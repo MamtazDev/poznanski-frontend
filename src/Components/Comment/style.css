@@ -1,0 +1,75 @@
+.comment-title {
+    color: var(--Base-base-500, #252733);
+    font-family: Urbanist;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.comment-title-dark {
+    color: #FFF;
+    font-family: Urbanist;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.view-all-btn {
+    color: var(--Primary-Purple-primary-purple-500, #5A1073);
+    font-family: Urbanist;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 144.5%; /* 23.12px */
+}
+
+.view-all-btn-dark {
+    color: var(--light-torquise-for-dark, #3BD6C6);
+    font-family: Urbanist;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 144.5%; /* 23.12px */
+}
+
+.comment-content{
+    padding: 12px;
+    border-radius: 0px 8px 8px 8px;
+    background: rgba(233, 233, 235, 0.5);
+    color: var(--Base-base-300, #6D6E76);
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Urbanist;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19px; /* 135.714% */
+}
+
+.comment-content{
+    padding: 12px;
+    border-radius: 0px 8px 8px 8px;
+    background: rgba(36, 37, 38, 0.5);
+    color: var(--Base-base-100, #BBBCC0);
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Urbanist;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19px; /* 135.714% */
+}
+
+.comment-reply-btn {
+    color: var(--Base-base-500, #252733);
+    font-family: Urbanist;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.comment-reply-btn-dark {
+    color: var(--dark-torquise-dark-mode, #2FC4B2);
+    font-family: Urbanist;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}

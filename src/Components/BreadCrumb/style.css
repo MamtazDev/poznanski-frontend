@@ -1,0 +1,12 @@
+.route-text{
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Urbanist;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 32px; /* 200% */
+}
+
+.textWhite {
+    color: white !important;
+}

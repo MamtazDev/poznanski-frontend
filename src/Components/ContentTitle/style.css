@@ -1,0 +1,35 @@
+.line {
+    background: #5A1073;
+}
+
+.title-type {
+    color: var(--Primary-Purple-primary-purple-500, #5A1073);
+    text-align: center;
+    font-family: Urbanist;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 2.03px;
+    text-transform: uppercase;
+}
+
+.text-dark-color{
+    color: #2FC4B2 !important;
+}
+
+.title {
+    color: var(--Base-base-500, #252733);
+    font-family: Urbanist;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: -1.2px;
+}
+
+.title-dark-color{
+    color: white !important;
+}
+
+.btn-dark-bg-color{
+    background: #2FC4B2 !important;
+}
