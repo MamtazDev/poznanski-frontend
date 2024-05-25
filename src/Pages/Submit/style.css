@@ -1,3 +1,4 @@
+
 .submit-description-text {
     color: var(--Base-base-300, #6D6E76);
     font-feature-settings: 'clig' off, 'liga' off;
@@ -55,7 +56,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    text-transform: capitalize;
 }
 
 .image-put-text-dark {
@@ -67,7 +67,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    text-transform: capitalize;
 }
 
 .img-select-btn{
@@ -78,7 +77,6 @@
     font-style: normal;
     font-weight: 500;
     line-height: 15.344px; /* 142.857% */
-    text-transform: capitalize;
     display: inline-flex;
     padding: 7.672px 18.413px 7.672px 12.275px;
     justify-content: center;

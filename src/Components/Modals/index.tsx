@@ -4,9 +4,10 @@ interface ModalProps {
   isOpen: boolean;
   onClose?: () => void;
   children: React.ReactNode;
+  type?: boolean;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, type }) => {
   const [isModalOpen, setIsModalOpen] = useState(isOpen);
 
   const handleClose = () => {
@@ -31,10 +32,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       }`}
     >
       <div
-        className="fixed inset-0 bg-black opacity-50"
+        className="fixed inset-0"
         onClick={handleBackdropClick}
       ></div>
-      <div className="z-50 bg-whiterounded shadow-lg">
+      <div className={`z-50 bg-whiterounded shadow-lg ${type && 'mx-auto'}`}>
         <div>{children}</div>
       </div>
     </div>

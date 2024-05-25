@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface YouTubePlayerInitialState {
   isOpen: boolean;
-  link: string;
+  videoId: string;
 }
 
 const initialPlayerState: YouTubePlayerInitialState = {
   isOpen: false,
-  link: "",
+  videoId: "",
 };
 export const playerSlice = createSlice({
   name: "player",
@@ -15,7 +15,7 @@ export const playerSlice = createSlice({
   reducers: {
     openPlayer: (state, action: PayloadAction<string>) => {
       state.isOpen = true;
-      state.link = action.payload;
+      state.videoId = action.payload;
     },
     closePlayer: (state) => {
       state.isOpen = false;

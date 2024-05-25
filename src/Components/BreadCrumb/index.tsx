@@ -6,10 +6,10 @@ import "./style.css";
 
 interface BreadCrumbProps {
   routeName: string[];
+  themeMode?: boolean;
 }
 
-const BreadCrumb: React.FC<BreadCrumbProps> = ({ routeName }) => {
-  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+const BreadCrumb: React.FC<BreadCrumbProps> = ({ routeName, themeMode }) => {
 
   return (
     <div className="flex">

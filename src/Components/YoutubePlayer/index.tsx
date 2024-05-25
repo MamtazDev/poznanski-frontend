@@ -2,67 +2,54 @@ import React, { useEffect, useState } from "react";
 import YouTube from "react-youtube";
 
 interface PlayerProps {
-  link: string;
+  videoId: string;
 }
 
-const YoutubePlayer: React.FC<PlayerProps> = ({ link }) => {
-  const [mute, setMute] = useState<boolean>(false);
-  const [videoId, setVideoId] = useState<string>("");
-  const [playerWidth, setPlayerWidth] = useState<string>("450px");
-  const [playerHeight, setPlayerHeight] = useState<string>("253px");
-  const [dataLink, setDataLink] = useState<string>(link);
+const YoutubePlayer: React.FC<PlayerProps> = ({ videoId }) => {
 
-  useEffect(() => {
-    console.log("input Link:", link);
-    const regExp =
-      /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const match = link.match(regExp);
-    if (match) {
-      setVideoId(match[4]);
-    } else {
-      setVideoId("1RFiFjG7Eh4");
-    }
-  }, [link]);
+
+
 
   const opts = {
-    height: playerHeight,
-    width: playerWidth,
+    height: 'auto',
+    width: 'auto',
     playerVars: {
       // autoplay: 1,
     },
+    enablejsapi: 1,
+    iframeClasssName: 'mx-auto'
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setPlayerHeight("200px");
-        setPlayerWidth("355px");
-      }
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     if (window.innerWidth < 768) {
+  //       setPlayerHeight("200px");
+  //       setPlayerWidth("355px");
+  //     }
+  //   };
 
-    handleResize();
+  //   handleResize();
 
-    window.addEventListener("resize", handleResize);
+  //   window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
 
-  const _onReady = (event: { target: any }) => {
-    console.log("test");
-    event.target.pauseVideo();
-  };
+  const onLoad = (event: { target: { playVideo: () => void; }; }) => {
+    setTimeout(() => {
+      event.target.playVideo();
+    }, 500)
+  }
+
+
   return (
     <div>
       <YouTube
         videoId={videoId}
-        // id={videoId}
-        onPlay={() => {
-          console.log("test");
-        }}
         opts={opts}
-        onReady={_onReady}
+        onReady={onLoad}
       />
     </div>
   );
