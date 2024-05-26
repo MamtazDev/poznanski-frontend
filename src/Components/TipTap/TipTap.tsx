@@ -14,6 +14,7 @@ import {getFileData, getFilesIncludedInHTML} from './helpers';
 import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
+import FileHandler from '@tiptap-pro/extension-file-handler';
 
 export interface TipTapProps {
 	onVideoAdd?: (videoUrl: string) => void;
@@ -41,14 +42,8 @@ export const getExtensionsData = (
 	setFiles: TipTapProps['setFiles']
 ): AnyExtension[] => [
 	StarterKit,
-	Image.configure({
-		HTMLAttributes: {
-			class: 'editor-image',
-		},
-	}),
 	TextAlign,
 	customYouTubeArticle,
-	customFileHandler(setFiles),
 	Link.configure({
 		validate: (href) => /^https?:\/\//.test(href),
 		autolink: true,
@@ -57,6 +52,36 @@ export const getExtensionsData = (
 			style: 'text-decoration: underline; cursor: pointer;',
 		},
 	}),
+	Image.configure({
+		HTMLAttributes: {
+			class: 'mx-auto my-3 max-h-[494px] max-w-[870px] object-cover',
+			style: 'border-radius: 8px; border: 1px solid #e5e7eb;'
+		},
+	}),
+	customFileHandler(setFiles),
+	// FileHandler.configure({
+	// 	onDrop: (editor, files) => {
+	// 		files.forEach(async (file) => {
+	// 			const compressedFile = await FileResizer(file);
+	// 			if (compressedFile) {
+	// 				const fileToAdd = getFileData(file, compressedFile);
+	// 				editor
+	// 					.chain()
+	// 					.focus()
+	// 					.setImage({src: fileToAdd.url, alt: fileToAdd.name})
+	// 					.run();
+	// 				setFiles((prev) => {
+	// 					URL.revokeObjectURL(fileToAdd.url);
+	// 					if (!prev) {
+	// 						return [fileToAdd];
+	// 					}
+	// 					return [...prev, fileToAdd];
+	// 				});
+	// 				editor.commands.enter();
+	// 			}
+	// 		});
+	// 	}
+	// }),
 ];
 
 const TipTap: React.FC<TipTapProps> = ({

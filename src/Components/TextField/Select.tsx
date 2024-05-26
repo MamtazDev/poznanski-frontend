@@ -1,94 +1,409 @@
-import React, {useState} from 'react';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../reducers';
-import {Modal, ModalContent, ModalFooter, ModalBody} from '@chakra-ui/react';
-import {Button} from '@chakra-ui/react';
-import Input from './Input';
-import './style.css';
+import * as React from 'react';
+import { useAutocomplete, AutocompleteGetTagProps } from '@mui/base/useAutocomplete';
+// import CheckIcon from '@mui/icons-material/Check';
+// import CloseIcon from '@mui/icons-material/Close';
+import { SlTrash } from "react-icons/sl";
+import { SlCheck } from "react-icons/sl";
+import { SlClose } from "react-icons/sl";
 
-interface SelectProps {
-	onChange?: (value: string) => void;
-	label: string;
-	data: {name: string}[];
-	value?: string;
-	handleOk?: (value: string) => void;
-	type?: boolean;
+import { styled } from '@mui/material/styles';
+import { autocompleteClasses } from '@mui/material/Autocomplete';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AlertIcon, CheckboxIcon } from '@chakra-ui/react';
+
+const lightTheme = createTheme({
+	palette: {
+	  mode: 'light',
+	  primary: {
+		main: '#1890ff',
+	  },
+	  background: {
+		default: '#fff',
+		paper: '#fafafa',
+	  },
+	  text: {
+		primary: 'rgba(0, 0, 0, 0.85)',
+		secondary: 'rgba(0, 0, 0, 0.65)',
+	  },
+	},
+  });
+
+  const darkTheme = createTheme({
+	palette: {
+	  mode: 'dark',
+	  primary: {
+		main: '#1890ff',
+	  },
+	  background: {
+		default: '#141414',
+		paper: '#303030',
+	  },
+	  text: {
+		primary: 'rgba(255, 255, 255)',
+		secondary: 'rgba(255, 255, 255)',
+	  },
+	},
+  });
+
+const Root = styled('div')(
+  ({ theme }) => `
+  color: ${
+    theme.palette.mode === 'light' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
+  };
+  font-size: 14px;
+`,
+);
+
+const Label = styled('label')`
+  padding: 0 0 4px;
+  line-height: 1.5;
+  display: block;
+`;
+
+const InputWrapper = styled('div')(
+  ({ theme }) => `
+  width: auto;
+  border: 2px solid ${theme.palette.mode === 'light' ? 'rgb(226, 232, 240)' : '#d9d9d9'};
+  background-color: ${theme.palette.mode === 'light' ? '#141414' : '#fff'};
+  border-radius: 4px;
+  padding: 1px;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 8px;
+
+  &:hover {
+    border-color: ${theme.palette.mode === 'light' ? '#40a9ff' : '#000'};
+  }
+
+  &.focused {
+    border-color: ${theme.palette.mode === 'light' ? '#177ddc' : '#000'};
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  }
+
+  & input {
+    background-color: ${theme.palette.mode === 'light' ? '#141414' : '#fff'};
+    color: ${
+      theme.palette.mode === 'light' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
+    };
+    height: 30px;
+    box-sizing: border-box;
+    padding: 4px 6px;
+    width: 0;
+    min-width: 30px;
+    flex-grow: 1;
+    border: 0;
+    margin: 0;
+    outline: 0;
+  }
+`,
+);
+
+interface TagProps extends ReturnType<AutocompleteGetTagProps> {
+  label: string;
 }
-const Select: React.FC<SelectProps> = ({
-	label,
-	data,
-	value,
-	onChange,
-	handleOk,
-	type,
-}) => {
-	const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-	const [isOpen, setIsOpen] = useState<boolean>(false);
 
-	const [tag, setTag] = useState<string>('');
+function Tag(props: TagProps) {
+  const { label, onDelete, ...other } = props;
+  return (
+    <div {...other}>
+      <span><b>{'#' + label}</b></span>
+      {/* <CheckboxIcon onClick={onDelete} /> */}
+	<SlClose style={{width: '20px', height: 'auto'}} onClick={onDelete} className='w-[20px] text-xl' width={20}/>
 
-	const handleAddTag = () => {
-		setIsOpen(true);
-	};
+    </div>
+  );
+}
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setTag(e.target.value);
-	};
+const StyledTag = styled(Tag)<TagProps>(
+  ({ theme }) => `
+  display: flex;
+  align-items: center;
+  height: 24px;
+  margin: 4px;
+  line-height: 22px;
+  background-color: ${
+    theme.palette.mode === 'light' ? 'rgba(255,255,255,0.08)' : '#fafafa'
+  };
+  border: 1px solid ${theme.palette.mode === 'light' ? '#fff' : '#000'};
+  border-radius: 8px;
+  box-sizing: content-box;
+  padding: 0 4px 0 10px;
+  outline: 0;
+  overflow: hidden;
 
-	const onClose = () => {
-		setIsOpen(false);
-		setTag('');
-	};
+  &:focus {
+    border-color: ${theme.palette.mode === 'light' ? '#177ddc' : '#40a9ff'};
+    background-color: ${theme.palette.mode === 'light' ? '#003b57' : '#e6f7ff'};
+  }
 
-	const handleClickOk = () => {
-		if (!tag) {
-		} else {
-			if (handleOk) {
-				handleOk(tag);
-			}
-			setIsOpen(false);
-			setTag('');
-		}
-	};
-	return (
-		<div className='w-full'>
-			<label
+  & span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  & svg {
+    font-size: 12px;
+    cursor: pointer;
+    padding: 4px;
+  }
+`,
+);
+
+const Listbox = styled('ul')(
+  ({ theme }) => `
+  width: 240px;
+  margin: 2px 0 0;
+  padding: 0;
+  position: absolute;
+  list-style: none;
+  background-color: ${theme.palette.mode === 'light' ? '#141414' : '#fff'};
+  overflow: auto;
+  max-height: 250px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+
+  & li {
+    padding: 5px 12px;
+    display: flex;
+
+    & span {
+      flex-grow: 1;
+    }
+
+    & svg {
+      color: transparent;
+    }
+  }
+
+  & li[aria-selected='true'] {
+    background-color: ${theme.palette.mode === 'light' ? '#2b2b2b' : '#fafafa'};
+    font-weight: 600;
+
+    & svg {
+      color: #1890ff;
+    }
+  }
+
+  & li.${autocompleteClasses.focused} {
+    background-color: ${theme.palette.mode === 'light' ? '#003b57' : '#e6f7ff'};
+    cursor: pointer;
+
+    & svg {
+      color: currentColor;
+    }
+  }
+`,
+);
+
+export default function useTags(label: string, themeMode?: boolean, type?: boolean) {
+  const {
+    getRootProps,
+    getInputProps,
+    getTagProps,
+    getListboxProps,
+    getOptionProps,
+    groupedOptions,
+    value,
+    focused,
+    setAnchorEl,
+  } = useAutocomplete({
+    id: 'customized-hook-demo',
+    defaultValue: [hashtagsMockUp[1]],
+    multiple: true,
+    options: hashtagsMockUp,
+    getOptionLabel: (option) => option,
+  });
+
+  return (
+	<ThemeProvider theme={themeMode ? darkTheme : lightTheme}>
+    <Root>
+      <div className='w-full' {...getRootProps()}>
+	  <label
 				className={`block mb-2 label-text text-left ${themeMode ? 'text-gray-900' : 'text-white'} `}
 				style={{fontSize: type ? '14px' : '18px'}}
 			>
 				{label}
 			</label>
-			<div className='relative'>
-				<select
-					id='tags'
-					value={value}
-					className={`border appearance-none text-sm block w-full ${themeMode ? 'input-light' : 'input-dark'} `}
-					style={{height: type ? '32px' : '36.825px'}}
-					onChange={onChange && ((e) => onChange(e.target.value))}
-				>
-					{data?.length &&
-						data.map((item, idx) => (
-							<option key={`tag-select-${idx}`} value={item.name}>
-								{item.name}
-							</option>
-						))}
-				</select>
-				<div
-					className={`add-btn ${themeMode ? 'add-btn-light' : 'add-btn-dark'} ${type ? 'add-btn-mobile' : 'add-btn-web '}`}
-					onClick={handleAddTag}
-				>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						viewBox='0 0 448 512'
-						width={type ? '10' : '12'}
-						height={type ? '10' : '12'}
-					>
-						<path d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z' />
-					</svg>
-				</div>
-			</div>
+        <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
+          {value.map((option: string, index: number) => (
+            <StyledTag label={option} {...getTagProps({ index })} />
+          ))}
+          <input {...getInputProps()} />
+        </InputWrapper>
+      </div>
+      {groupedOptions.length > 0 ? (
+        <Listbox className=' text-center' {...getListboxProps()}>
+          {(groupedOptions as typeof hashtagsMockUp).map((option, index) => (
+            <li {...getOptionProps({ option, index })}>
+              <span>{option}</span>
+              <p className='content-center'><SlCheck /></p>
+            </li>
+          ))}
+        </Listbox>
+      ) : null}
+    </Root>
+	</ThemeProvider>
+  );
+}
 
-			<Modal isOpen={isOpen} onClose={onClose}>
+interface FilmOptionType {
+  title: string;
+  year: number;
+}
+
+// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
+const hashtagsMockUp = [
+    "peja",
+    "slumsattack",
+    "RPS",
+    "kali",
+    "donGuralesko",
+    "shellerini",
+    "ksywa",
+    "jeżyce",
+    "staremiasto",
+    "winogrady",
+    "grunwald",
+    "wilda",
+    "nowemiasto",
+    "piatkowo",
+    "naramowice",
+    "strzeszyn",
+    "sołacz",
+    "szczepankowospozewo",
+    "umultowo",
+    "krzyżowniki",
+    "kobylepole",
+    "antoninek",
+    "kopernik",
+    "dębiec",
+    "łazarz",
+    "górczyn",
+    "plewiska",
+    "golęcin",
+    "ogrody",
+    "podolany",
+    "smochowice",
+    "światowid",
+    "krzesiny",
+    "fabianowo",
+    "garaszewo",
+    "wiara",
+    "tej",
+    "ziomki",
+    "ekipa",
+    "ziomal",
+    "pozdro"
+]
+
+
+// import React, {useId, useState} from 'react';
+// import {useSelector} from 'react-redux';
+// import {RootState} from '../../reducers';
+// import {Modal, ModalContent, ModalFooter, ModalBody} from '@chakra-ui/react';
+// import {Button} from '@chakra-ui/react';
+// import Input from './Input';
+// import './style.css';
+
+
+// interface SelectProps {
+// 	onChange?: (value: string) => void;
+// 	label: string;
+// 	data: string[];
+// 	value?: string;
+// 	handleOk?: (value: string) => void;
+// 	type?: boolean;
+// }
+// const Select: React.FC<SelectProps> = ({
+// 	label,
+// 	data,
+// 	value,
+// 	onChange,
+// 	handleOk,
+// 	type,
+// }) => {
+// 	const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+// 	const [isOpen, setIsOpen] = useState<boolean>(false);
+// 	const tagsInputRef = React.useRef<HTMLInputElement>(null);
+
+// 	const [tag, setTag] = useState<string>('');
+
+// 	const handleAddTag = () => {
+// 		setIsOpen(true);
+// 	};
+
+// 	const handleChange = (value: string, event: React.MouseEvent) => {
+// 		// event.preventDefault();
+// 		// event.stopPropagation();
+// 		setTag((prev) => {
+// 			if(!prev) {
+// 				return `#${value}`;
+// 			}
+// 			return `${prev}#${value}`;
+// 		});
+// 		console.log(value)
+// 	};
+
+// 	const onClose = () => {
+// 		setIsOpen(false);
+// 		setTag('');
+// 	};
+
+// 	const handleClickOk = () => {
+// 		if (!tag) {
+// 		} else {
+// 			if (handleOk) {
+// 				handleOk(tag);
+// 			}
+// 			setIsOpen(false);
+// 			setTag('');
+// 		}
+// 	};
+// 	const uniqueId = useId();
+
+// 	const openOrClose = () => {
+// 		setIsOpen((prev)=> !prev)
+// 	}
+// 	return (
+// 		<div className='w-full'>
+
+// 			<div className='relative' onClick={openOrClose}>
+// 				<Input
+// 				label={label}
+// 				name='tags'
+
+
+// 					// className={`border appearance-none text-sm block w-full ${themeMode ? 'input-light' : 'input-dark'} `}
+// 					// style={{height: type ? '32px' : '36.825px'}}
+// 					onChange={onChange && ((e) => onChange(e.target.value))}
+// 				/>
+// 					<div className={`w-full`}>
+// 						{isOpen && <div className={`absolute h-[200px] overflow-auto w-full ${themeMode ? 'input-light' : 'input-dark'}`} >
+// 						{data?.length &&
+// 						data.map((item, idx) => (
+// 							<p className='py-2 my-2' onClick={(event) => handleChange(item, event)} key={`tag-select-${uniqueId}`}>
+// 								{item}
+// 							</p>
+// 						))}</div>}
+// 						</div>
+
+// 				<div
+// 					className={`add-btn ${themeMode ? 'add-btn-light' : 'add-btn-dark'} ${type ? 'add-btn-mobile' : 'add-btn-web '}`}
+// 				>
+// 					<svg
+// 						xmlns='http://www.w3.org/2000/svg'
+// 						viewBox='0 0 448 512'
+// 						width={type ? '10' : '12'}
+// 						height={type ? '10' : '12'}
+// 					>
+// 						<path d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z' />
+// 					</svg>
+// 				</div>
+// 			</div>
+
+			{/* <Modal isOpen={isOpen} onClose={onClose}>
 				<ModalContent
 					maxWidth={'400px'}
 					backgroundColor={themeMode ? '#E9E9EB' : '#242526'}
@@ -104,9 +419,9 @@ const Select: React.FC<SelectProps> = ({
 						/>
 					</ModalBody>
 					<ModalFooter>
-						{/* <Button colorScheme="red" color={themeMode ? "black" : "black"} mr={3} onClick={onClose}>
+						<Button colorScheme="red" color={themeMode ? "black" : "black"} mr={3} onClick={onClose}>
               Anuluj
-            </Button> */}
+            </Button>
 						<Button
 							colorScheme='blue'
 							color={themeMode ? 'black' : 'white'}
@@ -116,9 +431,9 @@ const Select: React.FC<SelectProps> = ({
 						</Button>
 					</ModalFooter>
 				</ModalContent>
-			</Modal>
-		</div>
-	);
-};
+			</Modal> */}
+// 		</div>
+// 	);
+// };
 
-export default Select;
+// export default Select;

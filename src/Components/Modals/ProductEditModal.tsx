@@ -162,13 +162,13 @@ const ProductEditModal: React.FC<ModalProps> = ({
                   errMsg="Type new title "
                   onChange={handleTitle}
                 />
-                <Select
+                {/* <Select
                   label="Add Tag"
                   data={tags}
                   value={data.category}
                   onChange={handleChangeTag}
                   handleOk={createNewTag}
-                />
+                /> */}
                 <Input
                   name="location"
                   label="Location"

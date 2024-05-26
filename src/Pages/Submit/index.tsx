@@ -3,6 +3,7 @@ import BreadCrumb from '../../Components/BreadCrumb';
 import ContentTitle from '../../Components/ContentTitle';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../reducers';
+import { SlTrash } from "react-icons/sl";
 import Input from '../../Components/TextField/Input';
 import Select from '../../Components/TextField/Select';
 import Textarea from '../../Components/TextField/Textarea';
@@ -17,6 +18,8 @@ import {createArticleRequest} from '../../Constant/api-requests';
 import {error} from 'console';
 import {FileResizer} from '../../Components/ImageFileResizer/ImageFileResizer';
 import {openPlayer} from '../../reducers/PlayerReducer';
+import CustomizedHook from '../../Components/TextField/Select';
+import useTags from '../../Components/TextField/Select';
 
 export type SubmitArticleForm = {
 	email: string;
@@ -35,12 +38,57 @@ interface SubmitPageProps {
 	type: boolean;
 }
 
+const hashtagsMockUp = [
+    "peja",
+    "slumsattack",
+    "RPS",
+    "kali",
+    "donGuralesko",
+    "shellerini",
+    "ksywa",
+    "jeżyce",
+    "staremiasto",
+    "winogrady",
+    "grunwald",
+    "wilda",
+    "nowemiasto",
+    "piatkowo",
+    "naramowice",
+    "strzeszyn",
+    "sołacz",
+    "szczepankowospozewo",
+    "umultowo",
+    "krzyżowniki",
+    "kobylepole",
+    "antoninek",
+    "kopernik",
+    "dębiec",
+    "łazarz",
+    "górczyn",
+    "plewiska",
+    "golęcin",
+    "ogrody",
+    "podolany",
+    "smochowice",
+    "światowid",
+    "krzesiny",
+    "fabianowo",
+    "garaszewo",
+    "wiara",
+    "tej",
+    "ziomki",
+    "ekipa",
+    "ziomal",
+    "pozdro"
+]
+
 const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 	const [files, setFiles] = useState<FileFromEditor[] | null>(null);
 	const [article, setArticle] = useState<string>('');
 	const [imgData, setImgData] = useState<MainImgData | null>(null);
 	const fileInputRef = React.useRef<HTMLInputElement>(null);
 	const dispatch = useDispatch();
+	const AddTags = useTags('Dodaj tagi', themeMode, type)
 
 	const {
 		register,
@@ -294,14 +342,15 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 									<div
 										className={`h-full flex flex-${!type ? 'col' : 'col-reverse'} justify-between mt-4`}
 									>
-										<Select
+										{AddTags}
+										{/* <Select
 											label='Dodaj tagi'
-											data={[]}
+											data={hashtagsMockUp}
 											type={type}
-										/>
+										/> */}
 
 										<div
-											className={`flex flex-col mb-${!type ? '[60px]' : '4 ml-5'}`}
+											className={`flex flex-col ${!type ? 'mt-6' : 'mb-4 ml-5 min-w-36'}`}
 										>
 											<Input
 												label='Twój email'

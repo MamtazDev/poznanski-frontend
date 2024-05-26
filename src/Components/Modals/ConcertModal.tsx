@@ -193,13 +193,13 @@ const ConcertEditModal: React.FC<ModalProps> = ({
                   errMsg="Type concert name"
                   onChange={handleTitle}
                 />
-                <Select
+                {/* <Select
                   label="Add Tag"
                   data={tags}
                   value={data.category}
                   onChange={handleChangeTag}
                   handleOk={createNewTag}
-                />
+                /> */}
                 <Input
                   name="location"
                   label="Location"

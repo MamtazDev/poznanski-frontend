@@ -162,13 +162,13 @@ const EditModal: React.FC<ModalProps> = ({
                   errMsg="Type news title"
                   onChange={handleTitle}
                 />
-                <Select
+                {/* <Select
                   label="Add Tag"
                   data={tags}
                   value={data.feature}
                   onChange={handleChangeTag}
                   handleOk={createNewTag}
-                />
+                /> */}
                 <Input
                   name="link"
                   label="YouTube Video Link"
