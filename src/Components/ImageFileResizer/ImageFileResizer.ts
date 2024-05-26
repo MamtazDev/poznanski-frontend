@@ -14,22 +14,22 @@ const fileValidation = (file: File) => {
 	return true;
 };
 
-export const FileResizer = (file: File): Promise<Blob> | null => {
+export const FileResizer = (file: File): Promise<File> | null => {
 	return fileValidation(file)
-		? new Promise<Blob>((resolve) => {
+		? new Promise<File>((resolve) => {
 				return Resizer.imageFileResizer(
 					file,
-					300,
-					300,
+					870,
+					494,
 					`${file.type.split('/')[1]}`,
 					100,
 					0,
 					(uri) => {
-						resolve(uri as Blob);
+						resolve(uri as File);
 					},
-					`${file.type.split('/')[1]}`,
-					494,
-					870
+					'file',
+					300,
+					300
 				);
 			}).then((uri) => uri)
 		: null;

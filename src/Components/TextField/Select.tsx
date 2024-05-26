@@ -1,67 +1,75 @@
 import * as React from 'react';
-import { useAutocomplete, AutocompleteGetTagProps } from '@mui/base/useAutocomplete';
+import {
+	useAutocomplete,
+	AutocompleteGetTagProps,
+} from '@mui/base/useAutocomplete';
 // import CheckIcon from '@mui/icons-material/Check';
 // import CloseIcon from '@mui/icons-material/Close';
-import { SlTrash } from "react-icons/sl";
-import { SlCheck } from "react-icons/sl";
-import { SlClose } from "react-icons/sl";
+import {SlTrash} from 'react-icons/sl';
+import {SlCheck} from 'react-icons/sl';
+import {SlClose} from 'react-icons/sl';
 
-import { styled } from '@mui/material/styles';
-import { autocompleteClasses } from '@mui/material/Autocomplete';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AlertIcon, CheckboxIcon } from '@chakra-ui/react';
+import {styled} from '@mui/material/styles';
+import {
+	autocompleteClasses,
+	createFilterOptions,
+} from '@mui/material/Autocomplete';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {AlertIcon, CheckboxIcon} from '@chakra-ui/react';
 
 const lightTheme = createTheme({
 	palette: {
-	  mode: 'light',
-	  primary: {
-		main: '#1890ff',
-	  },
-	  background: {
-		default: '#fff',
-		paper: '#fafafa',
-	  },
-	  text: {
-		primary: 'rgba(0, 0, 0, 0.85)',
-		secondary: 'rgba(0, 0, 0, 0.65)',
-	  },
+		mode: 'light',
+		primary: {
+			main: '#1890ff',
+		},
+		background: {
+			default: '#fff',
+			paper: '#fafafa',
+		},
+		text: {
+			primary: 'rgba(0, 0, 0, 0.85)',
+			secondary: 'rgba(0, 0, 0, 0.65)',
+		},
 	},
-  });
+});
 
-  const darkTheme = createTheme({
+const darkTheme = createTheme({
 	palette: {
-	  mode: 'dark',
-	  primary: {
-		main: '#1890ff',
-	  },
-	  background: {
-		default: '#141414',
-		paper: '#303030',
-	  },
-	  text: {
-		primary: 'rgba(255, 255, 255)',
-		secondary: 'rgba(255, 255, 255)',
-	  },
+		mode: 'dark',
+		primary: {
+			main: '#1890ff',
+		},
+		background: {
+			default: '#141414',
+			paper: '#303030',
+		},
+		text: {
+			primary: 'rgba(255, 255, 255)',
+			secondary: 'rgba(255, 255, 255)',
+		},
 	},
-  });
+});
 
 const Root = styled('div')(
-  ({ theme }) => `
+	({theme}) => `
   color: ${
-    theme.palette.mode === 'light' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
+		theme.palette.mode === 'light'
+			? 'rgba(255,255,255,0.65)'
+			: 'rgba(0,0,0,.85)'
   };
   font-size: 14px;
-`,
+`
 );
 
 const Label = styled('label')`
-  padding: 0 0 4px;
-  line-height: 1.5;
-  display: block;
+	padding: 0 0 4px;
+	line-height: 1.5;
+	display: block;
 `;
 
 const InputWrapper = styled('div')(
-  ({ theme }) => `
+	({theme}) => `
   width: auto;
   border: 2px solid ${theme.palette.mode === 'light' ? 'rgb(226, 232, 240)' : '#d9d9d9'};
   background-color: ${theme.palette.mode === 'light' ? '#141414' : '#fff'};
@@ -71,6 +79,8 @@ const InputWrapper = styled('div')(
   flex-wrap: wrap;
   border-radius: 8px;
 
+  max-height: 250px;
+  overflow: auto;
   &:hover {
     border-color: ${theme.palette.mode === 'light' ? '#40a9ff' : '#000'};
   }
@@ -83,8 +93,10 @@ const InputWrapper = styled('div')(
   & input {
     background-color: ${theme.palette.mode === 'light' ? '#141414' : '#fff'};
     color: ${
-      theme.palette.mode === 'light' ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,.85)'
-    };
+		theme.palette.mode === 'light'
+			? 'rgba(255,255,255,0.65)'
+			: 'rgba(0,0,0,.85)'
+	};
     height: 30px;
     box-sizing: border-box;
     padding: 4px 6px;
@@ -95,39 +107,45 @@ const InputWrapper = styled('div')(
     margin: 0;
     outline: 0;
   }
-`,
+`
 );
 
 interface TagProps extends ReturnType<AutocompleteGetTagProps> {
-  label: string;
+	label: string;
 }
 
 function Tag(props: TagProps) {
-  const { label, onDelete, ...other } = props;
-  return (
-    <div {...other}>
-      <span><b>{'#' + label}</b></span>
-      {/* <CheckboxIcon onClick={onDelete} /> */}
-	<SlClose style={{width: '20px', height: 'auto'}} onClick={onDelete} className='w-[20px] text-xl' width={20}/>
-
-    </div>
-  );
+	const {label, onDelete, ...other} = props;
+	return (
+		<div {...other}>
+			<span>
+				<b>{label}</b>
+			</span>
+			{/* <CheckboxIcon onClick={onDelete} /> */}
+			<SlClose
+				style={{width: '20px', height: 'auto'}}
+				onClick={onDelete}
+				className='w-[20px] text-xl'
+				width={20}
+			/>
+		</div>
+	);
 }
 
 const StyledTag = styled(Tag)<TagProps>(
-  ({ theme }) => `
+	({theme}) => `
   display: flex;
   align-items: center;
   height: 24px;
-  margin: 4px;
+  margin: 6px;
   line-height: 22px;
   background-color: ${
-    theme.palette.mode === 'light' ? 'rgba(255,255,255,0.08)' : '#fafafa'
+		theme.palette.mode === 'light' ? 'rgba(255,255,255,0.08)' : '#fafafa'
   };
   border: 1px solid ${theme.palette.mode === 'light' ? '#fff' : '#000'};
   border-radius: 8px;
   box-sizing: content-box;
-  padding: 0 4px 0 10px;
+  padding: 2px 4px 2px 8px;
   outline: 0;
   overflow: hidden;
 
@@ -140,50 +158,58 @@ const StyledTag = styled(Tag)<TagProps>(
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    margin-right: 2px;
   }
 
   & svg {
-    font-size: 12px;
+    font-size: 14px;
     cursor: pointer;
-    padding: 4px;
+    padding: 2px;
   }
-`,
+`
 );
 
 const Listbox = styled('ul')(
-  ({ theme }) => `
-  width: 240px;
+	({theme}) => `
+  display: ruby;
+  max-height: 250px;
   margin: 2px 0 0;
   padding: 0;
   position: absolute;
   list-style: none;
+  transition: 0.2s;
   background-color: ${theme.palette.mode === 'light' ? '#141414' : '#fff'};
   overflow: auto;
-  max-height: 250px;
-  border-radius: 4px;
+  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 1;
 
   & li {
+    margin: 2px;
     padding: 5px 12px;
     display: flex;
-
+    transition: 0.2s;
+    border-radius: 6px;
     & span {
       flex-grow: 1;
     }
 
     & svg {
       color: transparent;
+      margin-left: 8px;
     }
   }
 
   & li[aria-selected='true'] {
     background-color: ${theme.palette.mode === 'light' ? '#2b2b2b' : '#fafafa'};
     font-weight: 600;
+    border: 1px solid ${theme.palette.mode === 'light' ? '#177ddc' : '#40a9ff'};
 
     & svg {
       color: #1890ff;
     }
+
+
   }
 
   & li.${autocompleteClasses.focused} {
@@ -194,110 +220,134 @@ const Listbox = styled('ul')(
       color: currentColor;
     }
   }
-`,
+`
 );
 
-export default function useTags(label: string, themeMode?: boolean, type?: boolean) {
-  const {
-    getRootProps,
-    getInputProps,
-    getTagProps,
-    getListboxProps,
-    getOptionProps,
-    groupedOptions,
-    value,
-    focused,
-    setAnchorEl,
-  } = useAutocomplete({
-    id: 'customized-hook-demo',
-    defaultValue: [hashtagsMockUp[1]],
-    multiple: true,
-    options: hashtagsMockUp,
-    getOptionLabel: (option) => option,
-  });
+const filter = createFilterOptions<string>();
 
-  return (
-	<ThemeProvider theme={themeMode ? darkTheme : lightTheme}>
-    <Root>
-      <div className='w-full' {...getRootProps()}>
-	  <label
-				className={`block mb-2 label-text text-left ${themeMode ? 'text-gray-900' : 'text-white'} `}
-				style={{fontSize: type ? '14px' : '18px'}}
-			>
-				{label}
-			</label>
-        <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
-          {value.map((option: string, index: number) => (
-            <StyledTag label={option} {...getTagProps({ index })} />
-          ))}
-          <input {...getInputProps()} />
-        </InputWrapper>
-      </div>
-      {groupedOptions.length > 0 ? (
-        <Listbox className=' text-center' {...getListboxProps()}>
-          {(groupedOptions as typeof hashtagsMockUp).map((option, index) => (
-            <li {...getOptionProps({ option, index })}>
-              <span>{option}</span>
-              <p className='content-center'><SlCheck /></p>
-            </li>
-          ))}
-        </Listbox>
-      ) : null}
-    </Root>
-	</ThemeProvider>
-  );
-}
+export default function useTags(
+	label: string,
+	setTags: React.Dispatch<React.SetStateAction<string[]>>,
+  tags: string[],
+	themeMode?: boolean,
+	type?: boolean
+) {
+	const {
+		getRootProps,
+		getInputProps,
+		getTagProps,
+		getListboxProps,
+		getOptionProps,
+		groupedOptions,
+		value,
+		focused,
+		setAnchorEl,
+	} = useAutocomplete({
+		id: 'customized-hook-demo',
+    value: tags,
+		multiple: true,
+		options: hashtagsMockUp,
+		getOptionLabel: (option) => option,
+		freeSolo: true,
+		onChange: (event, newValue) => {
+			setTags(newValue);
+		},
+		filterOptions: (options, params) => {
+			const filtered = filter(options, params);
 
-interface FilmOptionType {
-  title: string;
-  year: number;
+			filtered.push(`${params.inputValue}`);
+
+			return filtered;
+		},
+	});
+  const uniqueId = React.useId()
+	return (
+		<ThemeProvider theme={themeMode ? darkTheme : lightTheme}>
+			<Root {...getRootProps()}>
+				<div className='w-full'>
+					<label
+						className={`block mb-2 label-text text-left ${themeMode ? 'text-gray-900' : 'text-white'} `}
+						style={{fontSize: type ? '14px' : '18px'}}
+					>
+						{label}
+					</label>
+					<InputWrapper
+						ref={setAnchorEl}
+						className={focused ? 'focused' : ''}
+					>
+						{value.map((option: string, index: number) => (
+							<StyledTag
+								label={option}
+								{...getTagProps({index})}
+                key={index}
+							/>
+						))}
+						<input style={{placeSelf: 'center'}} {...getInputProps()} />
+					</InputWrapper>
+				</div>
+				{groupedOptions.length > 0 ? (
+					<Listbox className='text-left' {...getListboxProps()}>
+						{(groupedOptions as typeof hashtagsMockUp).map(
+							(option, index) => (
+								<li {...getOptionProps({option, index})} key={`${option}-${uniqueId}`}>
+									<span>{option}</span>
+									<p className='content-center'>
+										<SlCheck />
+									</p>
+								</li>
+							)
+						)}
+					</Listbox>
+				) : null}
+			</Root>
+		</ThemeProvider>
+	);
 }
 
 // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const hashtagsMockUp = [
-    "peja",
-    "slumsattack",
-    "RPS",
-    "kali",
-    "donGuralesko",
-    "shellerini",
-    "ksywa",
-    "jeżyce",
-    "staremiasto",
-    "winogrady",
-    "grunwald",
-    "wilda",
-    "nowemiasto",
-    "piatkowo",
-    "naramowice",
-    "strzeszyn",
-    "sołacz",
-    "szczepankowospozewo",
-    "umultowo",
-    "krzyżowniki",
-    "kobylepole",
-    "antoninek",
-    "kopernik",
-    "dębiec",
-    "łazarz",
-    "górczyn",
-    "plewiska",
-    "golęcin",
-    "ogrody",
-    "podolany",
-    "smochowice",
-    "światowid",
-    "krzesiny",
-    "fabianowo",
-    "garaszewo",
-    "wiara",
-    "tej",
-    "ziomki",
-    "ekipa",
-    "ziomal",
-    "pozdro"
-]
-
+	'peja',
+	'slumsattack',
+	'RPS',
+	'kali',
+	'donGuralesko',
+	'shellerini',
+	'ksywa',
+	'jeżyce',
+	'staremiasto',
+	'winogrady',
+	'grunwald',
+	'wilda',
+	'nowemiasto',
+	'piatkowo',
+	'naramowice',
+	'strzeszyn',
+	'sołacz',
+	'szczepankowospozewo',
+	'umultowo',
+	'krzyżowniki',
+	'kobylepole',
+	'antoninek',
+	'kopernik',
+	'dębiec',
+	'łazarz',
+	'górczyn',
+	'plewiska',
+	'golęcin',
+	'ogrody',
+	'podolany',
+	'smochowice',
+	'światowid',
+	'krzesiny',
+	'fabianowo',
+	'garaszewo',
+	'wiara',
+	'tej',
+	'ziomki',
+	'ekipa',
+	'ziomal',
+	'pozdro',
+];
 
 // import React, {useId, useState} from 'react';
 // import {useSelector} from 'react-redux';
@@ -306,7 +356,6 @@ const hashtagsMockUp = [
 // import {Button} from '@chakra-ui/react';
 // import Input from './Input';
 // import './style.css';
-
 
 // interface SelectProps {
 // 	onChange?: (value: string) => void;
@@ -374,7 +423,6 @@ const hashtagsMockUp = [
 // 				label={label}
 // 				name='tags'
 
-
 // 					// className={`border appearance-none text-sm block w-full ${themeMode ? 'input-light' : 'input-dark'} `}
 // 					// style={{height: type ? '32px' : '36.825px'}}
 // 					onChange={onChange && ((e) => onChange(e.target.value))}
@@ -403,7 +451,8 @@ const hashtagsMockUp = [
 // 				</div>
 // 			</div>
 
-			{/* <Modal isOpen={isOpen} onClose={onClose}>
+{
+	/* <Modal isOpen={isOpen} onClose={onClose}>
 				<ModalContent
 					maxWidth={'400px'}
 					backgroundColor={themeMode ? '#E9E9EB' : '#242526'}
@@ -431,7 +480,8 @@ const hashtagsMockUp = [
 						</Button>
 					</ModalFooter>
 				</ModalContent>
-			</Modal> */}
+			</Modal> */
+}
 // 		</div>
 // 	);
 // };

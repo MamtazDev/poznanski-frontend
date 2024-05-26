@@ -86,9 +86,10 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 	const [files, setFiles] = useState<FileFromEditor[] | null>(null);
 	const [article, setArticle] = useState<string>('');
 	const [imgData, setImgData] = useState<MainImgData | null>(null);
+	const [tags, setTags] = useState<string[]>([]);
 	const fileInputRef = React.useRef<HTMLInputElement>(null);
 	const dispatch = useDispatch();
-	const AddTags = useTags('Dodaj tagi', themeMode, type)
+	const AddTags = useTags('Dodaj tagi', setTags, tags, themeMode, type)
 
 	const {
 		register,
@@ -96,7 +97,7 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 		formState: {errors},
 	} = useForm<SubmitArticleForm>({
 		defaultValues: {email: '', title: '', intro: ''},
-		mode: 'onChange',
+		mode: 'all',
 	});
 
 	const description =
@@ -144,14 +145,16 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 					name,
 					size: compressedFile?.size,
 					url: '',
-					file: compressedFile,
+					file: new Blob([compressedFile]),
 				};
+				const stringOfTags = '#' + tags.join('#');
 				const articleData = {
 					...data,
 					content: article,
 					files: files ? [mainImg, ...files] : [mainImg],
+					tags: stringOfTags,
 				};
-
+				console.log(articleData);
 				await createArticleRequest(articleData);
 			} else {
 				alert('Nie udało się skompresować głównego zdjęcia');
@@ -170,6 +173,21 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 			// Additional logic based on the class of the clicked element
 		}
 	};
+
+	useEffect(() => {
+		if (errors.title) {
+			console.log(errors.title.message);
+		}
+		if (errors.intro) {
+			console.log(errors.intro.message);
+		}
+		if (errors.email) {
+			console.log(errors.email.message);
+		}
+		if (errors.nickname) {
+			console.log(errors.nickname.message);
+		}
+	}, [errors]);
 
 	useEffect(() => {
 		window.addEventListener('click', (event) => handlePlayButton(event));

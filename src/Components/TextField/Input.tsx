@@ -16,7 +16,6 @@ interface InputProps {
 	height?: string;
 	register?: UseFormRegister<any>;
 	registerOptions?: RegisterOptions;
-	ref?: React.RefObject<HTMLInputElement>;
 }
 
 const renderRegisterOptions = (
@@ -72,7 +71,6 @@ const Input: React.FC<InputProps> = ({
 	height,
 	register,
 	registerOptions,
-	ref,
 }) => {
 	const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 	const inputRegisterOptions = renderRegisterOptions(
@@ -104,7 +102,7 @@ const Input: React.FC<InputProps> = ({
 				/>
 			) : (
 				<input
-					onChange={onChange && ((e) => onChange(e.target.value))}
+					onChange={onChange && ((e) => onChange(e))}
 					{...registerProps}
 					type='text'
 					name={name}
@@ -112,7 +110,7 @@ const Input: React.FC<InputProps> = ({
 					className={`input-${themeMode ? 'light' : 'dark'} shadow-sm  block w-full ${error ? 'border border-red-500 text-red-900 placeholder-red-700' : 'border'} `}
 					style={{height: type ? '32px' : '36.825px'}}
 					autoComplete='off'
-					ref={ref}
+					// ref={ref}
 				/>
 			)}
 			<div className='text-red-400 h-6'>{error && <p>{error}</p>}</div>
