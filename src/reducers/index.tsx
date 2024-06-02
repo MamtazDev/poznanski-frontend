@@ -12,10 +12,12 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import newsReducer from "./NewsReducer";
 
 const rootReducer = combineReducers({
   themeMode: ThemeReducer,
   player: PlayerReducer,
+  news: newsReducer,
 });
 
 const persistConfig = {

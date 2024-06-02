@@ -4,29 +4,30 @@ import { Button, Card, Image } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "./style.css";
+import { getFirstTag } from "../../Pages/Article";
 
 interface CardProps {
   type: string;
   img: string;
   title: string;
-  feature: string;
+  tags: string;
   date: string;
-  id?: string;
+  _id: string;
 }
 
 const ProductCard1: React.FC<CardProps> = ({
   type,
   img,
   title,
-  feature,
+  tags,
   date,
-  id,
+  _id,
 }) => {
   const navigate = useNavigate();
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const handleClick = () => {
-    console.log(id);
-    navigate(`${id}`);
+    console.log(_id);
+    navigate(`${_id}`);
   };
 
   return (
@@ -61,7 +62,7 @@ const ProductCard1: React.FC<CardProps> = ({
                 className={`card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer ${!themeMode && "dark-bg-color"}`}
               >
                 <Image
-                  src={img}
+                  src={`${process.env.REACT_APP_FILES_URL}${img}`}
                   className="cursor-pointer object-cover h-full w-full"
                   alt={img}
                   borderRadius="xl"
@@ -71,7 +72,7 @@ const ProductCard1: React.FC<CardProps> = ({
                 <div
                   className={`feature-text ${!themeMode && "btn-dark-bg-color"}`}
                 >
-                  {feature}
+                  {tags}
                 </div>
               </div>
               <div
@@ -99,7 +100,7 @@ const ProductCard1: React.FC<CardProps> = ({
                 {date}
               </div>
               <Image
-                src={img}
+                src={`${process.env.REACT_APP_FILES_URL}${img}`}
                 className="cursor-pointer h-full object-cover"
                 alt={img}
                 borderRadius="md"
@@ -111,11 +112,11 @@ const ProductCard1: React.FC<CardProps> = ({
                   <div
                     className={`feature-text-2 ${!themeMode && "btn-dark-bg-color"}`}
                   >
-                    {feature}
+                    {tags}
                   </div>
                 </div>
                 <div
-                  className={`title-text-2 mt-2 flex ${!themeMode && "title-dark-color"}`}
+                  className={`title-text-2 mt-2 flex overflow-hidden ${!themeMode && "title-dark-color"}`}
                 >
                   {title}
                 </div>

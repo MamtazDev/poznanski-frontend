@@ -17,9 +17,23 @@ import {
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {AlertIcon, CheckboxIcon} from '@chakra-ui/react';
 
-const lightTheme = createTheme({
+const celadon = '#3BD6C6';
+const deepPurple = '#5A1073';
+const dark = '#141414';
+const light = '#fff';
+const darkText = 'rgba(255, 255, 255)';
+const lightText = 'rgba(0, 0, 0)';
+const darkSecondary = 'rgba(0, 0, 0, 0.65)';
+const lightSecondary = 'rgba(0, 0, 0, 0.85)';
+const darkBackground = '#242526';
+const lightBackground = '#fafafa';
+const darkPaper = '#303030';
+const lightPaper = '#fff';
+
+
+const darkTheme = createTheme({
 	palette: {
-		mode: 'light',
+		mode: 'dark',
 		primary: {
 			main: '#1890ff',
 		},
@@ -34,9 +48,9 @@ const lightTheme = createTheme({
 	},
 });
 
-const darkTheme = createTheme({
+const lightTheme = createTheme({
 	palette: {
-		mode: 'dark',
+		mode: 'light',
 		primary: {
 			main: '#1890ff',
 		},
@@ -54,7 +68,7 @@ const darkTheme = createTheme({
 const Root = styled('div')(
 	({theme}) => `
   color: ${
-		theme.palette.mode === 'light'
+		theme.palette.mode === 'dark'
 			? 'rgba(255,255,255,0.65)'
 			: 'rgba(0,0,0,.85)'
   };
@@ -71,31 +85,34 @@ const Label = styled('label')`
 const InputWrapper = styled('div')(
 	({theme}) => `
   width: auto;
-  border: 2px solid ${theme.palette.mode === 'light' ? 'rgb(226, 232, 240)' : '#d9d9d9'};
-  background-color: ${theme.palette.mode === 'light' ? '#141414' : '#fff'};
+  border: 1px solid ${theme.palette.mode === 'dark' ? 'rgb(226, 232, 240)' : '#d9d9d9'};
+  background-color: ${theme.palette.mode === 'dark' ? '#242526' : '#E9E9EB'};
+  opacity: 0.6;
   border-radius: 4px;
   padding: 1px;
   display: flex;
   flex-wrap: wrap;
   border-radius: 8px;
-
+transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   max-height: 250px;
   overflow: auto;
   &:hover {
-    border-color: ${theme.palette.mode === 'light' ? '#40a9ff' : '#000'};
+    border-color: ${theme.palette.mode === 'dark' ? celadon : '#000'};
+	opacity: 0.75;
   }
 
   &.focused {
-    border-color: ${theme.palette.mode === 'light' ? '#177ddc' : '#000'};
+    border-color: ${theme.palette.mode === 'dark' ? celadon : '#000'};
     box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+	opacity: 1;
   }
 
   & input {
-    background-color: ${theme.palette.mode === 'light' ? '#141414' : '#fff'};
+    background-color: ${theme.palette.mode === 'dark' ? '#242526' : '#E9E9EB'};
     color: ${
-		theme.palette.mode === 'light'
-			? 'rgba(255,255,255,0.65)'
-			: 'rgba(0,0,0,.85)'
+		theme.palette.mode === 'dark'
+			? '#fff'
+			: '#000'
 	};
     height: 30px;
     box-sizing: border-box;
@@ -140,19 +157,20 @@ const StyledTag = styled(Tag)<TagProps>(
   margin: 6px;
   line-height: 22px;
   background-color: ${
-		theme.palette.mode === 'light' ? 'rgba(255,255,255,0.08)' : '#fafafa'
+		theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : '#fafafa'
   };
-  border: 1px solid ${theme.palette.mode === 'light' ? '#fff' : '#000'};
+  border: 1px solid ${theme.palette.mode === 'dark' ? '#fff' : '#000'};
   border-radius: 8px;
   box-sizing: content-box;
-  padding: 2px 4px 2px 8px;
+  padding: 4px 4px 4px 8px;
   outline: 0;
   overflow: hidden;
 
   &:focus {
-    border-color: ${theme.palette.mode === 'light' ? '#177ddc' : '#40a9ff'};
-    background-color: ${theme.palette.mode === 'light' ? '#003b57' : '#e6f7ff'};
-  }
+    border-color: ${theme.palette.mode === 'dark' ? '#177ddc' : '#40a9ff'};
+    background-color: ${theme.palette.mode === 'dark' ? '#003b57' : '#e6f7ff'};
+	padding: 4px 4px 4px 8px;
+}
 
   & span {
     overflow: hidden;
@@ -178,7 +196,8 @@ const Listbox = styled('ul')(
   position: absolute;
   list-style: none;
   transition: 0.2s;
-  background-color: ${theme.palette.mode === 'light' ? '#141414' : '#fff'};
+  background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};
+  border: 1px solid ${theme.palette.mode === 'dark' ? celadon : deepPurple};
   overflow: auto;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -201,21 +220,22 @@ const Listbox = styled('ul')(
   }
 
   & li[aria-selected='true'] {
-    background-color: ${theme.palette.mode === 'light' ? '#2b2b2b' : '#fafafa'};
+    background-color: ${theme.palette.mode === 'dark' ? '#2b2b2b' : '#fafafa'};
     font-weight: 600;
-    border: 1px solid ${theme.palette.mode === 'light' ? '#177ddc' : '#40a9ff'};
+    border: 1px solid ${theme.palette.mode === 'dark' ? celadon : deepPurple};
 
     & svg {
-      color: #1890ff;
+      color: ${celadon};
     }
 
 
   }
 
   & li.${autocompleteClasses.focused} {
-    background-color: ${theme.palette.mode === 'light' ? '#003b57' : '#e6f7ff'};
+	color: ${theme.palette.mode === 'dark' ? '#000' : '#fff'};
+    background-color: ${theme.palette.mode === 'dark' ? celadon : deepPurple};
     cursor: pointer;
-
+	opacity: 0.5;
     & svg {
       color: currentColor;
     }
@@ -262,7 +282,7 @@ export default function useTags(
 	});
   const uniqueId = React.useId()
 	return (
-		<ThemeProvider theme={themeMode ? darkTheme : lightTheme}>
+		<ThemeProvider theme={themeMode ? lightTheme : darkTheme}>
 			<Root {...getRootProps()}>
 				<div className='w-full'>
 					<label
@@ -423,12 +443,12 @@ const hashtagsMockUp = [
 // 				label={label}
 // 				name='tags'
 
-// 					// className={`border appearance-none text-sm block w-full ${themeMode ? 'input-light' : 'input-dark'} `}
+// 					// className={`border appearance-none text-sm block w-full ${themeMode ? 'input-dark' : 'input-light'} `}
 // 					// style={{height: type ? '32px' : '36.825px'}}
 // 					onChange={onChange && ((e) => onChange(e.target.value))}
 // 				/>
 // 					<div className={`w-full`}>
-// 						{isOpen && <div className={`absolute h-[200px] overflow-auto w-full ${themeMode ? 'input-light' : 'input-dark'}`} >
+// 						{isOpen && <div className={`absolute h-[200px] overflow-auto w-full ${themeMode ? 'input-dark' : 'input-light'}`} >
 // 						{data?.length &&
 // 						data.map((item, idx) => (
 // 							<p className='py-2 my-2' onClick={(event) => handleChange(item, event)} key={`tag-select-${uniqueId}`}>
@@ -438,7 +458,7 @@ const hashtagsMockUp = [
 // 						</div>
 
 // 				<div
-// 					className={`add-btn ${themeMode ? 'add-btn-light' : 'add-btn-dark'} ${type ? 'add-btn-mobile' : 'add-btn-web '}`}
+// 					className={`add-btn ${themeMode ? 'add-btn-dark' : 'add-btn-light'} ${type ? 'add-btn-mobile' : 'add-btn-web '}`}
 // 				>
 // 					<svg
 // 						xmlns='http://www.w3.org/2000/svg'

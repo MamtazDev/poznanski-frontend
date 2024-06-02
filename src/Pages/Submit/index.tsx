@@ -37,6 +37,45 @@ interface SubmitPageProps {
 	themeMode: boolean;
 	type: boolean;
 }
+interface ArticleData {
+    content: string;
+    tags: string;
+    email: string;
+    title: string;
+    intro: string;
+    nickname: string;
+	files: FileFromEditor[];
+}
+
+type FileDetail = {
+	name: string;
+	size: number;
+	url: string;
+};
+interface FormDataEntries extends Omit<ArticleData, 'files'> {
+    gerson: string;
+    files: File[];
+    fileDetails: FileDetail[];
+}
+
+const objectToArrayOfProperties = (obj: any): Array<any> => {
+	return Object.entries(obj).map(([key, value]) => {
+		return { key: key, value: value };
+	  });
+}
+
+const appendFormData = (articleData: FormData, data: any) => {
+    for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+            const value = data[key as keyof FormDataEntries];
+            if (Array.isArray(value)) {
+                value.forEach((item) => articleData.append(key, item));
+            } else {
+                articleData.append(key, value as any);
+            }
+        }
+    }
+};
 
 const hashtagsMockUp = [
     "peja",
@@ -140,22 +179,35 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 			const {file} = imgData;
 			const {name} = file;
 			const compressedFile = await FileResizer(file);
+			const form = new FormData();
 			if (compressedFile) {
 				const mainImg = {
 					name,
 					size: compressedFile?.size,
 					url: '',
-					file: new Blob([compressedFile]),
+					file: new Blob([compressedFile], {type: compressedFile.type}),
 				};
 				const stringOfTags = '#' + tags.join('#');
+				const images = files ? [mainImg, ...files] : [mainImg]
+
+				images.forEach((image, i) => {
+					const {file, ...fileDetails} = image;
+					form.append(`files`, file, `${data.email} ${fileDetails.name}`);
+					// objectToArrayOfProperties(fileDetails).forEach((value, key) => {
+					// 	form.append(`filesDetails[${i}][${key}]`, value);
+					// })
+
+				})
 				const articleData = {
 					...data,
 					content: article,
-					files: files ? [mainImg, ...files] : [mainImg],
+					// files: files ? [mainImg, ...files] : [mainImg],
 					tags: stringOfTags,
 				};
-				console.log(articleData);
-				await createArticleRequest(articleData);
+				Object.entries(articleData).forEach(([key, value]) => {
+					form.append(key, value);
+				});
+				await createArticleRequest(form);
 			} else {
 				alert('Nie udało się skompresować głównego zdjęcia');
 			}

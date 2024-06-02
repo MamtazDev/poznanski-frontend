@@ -11,34 +11,44 @@ import {
 } from "react-icons/bs";
 
 interface PaginationProps {
-  selectedPage: string;
-  setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
-  pages: string;
+  selectedPage: number;
+  setSelectedPage: React.Dispatch<React.SetStateAction<number>>;
+  goToPage?: (page: number) => void;
+  prevPage?: () => void;
+  nextPage: () => void;
+  pages: number;
 }
 
 const PaginationBar: React.FC<PaginationProps> = ({
   selectedPage,
   setSelectedPage,
   pages,
+  goToPage,
+  prevPage,
+  nextPage,
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   const handleDecrease = () => {
-    if (parseInt(selectedPage) > 1) {
-      const value = parseInt(selectedPage) - 1;
-      setSelectedPage(value.toString());
+    if (selectedPage > 1) {
+      const value = selectedPage - 1;
+      // setSelectedPage(value);
+      prevPage?.();
     }
+
   };
 
   const handleIncrease = () => {
-    if (parseInt(selectedPage) <= parseInt(pages)) {
-      const value = parseInt(selectedPage) + 1;
-      setSelectedPage(value.toString());
+    if (selectedPage <= pages) {
+      const value = selectedPage + 1;
+      // setSelectedPage(value);
+      nextPage();
     }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSelectedPage(e.target.value);
+    setSelectedPage(Number(e.target.value));
+    goToPage?.(Number(e.target.value));
   };
 
   return (
@@ -53,20 +63,20 @@ const PaginationBar: React.FC<PaginationProps> = ({
           />
         }
         isDisabled={
-          selectedPage === "1" || parseInt(selectedPage) < 1 ? true : false
+          selectedPage === 1 || selectedPage < 1 ? true : false
         }
         backgroundColor={themeMode ? "#FFF" : "#242526"}
         color={themeMode ? "#252733" : "#FFF"}
         border={themeMode ? "border: 1px solid #E9EBF0" : "unset"}
         width="40px"
         height="30px"
-        onClick={() => setSelectedPage("1")}
+        onClick={() => setSelectedPage(1)}
       />
       <IconButton
         aria-label="PrevBtn"
         variant={themeMode ? "outline" : ""}
         isDisabled={
-          selectedPage === "1" || parseInt(selectedPage) < 1 ? true : false
+          selectedPage === 1 || selectedPage < 1 ? true : false
         }
         icon={
           <BsChevronLeft size={12} color={!themeMode ? "white" : "#6D6E76"} />
@@ -99,7 +109,7 @@ const PaginationBar: React.FC<PaginationProps> = ({
         aria-label="PrevBtn"
         variant={themeMode ? "outline" : ""}
         isDisabled={
-          selectedPage === pages || parseInt(selectedPage) > parseInt(pages)
+          selectedPage === pages || selectedPage > pages
             ? true
             : false
         }
@@ -123,7 +133,7 @@ const PaginationBar: React.FC<PaginationProps> = ({
           />
         }
         isDisabled={
-          selectedPage === pages || parseInt(selectedPage) > parseInt(pages)
+          selectedPage === pages || selectedPage > pages
             ? true
             : false
         }
