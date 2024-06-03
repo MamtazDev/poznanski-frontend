@@ -44,7 +44,7 @@ export const usePaginatedNews = (pageSize: number, page: number) => {
   const { news, error, loading } = useSelector((state: RootState) => state.news);
   const currentPage = useSelector((state: RootState) => getLastPageNumber(state));
   const allNews: Article[] = useSelector((state: RootState) => selectAllNews(state));
-  const pageData = useSelector((state: RootState) => state.news.news[page -1]);
+  const pageData = useSelector((state: RootState) => state.news.news[page]);
   const [totalPages, setTotalPages] = useState(0);
 
   const {
@@ -62,7 +62,7 @@ export const usePaginatedNews = (pageSize: number, page: number) => {
 
         // Check if the current page data is different from the fetched data
         if (!currentPage || page >= currentPage) {
-          dispatch(fetchSuccess({ data: fetchedNews, page }));
+          fetchedNews.length > 0 && dispatch(fetchSuccess({ data: fetchedNews, page }));
         } else if (page === currentPage) {
           dispatch(updatePage({ data: fetchedNews, page }));
         }

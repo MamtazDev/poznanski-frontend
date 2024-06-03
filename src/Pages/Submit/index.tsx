@@ -257,10 +257,7 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 				<div className='flex justify-center'>
 					<div className='container'>
 						<div className='md:mt-12 mt-8'>
-							<BreadCrumb
-								themeMode={themeMode}
-								routeName={['Home', 'Submit News']}
-							/>
+							<BreadCrumb />
 						</div>
 
 						<div className='md:mt-7 mt-10'>

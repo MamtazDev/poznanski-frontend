@@ -1,3 +1,7 @@
+import _, { debounce } from 'lodash';
+import React, {  useEffect, useRef } from 'react';
+
+
 function gcd(a: number, b: number): number {
   if (b === 0) {
     return a;
@@ -46,4 +50,22 @@ export const isInViewport = (element: HTMLElement | null) => {
     rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   );
+};
+
+export const useDebounceRef = (callback: (...args: any[]) => void, delay: number) => {
+  const debouncedCallback = useRef(debounce(callback, delay));
+
+  useEffect(() => {
+    debouncedCallback.current = debounce((...args: any[]) => {
+      if (callback) {
+        callback(...args);
+      }
+    }, delay);
+
+    return () => {
+      debouncedCallback.current.cancel();
+    };
+  }, [callback, delay]);
+
+  return debouncedCallback.current;
 };

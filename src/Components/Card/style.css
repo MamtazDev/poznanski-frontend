@@ -38,15 +38,15 @@
  }
 
  .feature-text-2 {
-   width: 43px;
-   height: 14px;
+  height: 20px;
    color: var(--Primary-Purple-primary-purple-500, #5A1073);
    font-family: Urbanist;
-   font-size: 8px;
+   font-size: 14px;
+   padding: 8px;
    font-style: normal;
    font-weight: 600;
    line-height: normal;
-   border-radius: 28.533px;
+   border-radius: 8px;
    background: #E8ECFE;
    display: flex;
    align-items: center;
@@ -198,7 +198,8 @@
  }
 
  .date-badge-2 {
-   height: 15px;
+   height: 20px;
+   border: 1px solid #000000;
    border-radius: 4px;
    opacity: 0.75;
    background: #E8ECFE;
@@ -206,10 +207,10 @@
    backdrop-filter: blur(4.247281551361084px);
    color: var(--Base-base-500, #252733);
    font-family: Urbanist;
-   font-size: 6px;
+   font-size: 12px;
    font-style: normal;
    font-weight: 700;
-   padding: 5px 10px;
+   padding: 2px 4px;
 }
 
  .location {
@@ -243,7 +244,7 @@
  .tv-card-image-2{
   height: 69px;
  }
-     
+
  .material-card-image {
   height: 236.627px;
  }
@@ -326,7 +327,7 @@
   width: 38.988px;
   height: 12.694px;
   border-radius: 25.894px;
-  background: #E8ECFE; 
+  background: #E8ECFE;
   display: flex;
   align-items: center;
   justify-content: center;

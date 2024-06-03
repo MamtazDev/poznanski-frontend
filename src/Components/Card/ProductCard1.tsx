@@ -87,13 +87,13 @@ const ProductCard1: React.FC<CardProps> = ({
                 className={`card-more-btn ${!themeMode && "text-dark-color"}`}
                 onClick={handleClick}
               >
-                Learn More...
+                Czytaj więcej...
               </Button>
             </div>
           </div>
         ) : (
           <div className="flex h-full">
-            <div className="h-full w-36 relative overflow-hidden">
+            <div className="h-full rounded-md w-36 bg-slate-900 relative overflow-hidden">
               <div
                 className={`date-badge-2 absolute top-1 right-1 z-50 ${!themeMode && "btn-dark-bg-color"}`}
               >
@@ -101,7 +101,7 @@ const ProductCard1: React.FC<CardProps> = ({
               </div>
               <Image
                 src={`${process.env.REACT_APP_FILES_URL}${img}`}
-                className="cursor-pointer h-full object-cover"
+                className="cursor-pointer"
                 alt={img}
                 borderRadius="md"
               />
@@ -121,12 +121,12 @@ const ProductCard1: React.FC<CardProps> = ({
                   {title}
                 </div>
               </div>
-              <div className="flex justify-start mt-2">
+              <div className="flex justify-start mr-2">
                 <div
                   className={`card-more-btn-2 ${!themeMode && "text-dark-color"}`}
                   onClick={handleClick}
                 >
-                  Learn More...
+                  Czytaj dalej...
                 </div>
               </div>
             </div>
