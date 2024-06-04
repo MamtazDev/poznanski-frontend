@@ -12,6 +12,7 @@ import ArtistsCarousel from "../Home/Artists/Carousel";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "../mainPageStyle.css";
+import { PageBasicProps } from "../../AppMain";
 
 interface ArtistsData {
   id: string;
@@ -43,7 +44,7 @@ interface inputProducts {
   location: string;
 }
 
-const ArtistMainPage = () => {
+const ArtistMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
   const [cardNum, setCardNum] = useState<number>(4);
   const [state, setState] = useState<boolean>(false);
   const [artists, setArtists] = useState<ArtistsData[]>([]);
@@ -54,8 +55,6 @@ const ArtistMainPage = () => {
     description: "",
   });
   const [cardData, setCardData] = useState<Products[]>([]);
-  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-  const [type, setType] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [pages, setPages] = useState<string>("0");
@@ -63,64 +62,64 @@ const ArtistMainPage = () => {
   const [lineNum, setLineNum] = useState<number>(3);
   const [filterCardNum, setFilterCardNum] = useState<number>(4);
 
-  useEffect(() => {
-    setLoading(true);
-    apiGetReq("/artist/data", {
-      rowsPerPage: filterText ? lineNum * filterCardNum : lineNum,
-      curPage: selectedPage,
-      filter: filterText,
-    })
-      .then((res) => {
-        let newData: ArtistsData[] = [];
-        const pages = Math.ceil(res.all / lineNum);
-        setPages(pages.toString());
-        res.products.map((item: inputArtistsData) => {
-          const temp: ArtistsData = {
-            id: item._id,
-            name: item.name,
-            img: fileUrl + item.profileImg,
-            description: item.description,
-          };
-          newData.push(temp);
-        });
-        setArtists(newData);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-      });
-  }, [selectedPage, filterText]);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   apiGetReq("/artist/data", {
+  //     rowsPerPage: filterText ? lineNum * filterCardNum : lineNum,
+  //     curPage: selectedPage,
+  //     filter: filterText,
+  //   })
+  //     .then((res) => {
+  //       let newData: ArtistsData[] = [];
+  //       const pages = Math.ceil(res.all / lineNum);
+  //       setPages(pages.toString());
+  //       res.products.map((item: inputArtistsData) => {
+  //         const temp: ArtistsData = {
+  //           id: item._id,
+  //           name: item.name,
+  //           img: fileUrl + item.profileImg,
+  //           description: item.description,
+  //         };
+  //         newData.push(temp);
+  //       });
+  //       setArtists(newData);
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       setLoading(false);
+  //     });
+  // }, [selectedPage, filterText]);
 
-  useEffect(() => {
-    apiGetReq("/artist/top", {}).then((res) => {
-      setArtist({
-        id: res.artist[0]._id,
-        name: res.artist[0].name,
-        img: fileUrl + res.artist[0].profileImg,
-        description: res.artist[0].description,
-      });
-      let newData: Products[] = [];
-      res.products.map((item: inputProducts) => {
-        const inputDate: Date = new Date(item.date);
-        const formattedDate =
-          inputDate.getDate() +
-          "/" +
-          (inputDate.getMonth() + 1) +
-          "/" +
-          inputDate.getFullYear();
-        const temp: Products = {
-          id: item._id,
-          title: item.title,
-          category: item.category,
-          date: formattedDate,
-          location: item.location,
-          img: fileUrl + item.img,
-        };
-        newData.push(temp);
-      });
-      setCardData(newData);
-    });
-  }, []);
+  // useEffect(() => {
+  //   apiGetReq("/artist/top", {}).then((res) => {
+  //     setArtist({
+  //       id: res.artist[0]._id,
+  //       name: res.artist[0].name,
+  //       img: fileUrl + res.artist[0].profileImg,
+  //       description: res.artist[0].description,
+  //     });
+  //     let newData: Products[] = [];
+  //     res.products.map((item: inputProducts) => {
+  //       const inputDate: Date = new Date(item.date);
+  //       const formattedDate =
+  //         inputDate.getDate() +
+  //         "/" +
+  //         (inputDate.getMonth() + 1) +
+  //         "/" +
+  //         inputDate.getFullYear();
+  //       const temp: Products = {
+  //         id: item._id,
+  //         title: item.title,
+  //         category: item.category,
+  //         date: formattedDate,
+  //         location: item.location,
+  //         img: fileUrl + item.img,
+  //       };
+  //       newData.push(temp);
+  //     });
+  //     setCardData(newData);
+  //   });
+  // }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -145,10 +144,10 @@ const ArtistMainPage = () => {
       }
 
       if (window.innerWidth < 768) {
-        setType(true);
+
         setLineNum(2);
       } else {
-        setType(false);
+
         setLineNum(3);
       }
     };
@@ -163,14 +162,14 @@ const ArtistMainPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout themeMode={themeMode} type={type}>
         <div className="flex justify-center">
           <div className="container">
             {type ? (
               ""
             ) : (
               <div className="md:mt-12 mt-8">
-                <BreadCrumb routeName={["Home", "TV/Radio"]} />
+                <BreadCrumb />
               </div>
             )}
             <div className="md:mt-7 mt-10">
@@ -309,11 +308,11 @@ const ArtistMainPage = () => {
             <div
               className={`flex ${type ? "justify-center" : "justify-end"} md:mt-16 mt-8`}
             >
-              <PaginationBar
+              {/* <PaginationBar
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
                 pages={pages}
-              />
+              /> */}
             </div>
           </div>
         </div>

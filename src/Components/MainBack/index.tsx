@@ -28,10 +28,10 @@ const MainBack: React.FC<MainBackProps> = ({ scrollToBottom }) => {
             <h1
               className={`text-xl md:text-5xl ${!themeMode && "text-dark-color"} font-semibold main-board-text md:mb-4 mb-1`}
             >
-              The Rap Insider:
+              poznanskirap.com:
             </h1>
             <h1 className="text-xl md:text-5xl font-normal main-board-text text-white">
-              Uncovering the Hottest Stories and Events
+              Największy regionalny portal rapowy
             </h1>
           </div>
           <div className="flex justify-center">

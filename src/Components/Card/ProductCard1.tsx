@@ -6,7 +6,7 @@ import { RootState } from "../../reducers";
 import "./style.css";
 import { getFirstTag } from "../../Pages/Article";
 
-interface CardProps {
+export interface News {
   type: string;
   img: string;
   title: string;
@@ -15,7 +15,7 @@ interface CardProps {
   _id: string;
 }
 
-const ProductCard1: React.FC<CardProps> = ({
+const ProductCard1: React.FC<News> = ({
   type,
   img,
   title,
@@ -27,7 +27,7 @@ const ProductCard1: React.FC<CardProps> = ({
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const handleClick = () => {
     console.log(_id);
-    navigate(`${_id}`);
+    navigate(`/news/${_id}`);
   };
 
   return (

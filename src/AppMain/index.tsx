@@ -28,6 +28,11 @@ interface Tag {
 	name: string;
 }
 
+export interface PageBasicProps {
+	themeMode: boolean;
+	type: boolean;
+}
+
 const AppMain: React.FC = () => {
 	const [tags, setTags] = useState<Tag[]>([]);
 	const themeMode = useSelector((state: RootState) => state.themeMode.mode);
@@ -84,33 +89,61 @@ const AppMain: React.FC = () => {
 			>
 				<ScrollToTopOnPageChange />
 				<Routes>
-					<Route path='/' element={<Home />} />
+					<Route
+						path='/'
+						element={<Home themeMode={themeMode} type={type} />}
+					/>
 					<Route path={common.NEWS_PATH}>
-						<Route path='' element={<ArticleMainPage />} />
+						<Route
+							path=''
+							element={<ArticleMainPage themeMode={themeMode} type={type} />}
+						/>
 						<Route
 							path=':id'
-							element={<ArticleDetailPage tagData={tags} />}
+							element={
+								<ArticleDetailPage
+									tagData={tags}
+									themeMode={themeMode}
+									type={type}
+								/>
+							}
 						/>
 					</Route>
 					<Route
 						path={common.TV_RADIO_PATH}
-						element={<VideoMainPage />}
+						element={
+							<VideoMainPage themeMode={themeMode} type={type} />
+						}
 					/>
 					<Route
 						path={common.MATERIAL_PATH}
-						element={<MaterialMainPage />}
+						element={
+							<MaterialMainPage
+								themeMode={themeMode}
+								type={type}
+							/>
+						}
 					/>
 					<Route
 						path={common.CONCERT_PATH}
-						element={<ConcertMainPage />}
+						element={
+							<ConcertMainPage
+								themeMode={themeMode}
+								type={type}
+							/>
+						}
 					/>
 					<Route
 						path={common.NEWRELEASE_PATH}
-						element={<AlbumsMainPage />}
+						element={
+							<AlbumsMainPage themeMode={themeMode} type={type} />
+						}
 					/>
 					<Route
 						path={common.ARTISTS_PATH}
-						element={<ArtistMainPage />}
+						element={
+							<ArtistMainPage themeMode={themeMode} type={type} />
+						}
 					/>
 					<Route
 						path={common.CREATE_NEWS}

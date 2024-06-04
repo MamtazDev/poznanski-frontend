@@ -12,11 +12,9 @@ import MarkCarousel from "../../Components/MarkCarousel";
 import Logo_2 from "../../assets/png/wujo-2.png";
 import "./style.css";
 import Footer from "../../Components/Layout/Footer";
-import { useSelector } from "react-redux";
-import { RootState } from "../../reducers";
+import { PageBasicProps } from "../../AppMain";
 
-const Home: React.FC = () => {
-  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
   const pageBottomRef = useRef<HTMLDivElement>(null);
   const [filterText, setFilterText] = useState<string>("");
   const scrollToBottom = () => {
@@ -24,12 +22,13 @@ const Home: React.FC = () => {
       pageBottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-
+  // mt-[${type ? '300' : '60'}px]
+  console.log(type)
   return (
     <Fragment>
       <div className={`${!themeMode && "back-dark"} overflow-hidden`}>
-        <NavBar filterText={filterText} setFilterText={setFilterText} />
-        <div>
+        <NavBar themeMode={themeMode} type={type} filterText={filterText} setFilterText={setFilterText} />
+        <div className={`mt-${type ? '28' : '40'}`}>
           <MainBack scrollToBottom={scrollToBottom} />
         </div>
         <div ref={pageBottomRef} />

@@ -13,13 +13,13 @@ import {getLastPageNumber} from '../../reducers/NewsReducer';
 import {isInViewport} from '../../Constant/helpers';
 import DelayedComponent from '../../Components/_utility/DelayedComponent';
 import useBreadCrumb from '../../Components/BreadCrumb';
+import { PageBasicProps } from '../../AppMain';
 
 export const getFirstTag = (tags: string) => {
 	return tags.split('#')[1];
 };
 
-const ArticleMainPage = () => {
-	const [type, setType] = useState<boolean>(false);
+const ArticleMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 	const currentPage = useSelector((state: RootState) =>
 		getLastPageNumber(state)
 	);
@@ -69,12 +69,6 @@ const ArticleMainPage = () => {
 					}
 				}
 			}
-
-			if (window.innerWidth < 768) {
-				setType(true);
-			} else {
-				setType(false);
-			}
 		};
 		handleResize();
 		window.addEventListener('scroll', checkVisibility);
@@ -96,17 +90,13 @@ const ArticleMainPage = () => {
 
 	return (
 		<>
-			<Layout>
+			<Layout type={type} themeMode={themeMode}>
 
 					<div className='flex justify-center'>
 						<div className='container'>
-							{type ? (
-								''
-							) : (
-								<div className='md:mt-12 mt-8'>
+						<div className='hidden sm:block md:mt-12 mt-8 '>
 									<BreadCrumb />
 								</div>
-							)}
 							<div className='md:mt-7 mt-10'>
 								<ContentTitle
 									titleType='NEWS'

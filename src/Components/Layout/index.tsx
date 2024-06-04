@@ -7,12 +7,14 @@ import "./style.css";
 
 interface LayoutProps {
   children: ReactNode;
+  type?: boolean;
+  themeMode?: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children, themeMode, type }) => {
   return (
-    <div>
-      <NavBar />
+    <div className={`${type ? 'pt-28' : 'pt-32'}`}>
+      <NavBar themeMode={themeMode}/>
       {children}
       <div className="middle-back md:mt-28 mt-12 flex justify-center items-center">
         <div className="md:h-40 h-20">

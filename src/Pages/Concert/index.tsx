@@ -13,6 +13,7 @@ import Carousel from "../../Components/Carousel";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "../mainPageStyle.css";
+import { PageBasicProps } from "../../AppMain";
 
 interface Product {
   id: string;
@@ -40,10 +41,7 @@ interface inputProducts {
   description: string;
 }
 
-const ConcertMainPage = () => {
-  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-
-  const [type, setType] = useState<boolean>(false);
+const ConcertMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [pages, setPages] = useState<string>("0");
   const [filterText, setFilterText] = useState<string>("");
@@ -108,11 +106,7 @@ const ConcertMainPage = () => {
         }
       }
 
-      if (window.innerWidth < 768) {
-        setType(true);
-      } else {
-        setType(false);
-      }
+
     };
     handleResize();
 
@@ -157,14 +151,14 @@ const ConcertMainPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout themeMode={themeMode} type={type}>
         <div className="flex justify-center">
           <div className="container">
             {type ? (
               ""
             ) : (
               <div className="md:mt-12 mt-8">
-                <BreadCrumb routeName={["Home", "Concert"]} />
+                <BreadCrumb />
               </div>
             )}
             <div className="md:mt-7 mt-10">
@@ -425,11 +419,11 @@ const ConcertMainPage = () => {
             <div
               className={`md:mt-16 mt-8 flex ${type ? "justify-center" : "justify-end"}`}
             >
-              <PaginationBar
+              {/* <PaginationBar
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
                 pages={pages}
-              />
+              /> */}
             </div>
           </div>
         </div>

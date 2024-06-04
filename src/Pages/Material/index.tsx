@@ -9,6 +9,7 @@ import { fileUrl } from "../../Constant/config";
 import MaterialCard from "../../Components/Card/MaterialCard";
 import { Spinner } from "@chakra-ui/react";
 import "../mainPageStyle.css";
+import { PageBasicProps } from "../../AppMain";
 
 interface Product {
   id: string;
@@ -33,8 +34,8 @@ interface inputProducts {
   star: number;
 }
 
-const MaterialMainPage = () => {
-  const [type, setType] = useState<boolean>(false);
+const MaterialMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
+
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [pages, setPages] = useState<string>("0");
   const [rowsPerPage, setRowsPerPage] = useState<number>(12);
@@ -97,12 +98,6 @@ const MaterialMainPage = () => {
           }
         }
       }
-
-      if (window.innerWidth < 768) {
-        setType(true);
-      } else {
-        setType(false);
-      }
     };
     handleResize();
 
@@ -147,14 +142,14 @@ const MaterialMainPage = () => {
 
   return (
     <>
-      <Layout>
+      <Layout themeMode={themeMode}>
         <div className="flex justify-center">
           <div className="container">
             {type ? (
               ""
             ) : (
               <div className="md:mt-12 mt-8">
-                <BreadCrumb routeName={["Home", "TV/Radio", "Material"]} />
+                <BreadCrumb />
               </div>
             )}
             <div className="md:mt-7 mt-10">
@@ -207,11 +202,11 @@ const MaterialMainPage = () => {
               )}
             </div>
             <div className={`flex ${type ? "justify-center" : "justify-end"}`}>
-              <PaginationBar
+              {/* <PaginationBar
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
                 pages={pages}
-              />
+              /> */}
             </div>
           </div>
         </div>

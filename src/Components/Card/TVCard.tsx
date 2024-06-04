@@ -6,7 +6,7 @@ import { openPlayer } from "../../reducers/PlayerReducer";
 import "./style.css";
 import { useDispatch } from "react-redux";
 
-interface CardProps {
+interface News {
   type: string;
   img: string;
   title: string;
@@ -14,7 +14,7 @@ interface CardProps {
   link: string;
 }
 
-const TVCard: React.FC<CardProps> = ({ type, img, title, feature, link }) => {
+const TVCard: React.FC<News> = ({ type, img, title, feature, link }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
 

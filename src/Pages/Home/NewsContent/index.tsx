@@ -5,16 +5,13 @@ import CarouselComponent from "./Carousel";
 import { apiGetReq } from "../../../Constant/api-functions";
 import { fileUrl } from "../../../Constant/config";
 import { useNavigate } from "react-router-dom";
+import { News } from "../../../Components/Card/ProductCard1";
+import { usePaginatedNews } from "../../../hooks/usePaginatedNews";
 
 interface Content {
   img: string;
 }
-interface News {
-  title: string;
-  feature: string;
-  date: string;
-  img: string;
-}
+
 interface inputNews {
   title: string;
   tag: string;
@@ -24,35 +21,12 @@ interface inputNews {
 
 const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
   const [cardNum, setCardNum] = useState<number>(3);
-  const [cardData, setCardData] = useState<News[]>([]);
+
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    apiGetReq("/news/top", { filterText }).then((res) => {
-      let newsData: News[] = [];
-      res.news.map((item: inputNews) => {
-        const inputDate: Date = new Date(item.date);
-        const options: object = {
-          year: "numeric",
-          day: "numeric",
-          month: "long",
-        };
-        const formattedDate: string = inputDate.toLocaleDateString(
-          "en-US",
-          options
-        );
-        const temp: News = {
-          title: item.title,
-          feature: item.tag,
-          img: fileUrl + item.content[0].img,
-          date: formattedDate,
-        };
-        newsData.push(temp);
-      });
-      setCardData(newsData);
-    });
-  }, [filterText]);
+  const {data: cardData} = usePaginatedNews(18, 1);
+
 
   useEffect(() => {
     const handleResize = () => {

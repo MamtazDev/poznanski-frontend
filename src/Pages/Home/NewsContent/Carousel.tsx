@@ -1,22 +1,35 @@
 import React, { useEffect, useState } from "react";
 import DetailButton from "../../../Components/Buttons/DetailButton";
-import ProductCard1 from "../../../Components/Card/ProductCard1";
+import ProductCard1, { News } from "../../../Components/Card/ProductCard1";
 import Carousel from "../../../Components/Carousel";
 import "../../mainPageStyle.css";
 
+export interface ArticleToDisplay {
+	title: string;
+	intro: string;
+	content: string;
+	files: FileToDisplay[];
+	nickname: string;
+	_id: string;
+	tags?: string;
+	date?: Date;
+}
+
+export interface FileToDisplay {
+	name: string;
+	url: string;
+	size: number;
+}
+
+
 interface CarouselProps {
   cardNum: number;
-  cardData: {
-    title: string;
-    feature: string;
-    date: string;
-    img: string;
-  }[];
+  cardData: ArticleToDisplay[];
 }
 
 interface DataType {
   title: string;
-  feature: string;
+  tags: string;
   date: string;
   img: string;
 }
@@ -43,19 +56,23 @@ const CarouselComponent: React.FC<CarouselProps> = (props) => {
                               type="horizontal"
                               img={
                                 props.cardData[idx * props.cardNum * 2 + index]
-                                  .img
+                                  .files[0].url
                               }
-                              feature={
-                                props.cardData[idx * props.cardNum * 2 + index]
-                                  .feature
+                              tags={
+                               `${props.cardData[idx * props.cardNum * 2 + index]
+                                  .tags}`
                               }
                               title={
-                                props.cardData[idx * props.cardNum * 2 + index]
-                                  .title
+                                `${props.cardData[idx * props.cardNum * 2 + index]
+                                  .title}`
                               }
                               date={
+                             `${   props.cardData[idx * props.cardNum * 2 + index]
+                                  .date}`.split("T")[0]
+                              }
+                              _id={
                                 props.cardData[idx * props.cardNum * 2 + index]
-                                  .date
+                                  ._id
                               }
                             />
                           </div>
@@ -77,10 +94,11 @@ const CarouselComponent: React.FC<CarouselProps> = (props) => {
                       <div key={`card-${index}-0`} className="w-full">
                         <ProductCard1
                           type="horizontal"
-                          img={props.cardData[index].img}
-                          feature={props.cardData[index].feature}
+                          img={props.cardData[index].files[0].url}
+                          tags={`${props.cardData[index].tags}`}
                           title={props.cardData[index].title}
-                          date={props.cardData[index].date}
+                          date={`${props.cardData[index].date}`}
+                          _id={props.cardData[index]._id}
                         />
                       </div>
                     )
@@ -104,10 +122,11 @@ const CarouselComponent: React.FC<CarouselProps> = (props) => {
                       <ProductCard1
                         key={`news-carousel-${index}-2`}
                         type="vertical"
-                        img={props.cardData[index].img}
-                        feature={props.cardData[index].feature}
+                        img={props.cardData[index].files[0].url}
+                        tags={`${props.cardData[index].tags}`}
                         title={props.cardData[index].title}
-                        date={props.cardData[index].date}
+                        date={`${props.cardData[index].date}`}
+                        _id={props.cardData[index]._id}
                       />
                     );
                   }
@@ -131,12 +150,13 @@ const CarouselComponent: React.FC<CarouselProps> = (props) => {
                               <ProductCard1
                                 key={`news-carousel-${index}-2`}
                                 type="vertical"
-                                img={props.cardData[idx * 4 + index].img}
-                                feature={
-                                  props.cardData[idx * 4 + index].feature
+                                img={props.cardData[idx * 4 + index].files[0].url}
+                                tags={
+                                 `${props.cardData[idx * 4 + index].tags}`
                                 }
                                 title={props.cardData[idx * 4 + index].title}
-                                date={props.cardData[idx * 4 + index].date}
+                                date={`${props.cardData[idx * 4 + index].date}`}
+                                _id={props.cardData[idx * 4 + index]._id}
                               />
                             );
                           }

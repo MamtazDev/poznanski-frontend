@@ -12,13 +12,14 @@ import "../mainPageStyle.css";
 import { apiGetReq } from "../../Constant/api-functions";
 import { fileUrl } from "../../Constant/config";
 import { changeData1 } from "../../Constant/helpers";
+import { PageBasicProps } from "../../AppMain";
 
 interface TagData {
   _id: string;
   name: string;
 }
 
-interface PageDataProps {
+interface PageDataProps extends PageBasicProps{
   tagData: {
     _id: string;
     name: string;
@@ -65,34 +66,18 @@ interface Comment {
   comment: string;
 }
 
-const ArticleDetailPage: React.FC<PageDataProps> = (props) => {
+const ArticleDetailPage: React.FC<PageDataProps> = ({tagData, themeMode, type}) => {
   const { id } = useParams<{ id: string }>();
-  const [type, setType] = useState<boolean>(false);
-  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [loading, setLoading] = useState<boolean>(false);
   const [pageData, setPageData] = useState<News>();
   const [relatedData, setRelatedData] = useState<News[]>();
   const [tags, setTags] = useState<TagData[]>([]);
 
   useEffect(() => {
-    setTags(props.tagData);
-  }, [props.tagData]);
+    setTags(tagData);
+  }, [tagData]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setType(true);
-      } else {
-        setType(false);
-      }
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -150,7 +135,7 @@ const ArticleDetailPage: React.FC<PageDataProps> = (props) => {
             ""
           ) : (
             <div className="md:mt-12 mt-8">
-              <BreadCrumb routeName={["Home", "News"]} />
+              <BreadCrumb />
             </div>
           )}
           <div className="flex md:flex-row flex-col gap-8">

@@ -6,7 +6,7 @@ import { openPlayer } from "../../reducers/PlayerReducer";
 import "./style.css";
 import { useDispatch } from "react-redux";
 
-interface CardProps {
+interface News {
   type: string;
   img: string;
   title: string;
@@ -16,7 +16,7 @@ interface CardProps {
   link: string;
 }
 
-const MaterialCard: React.FC<CardProps> = ({
+const MaterialCard: React.FC<News> = ({
   type,
   img,
   title,

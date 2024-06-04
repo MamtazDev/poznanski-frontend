@@ -14,10 +14,13 @@ import * as common from '../../../Constant/constants';
 import './style.css';
 import {set} from 'lodash';
 import BreadCrumb from '../../BreadCrumb';
+import { ToFixedIfOut } from '../../_utility/ToFixedWhileOut';
 
 interface NavBarProps {
 	filterText?: string;
 	setFilterText?: React.Dispatch<React.SetStateAction<string>>;
+  themeMode?: boolean;
+  type?: boolean;
 }
 
 const NavBar: React.FC<NavBarProps> = (props) => {
@@ -32,26 +35,8 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 	const [selectedMenu, setSelectedMenu] = useState<string>('Home');
 	// const [openFilterBox, setOpenFilterBox] = useState<boolean>(false);
 	const [openModal, setOpenModal] = useState<boolean>(false);
-	const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-	const [type, setType] = useState<boolean>(false);
 	const navigate = useNavigate();
 	const location = useLocation();
-
-	useEffect(() => {
-		const handleResize = () => {
-			if (window.innerWidth < 768) {
-				setType(true);
-			} else {
-				setType(false);
-			}
-		};
-		handleResize();
-		window.addEventListener('resize', handleResize);
-
-		return () => {
-			window.removeEventListener('resize', handleResize);
-		};
-	}, []);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		console.log(e.target.value);
@@ -120,35 +105,39 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 				break;
 		}
 	};
+  // ${props.type && 'fixed border-b-2 border-b-stone-500 shadow-2xl'}
 
 	const onClose = (): void => {
 		setOpenModal(false);
 	};
 	return (
 		<Fragment>
-			<div className='Nav-bar'>
+      <ToFixedIfOut>
+			<div className={`Nav-bar
+
+      w-full z-50`}>
 				{/* <div
-          className={`block sm:hidden Nav-part ${!themeMode && "Nav-part-dark"} w-full`}
+          className={`block sm:hidden Nav-part ${!props.themeMode && "Nav-part-dark"} w-full`}
         ></div> */}
 				<div
-					className={`Nav-bar-top ${!themeMode && 'Nav-bar-top-dark'} flex place-items-center justify-center`}
+					className={`Nav-bar-top ${!props.themeMode && 'Nav-bar-top-dark'} flex place-items-center justify-center`}
 				>
 					<div className='grid grid-cols-2 gap-x-4 container py-4'>
 						<div className='flex place-items-center'>
 							<img
 								className='mr-4 cursor-pointer'
-								src={themeMode ? Logo : Logo2}
+								src={props.themeMode ? Logo : Logo2}
 								style={{
-									width: type ? '40px' : '60px',
-									height: type ? '40px' : '60px',
+									width: '60px',
+									height: '60px',
 								}}
 								onClick={() => navigate(common.HOME_PATH)}
 								alt='logo'
 							/>
-							{!type && (
+							{!props.type && (
 								<div className='w-full'>
 									<div
-										className={`filter-box ${!themeMode && 'filter-box-dark'} flex place-items-center`}
+										className={`filter-box ${!props.themeMode && 'filter-box-dark'} flex place-items-center`}
 									>
 										<svg
 											xmlns='http://www.w3.org/2000/svg'
@@ -210,7 +199,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 												<path
 													d='M6.61914 19.5L19.859 6.5M6.61914 6.5L19.859 19.5'
 													stroke={
-														themeMode
+														props.themeMode
 															? '#6D6E76'
 															: '#51525C'
 													}
@@ -228,7 +217,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 							<div className='flex-2 flex place-items-center h-full justify-end'>
 								<div className='grid grid-cols-4 gap-x-4 '>
 									<div className='cursor-pointer'>
-										{themeMode ? (
+										{props.themeMode ? (
 											<img src={Youtube} alt='youtube' />
 										) : (
 											<svg
@@ -258,7 +247,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 										)}
 									</div>
 									<div className='cursor-pointer'>
-										{themeMode ? (
+										{props.themeMode ? (
 											<img
 												src={FaceBook}
 												alt='facebook'
@@ -289,7 +278,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 										)}
 									</div>
 									<div className='cursor-pointer'>
-										{themeMode ? (
+										{props.themeMode ? (
 											<img
 												src={Instagram}
 												alt='instagram'
@@ -327,7 +316,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 										)}
 									</div>
 									<div className='cursor-pointer'>
-										{themeMode ? (
+										{props.themeMode ? (
 											<img src={Cup} alt='cup' />
 										) : (
 											<svg
@@ -384,7 +373,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 								</div>
 								<Link to={common.CREATE_NEWS}>
 									<div
-										className={`submit-btn ${!themeMode && 'submit-btn-dark'} flex place-items-center ml-4 cursor-pointer`}
+										className={`submit-btn ${!props.themeMode && 'submit-btn-dark'} flex place-items-center ml-4 cursor-pointer`}
 									>
 										Submit News
 									</div>
@@ -397,7 +386,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 									<button
 									// onClick={() => setOpenFilterBox(true)}
 									>
-										{themeMode ? (
+										{props.themeMode ? (
 											<svg
 												xmlns='http://www.w3.org/2000/svg'
 												width='24'
@@ -474,7 +463,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 										)}
 									</button>
 									<button onClick={() => setOpenModal(true)}>
-										{themeMode ? (
+										{props.themeMode ? (
 											<svg
 												xmlns='http://www.w3.org/2000/svg'
 												width='24'
@@ -557,18 +546,20 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 				</div>
 				<div className='hidden sm:block'>
 					<div
-						className={`Nav-bar-down ${!themeMode && 'Nav-bar-down-dark'} flex justify-center`}
+						className={`Nav-bar-down ${!props.themeMode && 'Nav-bar-down-dark'} space-around`}
 					>
-						<div className='flex'>
-							{menu.map((item, idx) => (
+						<div className='flex justify-center gap-10'>
+							{/* <ToFixedIfOut > */}
+                {menu.map((item, idx) => (
 								<div
 									key={`nav-btn-${idx}`}
-									className={`Nav-btn ${!themeMode && 'Nav-btn-dark'} ${item === selectedMenu && (themeMode ? 'selected-menu' : 'selected-menu-dark')}`}
+									className={`Nav-btn ${!props.themeMode && 'Nav-btn-dark'} ${item === selectedMenu && (props.themeMode ? 'selected-menu' : 'selected-menu-dark')}`}
 									onClick={() => onClick(item)}
 								>
 									{item}
 								</div>
 							))}
+              {/* </ToFixedIfOut> */}
 						</div>
 					</div>
 				</div>
@@ -576,14 +567,14 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 			<Modal onClose={onClose} size='full' isOpen={openModal}>
 				<ModalOverlay />
 				<ModalContent
-					className={`container flex flex-col justify-between ${!themeMode && 'back-dark'}`}
+					className={`container ${!props.themeMode && 'back-dark'} justify-between h-screen`}
 				>
-					<div>
+					<div className='flex-col h-full'>
 						<div className='flex justify-between my-4'>
 							<div className='mr-4 cursor-pointer'>
 								<img
 									className='w-10 sm:w-auto'
-									src={themeMode ? Logo : Logo2}
+									src={props.themeMode ? Logo : Logo2}
 									alt='logo'
 								/>
 							</div>
@@ -593,30 +584,30 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 							>
 								<AiOutlineClose
 									size={24}
-									color={themeMode ? '' : '#FFF'}
+									color={props.themeMode ? '' : '#FFF'}
 								/>
 							</div>
 						</div>
 						<div className='flex justify-center mb-10'>
 							<BreadCrumb />
 						</div>
-						<div className='flex justify-center mb-10'>
-							<div className='grid grid-cols-1 gap-y-10'>
+						<div className='flex flex-col justify-around h-3/4 pb-10'>
+
 								{menu.map((item, idx) => (
 									<div
 										key={`nav-vertical-btn-${idx}`}
-										className={`Nav-vertical-btn text-center ${item === selectedMenu && (themeMode ? 'selected-menu' : 'text-dark-color')}`}
+										className={`Nav-vertical-btn text-center ${item === selectedMenu && (props.themeMode ? 'selected-menu' : 'text-dark-color')}`}
 										onClick={() => onClick(item)}
 									>
 										{item}
 									</div>
 								))}
-							</div>
+
 						</div>
 						<div className='flex justify-center'>
 							<div className='grid grid-cols-4 gap-x-8'>
 								<div className='cursor-pointer'>
-									{themeMode ? (
+									{props.themeMode ? (
 										<img src={Youtube} alt='youtube' />
 									) : (
 										<svg
@@ -646,7 +637,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 									)}
 								</div>
 								<div className='cursor-pointer'>
-									{themeMode ? (
+									{props.themeMode ? (
 										<img src={FaceBook} alt='facebook' />
 									) : (
 										<svg
@@ -674,7 +665,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 									)}
 								</div>
 								<div className='cursor-pointer'>
-									{themeMode ? (
+									{props.themeMode ? (
 										<img src={Instagram} alt='instagram' />
 									) : (
 										<svg
@@ -709,7 +700,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 									)}
 								</div>
 								<div className='cursor-pointer'>
-									{themeMode ? (
+									{props.themeMode ? (
 										<img src={Cup} alt='cup' />
 									) : (
 										<svg
@@ -769,7 +760,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 					<Link to={common.CREATE_NEWS}>
 						<div className='flex items-center mb-6'>
 							<div
-								className={`submit-btn-2 flex place-items-center w-full cursor-pointer ${!themeMode && 'btn-dark-bg-color btn-dark-color'}`}
+								className={`submit-btn-2 flex place-items-center w-full cursor-pointer ${!props.themeMode && 'btn-dark-bg-color btn-dark-color'}`}
 							>
 								Submit News
 							</div>
@@ -777,6 +768,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 					</Link>
 				</ModalContent>
 			</Modal>
+      </ToFixedIfOut>
 		</Fragment>
 	);
 };

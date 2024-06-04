@@ -21,11 +21,11 @@
   height: 44px;
 }
 
-@media (max-width: 640px) {
+/* @media (max-width: 640px) {
   .Nav-bar-top {
     height: 46px !important;
   }
-}
+} */
 
 .submit-btn {
   width: 150px;
@@ -96,10 +96,10 @@
   font-family: Urbanist;
   font-size: 16px;
   font-style: normal;
+  width: 100%;
   font-weight: 500;
   line-height: normal;
   background: #fff;
-  padding: 17px 0px;
 }
 
 .Nav-bar-down-dark {
@@ -107,8 +107,13 @@
 }
 
 .Nav-bar-down div {
-  margin: 0px 24px;
   cursor: pointer;
+}
+
+.Nav-btn {
+  height: 50px;
+  place-content: center;
+
 }
 
 .Nav-btn:hover {

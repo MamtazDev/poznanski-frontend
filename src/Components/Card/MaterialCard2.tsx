@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "./style.css";
 
-interface CardProps {
+interface News {
   type: string;
   img: string;
   title: string;
@@ -13,7 +13,7 @@ interface CardProps {
   location: string;
 }
 
-const MaterialCard: React.FC<CardProps> = ({
+const MaterialCard: React.FC<News> = ({
   type,
   img,
   title,
