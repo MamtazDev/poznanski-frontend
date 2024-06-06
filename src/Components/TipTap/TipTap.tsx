@@ -1,28 +1,28 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import Image from '@tiptap/extension-image';
 import {AnyExtension, EditorContent, useEditor} from '@tiptap/react';
 import styles from './TipTap.module.css';
 import {Box} from '@chakra-ui/react';
 import {FileResizer} from '../ImageFileResizer/ImageFileResizer';
 import {MenuBar} from './MenuBar';
-import {
-	customFileHandler,
-	customYouTube,
-	customYouTubeArticle,
-} from './Extensions';
 import {getFileData, getFilesIncludedInHTML} from './helpers';
 import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
-import FileHandler from '@tiptap-pro/extension-file-handler';
+import {customYouTubeArticle, customFileHandler} from './Extensions';
+import { openPlayer } from '../../reducers/PlayerReducer';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../reducers';
 
 export interface TipTapProps {
 	onVideoAdd?: (videoUrl: string) => void;
-	type: boolean;
-	setFiles: React.Dispatch<React.SetStateAction<FileFromEditor[] | null>>;
-	setArticle: React.Dispatch<React.SetStateAction<string>>;
+	type?: boolean;
+	setFiles?: React.Dispatch<React.SetStateAction<FileFromEditor[] | null>>;
+	setArticle?: React.Dispatch<React.SetStateAction<string>>;
 	onSubmit?: () => void;
-	themeMode: boolean;
+	themeMode?: boolean;
+	editable?: boolean;
+	content?: string;
 }
 
 type imageFromEditor = {
@@ -36,13 +36,17 @@ export type FileFromEditor = {
 	url: string;
 };
 
-const content = ``;
-
 export const getExtensionsData = (
 	setFiles: TipTapProps['setFiles']
 ): AnyExtension[] => [
 	StarterKit,
 	TextAlign,
+		Image.configure({
+		HTMLAttributes: {
+			class: 'mx-auto my-3 max-h-[494px] max-w-[870px] object-cover',
+			style: `border-radius: 16px; border: 1px solid #e5e7eb;`
+		},
+	}),
 	customYouTubeArticle,
 	Link.configure({
 		validate: (href) => /^https?:\/\//.test(href),
@@ -50,12 +54,6 @@ export const getExtensionsData = (
 		HTMLAttributes: {
 			class: 'editor-link',
 			style: 'text-decoration: underline; cursor: pointer;',
-		},
-	}),
-	Image.configure({
-		HTMLAttributes: {
-			class: 'mx-auto my-3 max-h-[494px] max-w-[870px] object-cover',
-			style: 'border-radius: 8px; border: 1px solid #e5e7eb;'
 		},
 	}),
 	customFileHandler(setFiles),
@@ -91,17 +89,22 @@ const TipTap: React.FC<TipTapProps> = ({
 	setFiles,
 	onSubmit,
 	themeMode,
+	editable = true,
+	content = '',
 }) => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const dispatch = useDispatch<AppDispatch>();
 
 	const onEditorUpdate = (htmlString: string) => {
-		setArticle(htmlString);
-		setFiles((prev) => {
-			if (!prev) {
-				return null;
-			}
-			return getFilesIncludedInHTML(htmlString, prev);
-		});
+		if (setArticle && setFiles) {
+			setArticle(htmlString);
+			setFiles((prev) => {
+				if (!prev) {
+					return null;
+				}
+				return getFilesIncludedInHTML(htmlString, prev);
+			});
+		}
 	};
 
 	const editor = useEditor({
@@ -111,6 +114,7 @@ const TipTap: React.FC<TipTapProps> = ({
 			const html = editor.getHTML();
 			return onEditorUpdate(html);
 		},
+		editable,
 	});
 
 	const handleVideoAdd = () => {
@@ -123,24 +127,28 @@ const TipTap: React.FC<TipTapProps> = ({
 	};
 
 	const handleImgAdd = async (file: File) => {
-		const compressedFile = await FileResizer(file);
-		if (compressedFile) {
-			const fileToAdd = getFileData(file, compressedFile);
-			editor
-				?.chain()
-				.focus()
-				.setImage({src: fileToAdd.url, alt: fileToAdd.name})
-				.run();
-			setFiles((prev) => {
-				URL.revokeObjectURL(fileToAdd.url);
-				if (!prev) {
-					return [fileToAdd];
-				}
-				return [...prev, fileToAdd];
-			});
-			editor?.commands.newlineInCode();
+		if (setFiles) {
+			const compressedFile = await FileResizer(file);
+			if (compressedFile) {
+				const fileToAdd = getFileData(file, compressedFile);
+				editor
+					?.chain()
+					.focus()
+					.setImage({src: fileToAdd.url, alt: fileToAdd.name})
+					.run();
+				setFiles((prev) => {
+					URL.revokeObjectURL(fileToAdd.url);
+					if (!prev) {
+						return [fileToAdd];
+					}
+					return [...prev, fileToAdd];
+				});
+				editor?.commands.newlineInCode();
+			}
 		}
 	};
+
+
 
 	const handleFileChange = async (
 		event: React.ChangeEvent<HTMLInputElement>
@@ -164,46 +172,77 @@ const TipTap: React.FC<TipTapProps> = ({
 		</button>,
 	];
 
+	const handlePlayButton = (event: MouseEvent) => {
+		const target = event.target as Element;
+		if (target.closest('.yt-play-button')) {
+			dispatch(openPlayer(`${target.getAttribute('value')}`));
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener('click', (event) => handlePlayButton(event));
+
+		return () => {
+			window.removeEventListener('click', (event) =>
+				handlePlayButton(event)
+			);
+		};
+	}, []);
+
 	return (
 		<>
 			<div className={styles.tiptap}>
-				<div
-					className={`block mb-2 text-left ${themeMode ? 'text-gray-900' : 'text-white'} `}
-					style={{fontSize: type ? '14px' : '18px'}}
-				>
-					<p className='label-text'>Treść Twojego newsa</p>
-					{editor && (
-						<MenuBar
-							editor={editor}
-							additionalButtons={additionalButtons}
-						/>
-					)}
-				</div>
+				{editable?
+					<>
+						<div
+							className={`block mb-2 text-left ${themeMode ? 'text-gray-900' : 'text-white'} `}
+							style={{fontSize: type ? '14px' : '18px'}}
+						>
+							{editable && (
+								<p className='label-text'>
+									Treść Twojego newsa
+								</p>
+							)}
+							{editor && (
+								<MenuBar
+									editor={editor}
+									additionalButtons={additionalButtons}
+								/>
+							)}
+						</div>
 
-				<Box
-					sx={{
-						'&& .ProseMirror': {
-							height: '600px',
-							overflowY: 'auto',
-							border: `1px solid ${themeMode ? '' : '#e5e7eb86'}`,
-							backgroundColor: `${themeMode ? '#E9E9EB' : 'rgb(36, 37, 38)'}`,
-							color: `${themeMode ? '#000' : '#fff'}`,
-							borderRadius: '7px',
-						},
-					}}
-				>
-					<EditorContent
-						className={styles.editorContent}
-						editor={editor}
-					/>
-				</Box>
-				<input
-					type='file'
-					accept='image/png'
-					onChange={handleFileChange}
-					ref={fileInputRef}
-					style={{display: 'none'}}
-				/>
+						<Box
+							sx={{
+								'&& .ProseMirror': {
+									height: editable ? '600px' : 'auto',
+									overflowY: 'auto',
+									border: editable
+										? `1px solid ${themeMode ? '' : '#e5e7eb86'}`
+										: 'none',
+									backgroundColor: editable
+										? `${themeMode ? '#E9E9EB' : 'rgb(36, 37, 38)'}`
+										: themeMode
+											? '#ffffff'
+											: 'rgb(17, 18, 23)',
+									color: `${!themeMode ? '#BBBCC0' : '#6D6E76'}`,
+									borderRadius: '7px',
+								},
+							}}
+						>
+							<EditorContent
+								className={styles.editorContent}
+								editor={editor}
+							/>
+						</Box>
+						<input
+							type='file'
+							accept='image/png'
+							onChange={handleFileChange}
+							ref={fileInputRef}
+							style={{display: 'none'}}
+						/>
+					</> : <div dangerouslySetInnerHTML={{__html: content}} />
+				}
 			</div>
 		</>
 	);

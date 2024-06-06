@@ -12,7 +12,7 @@ const BreadCrumb = () => {
 	const [selectedMenu, setSelectedMenu] =
 		React.useState<{[key: string]: string}[]>(defaultRoute);
 	const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-	useEffect(() => {
+useMemo(() => {
 		const breadcrumbValues = Object.values(common);
 		const shouldAddToBreadcrumb = breadcrumbValues.find((item) =>
 			currentRoute.includes(item)
@@ -60,7 +60,7 @@ const BreadCrumb = () => {
 		} else {
 			setSelectedMenu(defaultRoute);
 		}
-	}, [currentRoute]);
+	}, []);
 
 
 

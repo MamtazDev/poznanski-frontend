@@ -1,5 +1,5 @@
 import React from 'react';
-import {AnyExtension, mergeAttributes, useEditor} from '@tiptap/react';
+import {AnyExtension, NodeViewWrapper, mergeAttributes, useEditor} from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
 import Image from '@tiptap/extension-image';
@@ -9,6 +9,7 @@ import FileHandler from '@tiptap-pro/extension-file-handler';
 import {FileFromEditor, TipTapProps} from './TipTap';
 import {convertToEmbedLink, getFileData} from './helpers';
 import {text} from 'stream/consumers';
+import ReactDOM from 'react-dom';
 
 function getYouTubeThumbnail(url: string) {
 	let videoId: string | null = '';
@@ -54,34 +55,9 @@ const getYouTubeVideoId = (url: string) => {
 	return null;
 };
 
-export const customYouTube = YouTube.configure({
-	height: 240,
-	width: 320,
-	addPasteHandler: true,
-	disableKBcontrols: true,
-	HTMLAttributes: {
-		class: 'editor-youtube',
-	},
-}).extend({
-	renderHTML({node, HTMLAttributes}) {
-		return [
-			'div',
-			mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-				class: 'text-center my-10',
-				text: 'center',
-			}),
-			[
-				'iframe',
-				mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-					src: convertToEmbedLink(node.attrs.src),
-					class: 'mx-auto my-10 border-2 border-gray-300 rounded-lg event-none',
-					height: '240px',
-					width: '70%',
-				}),
-			],
-		];
-	},
-});
+
+
+
 
 export const customYouTubeArticle = YouTube.configure({
 	height: 240,
@@ -129,6 +105,9 @@ export const customYouTubeArticle = YouTube.configure({
 	},
 });
 
+
+
+
 export const customFileHandler = (setFiles: TipTapProps['setFiles']) =>
 	FileHandler.configure({
 		allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif'],
@@ -142,7 +121,7 @@ export const customFileHandler = (setFiles: TipTapProps['setFiles']) =>
 					.focus()
 					.setImage({src: fileToAdd.url, alt: fileToAdd.name})
 					.run();
-				setFiles((prev) => {
+				setFiles?.((prev) => {
 					URL.revokeObjectURL(fileToAdd.url);
 					if (!prev) {
 						return [fileToAdd];
@@ -162,7 +141,7 @@ export const customFileHandler = (setFiles: TipTapProps['setFiles']) =>
 					.focus()
 					.setImage({src: fileToAdd.url, alt: fileToAdd.name})
 					.run();
-				setFiles((prev) => {
+				setFiles?.((prev) => {
 					URL.revokeObjectURL(fileToAdd.url);
 					if (!prev) {
 						return [fileToAdd];

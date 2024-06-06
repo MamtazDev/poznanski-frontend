@@ -591,7 +591,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 						<div className='flex justify-center mb-10'>
 							<BreadCrumb />
 						</div>
-						<div className='flex flex-col justify-around h-3/4 pb-10'>
+						<div className='flex flex-col justify-between h-4/6 pb-10'>
 
 								{menu.map((item, idx) => (
 									<div
@@ -605,7 +605,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 
 						</div>
 						<div className='flex justify-center'>
-							<div className='grid grid-cols-4 gap-x-8'>
+							<div className='grid grid-cols-4 gap-x-8 -mb-20'>
 								<div className='cursor-pointer'>
 									{props.themeMode ? (
 										<img src={Youtube} alt='youtube' />

@@ -216,15 +216,6 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 		}
 	};
 
-	const handlePlayButton = (event: MouseEvent) => {
-		const target = event.target as Element;
-		if (target.closest('.yt-play-button')) {
-			dispatch(openPlayer(`${target.getAttribute('value')}`));
-			console.log('Div clicked!');
-			console.log('Clicked element class:', target.getAttribute('value'));
-			// Additional logic based on the class of the clicked element
-		}
-	};
 
 	useEffect(() => {
 		if (errors.title) {
@@ -241,19 +232,9 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 		}
 	}, [errors]);
 
-	useEffect(() => {
-		window.addEventListener('click', (event) => handlePlayButton(event));
-
-		return () => {
-			window.removeEventListener('click', (event) =>
-				handlePlayButton(event)
-			);
-		};
-	}, []);
-
 	return (
 		<div>
-			<Layout>
+			<Layout themeMode={themeMode} type={type}>
 				<div className='flex justify-center'>
 					<div className='container'>
 						<div className='md:mt-12 mt-8'>

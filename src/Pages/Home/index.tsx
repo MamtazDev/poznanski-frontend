@@ -28,8 +28,8 @@ const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
     <Fragment>
       <div className={`${!themeMode && "back-dark"} overflow-hidden`}>
         <NavBar themeMode={themeMode} type={type} filterText={filterText} setFilterText={setFilterText} />
-        <div className={`mt-${type ? '28' : '40'}`}>
-          <MainBack scrollToBottom={scrollToBottom} />
+        <div className="mt-[120px]">
+          <MainBack type={type} themeMode={themeMode} scrollToBottom={scrollToBottom} />
         </div>
         <div ref={pageBottomRef} />
         <NewsContent filterText={filterText} />

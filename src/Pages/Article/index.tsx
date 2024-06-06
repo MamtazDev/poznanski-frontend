@@ -7,19 +7,35 @@ import ProductCard1 from '../../Components/Card/ProductCard1';
 import {Button, Spinner} from '@chakra-ui/react';
 import '../mainPageStyle.css';
 import {usePaginatedNews} from '../../hooks/usePaginatedNews';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../reducers';
-import {getLastPageNumber} from '../../reducers/NewsReducer';
+import {
+	addLastVisited,
+	getLastPageNumber,
+	getLastVisitedId,
+} from '../../reducers/NewsReducer';
 import {isInViewport} from '../../Constant/helpers';
 import DelayedComponent from '../../Components/_utility/DelayedComponent';
 import useBreadCrumb from '../../Components/BreadCrumb';
-import { PageBasicProps } from '../../AppMain';
+import {PageBasicProps} from '../../AppMain';
+import {useParams} from 'react-router-dom';
 
 export const getFirstTag = (tags: string) => {
 	return tags.split('#')[1];
 };
 
+const scrollToById = (id: string) => {
+	const element = document.getElementById(id);
+	if (element) {
+		element.scrollIntoView({
+			// behavior: 'smooth',
+			block: 'center',
+		});
+	}
+};
+
 const ArticleMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
+	const dispatch = useDispatch();
 	const currentPage = useSelector((state: RootState) =>
 		getLastPageNumber(state)
 	);
@@ -27,13 +43,22 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 	const [cardNum, setCardNum] = useState<number>(4);
 	const [loadNexPage, setLoadNextPage] = useState<boolean>(false);
 	const loadNextPageElementRef = React.createRef<HTMLDivElement>();
-
+	const lastVisitedId = useSelector((state: RootState) =>
+		getLastVisitedId(state)
+	);
 	const pageSize = 18;
 	const {data, loading, forceRevalidateAll, totalPages} = usePaginatedNews(
 		pageSize,
 		selectedPage
 	);
 	const currentPageByLength = Math.ceil(data.length / pageSize);
+
+	if (lastVisitedId) {
+		setTimeout(() => {
+			scrollToById(lastVisitedId);
+			dispatch(addLastVisited(''));
+		}, 300);
+	}
 	const loadMore = () => {
 		setSelectedPage((prevPage) => {
 			if (prevPage < totalPages) {
@@ -91,29 +116,29 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 	return (
 		<>
 			<Layout type={type} themeMode={themeMode}>
-
-					<div className='flex justify-center'>
-						<div className='container'>
+				<div className='flex justify-center'>
+					<div className='container'>
 						<div className='hidden sm:block md:mt-12 mt-8 '>
-									<BreadCrumb />
-								</div>
-							<div className='md:mt-7 mt-10'>
-								<ContentTitle
-									titleType='NEWS'
-									title='See Our Latest News'
-								/>
-							</div>
-							<div className='md:mt-6 mt-4'>
-								<FilterInput type={type} />
-							</div>
-							<div
-								className={`md:mt-12 mt-8`}
-								style={{
-									minHeight: type ? '843px' : '1235.7px',
-									width: '100%',
-								}}
-							>
-								<DelayedComponent delay={200}>{loading ? (
+							<BreadCrumb />
+						</div>
+						<div className='md:mt-7 mt-10'>
+							<ContentTitle
+								titleType='NEWS'
+								title='See Our Latest News'
+							/>
+						</div>
+						<div className='md:mt-6 mt-4'>
+							<FilterInput type={type} />
+						</div>
+						<div
+							className={`md:mt-12 mt-8`}
+							style={{
+								minHeight: type ? '843px' : '1235.7px',
+								width: '100%',
+							}}
+						>
+							<DelayedComponent delay={200}>
+								{loading ? (
 									<div
 										className='w-full flex justify-center items-center'
 										style={{
@@ -136,6 +161,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 											(item) =>
 												item && (
 													<div
+														id={item._id}
 														key={`main-news-card-${item._id}`}
 														className='w-full'
 													>
@@ -164,49 +190,49 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 												)
 										)}
 									</div>
-								)}</DelayedComponent>
-							</div>
-							<div
-								className={`flex ${type ? 'justify-center' : 'justify-end'}`}
-							>
-								{loading ? (
-									<div
-										className='w-full flex justify-center items-center'
-										style={{
-											minHeight: type ? '776px' : '908px',
-										}}
-									>
-										<Spinner
-											thickness='4px'
-											speed='0.65s'
-											emptyColor='gray.200'
-											color='blue.500'
-											size='lg'
-										/>
-									</div>
-								) : (
-									currentPageByLength !== totalPages && (
-										<div
-											ref={loadNextPageElementRef}
-											onClick={() => loadMore()}
-											className='w-full h-32 flex justify-center items-center'
-										>
-											{loadNexPage && (
-												<Spinner
-													thickness='4px'
-													speed='0.65s'
-													emptyColor='gray.200'
-													color='blue.500'
-													size='lg'
-												/>
-											)}
-										</div>
-									)
 								)}
-							</div>
+							</DelayedComponent>
+						</div>
+						<div
+							className={`flex ${type ? 'justify-center' : 'justify-end'}`}
+						>
+							{loading ? (
+								<div
+									className='w-full flex justify-center items-center'
+									style={{
+										minHeight: type ? '776px' : '908px',
+									}}
+								>
+									<Spinner
+										thickness='4px'
+										speed='0.65s'
+										emptyColor='gray.200'
+										color='blue.500'
+										size='lg'
+									/>
+								</div>
+							) : (
+								currentPageByLength !== totalPages && (
+									<div
+										ref={loadNextPageElementRef}
+										onClick={() => loadMore()}
+										className='w-full h-32 flex justify-center items-center'
+									>
+										{loadNexPage && (
+											<Spinner
+												thickness='4px'
+												speed='0.65s'
+												emptyColor='gray.200'
+												color='blue.500'
+												size='lg'
+											/>
+										)}
+									</div>
+								)
+							)}
 						</div>
 					</div>
-
+				</div>
 			</Layout>
 		</>
 	);

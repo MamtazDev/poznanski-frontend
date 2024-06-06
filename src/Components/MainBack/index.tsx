@@ -8,17 +8,18 @@ import { RootState } from "../../reducers";
 
 interface MainBackProps {
   scrollToBottom: () => void;
+  themeMode: boolean;
+  type: boolean;
 }
 
-const MainBack: React.FC<MainBackProps> = ({ scrollToBottom }) => {
-  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+const MainBack: React.FC<MainBackProps> = ({ scrollToBottom, themeMode, type }) => {
 
   return (
     <div
       className={`flex w-full relative overflow-hidden ${themeMode ? "background" : "background-dark"} `}
     >
       <div
-        className={`flex flex-col justify-between items-center w-full md:py-5 py-1`}
+        className={`flex flex-col justify-between items-center w-full md:py-5 py-1 mt-${type ? '48' : '80'}`}
       >
         <div className="z-20 mt-4 md:mt-5">
           <div className="flex justify-center">

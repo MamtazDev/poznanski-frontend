@@ -15,6 +15,7 @@ import {
 } from '../reducers/NewsReducer';
 import {set} from 'react-hook-form';
 import _, {constant, get} from 'lodash';
+import { ArticleToDisplay } from '../Pages/Home/NewsContent/Carousel';
 
 export interface Article {
 	title: string;
@@ -43,7 +44,7 @@ export const usePaginatedNews = (pageSize: number, page: number) => {
   const dispatch = useDispatch<AppDispatch>();
   const { news, error, loading } = useSelector((state: RootState) => state.news);
   const currentPage = useSelector((state: RootState) => getLastPageNumber(state));
-  const allNews: Article[] = useSelector((state: RootState) => selectAllNews(state));
+  const allNews: ArticleToDisplay[] = useSelector((state: RootState) => selectAllNews(state));
   const pageData = useSelector((state: RootState) => state.news.news[page]);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -63,8 +64,6 @@ export const usePaginatedNews = (pageSize: number, page: number) => {
         // Check if the current page data is different from the fetched data
         if (!currentPage || page >= currentPage) {
           fetchedNews.length > 0 && dispatch(fetchSuccess({ data: fetchedNews, page }));
-        } else if (page === currentPage) {
-          dispatch(updatePage({ data: fetchedNews, page }));
         }
       },
       onError: (error) => dispatch(fetchError(error.message)),
@@ -72,19 +71,36 @@ export const usePaginatedNews = (pageSize: number, page: number) => {
   );
 
   const forceRevalidateAll = async () => {
-    const pageKeys = Object.keys(news);
-    const revalidatePromises = pageKeys.map(async (pageKey) => {
-      const pageNum = Number(pageKey);
-      const newData = await globalMutate(`/api/news?page=${pageNum}&pageSize=${pageSize}`, async () => {
-        const response = await getNewsRequests(pageNum, pageSize);
-        return response;
-      }, false);  // Passing false to avoid immediate refetch
-      if (newData?.news && !_.isEqual(newData.news, news[pageNum])) {
-        dispatch(updatePage({ data: newData.news, page: pageNum }));
-      }
-    });
+	const pageKeys = Object.keys(news);
+	const [firstPageKey, ...restOfPageKeys] = pageKeys;
 
-    await Promise.all(revalidatePromises);
+	const firstPageNum = Number(firstPageKey);
+
+	// Fetch the first page
+	const firstPageData = await globalMutate(`/api/news?page=${firstPageNum}&pageSize=${pageSize}`, async () => {
+	  const response = await getNewsRequests(firstPageNum, pageSize);
+	  return response;
+	}, false);  // Passing false to avoid immediate refetch
+
+	// Check if the first page's content has changed
+	if (firstPageData?.news && !_.isEqual(firstPageData.news, news[firstPageNum])) {
+	  dispatch(updatePage({ data: firstPageData.news, page: firstPageNum }));
+
+	  // Fetch and update the remaining pages only if the first page has changed
+	  const revalidatePromises = restOfPageKeys.map(async (pageKey) => {
+		const pageNum = Number(pageKey);
+		const newData = await globalMutate(`/api/news?page=${pageNum}&pageSize=${pageSize}`, async () => {
+		  const response = await getNewsRequests(pageNum, pageSize);
+		  return response;
+		}, false);  // Passing false to avoid immediate refetch
+
+		if (newData?.news && !_.isEqual(newData.news, news[pageNum])) {
+		  dispatch(updatePage({ data: newData.news, page: pageNum }));
+		}
+	  });
+
+	  await Promise.all(revalidatePromises);
+	}
   };
 
   return {
