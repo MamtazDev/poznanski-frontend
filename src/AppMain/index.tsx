@@ -4,13 +4,12 @@ import {apiGetReq} from '../Constant/api-functions';
 import {Spinner} from '@chakra-ui/react';
 import {useSelector} from 'react-redux';
 import {RootState} from '../reducers';
-import {closePlayer} from '../reducers/PlayerReducer';
+import {closePlayer, openPlayer} from '../reducers/PlayerReducer';
 import * as common from '../Constant/constants';
 import ScrollToTopOnPageChange from '../Components/ScrollToTop';
-import YoutubePlayer from '../Components/YoutubePlayer';
 import Modal from '../Components/Modals';
 import {useDispatch} from 'react-redux';
-
+import YoutubePlayer from '../Components/YoutubePlayer';
 const Home = lazy(() => import('../Pages/Home'));
 const SubmitPage = lazy(() => import('../Pages/Submit'));
 const VideoMainPage = lazy(() => import('../Pages/Video'));
@@ -96,7 +95,12 @@ const AppMain: React.FC = () => {
 					<Route path={common.NEWS_PATH}>
 						<Route
 							path=''
-							element={<ArticleMainPage themeMode={themeMode} type={type} />}
+							element={
+								<ArticleMainPage
+									themeMode={themeMode}
+									type={type}
+								/>
+							}
 						/>
 						<Route
 							path=':id'
@@ -153,9 +157,8 @@ const AppMain: React.FC = () => {
 					/>
 				</Routes>
 			</Suspense>
-			<Modal isOpen={isOpen} onClose={onClose} type={type}>
-				<YoutubePlayer videoId={videoId} />
-			</Modal>
+
+			<YoutubePlayer type={type} isOpen={isOpen} videoId={videoId} />
 		</div>
 	);
 };

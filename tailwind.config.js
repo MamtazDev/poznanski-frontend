@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./src/**/*.tsx"],
   theme: {
-    extend: {},
+    extend: {
+      rotate: {
+        '360': '360deg',
+      },
+    },
     container: {
       padding: {
         DEFAULT: "1rem",

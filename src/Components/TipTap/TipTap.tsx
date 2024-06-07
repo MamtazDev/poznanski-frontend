@@ -40,7 +40,9 @@ export const getExtensionsData = (
 	setFiles: TipTapProps['setFiles']
 ): AnyExtension[] => [
 	StarterKit,
-	TextAlign,
+	TextAlign.configure({
+		types: ['heading', 'paragraph'],
+	}),
 		Image.configure({
 		HTMLAttributes: {
 			class: 'mx-auto my-3 max-h-[494px] max-w-[870px] object-cover',
