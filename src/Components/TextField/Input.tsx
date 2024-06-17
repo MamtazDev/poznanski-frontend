@@ -55,6 +55,22 @@ const renderRegisterOptions = (
 					message: 'Ksywa musi mieć co najmniej 3 znaki',
 				},
 			};
+		case 'password':
+			return {
+				required: 'Podaj hasło',
+				minLength: {
+					value: 6,
+					message: 'Hasło musi mieć co najmniej 6 znaków',
+				},
+			};
+		case 'passwordRepeat':
+			return {
+				required: 'Powtórz hasło',
+				minLength: {
+					value: 6,
+					message: 'Hasło musi mieć co najmniej 6 znaków',
+				},
+			};
 		default:
 			return registerOptions;
 	}
@@ -104,7 +120,7 @@ const Input: React.FC<InputProps> = ({
 				<input
 					onChange={onChange && ((e) => onChange(e))}
 					{...registerProps}
-					type='text'
+					type={name.includes('password') ? 'password' : 'text'}
 					name={name}
 					value={value}
 					className={`input-${themeMode ? 'light' : 'dark'} shadow-sm  block w-full ${error ? 'border border-red-500 text-red-900 placeholder-red-700' : 'border'} `}

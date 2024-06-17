@@ -243,7 +243,7 @@ const TipTap: React.FC<TipTapProps> = ({
 							ref={fileInputRef}
 							style={{display: 'none'}}
 						/>
-					</> : <div dangerouslySetInnerHTML={{__html: content}} />
+					</> : <div className={!themeMode ?'text-stone-400' : 'text-stone-500'} dangerouslySetInnerHTML={{__html: content}} />
 				}
 			</div>
 		</>

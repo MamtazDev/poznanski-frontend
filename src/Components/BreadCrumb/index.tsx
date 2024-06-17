@@ -4,10 +4,10 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../reducers';
 import './style.css';
 import * as common from '../../Constant/constants';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const BreadCrumb = () => {
-	const currentRoute = window.location.pathname;
+	const currentRoute = useLocation().pathname;
 	const defaultRoute = [{Home: '/'}];
 	const [selectedMenu, setSelectedMenu] =
 		React.useState<{[key: string]: string}[]>(defaultRoute);

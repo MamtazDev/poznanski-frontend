@@ -1,15 +1,17 @@
 import React, {Suspense, lazy, useEffect, useState} from 'react';
-import {Routes, Route, Navigate} from 'react-router-dom';
-import {apiGetReq} from '../Constant/api-functions';
+import {Routes, Route} from 'react-router-dom';
 import {Spinner} from '@chakra-ui/react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../reducers';
-import {closePlayer, openPlayer} from '../reducers/PlayerReducer';
 import * as common from '../Constant/constants';
 import ScrollToTopOnPageChange from '../Components/ScrollToTop';
-import Modal from '../Components/Modals';
-import {useDispatch} from 'react-redux';
 import YoutubePlayer from '../Components/YoutubePlayer';
+import {RouteChangeTracker, initGA} from '../utils/analytics';
+import NavBar from '../Components/Layout/NavBar';
+import {logout, setUserLoggedIn} from '../reducers/user';
+import {deleteCookie, getCookie, parseJwt} from '../utils/auth';
+import {checkIfLoggedIn} from '../Constant/api-requests';
+
 const Home = lazy(() => import('../Pages/Home'));
 const SubmitPage = lazy(() => import('../Pages/Submit'));
 const VideoMainPage = lazy(() => import('../Pages/Video'));
@@ -21,6 +23,7 @@ const AlbumsMainPage = lazy(() => import('../Pages/Albums/index'));
 const ArticleDetailPage = lazy(
 	() => import('../Pages/Article/articleDetailPage')
 );
+const LoginPage = lazy(() => import('../Pages/Login/index'));
 
 interface Tag {
 	_id: string;
@@ -33,30 +36,34 @@ export interface PageBasicProps {
 }
 
 const AppMain: React.FC = () => {
-	const [tags, setTags] = useState<Tag[]>([]);
 	const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 	const playerOpen = useSelector((state: RootState) => state.player.isOpen);
 	const videoId = useSelector((state: RootState) => state.player.videoId);
-	const dispatch = useDispatch();
+	const user = useSelector((state: RootState) => state.user);
 	const [isOpen, setIsOpen] = useState<boolean>(playerOpen);
 	const [type, setType] = useState<boolean>(false);
+	const dispatch = useDispatch();
+	const handleLogout = () => {
+		deleteCookie('accessToken');
+		deleteCookie('refreshToken');
+		dispatch(logout());
+	};
+
+	const checkIfAuth = async () => {
+		const user = await checkIfLoggedIn();
+		if (user) {
+			dispatch(setUserLoggedIn(user));
+		} else {
+			handleLogout();
+		}
+	};
 
 	useEffect(() => {
 		setIsOpen(playerOpen);
 	}, [playerOpen]);
 
 	useEffect(() => {
-		apiGetReq('/tag', {}).then((res) => {
-			setTags(res.tags);
-		});
-	}, []);
-
-	const onClose = () => {
-		// setIsOpen(false);
-		dispatch(closePlayer());
-	};
-
-	useEffect(() => {
+		checkIfAuth();
 		const handleResize = () => {
 			if (window.innerWidth < 768) {
 				setType(true);
@@ -73,6 +80,7 @@ const AppMain: React.FC = () => {
 
 	return (
 		<div className={` ${!themeMode && 'back-dark'}`}>
+			<NavBar themeMode={themeMode} type={type} />
 			<Suspense
 				fallback={
 					<div className='w-screen h-screen flex justify-center items-center'>
@@ -106,7 +114,6 @@ const AppMain: React.FC = () => {
 							path=':id'
 							element={
 								<ArticleDetailPage
-									tagData={tags}
 									themeMode={themeMode}
 									type={type}
 								/>
@@ -155,9 +162,27 @@ const AppMain: React.FC = () => {
 							<SubmitPage themeMode={themeMode} type={type} />
 						}
 					/>
+					<Route
+						path={common.LOGIN_PATH}
+						element={
+							<LoginPage themeMode={themeMode} type={type} />
+						}
+					>
+						<Route
+							path=''
+							element={
+								<LoginPage themeMode={themeMode} type={type} />
+							}
+						/>
+						<Route
+							path='verify-email/:token'
+							element={
+								<LoginPage themeMode={themeMode} type={type} />
+							}
+						/>
+					</Route>
 				</Routes>
 			</Suspense>
-
 			<YoutubePlayer type={type} isOpen={isOpen} videoId={videoId} />
 		</div>
 	);

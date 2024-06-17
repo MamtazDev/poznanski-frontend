@@ -245,6 +245,14 @@ const Listbox = styled('ul')(
 
 const filter = createFilterOptions<string>();
 
+export const ThemeProviderMUI: React.FC<{themeMode?: boolean, children: React.ReactElement}> = ({themeMode, children}) => {
+	return (
+		<ThemeProvider theme={themeMode ? lightTheme : darkTheme}>
+			{children}
+		</ThemeProvider>
+	);
+}
+
 export default function useTags(
 	label: string,
 	setTags: React.Dispatch<React.SetStateAction<string[]>>,

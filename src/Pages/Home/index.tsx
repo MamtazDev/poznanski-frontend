@@ -27,7 +27,6 @@ const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
   return (
     <Fragment>
       <div className={`${!themeMode && "back-dark"} overflow-hidden`}>
-        <NavBar themeMode={themeMode} type={type} filterText={filterText} setFilterText={setFilterText} />
         <div className="mt-[120px]">
           <MainBack type={type} themeMode={themeMode} scrollToBottom={scrollToBottom} />
         </div>

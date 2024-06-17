@@ -13,11 +13,13 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import newsReducer from "./NewsReducer";
+import userReducer from "./user";
 
 const rootReducer = combineReducers({
   themeMode: ThemeReducer,
   player: PlayerReducer,
   news: newsReducer,
+  user: userReducer,
 });
 
 const persistConfig = {
