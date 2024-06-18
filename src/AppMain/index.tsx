@@ -63,7 +63,9 @@ const AppMain: React.FC = () => {
 	}, [playerOpen]);
 
 	useEffect(() => {
-		checkIfAuth();
+		if (user.isLoggedIn) {
+			checkIfAuth();
+		}
 		const handleResize = () => {
 			if (window.innerWidth < 768) {
 				setType(true);
@@ -71,6 +73,7 @@ const AppMain: React.FC = () => {
 				setType(false);
 			}
 		};
+		handleResize();
 		window.addEventListener('resize', handleResize);
 
 		return () => {

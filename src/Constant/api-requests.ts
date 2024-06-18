@@ -28,7 +28,8 @@ export const loginRequest = async (
 	email?: string,
 	nickname?: string
 ) => {
-
+	// generate csrf token in case user has just logged out
+	await fetchCSRF();
 	await apiPostReq(
 		'auth/login',
 		{email, password, nickname},

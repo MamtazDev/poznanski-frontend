@@ -22,7 +22,9 @@ import { logoutRequest } from '../../Constant/api-requests';
 
 export const AccountMenu: React.FC<{
 	themeMode?: boolean;
-}> = ({themeMode}) => {
+	width?: string;
+	height?: string;
+}> = ({themeMode, width=32, height=32}) => {
 	const dispatch = useDispatch();
 	const userStore = useSelector((state: RootState) => state.user);
 	const loggedIn = userStore.isLoggedIn;
@@ -53,6 +55,12 @@ export const AccountMenu: React.FC<{
 		}
 	}, [userStore]);
 
+	const UserAvatar = () => <Avatar sx={{width: 32, backgroundColor: 'transparent',
+		height: 32, borderWidth: 2, color: themeMode ? '#5A1073' : '#21E3CE', borderColor: themeMode ? '#5A1073' : '#21E3CE'}}>
+	   {`${userStore?.user?.nickname}`[0].toUpperCase() ??
+		   'X'}
+   </Avatar>
+
 	return (
 		<ThemeProviderMUI themeMode={false}>
 			<>
@@ -69,8 +77,8 @@ export const AccountMenu: React.FC<{
 								<UserIcon
 									stroke={themeMode ? '#5A1073' : '#21E3CE'}
 									fill={themeMode ? '#5A1073' : '#21E3CE'}
-									height={36}
-									width={36}
+									height={height}
+									width={width}
 								/>
 							</Link>
 						</Tooltip>
@@ -86,11 +94,7 @@ export const AccountMenu: React.FC<{
 								aria-haspopup='true'
 								aria-expanded={open ? 'true' : undefined}
 							>
-								<Avatar sx={{width: 32, backgroundColor: 'transparent',
-									 height: 32, borderWidth: 2, color: themeMode ? '#5A1073' : '#21E3CE', borderColor: themeMode ? '#5A1073' : '#21E3CE'}}>
-									{`${userStore?.user?.nickname}`[0].toUpperCase() ??
-										'X'}
-								</Avatar>
+								<UserAvatar />
 							</IconButton>
 						</Tooltip>
 					)}
@@ -104,7 +108,10 @@ export const AccountMenu: React.FC<{
 					slotProps={{
 						paper: {
 							elevation: 0,
+
 							sx: {
+
+								borderRadius: '8px',
 								overflow: 'visible',
 								filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
 								mt: 1.5,
@@ -114,6 +121,27 @@ export const AccountMenu: React.FC<{
 									ml: -0.5,
 									mr: 1,
 								},
+								'& .MuiList-root': {
+									py: 1,
+									bgcolor: themeMode ? 'background.paper' : 'black',
+									color: themeMode ? 'black' : 'white',
+									borderRadius: '8px',
+									'& .MuiMenuItem-root': {
+										py: 1,
+										px: 2.5,
+										bgcolor: themeMode ? 'background.paper' : 'black',
+										fontFamily: 'Urbanist',
+										textTransform: 'uppercase',
+										'&:active': {
+											bgcolor: themeMode ? 'background.paper' : 'black',
+											color: themeMode ? 'black' : 'white',
+										},
+										'&:hover': {
+											fontWeight: 600,
+											color: themeMode ? '#5A1073' : '#21E3CE',
+										},
+									},
+								},
 								'&::before': {
 									content: '""',
 									display: 'block',
@@ -122,7 +150,7 @@ export const AccountMenu: React.FC<{
 									right: 14,
 									width: 10,
 									height: 10,
-									bgcolor: 'background.paper',
+									bgcolor: themeMode ? 'background.paper' : 'black',
 									transform: 'translateY(-50%) rotate(45deg)',
 									zIndex: 0,
 								},
@@ -133,10 +161,7 @@ export const AccountMenu: React.FC<{
 					anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
 				>
 					<MenuItem onClick={handleClose}>
-					<Avatar sx={{width: 32, height: 32, borderWidth: 2, borderColor: themeMode ? '#5A1073' : '#21E3CE'}}>
-									{`${userStore?.user?.nickname}`[0].toUpperCase() ??
-										'X'}
-								</Avatar> Profil
+					<UserAvatar /> Profil
 					</MenuItem>
 					{/* <MenuItem onClick={handleClose}>
 						<Avatar /> My account
