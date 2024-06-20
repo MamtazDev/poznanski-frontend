@@ -16,14 +16,11 @@ import PromiseBasedToast, {
 	usePromiseBasedToast,
 	usePromiseToast,
 } from '../../Components/Toast/Toast';
-import {useNavigate, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setUserLoggedIn } from '../../reducers/user';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reducers';
-
-
-
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import {setUserLoggedIn} from '../../reducers/user';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../reducers';
 
 interface SubmitUserForm {
 	email: string;
@@ -35,8 +32,9 @@ interface SubmitUserForm {
 export const Login: React.FC<PageBasicProps> = ({themeMode, type}) => {
 	const user = useSelector((state: RootState) => state.user.isLoggedIn);
 	const {token} = useParams<{token: string}>();
-const navigate = useNavigate();
-const dispatch = useDispatch();
+	const location = useLocation();
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const [creatingAccount, setCreatingAccount] =
 		React.useState<boolean>(false);
 
@@ -44,7 +42,7 @@ const dispatch = useDispatch();
 		register,
 		handleSubmit,
 		formState: {errors},
-        reset,
+		reset,
 	} = useForm<SubmitUserForm>({
 		defaultValues: {
 			email: '',
@@ -71,8 +69,8 @@ const dispatch = useDispatch();
 				const user = await checkIfLoggedIn();
 				dispatch(setUserLoggedIn(user));
 			} finally {
-				navigate('/');
-               reset();
+				location.state ? navigate(location.state) : navigate('/');
+				reset();
 			}
 		}
 	};
@@ -109,7 +107,7 @@ const dispatch = useDispatch();
 			navigate('/');
 		} else if (token) {
 			verifyEmailWithNotification(token);
-            navigate('/login', {replace: true});
+			navigate('/login', {replace: true});
 		}
 	}, []);
 

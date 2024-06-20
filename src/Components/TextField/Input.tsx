@@ -16,6 +16,8 @@ interface InputProps {
 	height?: string;
 	register?: UseFormRegister<any>;
 	registerOptions?: RegisterOptions;
+	placeholder?: string;
+	disabled?: boolean;
 }
 
 const renderRegisterOptions = (
@@ -71,6 +73,19 @@ const renderRegisterOptions = (
 					message: 'Hasło musi mieć co najmniej 6 znaków',
 				},
 			};
+		case 'comment':
+			return {
+				required: 'Musisz coś napisać',
+				minLength: {
+					value: 3,
+					message: 'Komentarz musi mieć co najmniej 3 znaki',
+				},
+				maxLength: {
+					value: 255,
+					message: 'Komentarz nie może mieć więcej niż 255 znaków',
+				},
+			};
+
 		default:
 			return registerOptions;
 	}
@@ -83,12 +98,14 @@ const Input: React.FC<InputProps> = ({
 	onChange,
 	error,
 	errMsg,
-	type,
 	height,
 	register,
 	registerOptions,
+	placeholder,
+	disabled,
 }) => {
 	const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+	const type = useSelector((state: RootState) => state.themeMode.type);
 	const inputRegisterOptions = renderRegisterOptions(
 		name,
 		registerOptions ? registerOptions : {}
@@ -115,6 +132,8 @@ const Input: React.FC<InputProps> = ({
 					style={{
 						height: height ? height : type ? '32px' : '36.825px',
 					}}
+					placeholder={placeholder}
+					disabled={disabled}
 				/>
 			) : (
 				<input
@@ -126,6 +145,8 @@ const Input: React.FC<InputProps> = ({
 					className={`input-${themeMode ? 'light' : 'dark'} shadow-sm  block w-full ${error ? 'border border-red-500 text-red-900 placeholder-red-700' : 'border'} `}
 					style={{height: type ? '32px' : '36.825px'}}
 					autoComplete='off'
+					placeholder={placeholder}
+					disabled={disabled}
 					// ref={ref}
 				/>
 			)}

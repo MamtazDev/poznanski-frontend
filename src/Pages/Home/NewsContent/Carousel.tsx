@@ -4,6 +4,47 @@ import ProductCard1, { News } from "../../../Components/Card/ProductCard1";
 import Carousel from "../../../Components/Carousel";
 import "../../mainPageStyle.css";
 
+type EntityModels = "News" | "Article" | "Comment" | "Reply";
+
+interface EmbeddedReply {
+  entityId: string;
+  entityModel: EntityModels;
+  authorId: string;
+  content: string;
+  likes?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+interface Reply {
+  entityId: string;
+  entityModel: EntityModels;
+  authorId: string;
+  content: string;
+  embeddedReplies?: EmbeddedReply[];
+  repliesIds?: string[];
+  likes?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+interface Comment {
+  entityId: string;
+  entityModel: EntityModels;
+  authorId: {id: string, nickname: string, profilePicture: string};
+  content: string;
+  embeddedReplies?: Reply[];
+  repliesIds?: string[];
+  likes?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface CommentsSection {
+  embeddedComments: Comment[];
+  commentsIds: string[];
+}
+
 export interface ArticleToDisplay {
 	title: string;
 	intro: string;
@@ -11,6 +52,7 @@ export interface ArticleToDisplay {
 	files: FileToDisplay[];
 	nickname: string;
 	_id: string;
+  commentsSection?: CommentsSection;
 	tags?: string;
 	date?: Date;
 }

@@ -101,52 +101,6 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 		}
 	}, []);
 
-	// useEffect(() => {
-	//   setLoading(true);
-	//   apiGetReq("/news/id", { id }).then((res) => {
-	//     setLoading(false);
-	//     let newsContent: Content[] = [];
-	//     res.news[0].content.map((item: Content) => {
-	//       newsContent.push({
-	//         subHead: item.subHead,
-	//         img: fileUrl + item.img,
-	//         description: item.description,
-	//       });
-	//     });
-	//     const formattedDate1 = changeData1(res.news[0].date);
-	//     setPageData({
-	//       id: res.news[0]._id,
-	//       title: res.news[0].title,
-	//       feature: res.news[0].tag,
-	//       date: formattedDate1,
-	//       content: newsContent,
-	//       link: res.news[0].link,
-	//     });
-	//     let relatedNews: News[] = [];
-	//     res.relatedNews.map((item: inputNews) => {
-	//       const formattedDate2 = changeData1(item.date);
-	//       let newRelatedContent: Content[] = [];
-	//       item.content.map((contentData) => {
-	//         newRelatedContent.push({
-	//           subHead: contentData.subHead,
-	//           img: fileUrl + contentData.img,
-	//           description: contentData.description,
-	//         });
-	//       });
-	//       const temp: News = {
-	//         id: item._id,
-	//         title: item.title,
-	//         feature: item.tag,
-	//         content: newRelatedContent,
-	//         date: formattedDate2,
-	//         link: item.link,
-	//       };
-	//       relatedNews.push(temp);
-	//     });
-	//     setRelatedData(relatedNews);
-	//   });
-	// }, [id]);
-
 	return (
 		<Layout themeMode={themeMode} type={type}>
 			<div className='flex justify-center'>
@@ -206,38 +160,15 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 											/>
 										</div>
 									)}
+									<Comment
+									postModel='News'
+									commentData={
+										pageData?.commentsSection
+											?.embeddedComments ?? null
+									}
+								/>
 								</DelayedComponent>
-								<Comment commentData={[{id: 'bavba', img: 'haha', comment: 'Twoja stara'}]}/>
-								{/* <div className="md:mt-6 mt-4">
-                <FilterInput type={type} />
-              </div> */}
-								<div className={`md:mt-16 mt-8`}>
-									<div className={`flex flex-col w-full`}>
-										{/* {pageData?.content.map((item, idx) => (
-                      <div className="flex flex-col w-full md:mb-12 mb-6">
-                        <Image
-                          src={item.img}
-                          className="cursor-pointer object-cover w-full"
-                          height={type ? "257px" : "494px"}
-                          alt={item.img}
-                          borderRadius={type ? "16px" : "25px"}
-                        />
-                        <div
-                          className={`${themeMode ? "sub-head" : "sub-head-dark"} text-left md:mt-12 mt-6`}
-                          style={{ fontSize: type ? "18px" : "20px" }}
-                        >
-                          {item.subHead}
-                        </div>
-                        <div
-                          className={`${themeMode ? "description" : "description-dark"} md:mt-6 mt-4 text-left`}
-                          style={{ lineHeight: type ? "26.5px" : "24px" }}
-                        >
-                          {item.description}
-                        </div>
-                      </div>
-                    ))} */}
-									</div>
-								</div>
+
 							</div>
 							<div
 								className={`md:w-2/6 w-full`}
@@ -356,12 +287,11 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 									</div>
 								)}
 
-									<SocialShare
+								<SocialShare
 									themeMode={themeMode}
-										url={url}
-										title={`${pageData?.title}`}
-									/>
-
+									url={url}
+									title={`${pageData?.title}`}
+								/>
 							</div>
 						</div>
 					)}

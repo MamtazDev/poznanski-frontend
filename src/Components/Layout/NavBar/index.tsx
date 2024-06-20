@@ -14,6 +14,7 @@ import {ToFixedIfOut} from '../../_utility/ToFixedWhileOut';
 import {PoznanskiLogoIcon} from '../../../assets/svg/poznanskiLogo';
 import {AccountMenu} from '../../AccountMenu/AccountMenu';
 import {ReactComponent as InstagramIcon} from '../../../assets/svg/instagramIcon.svg';
+import {get} from 'lodash';
 
 interface NavBarProps {
 	filterText?: string;
@@ -22,15 +23,19 @@ interface NavBarProps {
 	type?: boolean;
 }
 
+const menu = [
+	'Newsy',
+	'TV/Radio',
+	'Nasze materiały',
+	'Albumy',
+	'Artyści',
+	'Wydarzenia',
+];
+
+const getIconsColor = (themeMode?: boolean) =>
+	themeMode ? '#5A1073' : '#2FC4B2';
+
 const NavBar: React.FC<NavBarProps> = (props) => {
-	const menu = [
-		'Newsy',
-		'TV/Radio',
-		'Nasze materiały',
-		'Albumy',
-		'Artyści',
-		'Wydarzenia',
-	];
 	const [selectedMenu, setSelectedMenu] = useState<string>('Home');
 	const [openFilterBox, setOpenFilterBox] = useState<boolean>(false);
 	const [openModal, setOpenModal] = useState<boolean>(false);
@@ -131,8 +136,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 							</Link>
 
 							<div
-								className={`w-full mt-2 ${!props.type || !openFilterBox ? 'z-50 shadow-2xl' : '-z-10'} transition-transform -translate-y-20 duration-500 ${!props.type ? '-translate-y-1' : openFilterBox && props.type ? 'translate-y-20 absolute w-2/3 shadow-2xl' : ''}`}
-								// className={`w-full mt-2 transition-transform -translate-y-20 duration-500 ${!props.type || openFilterBox ? '-translate-y-1' : ''}`}
+								className={`w-full mt-2 ${!props.type || !openFilterBox ? 'z-50 shadow-2xl' : '-z-10'} transition-transform -translate-y-20 duration-500 ${!props.type ? '-translate-y-1' : openFilterBox && props.type ? ' translate-y-14 absolute w-2/3 shadow-2xl' : ''}`}
 							>
 								<div
 									className={`filter-box ${!props.themeMode && 'filter-box-dark'} w-full flex place-items-center`}
@@ -140,11 +144,11 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 									<SearchIcon />
 									<input
 										className='ml-2.5 ml-peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline-none'
-										value={
-											props.filterText
-												? props.filterText
-												: ''
-										}
+										// value={
+										// 	props.filterText
+										// 		? props.filterText
+										// 		: ''
+										// }
 										onChange={handleChange}
 										placeholder='Szukaj...'
 									></input>
@@ -161,11 +165,9 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 										>
 											<path
 												d='M6.61914 19.5L19.859 6.5M6.61914 6.5L19.859 19.5'
-												stroke={
+												stroke={getIconsColor(
 													props.themeMode
-														? '#6D6E76'
-														: '#51525C'
-												}
+												)}
 												strokeWidth='2'
 												strokeLinecap='round'
 												strokeLinejoin='round'
@@ -181,38 +183,30 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 									<div className='grid grid-cols-4 gap-x-4 '>
 										<YoutubeIcon
 											className='cursor-pointer'
-											stroke={
+											stroke={getIconsColor(
 												props.themeMode
-													? '#5A1073'
-													: '#2FC4B2'
-											}
+											)}
 										/>
 
 										<FacebookIcon
 											className='cursor-pointer'
-											stroke={
+											stroke={getIconsColor(
 												props.themeMode
-													? '#5A1073'
-													: '#2FC4B2'
-											}
+											)}
 										/>
 
 										<InstagramIcon
 											className='cursor-pointer'
-											stroke={
+											stroke={getIconsColor(
 												props.themeMode
-													? '#5A1073'
-													: '#2FC4B2'
-											}
+											)}
 										/>
 
 										<SummaryIcon
 											className='cursor-pointer'
-											stroke={
+											stroke={getIconsColor(
 												props.themeMode
-													? '#5A1073'
-													: '#2FC4B2'
-											}
+											)}
 										/>
 									</div>
 									<AccountMenu themeMode={props.themeMode} />
@@ -241,21 +235,17 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 												{openFilterBox ? (
 													<AiOutlineClose
 														size={34}
-														color={
+														color={getIconsColor(
 															props.themeMode
-																? '#5A1073'
-																: '#3BD6C6'
-														}
+														)}
 													/>
 												) : (
 													<SearchIcon
 														width={34}
 														height={34}
-														stroke={
+														stroke={getIconsColor(
 															props.themeMode
-																? '#5A1073'
-																: '#3BD6C6'
-														}
+														)}
 													/>
 												)}
 											</button>
@@ -273,11 +263,9 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 											<MobileMenuIcon
 												width={40}
 												height={40}
-												stroke={
+												stroke={getIconsColor(
 													props.themeMode
-														? '#5A1073'
-														: '#3BD6C6'
-												}
+												)}
 											/>
 										</button>
 									</div>
@@ -347,30 +335,22 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 							<div className='grid grid-cols-4 gap-x-8 -mb-20'>
 								<YoutubeIcon
 									className='cursor-pointer'
-									stroke={
-										props.themeMode ? '#5A1073' : '#2FC4B2'
-									}
+									stroke={getIconsColor(props.themeMode)}
 								/>
 
 								<FacebookIcon
 									className='cursor-pointer'
-									stroke={
-										props.themeMode ? '#5A1073' : '#2FC4B2'
-									}
+									stroke={getIconsColor(props.themeMode)}
 								/>
 
 								<InstagramIcon
 									className='cursor-pointer'
-									stroke={
-										props.themeMode ? '#5A1073' : '#2FC4B2'
-									}
+									stroke={getIconsColor(props.themeMode)}
 								/>
 
 								<SummaryIcon
 									className='cursor-pointer'
-									stroke={
-										props.themeMode ? '#5A1073' : '#2FC4B2'
-									}
+									stroke={getIconsColor(props.themeMode)}
 								/>
 							</div>
 						</div>

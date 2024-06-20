@@ -11,6 +11,7 @@ import NavBar from '../Components/Layout/NavBar';
 import {logout, setUserLoggedIn} from '../reducers/user';
 import {deleteCookie, getCookie, parseJwt} from '../utils/auth';
 import {checkIfLoggedIn} from '../Constant/api-requests';
+import { setType } from '../reducers/ThemeReducer';
 
 const Home = lazy(() => import('../Pages/Home'));
 const SubmitPage = lazy(() => import('../Pages/Submit'));
@@ -41,7 +42,7 @@ const AppMain: React.FC = () => {
 	const videoId = useSelector((state: RootState) => state.player.videoId);
 	const user = useSelector((state: RootState) => state.user);
 	const [isOpen, setIsOpen] = useState<boolean>(playerOpen);
-	const [type, setType] = useState<boolean>(false);
+	const [type, setPropsType] = useState<boolean>(false);
 	const dispatch = useDispatch();
 	const handleLogout = () => {
 		deleteCookie('accessToken');
@@ -68,9 +69,11 @@ const AppMain: React.FC = () => {
 		}
 		const handleResize = () => {
 			if (window.innerWidth < 768) {
-				setType(true);
+				dispatch(setType(true));
+				setPropsType(true);
 			} else {
-				setType(false);
+				dispatch(setType(false));
+				setPropsType(false);
 			}
 		};
 		handleResize();
