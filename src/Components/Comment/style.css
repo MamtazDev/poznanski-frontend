@@ -32,7 +32,7 @@
 
 .comment-content {
 	padding: 12px;
-	border-radius: 0px 8px 8px 8px;
+	border-radius: 0px 6px 6px 6px;
 	background: rgba(233, 233, 235, 0.5);
 	color: var(--Base-base-300, #6d6e76);
 	font-feature-settings:
@@ -43,11 +43,13 @@
 	font-style: normal;
 	font-weight: 400;
 	line-height: 19px; /* 135.714% */
+	word-break: break-word;
 }
 
 .comment-content {
-	padding: 10px;
-	border-radius: 0px 8px 8px 8px;
+	word-break: break-word;
+	padding: 4px 8px;
+	border-radius: 0px 6px 6px 6px;
 	background: rgba(36, 37, 38, 0.5);
 	color: var(--Base-base-100, #bbbcc0);
 	font-feature-settings:
@@ -61,8 +63,9 @@
 }
 
 .comment-content-dark {
-	padding: 10px;
-	border-radius: 0px 8px 8px 8px;
+	word-break: break-word;
+	padding: 4px 8px;
+	border-radius: 0px 6px 6px 6px;
 	background: rgba(36, 37, 38, 0.5);
 	color: var(--Base-base-100, #bbbcc0);
 	font-feature-settings:
@@ -76,8 +79,9 @@
 }
 
 .comment-content-reverse {
-	padding: 10px;
-	border-radius: 8px 0px 8px 8px;
+	word-break: break-word;
+	padding: 4px 8px;
+	border-radius: 6px 0px 6px 6px;
 	background: rgba(36, 37, 38, 0.5);
 	color: var(--Base-base-100, #bbbcc0);
 	font-feature-settings:
@@ -91,7 +95,8 @@
 }
 
 .comment-content-dark-reverse {
-	padding: 10px;
+	word-break: break-word;
+	padding: 4px 8px;
 	border-radius: 8px 8px 8px 0px;
 	background: rgba(36, 37, 38, 0.5);
 	color: var(--Base-base-100, #bbbcc0);

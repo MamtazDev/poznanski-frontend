@@ -2,6 +2,7 @@ import {add} from 'lodash';
 import {apiBaseUrl} from './config';
 import axios, {AxiosInstance} from 'axios';
 import { getCookie } from '../utils/auth';
+import { fetchCSRF } from './api-requests';
 
 export const attachInterceptors = (axiosInstance: AxiosInstance) => {
     axiosInstance.interceptors.response.use(
@@ -55,7 +56,7 @@ export const attachInterceptors = (axiosInstance: AxiosInstance) => {
 // };
 
 const createAxiosInstance = async (contentType: string): Promise<AxiosInstance> => {
-    const csrfToken = getCookie('XSRF-TOKEN');
+    const csrfToken = getCookie('XSRF-TOKEN')
 
     const instance = axios.create({
         baseURL: apiBaseUrl,

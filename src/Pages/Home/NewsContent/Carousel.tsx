@@ -3,8 +3,9 @@ import DetailButton from "../../../Components/Buttons/DetailButton";
 import ProductCard1, { News } from "../../../Components/Card/ProductCard1";
 import Carousel from "../../../Components/Carousel";
 import "../../mainPageStyle.css";
+import { PostModels } from "../../../Constant/api-requests";
 
-type EntityModels = "News" | "Article" | "Comment" | "Reply";
+type EntityModels = PostModels;
 
 interface EmbeddedReply {
   entityId: string;
@@ -17,6 +18,7 @@ interface EmbeddedReply {
 }
 
 interface Reply {
+  _id: string;
   entityId: string;
   entityModel: EntityModels;
   authorId: string;
@@ -28,16 +30,19 @@ interface Reply {
   updatedAt?: Date;
 }
 
-interface Comment {
+export interface Comment {
+  _id: string;
   entityId: string;
   entityModel: EntityModels;
-  authorId: {id: string, nickname: string, profilePicture: string};
+  authorId: {_id: string, nickname: string, profilePicture: string};
   content: string;
-  embeddedReplies?: Reply[];
+  embeddedReplies?: Comment[];
   repliesIds?: string[];
   likes?: number;
   createdAt?: Date;
   updatedAt?: Date;
+  shouldReverse?: boolean;
+  parentCommentId?: string;
 }
 
 export interface CommentsSection {

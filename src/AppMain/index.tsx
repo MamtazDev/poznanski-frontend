@@ -51,11 +51,18 @@ const AppMain: React.FC = () => {
 	};
 
 	const checkIfAuth = async () => {
-		const user = await checkIfLoggedIn();
-		if (user) {
-			dispatch(setUserLoggedIn(user));
-		} else {
-			handleLogout();
+		try {
+		await checkIfLoggedIn();
+		} catch (error) {
+			const accessToken = getCookie('accessToken');
+			if(accessToken) {
+				const decoded = parseJwt(accessToken);
+				if(decoded.exp * 1000 < Date.now()) {
+					handleLogout();
+				}
+			} else {
+				handleLogout();
+			}
 		}
 	};
 

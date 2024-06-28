@@ -3,7 +3,7 @@ import BreadCrumb from '../../Components/BreadCrumb';
 import ContentTitle from '../../Components/ContentTitle';
 import FilterInput from '../../Components/FilterInput';
 import Layout from '../../Components/Layout';
-import Comment from '../../Components/Comment';
+import CommentForm from '../../Components/Comment';
 import {Link, useLocation, useParams} from 'react-router-dom';
 import {Image, Spinner} from '@chakra-ui/react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,6 +24,8 @@ import {stat} from 'fs';
 import TipTap from '../../Components/TipTap/TipTap';
 import DelayedComponent from '../../Components/_utility/DelayedComponent';
 import SocialShare from '../../Components/SocialShare/SocialShare';
+import { PostModels } from '../../Constant/api-requests';
+
 
 interface TagData {
 	_id: string;
@@ -64,7 +66,7 @@ interface inputComment {
 	comment: string;
 }
 
-interface Comment {
+interface CommentForm {
 	id: string;
 	img: string;
 	comment: string;
@@ -160,11 +162,11 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 											/>
 										</div>
 									)}
-									<Comment
-									postModel='News'
+									<CommentForm
+									postModel={PostModels.news}
 									commentData={
-										pageData?.commentsSection
-											?.embeddedComments ?? null
+										pageData?.commentsSection ?? null
+
 									}
 								/>
 								</DelayedComponent>

@@ -6,7 +6,7 @@ export interface ThemeModeInitialState {
 }
 
 const initialState: ThemeModeInitialState = {
-  mode: true,
+  mode: false,
   type: false,
 };
 

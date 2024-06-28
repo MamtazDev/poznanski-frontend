@@ -65,17 +65,21 @@ export const getNewsRequests = async (
 	);
 };
 // comments
-export type PostModels = 'News' | 'Comment';
+export enum PostModels {
+	news = 'News',
+	comment = 'Comment',
+}
 
 interface GetCommentRequest {
 	entityModel: PostModels;
 	postId: string;
+	parentCommentId?: string | null;
 }
 
-interface AddCommentRequestType extends GetCommentRequest{
+interface AddCommentRequestType extends GetCommentRequest {
 	content: string;
-	parentCommentId?: string;
-};
+	parentCommentId?: string | null;
+}
 
 export const addCommentRequest = async ({
 	entityModel,
@@ -83,18 +87,38 @@ export const addCommentRequest = async ({
 	content,
 	parentCommentId,
 }: AddCommentRequestType) => {
-
 	await apiPostReq(
 		`comment/${entityModel}/${postId}`,
-		{ content, parentCommentId},
+		{content, parentCommentId},
 		false
 	);
 };
 
-export const getTopCommentsRequest = async ({entityModel, postId}: GetCommentRequest) => {
-	return await apiGetReq(`comment/${entityModel}/${postId}`, {});
-}
+export const getTopCommentsRequest = async ({
+	entityModel,
+	postId,
+	parentCommentId,
+}: GetCommentRequest) => {
 
-export const getPaginatedCommentsRequest = async ({entityModel, postId, page, pageSize}: GetCommentRequest & {page: number, pageSize: number}) => {
-	return await apiGetReq(`comment/${entityModel}/${postId}/${page}?limit=${pageSize}`, {});
+	return await apiGetReq(`comment/${entityModel}/${postId}`, {});
+};
+
+export const getPaginatedCommentsRequest = async ({
+	entityModel,
+	postId,
+	page,
+	pageSize,
+	parentCommentId,
+}: GetCommentRequest & {page: number; pageSize: number}) => {
+	if(parentCommentId) {
+		return await apiGetReq(
+			`comment/${entityModel}/${postId}/${page}?limit=${pageSize}&parentCommentId=${parentCommentId}`,
+			{}
+		);
+	} else {
+	return await apiGetReq(
+		`comment/${entityModel}/${postId}/${page}?limit=${pageSize}`,
+		{}
+	);
 }
+};
