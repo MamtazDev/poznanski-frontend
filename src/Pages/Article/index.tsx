@@ -21,7 +21,7 @@ import {PageBasicProps} from '../../AppMain';
 import {useParams} from 'react-router-dom';
 
 export const getFirstTag = (tags: string) => {
-	return tags.split('#')[1];
+	return tags.split('#')[0];
 };
 
 const scrollToById = (id: string) => {
@@ -175,9 +175,9 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 																item.files[0]
 																	.url
 															}
-															tags={getFirstTag(
+															tags={
 																`${item.tags}`
-															)}
+															}
 															title={item.title}
 															date={
 																`${item.date}`.split(

@@ -18,7 +18,7 @@ const DelayedComponent: React.FC<{children: ReactNode; delay: number}> = ({
 	return (
 		<>
 			{isVisible ? (
-				children
+				<div className={`transition-opacity delay-300 ${isVisible ? '' : 'opacity-0'}`}>{children}</div>
 			) : (
 				<div className='w-full h-32 flex justify-center items-center'>
 					<Spinner
@@ -27,6 +27,7 @@ const DelayedComponent: React.FC<{children: ReactNode; delay: number}> = ({
 						emptyColor='gray.200'
 						color='blue.500'
 						size='lg'
+						backgroundColor={'transparent'}
 					/>
 				</div>
 			)}

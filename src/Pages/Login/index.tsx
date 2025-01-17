@@ -87,7 +87,7 @@ export const Login: React.FC<PageBasicProps> = ({themeMode, type}) => {
 			loading: {title: 'Logging in', description: 'Please wait'},
 		},
 	});
-	const {showPromiseToast} = usePromiseToast();
+	const {showPromiseToast} = usePromiseToast({});
 	const verifyEmailWithNotification = (token: string) => {
 		showPromiseToast(async () => await verifyEmailRequest(token), {
 			success: {

@@ -3,7 +3,7 @@ import BreadCrumb from '../../Components/BreadCrumb';
 import ContentTitle from '../../Components/ContentTitle';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../reducers';
-import { SlTrash } from "react-icons/sl";
+import {SlTrash} from 'react-icons/sl';
 import Input from '../../Components/TextField/Input';
 import Select from '../../Components/TextField/Select';
 import Textarea from '../../Components/TextField/Textarea';
@@ -14,12 +14,17 @@ import TipTap, {FileFromEditor} from '../../Components/TipTap/TipTap';
 import Layout from '../../Components/Layout';
 import {FieldErrors, set, useForm} from 'react-hook-form';
 import {create} from 'domain';
-import {createArticleRequest} from '../../Constant/api-requests';
+import {
+	createArticleByUserRequest,
+	createArticleRequest,
+} from '../../Constant/api-requests';
 import {error} from 'console';
 import {FileResizer} from '../../Components/ImageFileResizer/ImageFileResizer';
 import {openPlayer} from '../../reducers/PlayerReducer';
 import CustomizedHook from '../../Components/TextField/Select';
 import useTags from '../../Components/TextField/Select';
+import usePromiseBasedToast from '../../Components/Toast/Toast';
+import { ActionButton } from '../../Components/Button';
 
 export type SubmitArticleForm = {
 	email: string;
@@ -38,12 +43,12 @@ interface SubmitPageProps {
 	type: boolean;
 }
 interface ArticleData {
-    content: string;
-    tags: string;
-    email: string;
-    title: string;
-    intro: string;
-    nickname: string;
+	content: string;
+	tags: string;
+	email: string;
+	title: string;
+	intro: string;
+	nickname: string;
 	files: FileFromEditor[];
 }
 
@@ -53,73 +58,73 @@ type FileDetail = {
 	url: string;
 };
 interface FormDataEntries extends Omit<ArticleData, 'files'> {
-    gerson: string;
-    files: File[];
-    fileDetails: FileDetail[];
+	gerson: string;
+	files: File[];
+	fileDetails: FileDetail[];
 }
 
 const objectToArrayOfProperties = (obj: any): Array<any> => {
 	return Object.entries(obj).map(([key, value]) => {
-		return { key: key, value: value };
-	  });
-}
+		return {key: key, value: value};
+	});
+};
 
 const appendFormData = (articleData: FormData, data: any) => {
-    for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-            const value = data[key as keyof FormDataEntries];
-            if (Array.isArray(value)) {
-                value.forEach((item) => articleData.append(key, item));
-            } else {
-                articleData.append(key, value as any);
-            }
-        }
-    }
+	for (const key in data) {
+		if (data.hasOwnProperty(key)) {
+			const value = data[key as keyof FormDataEntries];
+			if (Array.isArray(value)) {
+				value.forEach((item) => articleData.append(key, item));
+			} else {
+				articleData.append(key, value as any);
+			}
+		}
+	}
 };
 
 const hashtagsMockUp = [
-    "peja",
-    "slumsattack",
-    "RPS",
-    "kali",
-    "donGuralesko",
-    "shellerini",
-    "ksywa",
-    "jeżyce",
-    "staremiasto",
-    "winogrady",
-    "grunwald",
-    "wilda",
-    "nowemiasto",
-    "piatkowo",
-    "naramowice",
-    "strzeszyn",
-    "sołacz",
-    "szczepankowospozewo",
-    "umultowo",
-    "krzyżowniki",
-    "kobylepole",
-    "antoninek",
-    "kopernik",
-    "dębiec",
-    "łazarz",
-    "górczyn",
-    "plewiska",
-    "golęcin",
-    "ogrody",
-    "podolany",
-    "smochowice",
-    "światowid",
-    "krzesiny",
-    "fabianowo",
-    "garaszewo",
-    "wiara",
-    "tej",
-    "ziomki",
-    "ekipa",
-    "ziomal",
-    "pozdro"
-]
+	'peja',
+	'slumsattack',
+	'RPS',
+	'kali',
+	'donGuralesko',
+	'shellerini',
+	'ksywa',
+	'jeżyce',
+	'staremiasto',
+	'winogrady',
+	'grunwald',
+	'wilda',
+	'nowemiasto',
+	'piatkowo',
+	'naramowice',
+	'strzeszyn',
+	'sołacz',
+	'szczepankowospozewo',
+	'umultowo',
+	'krzyżowniki',
+	'kobylepole',
+	'antoninek',
+	'kopernik',
+	'dębiec',
+	'łazarz',
+	'górczyn',
+	'plewiska',
+	'golęcin',
+	'ogrody',
+	'podolany',
+	'smochowice',
+	'światowid',
+	'krzesiny',
+	'fabianowo',
+	'garaszewo',
+	'wiara',
+	'tej',
+	'ziomki',
+	'ekipa',
+	'ziomal',
+	'pozdro',
+];
 
 const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 	const [files, setFiles] = useState<FileFromEditor[] | null>(null);
@@ -127,17 +132,29 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 	const [imgData, setImgData] = useState<MainImgData | null>(null);
 	const [tags, setTags] = useState<string[]>([]);
 	const fileInputRef = React.useRef<HTMLInputElement>(null);
-	const dispatch = useDispatch();
-	const AddTags = useTags('Dodaj tagi', setTags, tags, themeMode, type)
-
+	const AddTags = useTags('Dodaj tagi', setTags, tags, themeMode, type);
+	const {isLoggedIn} = useSelector((state: RootState) => state.user);
 	const {
 		register,
 		handleSubmit,
 		formState: {errors},
+		reset,
 	} = useForm<SubmitArticleForm>({
 		defaultValues: {email: '', title: '', intro: ''},
 		mode: 'all',
 	});
+
+	const resetArticle = () => {
+		reset({
+			email: '',
+			title: '',
+			intro: '',
+			nickname: '',
+		});
+		setArticle('');
+		setImgData(null);
+		setFiles(null);
+	}
 
 	const description =
 		'Dodaj swojego newsa lub pomysł na niego, zostań częścią poznańskiego rapu!';
@@ -169,11 +186,25 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 		});
 	};
 
+	const handleSubmitRequest = async (form: FormData) => {
+		try {
+			isLoggedIn
+				? await createArticleByUserRequest(form)
+				: await createArticleRequest(form);
+				resetArticle();
+			} catch (e) {
+				console.error(e);
+			}
+	};
+
 	const onSubmit = async (data: SubmitArticleForm) => {
+		if (!imgData) {
+			throw Error('Dodaj zdjęcie');
+		}
 		if (article.length < 200) {
-			return alert('Artykuł jest zbyt krótki');
+			throw Error('Artykuł jest zbyt krótki');
 		} else if (article.length > 20000) {
-			return alert('Artykuł jest zbyt długi');
+			throw Error('Artykuł jest zbyt długi');
 		}
 		if (imgData) {
 			const {file} = imgData;
@@ -185,52 +216,50 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 					name,
 					size: compressedFile?.size,
 					url: '',
-					file: new Blob([compressedFile], {type: compressedFile.type}),
+					file: new Blob([compressedFile], {
+						type: compressedFile.type,
+					}),
 				};
 				const stringOfTags = '#' + tags.join('#');
-				const images = files ? [mainImg, ...files] : [mainImg]
+				const images = files ? [mainImg, ...files] : [mainImg];
 
 				images.forEach((image, i) => {
 					const {file, ...fileDetails} = image;
-					form.append(`files`, file, `${data.email} ${fileDetails.name}`);
-					// objectToArrayOfProperties(fileDetails).forEach((value, key) => {
-					// 	form.append(`filesDetails[${i}][${key}]`, value);
-					// })
-
-				})
+					form.append(
+						`files`,
+						file,
+						`${data.email} ${fileDetails.name}`
+					);
+				});
 				const articleData = {
 					...data,
 					content: article,
-					// files: files ? [mainImg, ...files] : [mainImg],
 					tags: stringOfTags,
 				};
 				Object.entries(articleData).forEach(([key, value]) => {
 					form.append(key, value);
 				});
-				await createArticleRequest(form);
+				await handleSubmitRequest(form);
 			} else {
-				alert('Nie udało się skompresować głównego zdjęcia');
+				throw Error('Nie udało się skompresować głównego zdjęcia');
 			}
-		} else {
-			alert('Dodaj główne zdjęcie');
 		}
 	};
 
-
-	useEffect(() => {
-		if (errors.title) {
-			console.log(errors.title.message);
-		}
-		if (errors.intro) {
-			console.log(errors.intro.message);
-		}
-		if (errors.email) {
-			console.log(errors.email.message);
-		}
-		if (errors.nickname) {
-			console.log(errors.nickname.message);
-		}
-	}, [errors]);
+	const {wrappedSubmit} = usePromiseBasedToast({
+		handleSubmit,
+		onSubmit,
+		toastMessages: {
+			success: {
+				title: `Twój news został wysłany!`,
+				description: `Teraz ${isLoggedIn ? 'zajmie się nim' : 'go potwierdź, aby mogła zająć się nim'} nasza redakcja`,
+			},
+			error: {
+				title: 'Wysłanie newsa nie powiodło się',
+			},
+			loading: {title: 'Wysyłanie newsa', description: 'Proszę czekać...'},
+		},
+	});
 
 	return (
 		<div>
@@ -252,7 +281,7 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 						>
 							{description}
 						</div>
-						<form onSubmit={handleSubmit(onSubmit)}>
+						<form onSubmit={handleSubmit(() => wrappedSubmit())}>
 							<div className='flex flex-col md:flex-row md:mt-12 mt-6 gap-4'>
 								<div className='flex flex-col md:w-8/12 lg:w-9/12 w-full mb-2'>
 									<div className='flex flex-col md:flex-row md:gap-6'>
@@ -400,7 +429,7 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 										<div
 											className={`flex flex-col ${!type ? 'mt-6' : 'mb-4 ml-5 min-w-36'}`}
 										>
-											<Input
+											{isLoggedIn || <><Input
 												label='Twój email'
 												name='email'
 												type={type}
@@ -414,14 +443,14 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 												type={type}
 												register={register}
 												error={errors.nickname?.message}
-											/>
+											/></>}
 											<div>
-												<button
+												<ActionButton
 													className={`submit-btn submit-btn-${themeMode ? 'light' : 'dark'} my-2`}
 													type='submit'
 												>
 													Wyślij newsa
-												</button>
+												</ActionButton>
 											</div>
 										</div>
 									</div>

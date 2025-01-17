@@ -190,10 +190,12 @@ const StyledTag = styled(Tag)<TagProps>(
 const Listbox = styled('ul')(
 	({theme}) => `
   display: ruby;
+  left: calc(60dvw - 50px);
+  max-width: 250px;
   max-height: 250px;
   margin: 2px 0 0;
   padding: 0;
-  position: absolute;
+	position: absolute;
   list-style: none;
   transition: 0.2s;
   background-color: ${theme.palette.mode === 'dark' ? '#141414' : '#fff'};

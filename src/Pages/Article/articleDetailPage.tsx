@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import BreadCrumb from '../../Components/BreadCrumb';
 import ContentTitle from '../../Components/ContentTitle';
-import FilterInput from '../../Components/FilterInput';
 import Layout from '../../Components/Layout';
 import CommentForm from '../../Components/Comment';
 import {Link, useLocation, useParams} from 'react-router-dom';
@@ -9,9 +8,6 @@ import {Image, Spinner} from '@chakra-ui/react';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../reducers';
 import '../mainPageStyle.css';
-import {apiGetReq} from '../../Constant/api-functions';
-import {fileUrl} from '../../Constant/config';
-import {changeData1} from '../../Constant/helpers';
 import {PageBasicProps} from '../../AppMain';
 import {ArticleToDisplay} from '../Home/NewsContent/Carousel';
 import {
@@ -20,51 +16,13 @@ import {
 	getLastVisitedId,
 	getTargetNews,
 } from '../../reducers/NewsReducer';
-import {stat} from 'fs';
+
 import TipTap from '../../Components/TipTap/TipTap';
 import DelayedComponent from '../../Components/_utility/DelayedComponent';
 import SocialShare from '../../Components/SocialShare/SocialShare';
 import { PostModels } from '../../Constant/api-requests';
 
 
-interface TagData {
-	_id: string;
-	name: string;
-}
-
-interface Content {
-	subHead: string;
-	img: string;
-	description: string;
-}
-
-interface News {
-	id: string;
-	title: string;
-	feature: string;
-	date: string;
-	content: Content[];
-	link: string;
-}
-
-interface inputNews {
-	_id: string;
-	title: string;
-	tag: string;
-	date: string;
-	content: Content[];
-	link: string;
-}
-
-interface inputComment {
-	_id: string;
-	entityId: string;
-	commentId: string;
-	name: string;
-	email: string;
-	website: string;
-	comment: string;
-}
 
 interface CommentForm {
 	id: string;

@@ -38,7 +38,7 @@ export const CustomToast = () => {
     return { addToast };
 }
 
-export const usePromiseToast = () => {
+export const usePromiseToast = ({onError, onSuccess}: {onError?: () => void, onSuccess?: () => void}) => {
 	const toast = useToast({
 		position: 'top-right',
 		id: 'promise-toast',
@@ -53,10 +53,13 @@ export const usePromiseToast = () => {
         toast.closeAll();
 		if (!toast.isActive('promise-toast')) {
 			const toastPromise = promise()
-				.then((response) => response)
+				.then((response) => {
+					onSuccess?.();
+					return response;
+				})
 				.catch(async (error) => {
 					let errorMessage = 'An unexpected error occurred';
-
+					onError?.();
 					if (
 						error.response &&
 						error.response.data &&
@@ -107,10 +110,10 @@ export const usePromiseBasedToast = <T extends FieldValues>({
 	onSubmit,
 	toastMessages,
 }: UseSubmitWithToastProps<T>) => {
-	const {showPromiseToast} = usePromiseToast();
+	const {showPromiseToast} = usePromiseToast({});
 
 	const wrappedSubmit = handleSubmit(async (data: T) => {
-		await showPromiseToast(
+		showPromiseToast(
 			async () => onSubmit(data),
 			toastMessages ?? defaultToastMessages
 		);

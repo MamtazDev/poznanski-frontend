@@ -1,8 +1,27 @@
-import React, {useState, useEffect, useMemo, MouseEvent, useId} from 'react';
+import React, {
+	useState,
+	useEffect,
+	useMemo,
+	MouseEvent,
+	useId,
+	ReactNode,
+	SetStateAction,
+	useCallback,
+	useRef,
+} from 'react';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../reducers';
 import './style.css';
-import {Avatar, Button, Spinner} from '@chakra-ui/react';
+import {
+	Avatar,
+	Button,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalOverlay,
+	Portal,
+	Spinner,
+} from '@chakra-ui/react';
 import Input from '../TextField/Input';
 import {Link, useParams} from 'react-router-dom';
 import {
@@ -22,6 +41,12 @@ import {
 } from '../../Pages/Home/NewsContent/Carousel';
 import {get, max, rest, set, throttle} from 'lodash';
 import {m} from 'framer-motion';
+import {JsxElement} from 'typescript';
+import DelayedComponent from '../_utility/DelayedComponent';
+import {ActionButton} from '../Button';
+import {DelayedLink} from '../_utility/DelayedLink';
+// import useScrollToBottom from '../../hooks/useScrollToBottom';
+import {comment} from 'postcss';
 
 // type CommentSection = {
 // 	commentData: {id: string; img: string; comment: string}[];
@@ -49,12 +74,14 @@ const processQueue = async () => {
 	isProcessing = false;
 	if (queue.length > 0) throttledProcessQueue();
 };
-const throttledProcessQueue = throttle(processQueue, 1000); // Throttle to one call per 1 second
+const throttledProcessQueue = throttle(processQueue, 500); // Throttle to one call per 1 second
 
 const throttledFetcher = (
 	postModel: PostModels,
 	id: string,
-	pageNum: number
+	pageNum: number,
+	noComments?: boolean,
+	parentCommentId?: string | null
 ): Promise<{comments: CommentWithReplies[]; totalPages: number}> => {
 	return new Promise((resolve, reject) => {
 		queue.push(async () => {
@@ -63,7 +90,9 @@ const throttledFetcher = (
 					true,
 					postModel,
 					id,
-					pageNum
+					pageNum,
+					noComments,
+					parentCommentId
 				);
 				resolve({comments, totalPages});
 			} catch (error) {
@@ -251,11 +280,7 @@ const useComments = (
 	const optimisticUpdateWithRevalidation = (
 		newComment: CommentWithReplies
 	) => {
-		setCommentsState((prev) => [newComment, ...prev]);
-		if (parentCommentId) {
-		} else {
-			scrollToCommentsStart();
-		}
+		setCommentsState((prev) => [...prev, newComment]);
 		revalidateAllFetchedPages();
 	};
 
@@ -292,9 +317,12 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 		defaultValues: {
 			comment: '',
 		},
-		mode: 'all',
+		mode: 'onChange',
 	});
-	const [commentReply, setCommentReply] = useState<CommentWithReplies | null>(null);
+	const [commentRepliesHistory, setCommentRepliesHistory] = useState<
+		CommentWithReplies[]
+	>([]);
+	const [replies, setReplies] = useState<CommentWithReplies[] | null>([]);
 	const [paginatedComments, setPaginatedComments] = useState<boolean>(false);
 	const [hideComments, setHideComments] = useState<boolean>(false);
 	const noComments = commentData === null && !paginatedComments;
@@ -307,6 +335,7 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 		maxPages,
 		fetchedComments,
 		optimisticUpdate,
+		revalidateComments,
 	} = useComments(
 		`${id}`,
 		postModel,
@@ -332,7 +361,7 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 
 	const gen_Id = useId();
 	// handles replies
-	// const commentReply = useMemo(() => {
+	// const commentRepliesHistory = useMemo(() => {
 	// 	if (commentIdToReply) {
 	// 		return data?.find((comment) => comment._id === commentIdToReply);
 	// 	}
@@ -342,12 +371,43 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 
 	// 	optimisticUpdate: optimisticUpdateComments,
 	// } = useComments(
-	// 	`${commentReply?._id}`,
+	// 	`${commentRepliesHistory?._id}`,
 	// 	PostModels.comment,
 	// 	false,
 	// 	true,
 	// 	true
 	// );
+	const commentToReply =
+		commentRepliesHistory?.[commentRepliesHistory.length - 1];
+	const refreshAllPagesOfRelies = async () => {
+		const repliesPages = Math.ceil(Number(replies?.length) / 10);
+
+			const pages = Array.from({length: repliesPages}, (_, i) => i + 1);
+			let maxPage: number = 1;
+			const revalidatePromises = pages.map(async (pageNum) => {
+				const response =
+					(await mutate(
+						`comment/replies/${commentToReply?._id}?page=${pageNum}`,
+						async () => {
+							const response = await throttledFetcher(
+								postModel,
+								`${id}`,
+								pageNum,
+								false,
+								commentToReply?._id
+							);
+							maxPage = response?.totalPages ?? 1;
+							return response?.comments ?? [];
+						},
+						false
+					)) ?? [];
+
+				return response;
+			});
+			const allComments = (await Promise.all(revalidatePromises)).flat();
+			setReplies(allComments);
+
+	};
 
 	const handleComment = async (commentData: {comment: string}) => {
 		const requestsData = {
@@ -355,13 +415,48 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 			postId: `${id}`,
 			content: commentData.comment,
 		};
-		if (commentReply) {
+		const optimisticData = {
+			_id: gen_Id,
+			entityId: `${id}`,
+			authorId: {
+				nickname: 'Ty',
+				_id: gen_Id,
+				profilePicture: user?.avatar ?? '',
+			},
+		};
+		if (commentToReply) {
 			const replyRequestsData = {
 				...requestsData,
 				postId: `${id}`,
-				parentCommentId: commentReply?._id,
+				parentCommentId: commentToReply?._id,
+			};
+			const replyOptimisticData = {
+				...replyRequestsData,
+				...optimisticData,
 			};
 			await addCommentRequest(replyRequestsData);
+			if (commentRepliesHistory.length === 1) {
+				revalidateComments();
+			}
+			setReplies((prev) => {
+
+				if (!prev) {
+					return [replyOptimisticData];
+				}
+				const repliesPages = Math.ceil(Number(prev?.length + 1) / 10);
+				if (repliesPages === 1) {
+					mutate(`comment/replies/${commentToReply?._id}?page=1`);
+				} else {
+					refreshAllPagesOfRelies();
+				}
+				return [...prev, replyOptimisticData];
+			});
+			// const repliesPages = Math.ceil(Number(replies?.length) / 10);
+			// if (repliesPages === 1) {
+			// 	mutate(`comment/replies/${commentToReply?._id}?page=1`);
+			// } else {
+			// 	refreshAllPagesOfRelies();
+			// }
 			// optimisticUpdateComments({
 			// 	...replyRequestsData,
 			// 	_id: gen_Id,
@@ -373,6 +468,7 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 			// 	},
 
 			// });
+
 		} else {
 			await addCommentRequest(requestsData);
 
@@ -383,7 +479,7 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 				authorId: {
 					nickname: 'Ty',
 					_id: gen_Id,
-					profilePicture: `${user?.avatar}`,
+					profilePicture: user?.avatar ?? '',
 				},
 			});
 		}
@@ -391,6 +487,7 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 		if (shouldDisplayFetchButton) {
 			setPaginatedComments(true);
 		}
+		revalidateComments()
 	};
 
 	// const handleReply = (parentId: string) => {
@@ -417,16 +514,8 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 
 				return;
 			}
-			let shouldReverse = false;
+
 			return comments?.flatMap((comment, idx) => {
-				const prevHasDifferentAuthor =
-					idx > 0 &&
-					comments[idx - 1]?.authorId._id !== comment.authorId._id;
-
-				if (prevHasDifferentAuthor) {
-					shouldReverse = true;
-				}
-
 				const authorNickname =
 					comment.authorId._id === `${user?._id}`
 						? 'Ty'
@@ -434,7 +523,7 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 
 				return {
 					...comment,
-					shouldReverse,
+
 					authorId: {
 						...comment.authorId,
 						nickname: authorNickname,
@@ -447,9 +536,9 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 	);
 
 	const dataToRender =
-		(paginatedComments && data.length <= 10
+		paginatedComments && data.length <= 10
 			? data
-			: remapEmbeddedComments(data!)) ?? commentData?.embeddedComments;
+			: remapEmbeddedComments(data) ?? commentData?.embeddedComments;
 
 	return (
 		<>
@@ -471,8 +560,10 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 							<Comment
 								key={item._id}
 								comment={item}
-								setCommentReply={setCommentReply}
-								viewOnly={!item._id}
+								setCommentRepliesHistory={
+									setCommentRepliesHistory
+								}
+								inModal={!item._id}
 							/>
 						);
 					})}
@@ -513,103 +604,271 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 					</>
 				)}
 				<div className='mt-4'>
-					<form id='comments-form' onSubmit={wrappedSubmit}>
-						{commentReply && (
+					<ReplyCommentModal
+						isOpen={Boolean(commentToReply)}
+						onClose={() =>
+							setCommentRepliesHistory((prev) => {
+								const newComments = prev?.filter(
+									(comment) =>
+										comment._id !== commentToReply?._id
+								);
+								return newComments;
+							})
+						}
+						type={type}
+						setCommentRepliesHistory={setCommentRepliesHistory}
+						commentToReply={commentToReply}
+					>
+						{commentToReply && (
 							<Comment
-								comment={commentReply}
-								setCommentReply={setCommentReply}
-								viewOnly
+								comment={commentToReply}
+								setCommentRepliesHistory={
+									setCommentRepliesHistory
+								}
+								replies={replies}
+								setReplies={setReplies}
+								inModal
 							/>
 						)}
-						<Input
-							register={register}
-							label={
-								commentReply
-									? `Odpowiadasz ${commentReply?.authorId.nickname === user?.nickname ? 'sobie' : commentReply?.authorId.nickname}`
-									: 'Dodaj swój komentarz'
-							}
-							placeholder={
-								isLoggedIn
-									? 'Napisz coś od siebie...'
-									: 'Zaloguj się aby dodać komentarz'
-							}
-							name='comment'
-							disabled={!isLoggedIn}
-							height={isLoggedIn ? '150px' : ''}
-							error={errors.comment?.message}
-						/>
-
-						{isLoggedIn ? (
-							<>
-								<Button
-									type='submit'
-									className='float-right ml-2'
-									colorScheme={
-										themeMode ? 'blackAlpha' : 'whiteAlpha'
-									}
+						{/* <div
+							ref={containerRef}
+							className={`h-full overflow-y-scroll scrollbar ${type ? '' : 'mt-20'}`}
+						> */}
+						{/* {commentRepliesHistory && (
+							<Comment
+								comment={commentToReply}
+								setCommentRepliesHistory={
+									setCommentRepliesHistory
+								}
+								inModal
+							/>
+						)} */}
+						{/* </div> */}
+						{Boolean(commentToReply) && (
+							<form onSubmit={wrappedSubmit}>
+								<div
+									className={`fixed px-5 pb-5 bottom-0 ${type ? 'w-full': 'w-[360px]'}`}
 								>
-									{commentReply
-										? 'Odpowiedz'
-										: 'Dodaj komentarz'}
-								</Button>
-								{commentReply && (
-									<Button
-										onClick={() => setCommentReply(null)}
-										type='button'
-										className='float-right mr-2'
-										colorScheme={
-											themeMode
-												? 'blackAlpha'
-												: 'whiteAlpha'
+									{/* <div className='flex w-full justify-end'>
+										{ScrollButton}
+									</div> */}
+									<Input
+										register={register}
+										label={
+											commentToReply
+												? `Odpowiadasz ${commentToReply?.authorId.nickname === user?.nickname ? 'sobie' : commentToReply?.authorId.nickname}`
+												: 'Dodaj swój komentarz'
 										}
-									>
-										Dodaj swój komentarz
-									</Button>
-								)}
-							</>
-						) : (
-							<Link state={window.location.pathname} to='/login'>
-								<Button
-									type='button'
-									colorScheme={
-										themeMode ? 'blackAlpha' : 'whiteAlpha'
-									}
-									variant='ghost'
-								>
-									Zaloguj się lub załóż konto
-								</Button>
-							</Link>
+										placeholder={
+											isLoggedIn
+												? 'Napisz coś od siebie...'
+												: 'Zaloguj się aby dodać komentarz'
+										}
+										name='comment'
+										disabled={!isLoggedIn}
+										height={isLoggedIn ? '100px' : ''}
+										error={errors.comment?.message}
+									/>
+									<div className='flex flex-row-reverse justify-between'>
+										{isLoggedIn ? (
+											<ActionButton type='submit'>
+												{commentRepliesHistory
+													? 'Odpowiedz'
+													: 'Dodaj komentarz'}
+											</ActionButton>
+										) : (
+											<Link
+												state={window.location.pathname}
+												to='/login'
+											>
+												<ActionButton type='button'>
+													Zaloguj się lub załóż konto
+												</ActionButton>
+											</Link>
+										)}
+										{commentToReply && (
+											<ActionButton
+												reverted
+												onClick={() =>
+													setTimeout(() => {
+														setCommentRepliesHistory(
+															(prev) => {
+																const newComments =
+																	prev?.filter(
+																		(
+																			comment
+																		) =>
+																			comment._id !==
+																			commentToReply?._id
+																	);
+																return newComments;
+															}
+														);
+													}, 300)
+												}
+												type='button'
+											>
+												{commentRepliesHistory.length >
+													1 || !isLoggedIn
+													? 'Cofnij'
+													: 'Dodaj swój komentarz'}
+											</ActionButton>
+										)}
+									</div>
+								</div>
+							</form>
 						)}
-					</form>
+					</ReplyCommentModal>
+					<>
+						{commentRepliesHistory.length > 0 || (
+							<form onSubmit={wrappedSubmit}>
+								<Input
+									register={register}
+									label={
+										commentToReply
+											? `Odpowiadasz ${commentToReply?.authorId.nickname === user?.nickname ? 'sobie' : commentToReply?.authorId.nickname}`
+											: 'Dodaj swój komentarz'
+									}
+									placeholder={
+										isLoggedIn
+											? 'Napisz coś od siebie...'
+											: 'Zaloguj się aby dodać komentarz'
+									}
+									name='comment'
+									disabled={!isLoggedIn}
+									height={isLoggedIn ? '150px' : ''}
+									error={errors.comment?.message}
+								/>
+								{isLoggedIn ? (
+									<div className='w-full flex justify-end'>
+										<ActionButton type='submit'>
+											Dodaj komentarz
+										</ActionButton>
+										{/* {commentRepliesHistory && (
+											<Button
+												onClick={() =>
+													setCommentRepliesHistory([])
+												}
+												type='button'
+												className='float-right mr-2'
+												colorScheme={
+													themeMode
+														? 'blackAlpha'
+														: 'whiteAlpha'
+												}
+											>
+												Dodaj swój komentarz
+											</Button>
+										)} */}
+									</div>
+								) : (
+									<div className='w-full flex justify-end'>
+										<DelayedLink
+											state={`${window.location.pathname}/${commentToReply?._id}`}
+											to='/login'
+										>
+											<ActionButton type='button'>
+												Zaloguj się lub załóż konto
+											</ActionButton>
+										</DelayedLink>
+									</div>
+								)}
+							</form>
+						)}
+					</>
 				</div>
 			</div>
 		</>
 	);
 };
 
-const Comment: React.FC<{
-	comment: CommentWithReplies;
-	setCommentReply: (comment: CommentWithReplies | null) => void;
-	viewOnly?: boolean;
-}> = ({comment, setCommentReply, viewOnly}) => {
-	const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-	const [replies, setReplies] = useState<CommentWithReplies[] | null>([]);
-	const [showReplies, setShowReplies] = useState(false);
-	const {user} = useSelector((state: RootState) => state.user);
-	const [parentId, setParentId] = useState<string | null>(null);
+const useReplies = (
+	commentModel: PostModels,
+	commentId: string,
+	parentId: string,
+	replyPage: number
+) => {
+	const [replies, setReplies] = useState<CommentWithReplies[]>([]);
 	const [paginatedComments, setPaginatedComments] = useState<boolean>(false);
 	const [hideReplies, setHideReplies] = useState<boolean>(false);
-	const noReplies = !comment._id || viewOnly;
+	const [numberOfReplies, setNumberOfReplies] = useState<number>(0);
+	const [repliesPage, setRepliesPage] = useState(1);
 
 	const {data} = useSWR(
-		`comment/replies/${comment._id}`,
+		`comment/replies/${parentId}?page=${replyPage}`,
+		async () =>
+			await getPaginatedCommentsRequest({
+				entityModel: commentModel,
+				postId: commentId,
+				page: repliesPage,
+				pageSize: 10,
+			}),
+		{revalidateOnFocus: false, dedupingInterval: 60000}
+	);
+
+	useEffect(() => {
+		if (data) {
+			setReplies((prev) => {
+				if (prev?.length === 0) {
+					return [...data.comments];
+				}
+				if (prev?.[prev.length - 1]._id === data.comments[0]._id) {
+					return prev;
+				}
+				return [...prev, ...data.comments];
+			});
+			setNumberOfReplies(data.totalComments);
+		}
+	}, [data]);
+
+	const fetchMoreReplies = () => {
+		setRepliesPage((prev) => prev + 1);
+	};
+
+	const handleHidingReplies = () => {
+		setHideReplies((prev) => !prev);
+	};
+
+	return {
+		replies,
+		numberOfReplies,
+		handleHidingReplies,
+		fetchMoreReplies,
+	};
+};
+
+const Comment: React.FC<{
+	comment: CommentWithReplies;
+	setCommentRepliesHistory: React.Dispatch<
+		React.SetStateAction<CommentWithReplies[]>
+	>;
+	replies?: CommentWithReplies[] | null;
+	setReplies?: React.Dispatch<SetStateAction<CommentWithReplies[] | null>>;
+	inModal?: boolean;
+}> = ({comment, setCommentRepliesHistory, replies, setReplies, inModal}) => {
+	const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+	const [showReplies, setShowReplies] = useState(false);
+	const {user} = useSelector((state: RootState) => state.user);
+
+	const [paginatedComments, setPaginatedComments] = useState<boolean>(false);
+	const [hideReplies, setHideReplies] = useState<boolean>(false);
+	const [numberOfReplies, setNumberOfReplies] = useState<number>(0);
+	const noReplies =
+		comment.repliesIds?.length === 0 ||
+		replies?.length === 0 ||
+		comment.authorId.nickname === 'Ty';
+	const [repliesPage, setRepliesPage] = useState(1);
+	const [maxPages, setMaxPages] = useState(1);
+
+	const {data, isLoading} = useSWR(
+		`comment/replies/${comment._id}?page=${repliesPage}`,
 		noReplies
 			? null
-			: () =>
-					getPaginatedCommentsRequest({
+			: async () =>
+					await getPaginatedCommentsRequest({
 						entityModel: comment.entityModel,
 						postId: comment.entityId,
-						page: 1,
+						page: repliesPage,
 						pageSize: 10,
 						parentCommentId: comment._id,
 					}),
@@ -618,10 +877,53 @@ const Comment: React.FC<{
 
 	useEffect(() => {
 		console.log(data);
-		if (data?.totalComments > 0) {
-			setReplies(data.comments);
+
+		if (data?.comments) {
+			if (data.currentPage > 1 && data.comments.length === 0) {
+				setRepliesPage(1);
+			}
+			// handles case if user falls back to previous comment
+			// if (
+			// 	replies?.[0]?.parentCommentId !==
+			// 	data.comments?.[0]?.parentCommentId
+			// ) {
+			// 	setRepliesPage(1);
+			// }
+
+			setReplies?.((prevReplies) => {
+				if (!prevReplies) {
+					return data.comments;
+				}
+
+				const newComments = data?.comments?.filter(
+					(comment: CommentWithReplies) =>
+						!prevReplies?.some(
+							(prevReply) => prevReply._id === comment._id
+						)
+				);
+				return repliesPage === 1
+					? data.comments
+					: [...prevReplies, ...newComments];
+			});
+
+			setNumberOfReplies(data.totalComments);
+			setMaxPages((prev) => {
+				if (data.totalPages > prev) {
+					return data.totalPages;
+				}
+				return prev;
+
+			});
+		} else {
+			if (comment.repliesIds?.length === 0) setReplies?.(null);
 		}
-	}, [noReplies, data]);
+	}, [data, comment._id]);
+
+	const fetchMoreReplies = () => {
+		if (repliesPage < maxPages) {
+			setRepliesPage((prev) => prev + 1);
+		}
+	};
 
 	const remapEmbeddedComments = useMemo(
 		() => (comments: CommentsSection['embeddedComments']) => {
@@ -666,7 +968,7 @@ const Comment: React.FC<{
 	return comment ? (
 		<div
 			key={comment._id}
-			className={`flex gap-x-1 mt-3 ${comment.shouldReverse ? 'flex-row-reverse' : ''} md:gap-3 ${comment.shouldReverse && 'justify-start'} ${viewOnly ? 'p-4' : ''}`}
+			className={`flex gap-x-1 ${inModal ? '' : 'mt-3'} ${comment.shouldReverse ? 'flex-row-reverse' : ''} md:gap-3 ${comment.shouldReverse && 'justify-start'} ${inModal ? 'px-4 pb-4' : ''}`}
 		>
 			{comment.authorId.profilePicture ? (
 				<Avatar src={comment.authorId.profilePicture} />
@@ -683,7 +985,7 @@ const Comment: React.FC<{
 			<div
 				className={`flex flex-col ${comment.shouldReverse ? 'text-right' : 'text-left'}`}
 			>
-				<p className=' text-xs font-bold'>
+				<p className={`${themeMode || 'text-white'} text-xs font-bold`}>
 					{comment.authorId.nickname}
 				</p>
 				<div
@@ -693,40 +995,87 @@ const Comment: React.FC<{
 					{comment.content || 'No Comment'}
 				</div>
 
-				{viewOnly || (
+				{comment.authorId.nickname === 'Ty' || <div
+					className={`flex flex-row gap-2 md:mt-1.5 mt-2 ${comment.shouldReverse ? 'justify-end' : ''}`}
+				>
 					<div
-						className={`flex flex-row gap-2 md:mt-1.5 mt-2 ${comment.shouldReverse ? 'justify-end' : ''}`}
+						className={`${themeMode ? 'comment-reply-btn' : 'comment-reply-btn-dark'}`}
 					>
-						<div
-							className={`${themeMode ? 'comment-reply-btn' : 'comment-reply-btn-dark'}`}
+						Polub
+					</div>
+					<div
+						onClick={() => {
+							setReplies?.([]);
+							setCommentRepliesHistory((prev) => {
+								if (prev?.length === 0) {
+
+									return [comment];
+								}
+								if (
+									prev?.[prev.length - 1]._id === comment._id
+								) {
+									return prev;
+								}
+								return [...prev, comment];
+							});
+
+							scrollToCommentsForm();
+						}}
+						className={`${themeMode ? 'comment-reply-btn' : 'comment-reply-btn-dark'} cursor-pointer select-none`}
+					>
+						Odpowiedz
+					</div>
+				</div>}
+
+				{!inModal &&
+					(dataToRender.length ||
+						Number(comment.repliesIds?.length)) > 0 && (
+						<p
+							className={`text-xs mt-2 ${themeMode ? '' : 'text-white'} select-none`}
 						>
-							Like
-						</div>
-						<div
-							onClick={() => {
-								setCommentReply(comment);
-								scrollToCommentsForm();
-							}}
-							className={`${themeMode ? 'comment-reply-btn' : 'comment-reply-btn-dark'}`}
-						>
-							Reply
-						</div>
+							{(dataToRender.length ||
+								Number(comment?.repliesIds?.length)) > 1
+								? `${Number(comment?.repliesIds?.length ?? numberOfReplies)} odpowiedzi`
+								: '1 odpowiedź'}
+						</p>
+					)}
+				{/* <p className={themeMode ? '' : 'text-white'}>{dataToRender.length > 1 ? `${dataToRender.length} odpowiedzi` : '1 odpowiedź'}</p> */}
+				{inModal && dataToRender.length > 0 && (
+					<div className='flex-col -ml-1'>
+						{dataToRender?.map((reply: CommentWithReplies) => {
+							return (
+								reply._id !== comment._id && (
+									<Comment
+										key={reply._id}
+										comment={reply}
+										setCommentRepliesHistory={
+											setCommentRepliesHistory
+										}
+									/>
+								)
+							);
+						})}
 					</div>
 				)}
-				{!viewOnly && dataToRender.length > 0 && (<p className={`text-xs mt-2 ${themeMode ? '' : 'text-white'}`}>{dataToRender.length > 1 ? `${dataToRender.length} odpowiedzi` : '1 odpowiedź'}</p>)}
-				{/* <p className={themeMode ? '' : 'text-white'}>{dataToRender.length > 1 ? `${dataToRender.length} odpowiedzi` : '1 odpowiedź'}</p> */}
-				{/* {dataToRender && (
-					<div className='flex-col -ml-1'>
-						{dataToRender?.map((reply: CommentWithReplies) => (
-							<Comment
-								key={reply._id}
-								comment={reply}
-
-								setCommentReply={setCommentReply}
-							/>
-						))}
-					</div>
-				)} */}
+				{isLoading ? (
+					<Spinner />
+				) : (
+					maxPages > repliesPage &&
+					inModal && (
+						<div className='flex w-[320px] justify-end mt-2 pr-9'>
+							<ActionButton
+								reverted
+								onClick={() => {
+									setTimeout(() => {
+										fetchMoreReplies();
+									}, 300);
+								}}
+							>
+								Wczytaj więcej
+							</ActionButton>
+						</div>
+					)
+				)}
 			</div>
 		</div>
 	) : (
@@ -746,8 +1095,155 @@ const Comment: React.FC<{
 	// </div>
 };
 
-const ReplyCommentModal: React.FC<{}> = () => {
-	return <></>;
-}
+const ReplyCommentModal: React.FC<{
+	isOpen: boolean;
+	onClose: () => void;
+	children: ReactNode;
+	commentToReply?: CommentWithReplies;
+	setCommentRepliesHistory: React.Dispatch<
+		React.SetStateAction<CommentWithReplies[]>
+	>;
+	type?: boolean;
+}> = ({
+	isOpen,
+	onClose,
+	children,
+	commentToReply,
+	setCommentRepliesHistory,
+	type,
+}) => {
+	const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+	// const commentToReply = commentRepliesHistory?.[commentRepliesHistory.length - 1];
+	const containerRef = React.useRef<HTMLDivElement>(null);
+	const [isAtBottom, setIsAtBottom] = useState(false);
+
+	const handleScrollToBottom = () => {
+		const container = containerRef.current;
+		if (container) {
+			container.scrollTo({
+				top: container.scrollHeight,
+				behavior: 'smooth',
+			});
+		}
+	};
+
+	const checkIfAtBottom = useCallback(() => {
+		const container = containerRef.current;
+		if (container) {
+			// bc max height of container is 55% of window height
+			const scrollable =
+				container.scrollHeight > window.innerHeight - 320;
+
+			if (!scrollable) {
+				setIsAtBottom(true);
+			} else {
+				const isBottom =
+					Math.abs(
+						container.scrollHeight -
+							container.scrollTop -
+							container.clientHeight
+					) < 1;
+				setIsAtBottom(isBottom);
+			}
+		}
+	}, [children]);
+
+	useEffect(() => {
+		if (isOpen) {
+			const timeoutId = setTimeout(() => {
+				const container = containerRef.current;
+				if (container) {
+					const handleScroll = () => checkIfAtBottom();
+					container.addEventListener('scroll', handleScroll, {
+						passive: true,
+					});
+
+					// Ensure check runs immediately
+					checkIfAtBottom();
+
+					return () => {
+						container.removeEventListener('scroll', handleScroll);
+					};
+				}
+			}, 100); // Adjust timeout as necessary
+
+			return () => clearTimeout(timeoutId);
+		}
+	}, [isOpen, children]);
+
+	return (
+		<Modal onClose={onClose} isOpen={isOpen}>
+			<ModalOverlay bgColor={themeMode ? 'white' : '#111217'} />
+			<ModalContent
+				marginTop={'90px'}
+				fontFamily='Urbanist'
+				backgroundColor={'transparent'}
+			>
+				<ModalBody
+					ref={containerRef}
+					style={{
+						overflowY: 'scroll',
+						padding: '0',
+
+						maxHeight: type? 'calc(100% - 320px)' : 'calc(100% - 380px)',
+					}}
+					className={`fixed block w-full overflow-y-scroll h-full ${type ? '' : 'mt-16'} scrollbar`}
+				>
+					{!isAtBottom ? (
+						<button
+							style={{
+								zIndex: 17000,
+								position: 'fixed',
+								bottom: 200,
+								marginLeft: '320px',
+								height: '50px',
+								width: '50px'
+							}}
+							type='button'
+							onClick={handleScrollToBottom}
+						>
+							<div className='flex cursor-pointer animate-bounce hover:animate-none w-fit justify-end mx-auto'>
+								<svg
+									xmlns='http://www.w3.org/2000/svg'
+									width='29'
+									height='28'
+									viewBox='0 0 29 28'
+									fill='none'
+								>
+									<path
+										d='M22.6668 14L14.5002 22.1667L6.3335 14'
+										stroke='#F1F4F9'
+										strokeWidth='3.29412'
+										strokeLinecap='round'
+										strokeLinejoin='round'
+									/>
+								</svg>
+							</div>
+						</button>
+					) : null}
+
+					{/* </div> */}
+
+					{/* <div
+							ref={containerRef}
+							className={`h-full overflow-y-scroll scrollbar ${type ? '' : 'mt-20'}`}
+						> */}
+					{/* {commentToReply && (
+								<Comment
+									comment={commentToReply}
+									setCommentRepliesHistory={
+										setCommentRepliesHistory
+									}
+									inModal
+								/>
+							)} */}
+					{/* </div> */}
+
+					{children}
+				</ModalBody>
+			</ModalContent>
+		</Modal>
+	);
+};
 
 export default CommentForm;

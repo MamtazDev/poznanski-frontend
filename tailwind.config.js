@@ -31,5 +31,29 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-thin': {
+          'scrollbar-width': 'thin',
+        },
+        '.scrollbar-thumb-rounded': {
+          'scrollbar-color': '#888 #f1f1f1',
+        },
+        '.scrollbar-thumb': {
+          'scrollbar-color': '#888',
+          'border-radius': '10px',
+        },
+        '.scrollbar-thumb:hover': {
+          'scrollbar-color': '#555',
+        },
+        '.scrollbar-track': {
+          'scrollbar-color': '#f1f1f1',
+        },
+        '.scrollbar-track:hover': {
+          'scrollbar-color': '#f1f1f1',
+        },
+      }, ['responsive'])
+    },
+  ],
 };

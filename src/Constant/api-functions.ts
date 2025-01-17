@@ -104,8 +104,8 @@ export const apiPostReq = (
 export const apiGetReq = (path: string, params: object, formData: boolean = false) =>
 	apiCall('get', path, params, formData);
 
-export const apiPutReq = (path: string, body: object) =>
-	apiCall('put', path, body);
+export const apiPutReq = (path: string, body: object, formData: boolean = false) =>
+	apiCall('put', path, body, formData);
 
 export const apiDeleteReq = (path: string, params: object) =>
 	apiCall('delete', path, params);

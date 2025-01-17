@@ -15,6 +15,8 @@ import {PoznanskiLogoIcon} from '../../../assets/svg/poznanskiLogo';
 import {AccountMenu} from '../../AccountMenu/AccountMenu';
 import {ReactComponent as InstagramIcon} from '../../../assets/svg/instagramIcon.svg';
 import {get} from 'lodash';
+import {DelayedLink} from '../../_utility/DelayedLink';
+import {ActionButton} from '../../Button';
 
 interface NavBarProps {
 	filterText?: string;
@@ -32,7 +34,7 @@ const menu = [
 	'Wydarzenia',
 ];
 
-const getIconsColor = (themeMode?: boolean) =>
+export const getIconsColor = (themeMode?: boolean) =>
 	themeMode ? '#5A1073' : '#2FC4B2';
 
 const NavBar: React.FC<NavBarProps> = (props) => {
@@ -136,7 +138,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 							</Link>
 
 							<div
-								className={`w-full mt-2 ${!props.type || !openFilterBox ? 'z-50 shadow-2xl' : '-z-10'} transition-transform -translate-y-20 duration-500 ${!props.type ? '-translate-y-1' : openFilterBox && props.type ? ' translate-y-14 absolute w-2/3 shadow-2xl' : ''}`}
+								className={`w-2/3 mt-2 ${!props.type || !openFilterBox ? 'z-50 shadow-2xl' : '-z-10'} transition-transform -translate-y-20 duration-500 ${!props.type ? '-translate-y-1' : openFilterBox && props.type ? ' translate-y-14 absolute w-2/3 shadow-2xl' : ''}`}
 							>
 								<div
 									className={`filter-box ${!props.themeMode && 'filter-box-dark'} w-full flex place-items-center`}
@@ -210,13 +212,21 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 										/>
 									</div>
 									<AccountMenu themeMode={props.themeMode} />
-									<Link to={common.CREATE_NEWS}>
+									{/* <Link to={common.CREATE_NEWS}>
 										<div
 											className={`submit-btn ${!props.themeMode && 'submit-btn-dark'} flex place-items-center ml-4 cursor-pointer`}
 										>
 											Submit News
 										</div>
-									</Link>
+									</Link> */}
+									<DelayedLink
+										to={common.CREATE_NEWS}
+										state={''}
+									>
+										<ActionButton type='button'>
+											Dodaj newsa
+										</ActionButton>
+									</DelayedLink>
 								</div>
 							</div>
 						) : (
@@ -356,7 +366,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 						</div>
 					</div>
 
-					<Link to={common.CREATE_NEWS}>
+					{/* <Link to={common.CREATE_NEWS}>
 						<div className='flex items-center mb-6'>
 							<div
 								className={`submit-btn-2 flex place-items-center w-full cursor-pointer ${!props.themeMode && 'btn-dark-bg-color btn-dark-color'}`}
@@ -364,7 +374,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 								Submit News
 							</div>
 						</div>
-					</Link>
+					</Link> */}
 				</ModalContent>
 			</Modal>
 		</Fragment>

@@ -11,7 +11,8 @@ import NavBar from '../Components/Layout/NavBar';
 import {logout, setUserLoggedIn} from '../reducers/user';
 import {deleteCookie, getCookie, parseJwt} from '../utils/auth';
 import {checkIfLoggedIn} from '../Constant/api-requests';
-import { setType } from '../reducers/ThemeReducer';
+import {setType} from '../reducers/ThemeReducer';
+
 
 const Home = lazy(() => import('../Pages/Home'));
 const SubmitPage = lazy(() => import('../Pages/Submit'));
@@ -25,6 +26,7 @@ const ArticleDetailPage = lazy(
 	() => import('../Pages/Article/articleDetailPage')
 );
 const LoginPage = lazy(() => import('../Pages/Login/index'));
+const SubmitConfirmation = lazy(() => import('../Pages/SubmitConfirmation/index'));
 
 interface Tag {
 	_id: string;
@@ -52,12 +54,12 @@ const AppMain: React.FC = () => {
 
 	const checkIfAuth = async () => {
 		try {
-		await checkIfLoggedIn();
+			await checkIfLoggedIn();
 		} catch (error) {
 			const accessToken = getCookie('accessToken');
-			if(accessToken) {
+			if (accessToken) {
 				const decoded = parseJwt(accessToken);
-				if(decoded.exp * 1000 < Date.now()) {
+				if (decoded.exp * 1000 < Date.now()) {
 					handleLogout();
 				}
 			} else {
@@ -194,6 +196,10 @@ const AppMain: React.FC = () => {
 							}
 						/>
 					</Route>
+					<Route
+						path={common.VERIFY_PATH}
+						element={<SubmitConfirmation />}
+					/>
 				</Routes>
 			</Suspense>
 			<YoutubePlayer type={type} isOpen={isOpen} videoId={videoId} />

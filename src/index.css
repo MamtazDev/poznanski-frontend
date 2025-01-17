@@ -1,22 +1,162 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-@import "@fontsource/urbanist";
-@import "@fontsource/urbanist/400.css";
-@import "@fontsource/urbanist/400-italic.css";
-@import "@fontsource/oswald"; 
-@import "@fontsource/oswald/400.css";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import '@fontsource/urbanist';
+@import '@fontsource/urbanist/400.css';
+@import '@fontsource/urbanist/400-italic.css';
+@import '@fontsource/oswald';
+@import '@fontsource/oswald/400.css';
 /* @import "@fontsource/oswald/400-italic.css"; */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	margin: 0;
+	font-family:
+		'Urbanist',
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		'Roboto',
+		'Oxygen',
+		'Ubuntu',
+		'Cantarell',
+		'Fira Sans',
+		'Droid Sans',
+		'Helvetica Neue',
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	overflow-y: auto;
+	height: 100%;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+		monospace;
+}
+
+.custom-button {
+	position: relative;
+	overflow: hidden;
+	background-color: rgb(59, 214, 198);
+
+	color: rgb(90, 16, 115);
+	text-shadow: 2px 2px 4px rgb(150, 150, 150);
+	box-shadow: inset rgb(0, 157, 154) 0px 0px 60px -12px;
+	padding: 6px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	font-weight: 600;
+
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 8px;
+	transition:
+		background-color 0.3s ease,
+		transform 0.3s ease;
+}
+
+.custom-button-light {
+	position: relative;
+	overflow: hidden;
+	color: rgb(255, 255, 255);
+
+	background-color: rgb(90, 16, 115);
+	text-shadow: 2px 2px 4px rgb(0, 0, 0);
+	box-shadow: inset rgb(128, 42, 129) 0px 0px 60px -12px;
+	padding: 6px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	font-weight: 600;
+
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 8px;
+	transition:
+		background-color 0.3s ease,
+		transform 0.3s ease;
+}
+
+.custom-button-reversed {
+	position: relative;
+	overflow: hidden;
+	background-color: transparent;
+
+	color: rgb(90, 16, 115);
+	text-shadow: 2px 2px 4px rgb(150, 150, 150);
+	box-shadow: inset rgb(128, 42, 129) 0px 0px 60px -12px;
+
+	padding: 6px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	font-weight: 600;
+
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 8px;
+	transition:
+		background-color 0.3s ease,
+		transform 0.3s ease;
+}
+
+.custom-button-light-reversed {
+	position: relative;
+	overflow: hidden;
+	color: rgb(255, 255, 255);
+
+	background-color: transparent;
+	text-shadow: 2px 2px 4px rgb(0, 0, 0);
+	box-shadow: inset rgb(0, 157, 154) 0px 0px 60px -12px;
+	padding: 6px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	font-weight: 600;
+
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 8px;
+	transition:
+		background-color 0.3s ease,
+		transform 0.3s ease;
+}
+
+/* .custom-button:hover {
+	background-color: #2980b9;
+} */
+
+.custom-button:active {
+	background-color: #ffffff;
+	transform: scale(0.95);
+}
+
+.custom-button-light:active {
+	background-color: #000000;
+	transform: scale(0.95);
+}
+
+/* .custom-button:focus {
+	outline: none;
+	box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.5);
+} */
+
+.ripple {
+	position: absolute;
+	border-radius: 100%;
+	opacity: 0.2;
+	background: rgba(255, 255, 255, 0.6);
+	transform: scale(0);
+	animation: ripple-animation 0.6s linear;
+}
+
+@keyframes ripple-animation {
+	to {
+		transform: scale(4);
+		opacity: 0;
+	}
 }

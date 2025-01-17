@@ -55,7 +55,7 @@ const ProductCard1: React.FC<News> = ({
             <div
               className={`date-badge absolute top-10 right-10 z-50 ${!themeMode && "btn-dark-bg-color"}`}
             >
-              {date}
+              {date.split("T")[0]}
             </div>
             <div>
               <div
@@ -72,7 +72,7 @@ const ProductCard1: React.FC<News> = ({
                 <div
                   className={`feature-text ${!themeMode && "btn-dark-bg-color"}`}
                 >
-                  {tags}
+                  {tags.split("#")[1]}
                 </div>
               </div>
               <div
@@ -97,7 +97,7 @@ const ProductCard1: React.FC<News> = ({
               <div
                 className={`date-badge-2 absolute top-1 right-1 z-50 ${!themeMode && "btn-dark-bg-color"}`}
               >
-                {date}
+                {date.split("T")[0]}
               </div>
               <Image
                 src={`${process.env.REACT_APP_FILES_URL}${img}`}
@@ -112,7 +112,7 @@ const ProductCard1: React.FC<News> = ({
                   <div
                     className={`feature-text-2 ${!themeMode && "btn-dark-bg-color"}`}
                   >
-                    {tags}
+                    {tags.split("#")[1]}
                   </div>
                 </div>
                 <div

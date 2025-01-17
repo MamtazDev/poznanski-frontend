@@ -8,3 +8,4 @@ export const CREATE_NEWS = "/news/create";
 export const MATERIAL_PATH = "/material";
 export const NEWRELEASE_PATH = "/releases";
 export const LOGIN_PATH = "/login";
+export const VERIFY_PATH = "/verify";

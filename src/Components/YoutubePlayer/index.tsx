@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import YouTube from 'react-youtube';
 import {RootState} from '../../reducers';
@@ -18,17 +18,18 @@ const YoutubePlayer: React.FC<PlayerProps> = ({isOpen, type}) => {
 		height: 'auto',
 		width: 'auto',
 		playerVars: {
-			// autoplay: 1,
+			autoplay: 1,
 		},
 		iframeClass: 'rounded-lg',
 		enablejsapi: 1,
+
 	};
 
-	const onLoad = (event: {target: {playVideo: () => void}}) => {
-		setTimeout(() => {
-			event.target.playVideo();
-		}, 500);
-	};
+	// const onLoad = (event: {target: {playVideo: () => void}}) => {
+	// 	setTimeout(() => {
+	// 		event.target.playVideo();
+	// 	}, 500);
+	// };
 
 	const onClose = () => {
 		dispatch(closePlayer());
@@ -37,6 +38,16 @@ const YoutubePlayer: React.FC<PlayerProps> = ({isOpen, type}) => {
 	const onOpen = () => {
 		dispatch(openPlayer(videoId));
 	};
+	const onReady = (event: { target: { getIframe: () => any, playVideo: () => void }; }) => {
+		const iframe = event.target.getIframe();
+		const src = iframe.src.replace('www.youtube.com', 'www.youtube-nocookie.com');
+		iframe.src = src;
+			setTimeout(() => {
+			event.target.playVideo();
+		}, 500);
+		// Call the user's onReady event if provided
+
+	  };
 
 	return (
 		<div
@@ -58,8 +69,10 @@ const YoutubePlayer: React.FC<PlayerProps> = ({isOpen, type}) => {
 			<YouTube
 				videoId={videoId}
 				opts={opts}
-				onReady={onLoad}
+				onReady={onReady}
+				// onReady={onLoad}
 				iframeClassName='rounded-lg'
+
 			/>
 		</div>
 	);
