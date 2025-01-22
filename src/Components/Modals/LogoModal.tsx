@@ -54,6 +54,7 @@ const LogoModal: React.FC<ModalProps> = ({
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const fileInputRef1 = React.useRef<HTMLInputElement>(null);
   const fileInputRef2 = React.useRef<HTMLInputElement>(null);
+    const [errTitle, setErrTitle] = useState<boolean>(false);
   const [err, setErr] = useState<Err>({
     errTitle: false,
     errImg1: false,
@@ -158,7 +159,7 @@ const LogoModal: React.FC<ModalProps> = ({
                   name="name"
                   label="Name"
                   value={data.name}
-                  error={err.errTitle}
+                  error={errTitle ? "true" : "false"}
                   errMsg="Type Logo Name"
                   onChange={handleChange}
                 />

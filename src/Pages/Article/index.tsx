@@ -115,7 +115,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
   }, [loadNexPage]);
   {
-    console.log(data, "daaaaaaaaaa");
+    console.log(data, "rafa");
   }
 
   return (

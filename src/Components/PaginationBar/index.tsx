@@ -1,5 +1,5 @@
 import { IconButton } from "@chakra-ui/react";
-import React, { useState, ChangeEvent } from "react";
+import React, { ChangeEvent } from "react";
 import { Input } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
@@ -31,24 +31,20 @@ const PaginationBar: React.FC<PaginationProps> = ({
 
   const handleDecrease = () => {
     if (selectedPage > 1) {
-      const value = selectedPage - 1;
-      // setSelectedPage(value);
-      prevPage?.();
+      prevPage?.(); // Removed manual `setSelectedPage` call and instead used `prevPage` function
     }
-
   };
 
   const handleIncrease = () => {
-    if (selectedPage <= pages) {
-      const value = selectedPage + 1;
-      // setSelectedPage(value);
-      nextPage();
+    if (selectedPage < pages) {
+      nextPage(); // Removed manual `setSelectedPage` call and instead used `nextPage` function
     }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSelectedPage(Number(e.target.value));
-    goToPage?.(Number(e.target.value));
+    const value = Math.max(1, Math.min(pages, Number(e.target.value) || 1)); // Ensured input value is between 1 and `pages`
+    setSelectedPage(value);
+    goToPage?.(value);
   };
 
   return (
