@@ -14,6 +14,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "../mainPageStyle.css";
 import { PageBasicProps } from "../../AppMain";
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
 
 interface Product {
   id: string;
@@ -41,7 +46,7 @@ interface inputProducts {
   description: string;
 }
 
-const ConcertMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
+const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [pages, setPages] = useState<string>("0");
   const [filterText, setFilterText] = useState<string>("");
@@ -105,8 +110,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
           }
         }
       }
-
-
     };
     handleResize();
 
@@ -171,9 +174,19 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
               <FilterInput type={type} />
             </div>
             <div className="md:mt-16">
-              <Carousel>
+              {/* <Carousel>
+                
+              </Carousel> */}
+
+              <Swiper
+                pagination={{
+                  dynamicBullets: true,
+                }}
+                modules={[Pagination]}
+                className="mySwiper"
+              >
                 {cardData.map((item, idx) => (
-                  <div className="p-2 md:mb-16 mb-8">
+                  <SwiperSlide className="p-2 md:mb-16 mb-8">
                     <div
                       key={`ticket-detail-${idx}`}
                       className={`grid md:grid-cols-2 grid-cols-1 md:gap-20 gap-6`}
@@ -268,9 +281,9 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </SwiperSlide>
                 ))}
-              </Carousel>
+              </Swiper>
               {type && (
                 <div className="md:mt-10 mt-8">
                   <DetailButton text="Buy Tickets Of Concet" btnType="mobile" />
