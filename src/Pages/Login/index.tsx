@@ -116,7 +116,7 @@ export const Login: React.FC<PageBasicProps> = ({themeMode, type}) => {
 			<form onSubmit={wrappedSubmit}>
 				<div className='flex w-full justify-center mt-20'>
 					<div
-						className={`${themeMode ? 'border border-solid' : 'bg-[#242526]'} max-w-80 min-h-[577px] shadow-lg rounded-2xl px-6 py-4`}
+						className={`${themeMode ? 'border border-solid' : 'bg-[#242526]'} w-[500px] shadow-lg rounded-2xl px-6 py-4`}
 					>
 						{creatingAccount ? (
 							<div className='flex flex-col justify-between h-full'>
@@ -149,7 +149,7 @@ export const Login: React.FC<PageBasicProps> = ({themeMode, type}) => {
 									error={errors.passwordRepeat?.message}
 								/>
 								<Button
-									className='mt-6'
+									className='mt-3'
 									type='submit'
 									variant='ghost'
 									colorScheme={
@@ -159,7 +159,7 @@ export const Login: React.FC<PageBasicProps> = ({themeMode, type}) => {
 									Załóż konto
 								</Button>
 								<p
-									className={`mt-8 ${
+									className={`mt-3 ${
 										themeMode ? 'text-black' : 'text-white'
 									}`}
 								>
@@ -177,7 +177,7 @@ export const Login: React.FC<PageBasicProps> = ({themeMode, type}) => {
 							</div>
 						) : (
 							<div className='flex flex-col justify-between h-full'>
-								<div className='flex flex-col'>
+								<div className='flex flex-col gap-3'>
 									<Input
 										register={register}
 										label='email / ksywa'

@@ -142,7 +142,7 @@ const Input: React.FC<InputProps> = ({
 					type={name.includes('password') ? 'password' : 'text'}
 					name={name}
 					value={value}
-					className={`input-${themeMode ? 'light' : 'dark'} shadow-sm  block w-full ${error ? 'border border-red-500 text-red-900 placeholder-red-700' : 'border'} `}
+					className={`input-${themeMode ? 'light' : 'dark'} shadow-sm block w-full ${error ? 'border border-red-500 text-red-900 placeholder-red-700' : 'border'} `}
 					style={{height: type ? '32px' : '36.825px'}}
 					autoComplete='off'
 					placeholder={placeholder}
@@ -150,7 +150,14 @@ const Input: React.FC<InputProps> = ({
 					// ref={ref}
 				/>
 			)}
-			<div className='text-red-400 h-6'>{error && <p>{error}</p>}</div>
+			{/* <div className='text-red-400 h-6 py-2 mb-2'>{error && <p>{error}</p>}</div> */}
+		{error &&
+		<>
+		<div className='text-red-400 h-6 py-2'>
+		<p>{error}</p>
+		</div>
+		</>
+		}
 		</div>
 	);
 };

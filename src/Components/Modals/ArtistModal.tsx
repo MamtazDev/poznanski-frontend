@@ -115,7 +115,7 @@ const ArtistModal: React.FC<ModalProps> = ({
                   name="name"
                   label="Name"
                   value={data.name}
-                  error={errTitle}
+                  error={errTitle ? "true" : "false"}
                   errMsg="Type artist name"
                   onChange={handleChange}
                 />
