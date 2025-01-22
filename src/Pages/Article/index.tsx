@@ -51,6 +51,8 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     pageSize,
     selectedPage
   );
+
+  console.log("data", data);
   const currentPageByLength = Math.ceil(data.length / pageSize);
 
   if (lastVisitedId) {
@@ -118,6 +120,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   return (
     <>
+      <h1 className="text-white">Here is will come news data</h1>
       <Layout type={type} themeMode={themeMode}>
         <div className="flex justify-center">
           <div className="container">
@@ -130,6 +133,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <div className="md:mt-6 mt-4">
               <FilterInput type={type} />
             </div>
+
             <div
               className={`md:mt-12 mt-8`}
               style={{
