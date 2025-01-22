@@ -161,7 +161,7 @@ export const AccountMenu: React.FC<{
 					anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
 				>
 					<MenuItem onClick={handleClose}>
-					<UserAvatar /> Profil
+					<UserAvatar /> Profile
 					</MenuItem>
 					{/* <MenuItem onClick={handleClose}>
 						<Avatar /> My account
