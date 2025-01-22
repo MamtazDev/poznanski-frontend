@@ -317,7 +317,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       item &&
                       (!type ? (
                         <div
-                          className={`grid grid-cols-4 ${idx !== 0 && "ticket-top-border"} items-center px-3`}
+                          className={`grid grid-cols-4 ${idx !== 0 && "ticket-top-border"} items-center px-3 shadow-md rounded-2xl`}
                           style={{ height: 75 }}
                         >
                           <div className="flex items-center">
