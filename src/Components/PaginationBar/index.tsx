@@ -1,4 +1,4 @@
-import { IconButton } from "@chakra-ui/react";
+import { IconButton, Select } from "@chakra-ui/react";
 import React, { useState, ChangeEvent } from "react";
 import { Input } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
@@ -12,8 +12,10 @@ import {
 
 interface PaginationProps {
   selectedPage: number;
-  setSelectedPage: React.Dispatch<React.SetStateAction<number>>;
+  entriesPerPage: number;
   goToPage?: (page: number) => void;
+  setSelectedPage: React.Dispatch<React.SetStateAction<number>>;
+  setEntriesPerPage: React.Dispatch<React.SetStateAction<number>>;
   prevPage?: () => void;
   nextPage: () => void;
   pages: number;
@@ -26,6 +28,8 @@ const PaginationBar: React.FC<PaginationProps> = ({
   goToPage,
   prevPage,
   nextPage,
+  setEntriesPerPage,
+  entriesPerPage,
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
@@ -35,7 +39,6 @@ const PaginationBar: React.FC<PaginationProps> = ({
       // setSelectedPage(value);
       prevPage?.();
     }
-
   };
 
   const handleIncrease = () => {
@@ -51,100 +54,118 @@ const PaginationBar: React.FC<PaginationProps> = ({
     goToPage?.(Number(e.target.value));
   };
 
+  const handleEntriesChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setEntriesPerPage(Number(e.target.value));
+    setSelectedPage(1); // Reset to first page when entries per page change
+  };
+
   return (
-    <div className="flex gap-2">
-      <IconButton
-        aria-label="PrevBtn"
-        variant={themeMode ? "outline" : ""}
-        icon={
-          <BsChevronDoubleLeft
-            size={12}
-            color={!themeMode ? "white" : "#6D6E76"}
+    <>
+      <div className="flex justify-between items-center w-full">
+        <div className="flex items-center gap-2">
+          <span>Show</span>
+          <select value={entriesPerPage} onChange={handleEntriesChange} className="border border-[#E9EBF0] rounded-sm px-2 py-1">
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+          <span>entries</span>
+        </div>
+
+        <div className="flex gap-2">
+          <IconButton
+            aria-label="PrevBtn"
+            variant={themeMode ? "outline" : ""}
+            icon={
+              <BsChevronDoubleLeft
+                size={12}
+                color={!themeMode ? "white" : "#6D6E76"}
+              />
+            }
+            isDisabled={selectedPage === 1 || selectedPage < 1 ? true : false}
+            backgroundColor={themeMode ? "#FFF" : "#242526"}
+            color={themeMode ? "#252733" : "#FFF"}
+            border={themeMode ? "border: 1px solid #E9EBF0" : "unset"}
+            width="40px"
+            height="30px"
+            onClick={() => setSelectedPage(1)}
           />
-        }
-        isDisabled={
-          selectedPage === 1 || selectedPage < 1 ? true : false
-        }
-        backgroundColor={themeMode ? "#FFF" : "#242526"}
-        color={themeMode ? "#252733" : "#FFF"}
-        border={themeMode ? "border: 1px solid #E9EBF0" : "unset"}
-        width="40px"
-        height="30px"
-        onClick={() => setSelectedPage(1)}
-      />
-      <IconButton
-        aria-label="PrevBtn"
-        variant={themeMode ? "outline" : ""}
-        isDisabled={
-          selectedPage === 1 || selectedPage < 1 ? true : false
-        }
-        icon={
-          <BsChevronLeft size={12} color={!themeMode ? "white" : "#6D6E76"} />
-        }
-        color={themeMode ? "#252733" : "#FFF"}
-        backgroundColor={themeMode ? "#FFF" : "#242526"}
-        border={themeMode ? "1px solid #E9EBF0" : "unset"}
-        width="40px"
-        height="30px"
-        onClick={() => handleDecrease()}
-      />
-      <div>
-        <Input
-          value={selectedPage}
-          width={"55px"}
-          height={"30px"}
-          onChange={handleChange}
-          backgroundColor={themeMode ? "#FFF" : "#242526"}
-          color={themeMode ? "#252733" : "#FFF"}
-          border={themeMode ? "1px solid #E9EBF0" : "unset"}
-          textAlign="center"
-        />
-      </div>
-      <div
-        className={`flex items-center gap-2 ${themeMode ? "entire-page" : "entire-page-2"}`}
-      >
-        of  {pages}
-      </div>
-      <IconButton
-        aria-label="PrevBtn"
-        variant={themeMode ? "outline" : ""}
-        isDisabled={
-          selectedPage === pages || selectedPage > pages
-            ? true
-            : false
-        }
-        backgroundColor={themeMode ? "#FFF" : "#242526"}
-        color={themeMode ? "#252733" : "#FFF"}
-        border={themeMode ? "1px solid #E9EBF0" : "unset"}
-        width="40px"
-        height="30px"
-        icon={
-          <BsChevronRight size={12} color={!themeMode ? "white" : "#6D6E76"} />
-        }
-        onClick={() => handleIncrease()}
-      />
-      <IconButton
-        aria-label="PrevBtn"
-        variant={themeMode ? "outline" : ""}
-        icon={
-          <BsChevronDoubleRight
-            size={12}
-            color={!themeMode ? "white" : "#6D6E76"}
+          <IconButton
+            aria-label="PrevBtn"
+            variant={themeMode ? "outline" : ""}
+            isDisabled={selectedPage === 1 || selectedPage < 1 ? true : false}
+            icon={
+              <BsChevronLeft
+                size={12}
+                color={!themeMode ? "white" : "#6D6E76"}
+              />
+            }
+            color={themeMode ? "#252733" : "#FFF"}
+            backgroundColor={themeMode ? "#FFF" : "#242526"}
+            border={themeMode ? "1px solid #E9EBF0" : "unset"}
+            width="40px"
+            height="30px"
+            onClick={() => handleDecrease()}
           />
-        }
-        isDisabled={
-          selectedPage === pages || selectedPage > pages
-            ? true
-            : false
-        }
-        backgroundColor={themeMode ? "#FFF" : "#242526"}
-        color={themeMode ? "#252733" : "#FFF"}
-        border={themeMode ? "1px solid #E9EBF0" : "unset"}
-        width="40px"
-        height="30px"
-        onClick={() => setSelectedPage(pages)}
-      />
-    </div>
+          <div>
+            <Input
+              value={selectedPage}
+              width={"55px"}
+              height={"30px"}
+              onChange={handleChange}
+              backgroundColor={themeMode ? "#FFF" : "#242526"}
+              color={themeMode ? "#252733" : "#FFF"}
+              border={themeMode ? "1px solid #E9EBF0" : "unset"}
+              textAlign="center"
+            />
+          </div>
+          <div
+            className={`flex items-center gap-2 ${themeMode ? "entire-page" : "entire-page-2"}`}
+          >
+            of {pages}
+          </div>
+          <IconButton
+            aria-label="PrevBtn"
+            variant={themeMode ? "outline" : ""}
+            isDisabled={
+              selectedPage === pages || selectedPage > pages ? true : false
+            }
+            backgroundColor={themeMode ? "#FFF" : "#242526"}
+            color={themeMode ? "#252733" : "#FFF"}
+            border={themeMode ? "1px solid #E9EBF0" : "unset"}
+            width="40px"
+            height="30px"
+            icon={
+              <BsChevronRight
+                size={12}
+                color={!themeMode ? "white" : "#6D6E76"}
+              />
+            }
+            onClick={() => handleIncrease()}
+          />
+          <IconButton
+            aria-label="PrevBtn"
+            variant={themeMode ? "outline" : ""}
+            icon={
+              <BsChevronDoubleRight
+                size={12}
+                color={!themeMode ? "white" : "#6D6E76"}
+              />
+            }
+            isDisabled={
+              selectedPage === pages || selectedPage > pages ? true : false
+            }
+            backgroundColor={themeMode ? "#FFF" : "#242526"}
+            color={themeMode ? "#252733" : "#FFF"}
+            border={themeMode ? "1px solid #E9EBF0" : "unset"}
+            width="40px"
+            height="30px"
+            onClick={() => setSelectedPage(pages)}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 
