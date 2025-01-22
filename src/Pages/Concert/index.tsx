@@ -432,11 +432,11 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <div
               className={`md:mt-16 mt-8 flex ${type ? "justify-center" : "justify-end"}`}
             >
-              {/* <PaginationBar
+              <PaginationBar
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
                 pages={pages}
-              /> */}
+              />
             </div>
           </div>
         </div>

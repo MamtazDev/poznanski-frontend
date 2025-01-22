@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "./style.css";
+import PopUp from "./PopUp";
 
 interface FilterInputProps {
   type?: boolean;
@@ -9,6 +10,18 @@ interface FilterInputProps {
 
 const FilterInput: React.FC<FilterInputProps> = ({ type }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+
+
+  const handleShowPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
 
   return (
     <>
@@ -64,7 +77,7 @@ const FilterInput: React.FC<FilterInputProps> = ({ type }) => {
                 : "var(--Base-base-300, #6D6E76) !important",
             }}
           />
-          <div className={`md:ml-6 ml-4`}>
+          <button onClick={handleShowPopup} className={`md:ml-6 ml-4`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width={!type ? "27" : "19"}
@@ -121,8 +134,11 @@ const FilterInput: React.FC<FilterInputProps> = ({ type }) => {
                 strokeLinejoin="round"
               />
             </svg>
-          </div>
+          </button>
         </div>
+        {isPopupOpen && (
+          <PopUp handleClosePopup={handleClosePopup}/>
+        )}
       </div>
     </>
   );
