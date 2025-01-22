@@ -101,9 +101,9 @@ const PaginationBar: React.FC<PaginationProps> = ({
         />
       </div>
       <div
-        className={`flex items-center ${themeMode ? "entire-page" : "entire-page-2"}`}
+        className={`flex items-center gap-2 ${themeMode ? "entire-page" : "entire-page-2"}`}
       >
-        of {pages}
+        of  {pages}
       </div>
       <IconButton
         aria-label="PrevBtn"
