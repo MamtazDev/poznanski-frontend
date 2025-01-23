@@ -25,7 +25,7 @@ const SearchArtist = ({ themeMode, type }: any) => {
     description: "",
   });
   return (
-    <div>
+    <div className="mt-16">
       <h1 className="text-[#252733] text-2xl font-semibold text-start mb-6">
         Artists
       </h1>

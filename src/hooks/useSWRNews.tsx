@@ -2,16 +2,15 @@ import useSWR from "swr";
 import axios from "axios";
 import apiClient from "./apiClient";
 
+interface FileItem {
+  url: string;
+}
 interface NewsItem {
   _id: string;
   title: string;
   intro?: string;
   content: string;
-  files?: Array<{
-    name: string;
-    url: string;
-    size: number;
-  }>;
+  files?: FileItem[];
   nickname?: string;
   email?: string;
   tags?: string;

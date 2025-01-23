@@ -13,6 +13,8 @@ import TVCard from "../../Components/Card/TVCard";
 import SearchTV from "./SearchTV";
 import SearchArtist from "./SearchArtist";
 
+
+
 const SearchMainPage = ({ themeMode, type }: any) => {
   const currentPage = useSelector((state: RootState) =>
     getLastPageNumber(state)
@@ -88,7 +90,7 @@ const SearchMainPage = ({ themeMode, type }: any) => {
                           >
                             <ProductCard1
                               type={type ? "vertical" : "horizontal"}
-                              img={item.files?.[0]?.url || ""}
+                              img={item?.files?.[0]?.url}
                               tags={`${item.tags}`}
                               title={item.title}
                               date={`${item.date}`.split("T")[0]}
