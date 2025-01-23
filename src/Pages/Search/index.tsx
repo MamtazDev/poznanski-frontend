@@ -4,11 +4,11 @@ import BreadCrumb from "../../Components/BreadCrumb";
 import MaterialCard from "../../Components/Card/MaterialCard";
 import ProductCard1 from "../../Components/Card/ProductCard1";
 import Layout from "../../Components/Layout";
-import { usePaginatedNews } from "../../hooks/usePaginatedNews";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { getLastPageNumber } from "../../reducers/NewsReducer";
+import { usePaginatedNews } from "../../hooks/useSWRNews";
 
 const SearchMainPage = ({ themeMode, type }: any) => {
     const currentPage = useSelector((state: RootState) =>
@@ -18,11 +18,14 @@ const SearchMainPage = ({ themeMode, type }: any) => {
       const [cardNum, setCardNum] = useState<number>(4);
     
      const pageSize = 18;
+
       const { data, loading, forceRevalidateAll, totalPages } = usePaginatedNews(
         pageSize,
         selectedPage
       );
     
+
+      console.log("data", data)
  
 
   return (
@@ -84,7 +87,7 @@ const SearchMainPage = ({ themeMode, type }: any) => {
                           >
                             <ProductCard1
                               type={type ? "vertical" : "horizontal"}
-                              img={item.files[0].url}
+                              img={item.files && item.files[0].url}
                               tags={`${item.tags}`}
                               title={item.title}
                               date={`${item.date}`.split("T")[0]}

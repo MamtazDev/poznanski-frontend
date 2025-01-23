@@ -8,7 +8,7 @@ import { getFirstTag } from "../../Pages/Article";
 
 export interface News {
   type: string;
-  img: string;
+  img: string | undefined;
   title: string;
   tags: string;
   date: string;
