@@ -9,24 +9,42 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { getLastPageNumber } from "../../reducers/NewsReducer";
 import { usePaginatedNews } from "../../hooks/useSWRNews";
+import TVCard from "../../Components/Card/TVCard";
 
 const SearchMainPage = ({ themeMode, type }: any) => {
-    const currentPage = useSelector((state: RootState) =>
-        getLastPageNumber(state)
-      );
-      const [selectedPage, setSelectedPage] = useState<number>(currentPage);
-      const [cardNum, setCardNum] = useState<number>(4);
-    
-     const pageSize = 18;
+  const currentPage = useSelector((state: RootState) =>
+    getLastPageNumber(state)
+  );
+  const [selectedPage, setSelectedPage] = useState<number>(currentPage);
+  const [cardNum, setCardNum] = useState<number>(4);
 
-      const { data, loading, forceRevalidateAll, totalPages } = usePaginatedNews(
-        pageSize,
-        selectedPage
-      );
-    
+  const pageSize = 18;
 
-      console.log("data", data)
+  const { data, loading, forceRevalidateAll, totalPages } = usePaginatedNews(
+    pageSize,
+    selectedPage
+  );
+
+  console.log("data", data);
+
+  const fakeNews = [
+    {
+      type: "horizontal",
+      img: "https://via.placeholder.com/300x200",
+      title: "Breaking News",
+      feature: "Featured Article",
+      link: "https://example.com/video/1",
+    },
  
+    {
+      type: "horizontal",
+      img: "https://via.placeholder.com/300x200",
+      title: "Sports Highlights",
+      feature: "Top Sports",
+      link: "https://example.com/video/3",
+    },
+   
+  ];
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -51,9 +69,7 @@ const SearchMainPage = ({ themeMode, type }: any) => {
             </h1>
 
             <div
-              className={`md:mt-12 mt-8`}
               style={{
-                minHeight: type ? "843px" : "1235.7px",
                 width: "100%",
               }}
             >
@@ -100,7 +116,30 @@ const SearchMainPage = ({ themeMode, type }: any) => {
                 )}
               </DelayedComponent>
             </div>
-            
+
+            <div className="mt-16">
+            <h1 className="text-[#252733] text-2xl font-semibold text-start mb-6">
+            TV/Radio
+            </h1>
+
+              {loading ? (
+                <Spinner size="xl" />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                  {/* Map through the fake data and render TVCard */}
+                  {fakeNews.map((news, index) => (
+                    <TVCard
+                      key={index}
+                      type={news.type}
+                      img={news.img}
+                      title={news.title}
+                      feature={news.feature}
+                      link={news.link}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
