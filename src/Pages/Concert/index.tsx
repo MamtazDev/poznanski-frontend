@@ -14,11 +14,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "../mainPageStyle.css";
 import { PageBasicProps } from "../../AppMain";
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from "swiper/react";
 
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { Pagination } from 'swiper/modules';
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+// import ticketImg from "../../assets/png/ticketBanner.png"
 
 interface Product {
   id: string;
@@ -72,7 +73,9 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         ":" +
         (inputDate2.getUTCMinutes() < 10 ? "0" : "") +
         inputDate2.getUTCMinutes();
-      const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(inputDate1);
+      const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(
+        inputDate1
+      );
       const temp: Product = {
         id: item._id,
         name: item.name,
@@ -89,7 +92,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     });
     setCardData(newProducts);
   };
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -151,6 +153,8 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       });
   }, [selectedPage, filterText]);
 
+  console.log("cardData", cardData);
+
   return (
     <>
       <Layout themeMode={themeMode} type={type}>
@@ -192,7 +196,8 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     >
                       <div className={`relative`}>
                         <Image
-                          src={item.img}
+                          // src={item?.img}
+                          src={"https://i.ibb.co.com/5KchHq8/ticket-Banner.png"}
                           className="cursor-pointer object-cover h-full w-full"
                           alt={item.img}
                           borderRadius={type ? "18px" : "25px"}
@@ -285,7 +290,10 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </Swiper>
               {type && (
                 <div className="md:mt-10 mt-8">
-                  <DetailButton text="buy Tickets Of Concert" btnType="mobile" />
+                  <DetailButton
+                    text="buy Tickets Of Concert"
+                    btnType="mobile"
+                  />
                 </div>
               )}
             </div>
@@ -434,9 +442,14 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <PaginationBar
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
-                pages={pages} entriesPerPage={0} setEntriesPerPage={function (value: React.SetStateAction<number>): void {
+                pages={pages}
+                entriesPerPage={0}
+                setEntriesPerPage={function (
+                  value: React.SetStateAction<number>
+                ): void {
                   throw new Error("Function not implemented.");
-                } }              />
+                }}
+              />
             </div>
           </div>
         </div>

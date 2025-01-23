@@ -72,7 +72,7 @@ const PaginationBar: React.FC<PaginationProps> = ({
         <select
           value={entriesPerPage}
           onChange={handleEntriesChange}
-          className={`border border-[#E9EBF0] rounded-sm px-2 py-1 ${themeMode ?"text-[#252733] bg-red-300" : " text-white bg-[#242526]"}`}
+          className={`border border-[#E9EBF0] rounded-sm px-2 py-1 ${themeMode ?"text-[#252733] bg-white" : " text-white bg-[#242526]"}`}
         >
           <option value={5}>5</option>
           <option value={10}>10</option>

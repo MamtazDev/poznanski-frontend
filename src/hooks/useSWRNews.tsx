@@ -10,7 +10,7 @@ interface NewsItem {
   title: string;
   intro?: string;
   content: string;
-  files?: FileItem[];
+  files?: [string];
   nickname?: string;
   email?: string;
   tags?: string;
