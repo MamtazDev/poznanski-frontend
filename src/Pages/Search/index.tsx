@@ -27,24 +27,7 @@ const SearchMainPage = ({ themeMode, type }: any) => {
 
   console.log("data", data);
 
-  const fakeNews = [
-    {
-      type: "horizontal",
-      img: "https://via.placeholder.com/300x200",
-      title: "Breaking News",
-      feature: "Featured Article",
-      link: "https://example.com/video/1",
-    },
- 
-    {
-      type: "horizontal",
-      img: "https://via.placeholder.com/300x200",
-      title: "Sports Highlights",
-      feature: "Top Sports",
-      link: "https://example.com/video/3",
-    },
-   
-  ];
+  
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -117,29 +100,7 @@ const SearchMainPage = ({ themeMode, type }: any) => {
               </DelayedComponent>
             </div>
 
-            <div className="mt-16">
-            <h1 className="text-[#252733] text-2xl font-semibold text-start mb-6">
-            TV/Radio
-            </h1>
-
-              {loading ? (
-                <Spinner size="xl" />
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                  {/* Map through the fake data and render TVCard */}
-                  {fakeNews.map((news, index) => (
-                    <TVCard
-                      key={index}
-                      type={news.type}
-                      img={news.img}
-                      title={news.title}
-                      feature={news.feature}
-                      link={news.link}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+           
           </div>
         </div>
       </div>
