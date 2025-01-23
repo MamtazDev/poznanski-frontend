@@ -21,9 +21,9 @@ const PopUp = ({ handleClosePopup } : any) => {
             Sort by
           </label>
           <div className="flex items-center gap-2">
-            <p className="flex-1 p-2 text-center bg-[#5A1073] text-white rounded-md">
+            <button className="flex-1 p-2 text-center bg-[#5A1073] text-white rounded-md">
               <span> A to Z</span>
-            </p>
+            </button>
             <button className="flex-1 p-2 text-center border border-gray-300 rounded-md">
               Z to A
             </button>
