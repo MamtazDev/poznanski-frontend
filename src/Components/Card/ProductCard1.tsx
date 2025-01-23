@@ -31,6 +31,10 @@ const ProductCard1: React.FC<News> = ({
   };
 
   const imageSrc = img ? `${process.env.REACT_APP_FILES_URL}${img}` : artists1;
+
+  const wordArray = tags.split(",").map((word) => word.trim());
+  console.log("wordArray", wordArray);
+
   return (
     <div className={`product-card1 flex w-full`}>
       <Card
@@ -71,7 +75,7 @@ const ProductCard1: React.FC<News> = ({
               </div>
               <div className="flex justify-start mt-4">
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {tags.split("#").map(
+                  {wordArray.map(
                     (tag, index) =>
                       tag && (
                         <div
