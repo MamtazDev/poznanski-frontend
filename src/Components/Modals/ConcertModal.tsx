@@ -189,7 +189,7 @@ const ConcertEditModal: React.FC<ModalProps> = ({
                   name="name"
                   label="Name"
                   value={data.name}
-                  error={errTitle}
+                  error={errTitle ? "true" : "false"}
                   errMsg="Type concert name"
                   onChange={handleTitle}
                 />
@@ -280,7 +280,7 @@ const ConcertEditModal: React.FC<ModalProps> = ({
                   label="Start"
                   value={data.timeframe.start}
                   errMsg="Tpye start time"
-                  error={errStart}
+                  error={errStart ? "true" : "false"}
                   onChange={handleChangeTimeframe}
                 />
               </div>
@@ -290,7 +290,7 @@ const ConcertEditModal: React.FC<ModalProps> = ({
                   label="End"
                   value={data.timeframe.end}
                   errMsg="Tpye end time"
-                  error={errEnd}
+                  error={errEnd ? "true" : "false"}
                   onChange={handleChangeTimeframe}
                 />
               </div>

@@ -47,8 +47,8 @@ interface inputProducts {
 }
 
 const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-  const [selectedPage, setSelectedPage] = useState<string>("1");
-  const [pages, setPages] = useState<string>("0");
+  const [selectedPage, setSelectedPage] = useState<number>(1);
+  const [pages, setPages] = useState<number>(0);
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<Product[]>([]);
   const [cardNum, setCardNum] = useState<number>(4);
@@ -57,9 +57,9 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   const handleData = (response: any) => {
     let newProducts: Product[] = [];
-    const pages = Math.ceil(response.all / 6);
-    setPages(pages.toString());
-    response.products.map((item: inputProducts) => {
+    const totalPages = Math.ceil(response.all / 6);
+    setPages(totalPages); // No need to convert to string
+    response.products.forEach((item: inputProducts) => {
       const inputDate1: Date = new Date(item.timeframe.start);
       const inputDate2: Date = new Date(item.timeframe.end);
       const formattedTimeframe =
@@ -72,9 +72,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         ":" +
         (inputDate2.getUTCMinutes() < 10 ? "0" : "") +
         inputDate2.getUTCMinutes();
-      var month = new Intl.DateTimeFormat("en-US", {
-        month: "long",
-      }).format(inputDate1);
+      const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(inputDate1);
       const temp: Product = {
         id: item._id,
         name: item.name,
@@ -91,6 +89,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     });
     setCardData(newProducts);
   };
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -124,7 +123,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     setLoading(true);
     apiGetReq("/concert", {
       rowsPerPage: 6,
-      curPage: selectedPage,
+      curPage: selectedPage, // This is now a number
       filter: filterText,
     })
       .then((res) => {
@@ -175,7 +174,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             </div>
             <div className="md:mt-16">
               {/* <Carousel>
-                
+
               </Carousel> */}
 
               <Swiper
