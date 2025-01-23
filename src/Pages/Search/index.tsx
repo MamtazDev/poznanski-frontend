@@ -45,7 +45,7 @@ const SearchMainPage = ({ themeMode, type }: any) => {
             </div>
           )}
           <div>
-            <h1 className="text-[#252733] font-bold text-5xl text-start mt-5 mb-16">
+            <h1 className={` font-bold text-5xl text-start mt-5 mb-16 ${themeMode ? "text-[#252733]" : "text-white"}`}>
               You searched for “Lorum Ipsum”
             </h1>
           </div>
