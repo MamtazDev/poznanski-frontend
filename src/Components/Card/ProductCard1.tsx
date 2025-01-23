@@ -44,11 +44,11 @@ const ProductCard1: React.FC<News> = ({
         _hover={
           !themeMode
             ? {
-                boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
-              }
+              boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
+            }
             : {
-                boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
-              }
+              boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
+            }
         }
         className={`transition-all duration-300 ease-out w-full h-pull`}
       >
@@ -64,7 +64,7 @@ const ProductCard1: React.FC<News> = ({
               <div
                 className={`card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer ${!themeMode && "dark-bg-color"}`}
               >
-                  <Image
+                <Image
                   src={imageSrc}
                   className="cursor-pointer object-cover h-full w-full"
                   alt="news image"
@@ -72,19 +72,19 @@ const ProductCard1: React.FC<News> = ({
                 />
               </div>
               <div className="flex justify-start mt-4">
-              <div className="flex flex-wrap gap-2 mt-2">
-  {tags.split("#").map(
-    (tag, index) =>
-      tag && (
-        <div
-          key={index}
-          className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
-        >
-          {tag.trim()}
-        </div>
-      )
-  )}
-</div>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {tags.split("#").map(
+                    (tag, index) =>
+                      tag && (
+                        <div
+                          key={index}
+                          className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
+                        >
+                          {tag.trim()}
+                        </div>
+                      )
+                  )}
+                </div>
 
               </div>
               <div
@@ -112,30 +112,30 @@ const ProductCard1: React.FC<News> = ({
                 {date.split("T")[0]}
               </div>
               <Image
-              src={imageSrc}
-              alt="news image"
-              className="cursor-pointer object-cover h-full w-full"
-              borderRadius="xl"
-            />
+                src={imageSrc}
+                alt="news image"
+                className="cursor-pointer object-cover h-full w-full"
+                borderRadius="xl"
+              />
             </div>
             <div className="w-full ml-2">
               <div>
-              <div className="flex flex-wrap gap-2 mt-2">
-              <div className="flex flex-wrap gap-2 mt-2">
-  {tags.split("#").map(
-    (tag, index) =>
-      tag && (
-        <div
-          key={index}
-          className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
-        >
-          {tag.trim()}
-        </div>
-      )
-  )}
-</div>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {tags.split("#").map(
+                      (tag, index) =>
+                        tag && (
+                          <div
+                            key={index}
+                            className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
+                          >
+                            {tag.trim()}
+                          </div>
+                        )
+                    )}
+                  </div>
 
-</div>
+                </div>
 
                 <div
                   className={`title-text-2 mt-2 flex overflow-hidden ${!themeMode && "title-dark-color"}`}
