@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "./style.css";
 import { getFirstTag } from "../../Pages/Article";
-import artists1 from '../../assets/svg/artists1.svg'
+import artists1 from "../../assets/svg/artists1.svg";
 export interface News {
   type: string;
   img: string | undefined;
@@ -30,9 +30,7 @@ const ProductCard1: React.FC<News> = ({
     navigate(`/news/${_id}`);
   };
 
-  const imageSrc = img
-    ? `${process.env.REACT_APP_FILES_URL}${img}`
-    : artists1;
+  const imageSrc = img ? `${process.env.REACT_APP_FILES_URL}${img}` : artists1;
   return (
     <div className={`product-card1 flex w-full`}>
       <Card
@@ -65,7 +63,7 @@ const ProductCard1: React.FC<News> = ({
                 className={`card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer ${!themeMode && "dark-bg-color"}`}
               >
                 <Image
-                  src={imageSrc}
+                  src={img ?? imageSrc}
                   className="cursor-pointer object-cover h-full w-full"
                   alt="news image"
                   borderRadius="xl"
@@ -85,7 +83,6 @@ const ProductCard1: React.FC<News> = ({
                       )
                   )}
                 </div>
-
               </div>
               <div
                 className={`title-text flex mt-2 ${!themeMode && "title-dark-color"}`}
@@ -134,7 +131,6 @@ const ProductCard1: React.FC<News> = ({
                         )
                     )}
                   </div>
-
                 </div>
 
                 <div
