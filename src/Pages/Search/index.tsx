@@ -1,56 +1,29 @@
+import { Spinner } from "@chakra-ui/react";
+import DelayedComponent from "../../Components/_utility/DelayedComponent";
 import BreadCrumb from "../../Components/BreadCrumb";
 import MaterialCard from "../../Components/Card/MaterialCard";
 import ProductCard1 from "../../Components/Card/ProductCard1";
 import Layout from "../../Components/Layout";
+import { usePaginatedNews } from "../../hooks/usePaginatedNews";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../reducers";
+import { getLastPageNumber } from "../../reducers/NewsReducer";
 
 const SearchMainPage = ({ themeMode, type }: any) => {
-  const cardData = [
-    {
-      id: 1,
-      img: "https://via.placeholder.com/150",
-      feature: "Feature 1",
-      title: "Card Title 1",
-      date: "2025-01-01",
-      link: "/link1",
-      location: "Location 1",
-    },
-    {
-      id: 2,
-      img: "https://via.placeholder.com/150",
-      feature: "Feature 2",
-      title: "Card Title 2",
-      date: "2025-01-02",
-      link: "/link2",
-      location: "Location 2",
-    },
-    {
-      id: 3,
-      img: "https://via.placeholder.com/150",
-      feature: "Feature 3",
-      title: "Card Title 3",
-      date: "2025-01-03",
-      link: "/link3",
-      location: "Location 3",
-    },
-    {
-      id: 4,
-      img: "https://via.placeholder.com/150",
-      feature: "Feature 4",
-      title: "Card Title 4",
-      date: "2025-01-04",
-      link: "/link4",
-      location: "Location 4",
-    },
-    {
-      id: 5,
-      img: "https://via.placeholder.com/150",
-      feature: "Feature 5",
-      title: "Card Title 5",
-      date: "2025-01-05",
-      link: "/link5",
-      location: "Location 5",
-    },
-  ];
+    const currentPage = useSelector((state: RootState) =>
+        getLastPageNumber(state)
+      );
+      const [selectedPage, setSelectedPage] = useState<number>(currentPage);
+      const [cardNum, setCardNum] = useState<number>(4);
+    
+     const pageSize = 18;
+      const { data, loading, forceRevalidateAll, totalPages } = usePaginatedNews(
+        pageSize,
+        selectedPage
+      );
+    
+ 
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -74,24 +47,56 @@ const SearchMainPage = ({ themeMode, type }: any) => {
               News
             </h1>
 
-            {cardData.map(
-                    (item, index) =>
-                      item && (
-                        <div
-                          key={`main-video-card-${index}`}
-                          className="w-full"
-                        >
-                        <ProductCard1
+            <div
+              className={`md:mt-12 mt-8`}
+              style={{
+                minHeight: type ? "843px" : "1235.7px",
+                width: "100%",
+              }}
+            >
+              <DelayedComponent delay={200}>
+                {loading ? (
+                  <div
+                    className="w-full flex justify-center items-center"
+                    style={{
+                      minHeight: type ? "776px" : "908px",
+                    }}
+                  >
+                    <Spinner
+                      thickness="4px"
+                      speed="0.65s"
+                      emptyColor="gray.200"
+                      color="blue.500"
+                      size="lg"
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className={`${"grid"} ${cardNum === 4 && "grid-cols-4"} ${cardNum === 3 && "grid-cols-3"} ${cardNum === 2 && "grid-cols-2"} gap-4 py-5`}
+                  >
+                    {data?.map(
+                      (item) =>
+                        item && (
+                          <div
+                            id={item._id}
+                            key={`main-news-card-${item._id}`}
+                            className="w-full"
+                          >
+                            <ProductCard1
                               type={type ? "vertical" : "horizontal"}
-                              img={item.img}
+                              img={item.files[0].url}
                               tags={`${item.tags}`}
                               title={item.title}
                               date={`${item.date}`.split("T")[0]}
-                              _id={item.id}
+                              _id={item._id}
                             />
-                        </div>
-                      )
-                  )}
+                          </div>
+                        )
+                    )}
+                  </div>
+                )}
+              </DelayedComponent>
+            </div>
             
           </div>
         </div>
