@@ -87,7 +87,7 @@ const SearchMainPage = ({ themeMode, type }: any) => {
                           >
                             <ProductCard1
                               type={type ? "vertical" : "horizontal"}
-                              img={item.files && item.files[0].url}
+                              img={item.files?.[0]?.url || ""}
                               tags={`${item.tags}`}
                               title={item.title}
                               date={`${item.date}`.split("T")[0]}
