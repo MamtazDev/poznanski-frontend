@@ -273,7 +273,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         {!type && (
                           <div className="md:mt-10 mt-8">
                             <DetailButton
-                              text="Buy Tickets Of Concet"
+                              text="buy Tickets Of Concert"
                               btnType="web"
                             />
                           </div>
@@ -285,7 +285,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </Swiper>
               {type && (
                 <div className="md:mt-10 mt-8">
-                  <DetailButton text="Buy Tickets Of Concet" btnType="mobile" />
+                  <DetailButton text="buy Tickets Of Concert" btnType="mobile" />
                 </div>
               )}
             </div>
