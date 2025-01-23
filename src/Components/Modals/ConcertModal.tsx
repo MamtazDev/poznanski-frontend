@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Modal,
   ModalBody,
@@ -9,10 +9,12 @@ import {
 import { Button } from "@chakra-ui/react";
 import { fileUrl } from "../../Constant/config";
 import Input from "../TextField/Input";
+import Select from "../TextField/Select";
 import Textarea from "../TextField/Textarea";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import FolderIcon from "../../assets/png/folder_icon.png";
+import { apiPostReq } from "../../Constant/api-functions";
 import "./style.css";
 import CrudBtn from "../CrudBtn";
 
@@ -130,30 +132,30 @@ const ConcertEditModal: React.FC<ModalProps> = ({
     });
   };
 
-  // const handleChangeTag = (value: string) => {
-  //   setData({ ...data, category: value });
-  // };
+  const handleChangeTag = (value: string) => {
+    setData({ ...data, category: value });
+  };
 
-  // const createNewTag = (value: string) => {
-  //   console.log(value);
-  //   apiPostReq("/tag", { name: value })
-  //     .then((res) => {
-  //       if (res.success) {
-  //         setTags((prevTags) => {
-  //           const newTags = [...prevTags];
-  //           newTags.push({
-  //             _id: res.result._id,
-  //             name: res.result.name,
-  //           });
-  //           return newTags;
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       throw err;
-  //     });
-  // };
+  const createNewTag = (value: string) => {
+    console.log(value);
+    apiPostReq("/tag", { name: value })
+      .then((res) => {
+        if (res.success) {
+          setTags((prevTags) => {
+            const newTags = [...prevTags];
+            newTags.push({
+              _id: res.result._id,
+              name: res.result.name,
+            });
+            return newTags;
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
+  };
 
   const handleDescription = (value: string) => {
     setData({ ...data, description: value });
@@ -187,7 +189,7 @@ const ConcertEditModal: React.FC<ModalProps> = ({
                   name="name"
                   label="Name"
                   value={data.name}
-                  error={errTitle ? "true" : "false"}
+                  error={errTitle}
                   errMsg="Type concert name"
                   onChange={handleTitle}
                 />
@@ -278,7 +280,7 @@ const ConcertEditModal: React.FC<ModalProps> = ({
                   label="Start"
                   value={data.timeframe.start}
                   errMsg="Tpye start time"
-                  error={errStart ? "true" : "false"}
+                  error={errStart}
                   onChange={handleChangeTimeframe}
                 />
               </div>
@@ -288,7 +290,7 @@ const ConcertEditModal: React.FC<ModalProps> = ({
                   label="End"
                   value={data.timeframe.end}
                   errMsg="Tpye end time"
-                  error={errEnd ? "true" : "false"}
+                  error={errEnd}
                   onChange={handleChangeTimeframe}
                 />
               </div>

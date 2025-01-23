@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Modal,
   ModalBody,
@@ -9,9 +9,11 @@ import {
 import { Button } from "@chakra-ui/react";
 import { fileUrl } from "../../Constant/config";
 import Input from "../TextField/Input";
+import Select from "../TextField/Select";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import FolderIcon from "../../assets/png/folder_icon.png";
+import { apiPostReq } from "../../Constant/api-functions";
 import "./style.css";
 import CrudBtn from "../CrudBtn";
 
@@ -108,29 +110,29 @@ const ProductEditModal: React.FC<ModalProps> = ({
     });
   };
 
-  // const handleChangeTag = (value: string) => {
-  //   setData({ ...data, category: value });
-  // };
-  // const createNewTag = (value: string) => {
-  //   console.log(value);
-  //   apiPostReq("/tag", { name: value })
-  //     .then((res) => {
-  //       if (res.success) {
-  //         setTags((prevTags) => {
-  //           const newTags = [...prevTags];
-  //           newTags.push({
-  //             _id: res.result._id,
-  //             name: res.result.name,
-  //           });
-  //           return newTags;
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       throw err;
-  //     });
-  // };
+  const handleChangeTag = (value: string) => {
+    setData({ ...data, category: value });
+  };
+  const createNewTag = (value: string) => {
+    console.log(value);
+    apiPostReq("/tag", { name: value })
+      .then((res) => {
+        if (res.success) {
+          setTags((prevTags) => {
+            const newTags = [...prevTags];
+            newTags.push({
+              _id: res.result._id,
+              name: res.result.name,
+            });
+            return newTags;
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        throw err;
+      });
+  };
 
   const handleClickOk = () => {
     if (data.title === "") {
@@ -156,7 +158,7 @@ const ProductEditModal: React.FC<ModalProps> = ({
                   name="title"
                   label="Title"
                   value={data.title}
-                  error={errTitle ? "true" : "false"}
+                  error={errTitle}
                   errMsg="Type new title "
                   onChange={handleTitle}
                 />

@@ -55,5 +55,6 @@ module.exports = {
         },
       }, ['responsive'])
     },
+
   ],
 };

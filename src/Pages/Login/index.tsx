@@ -21,6 +21,8 @@ import { useDispatch } from "react-redux";
 import { setUserLoggedIn } from "../../reducers/user";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
+import ForgotPasswordModal from "./ForgotPasswordModal";
+import { ActionButton } from "../../Components/Button";
 
 interface SubmitUserForm {
   email: string;
@@ -110,6 +112,16 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
   }, []);
 
+  //  forget password
+  // const handleForgotPasswordClick = () => {
+  //   setForgotPasswordModalOpen(true);
+  // };
+
+  //   const handleCloseModal = () => {
+  //     setForgotPasswordModalOpen(false);
+  //   };
+  const [forgotPasswordModalOpen, setForgotPasswordModalOpen] = React.useState(false);
+
   return (
     <Layout type={type} themeMode={themeMode}>
       <form onSubmit={wrappedSubmit}>
@@ -118,7 +130,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             className={`${themeMode ? "border border-solid" : "bg-[#242526]"} w-[500px] shadow-lg rounded-2xl px-6 py-4`}
           >
             {creatingAccount ? (
-              <div className="flex flex-col justify-between h-full">
+              <div className="flex flex-col justify-between h-full gap-3">
                 <Input
                   register={register}
                   label="email"
@@ -147,6 +159,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   type={type}
                   error={errors.passwordRepeat?.message}
                 />
+
                 <Button
                   className="mt-3"
                   type="submit"
@@ -155,6 +168,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 >
                   Załóż konto
                 </Button>
+                <ActionButton   type="submit" >Załóż konto</ActionButton>
                 <p
                   className={`mt-3 ${themeMode ? "text-black" : "text-white"}`}
                 >
@@ -165,7 +179,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   variant="ghost"
                   colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
                 >
-                  Zaloguj się rafa
+                  Zaloguj się
                 </Button>
               </div>
             ) : (
@@ -186,20 +200,28 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     error={errors.password?.message}
                   />
 
-                  <Button
-                    className="mt-6"
-                    type="submit"
-                    variant="ghost"
-                    colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
-                  >
-                    Zaloguj się
-                  </Button>
+                  <div>
+                    {/* Forgot Password Link */}
+                    <Button
+                      variant='link'
+                      colorScheme={themeMode ? 'blackAlpha' : 'whiteAlpha'}
+                      className='mt-3 text-sm text-center'
+                      onClick={() => setForgotPasswordModalOpen(true)}
+                    >
+                      Zapomniałeś hasła?
+                    </Button>
+                    <ForgotPasswordModal
+                        isOpen={forgotPasswordModalOpen}
+                        onClose={() => setForgotPasswordModalOpen(false)}
+                        themeMode={themeMode}
+                    />
+                  </div>
+                  <ActionButton type="submit">Zaloguj się</ActionButton>
                 </div>
                 <div className="flex flex-col">
                   <p
-                    className={` mt-8 ${
-                      themeMode ? "text-black" : "text-white"
-                    }`}
+                    className={` mt-3 mb-3 ${themeMode ? "text-black" : "text-white"
+                      }`}
                   >
                     lub
                   </p>
