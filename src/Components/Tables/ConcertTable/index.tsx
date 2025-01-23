@@ -23,9 +23,9 @@ interface TableProps {
   handleEdit: (id: string) => void;
   handleDelete: (id: string) => void;
   handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  selectedPage: string;
-  setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
-  pageNum: string;
+   selectedPage: number; // Changed from string to number
+   setSelectedPage: React.Dispatch<React.SetStateAction<number>>; // Updated type
+   pageNum: number; // Changed from string to number
 }
 
 const ConcertTable: React.FC<TableProps> = (props) => {

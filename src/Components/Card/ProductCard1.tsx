@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "./style.css";
 import { getFirstTag } from "../../Pages/Article";
-
+import artists1 from '../../assets/svg/artists1.svg'
 export interface News {
   type: string;
   img: string | undefined;
@@ -30,6 +30,9 @@ const ProductCard1: React.FC<News> = ({
     navigate(`/news/${_id}`);
   };
 
+  const imageSrc = img
+    ? `${process.env.REACT_APP_FILES_URL}${img}`
+    : artists1;
   return (
     <div className={`product-card1 flex w-full`}>
       <Card
@@ -61,19 +64,28 @@ const ProductCard1: React.FC<News> = ({
               <div
                 className={`card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer ${!themeMode && "dark-bg-color"}`}
               >
-                <Image
-                  src={`${process.env.REACT_APP_FILES_URL}${img}`}
+                  <Image
+                  src={imageSrc}
                   className="cursor-pointer object-cover h-full w-full"
-                  alt={img}
+                  alt="news image"
                   borderRadius="xl"
                 />
               </div>
               <div className="flex justify-start mt-4">
-                <div
-                  className={`feature-text ${!themeMode && "btn-dark-bg-color"}`}
-                >
-                  {tags.split("#")[1]}
-                </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+  {tags.split("#").map(
+    (tag, index) =>
+      tag && (
+        <div
+          key={index}
+          className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
+        >
+          {tag.trim()}
+        </div>
+      )
+  )}
+</div>
+
               </div>
               <div
                 className={`title-text flex mt-2 ${!themeMode && "title-dark-color"}`}
@@ -100,21 +112,31 @@ const ProductCard1: React.FC<News> = ({
                 {date.split("T")[0]}
               </div>
               <Image
-                src={`${process.env.REACT_APP_FILES_URL}${img}`}
-                className="cursor-pointer"
-                alt={img}
-                borderRadius="md"
-              />
+              src={imageSrc}
+              alt="news image"
+              className="cursor-pointer object-cover h-full w-full"
+              borderRadius="xl"
+            />
             </div>
             <div className="w-full ml-2">
               <div>
-                <div className="flex justify-start">
-                  <div
-                    className={`feature-text-2 ${!themeMode && "btn-dark-bg-color"}`}
-                  >
-                    {tags.split("#")[1]}
-                  </div>
-                </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-2 mt-2">
+  {tags.split("#").map(
+    (tag, index) =>
+      tag && (
+        <div
+          key={index}
+          className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
+        >
+          {tag.trim()}
+        </div>
+      )
+  )}
+</div>
+
+</div>
+
                 <div
                   className={`title-text-2 mt-2 flex overflow-hidden ${!themeMode && "title-dark-color"}`}
                 >
