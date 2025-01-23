@@ -14,12 +14,14 @@ import {checkIfLoggedIn} from '../Constant/api-requests';
 import {setType} from '../reducers/ThemeReducer';
 
 
+
 const Home = lazy(() => import('../Pages/Home'));
 const SubmitPage = lazy(() => import('../Pages/Submit'));
 const VideoMainPage = lazy(() => import('../Pages/Video'));
 const ConcertMainPage = lazy(() => import('../Pages/Concert'));
 const ArticleMainPage = lazy(() => import('../Pages/Article'));
 const ArtistMainPage = lazy(() => import('../Pages/Artist'));
+const SearchMainPage = lazy(() => import('../Pages/Search'));
 const MaterialMainPage = lazy(() => import('../Pages/Material'));
 const AlbumsMainPage = lazy(() => import('../Pages/Albums/index'));
 const ArticleDetailPage = lazy(
@@ -169,6 +171,13 @@ const AppMain: React.FC = () => {
 						path={common.ARTISTS_PATH}
 						element={
 							<ArtistMainPage themeMode={themeMode} type={type} />
+						}
+					/>
+					<Route
+						path={common.SEARCH_PATH}
+						element={
+							// <ArtistMainPage themeMode={themeMode} type={type} />
+							<SearchMainPage themeMode={themeMode} type={type}/>
 						}
 					/>
 					<Route

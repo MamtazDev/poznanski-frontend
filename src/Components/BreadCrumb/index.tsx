@@ -39,6 +39,12 @@ useMemo(() => {
 					{Artyści: common.ARTISTS_PATH},
 				]);
 			}
+			if (currentRoute.includes(common.SEARCH_PATH)) {
+				setSelectedMenu((prev) => [
+					...prev,
+					{searcgh: common.SEARCH_PATH},
+				]);
+			}
 			if (currentRoute.includes(common.MATERIAL_PATH)) {
 				setSelectedMenu((prev) => [
 					...prev,

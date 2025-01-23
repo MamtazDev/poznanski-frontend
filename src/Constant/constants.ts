@@ -2,6 +2,7 @@ export const ADMIN_PATH = "/admin";
 export const HOME_PATH = "/";
 export const TV_RADIO_PATH = "/video";
 export const CONCERT_PATH = "/concert";
+export const SEARCH_PATH = "/search";
 export const NEWS_PATH = "/news";
 export const ARTISTS_PATH = "/artists";
 export const CREATE_NEWS = "/news/create";
