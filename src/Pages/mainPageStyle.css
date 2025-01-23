@@ -182,7 +182,7 @@ border-radius: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: 24px;
-    text-align: left;
+    text-align: justify !important;
   }
   
   .artist-description-2{
@@ -192,7 +192,7 @@ border-radius: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: 24px;
-    text-align: left;
+    text-align: justify !important;
   }
   .artist-name{
     color: var(--Base-base-500, #252733);
