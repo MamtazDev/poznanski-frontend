@@ -158,7 +158,7 @@ const ProductEditModal: React.FC<ModalProps> = ({
                   name="title"
                   label="Title"
                   value={data.title}
-                  error={errTitle}
+                  error={errTitle ? "true" : "false"}
                   errMsg="Type new title "
                   onChange={handleTitle}
                 />

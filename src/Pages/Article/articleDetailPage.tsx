@@ -98,10 +98,11 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 								>
 									<b>{pageData?.intro}</b>
 								</p>
-								<img
+								<Image
 									className={` rounded-2xl mx-auto border-solid border ${!themeMode && 'border-white'}`}
 									src={`${process.env.REACT_APP_FILES_URL}${pageData?.files[0].url}`}
-								></img>
+									alt='img'
+								></Image>
 								<DelayedComponent delay={200}>
 									{targetNewsSelected && pageData?.content ? (
 										<TipTap

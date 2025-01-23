@@ -158,7 +158,7 @@ const EditModal: React.FC<ModalProps> = ({
                   name="title"
                   label="Title"
                   value={data.title}
-                  error={errTitle}
+                  error={errTitle ? "true" : "false"}
                   errMsg="Type news title"
                   onChange={handleTitle}
                 />

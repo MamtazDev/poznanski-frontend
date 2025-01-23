@@ -59,6 +59,7 @@ const LogoModal: React.FC<ModalProps> = ({
     errImg1: false,
     errImg2: false,
   });
+const [errTitle, setErrTitle] = useState<boolean>(false);
 
   const handleButtonClick = (value: boolean) => {
     if (value) {
@@ -158,7 +159,7 @@ const LogoModal: React.FC<ModalProps> = ({
                   name="name"
                   label="Name"
                   value={data.name}
-                  error={err.errTitle}
+                  error={errTitle ? "true" : "false"}
                   errMsg="Type Logo Name"
                   onChange={handleChange}
                 />
