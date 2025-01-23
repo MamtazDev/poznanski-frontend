@@ -62,7 +62,7 @@ const ProductCard1: React.FC<News> = ({
                 className={`card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer ${!themeMode && "dark-bg-color"}`}
               >
                 <Image
-                  src={`${process.env.REACT_APP_FILES_URL}${img}`}
+                  src={`${img}`}
                   className="cursor-pointer object-cover h-full w-full"
                   alt={img}
                   borderRadius="xl"
