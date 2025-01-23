@@ -77,7 +77,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 		<button
 			ref={buttonRef}
 			{...props}
-			className={`${theme}${reverted ? '-reversed' : ''} shadow-lg ${fixedHeight ? 'max-h-[36px] max-w-[138px]' : ''} ${!themeMode ? `border ${reverted ? 'border-transparent' : 'border-white'}` : 'border border-black'}`}
+			className={`${theme}${reverted ? '-reversed' : ''} shadow-lg ${fixedHeight ? 'max-h-[36px] max-w-[138px]' : ''} ${!themeMode ? `border ${reverted ? 'border-transparent' : 'border-transparent'}` : 'border border-black'}`}
 
 		>
 			{children}

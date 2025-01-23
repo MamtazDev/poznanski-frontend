@@ -59,7 +59,7 @@ export const usePaginatedNews = (pageSize: number, page: number) => {
     error: swrError,
     mutate,
   } = useSWR<{ news: Article[]; totalPages: number }>(
-    `/api/news/all`,
+    `/api/newsall?page=${page}&pageSize=${pageSize}`,
     () => getNewsRequests(page, pageSize),
     {
       onLoadingSlow: () => dispatch(fetchStart()),
@@ -85,7 +85,7 @@ export const usePaginatedNews = (pageSize: number, page: number) => {
 
     // Fetch the first page
     const firstPageData = await globalMutate(
-      `/api/news?page=${firstPageNum}&pageSize=${pageSize}`,
+      `/api/newsa?page=${firstPageNum}&pageSize=${pageSize}`,
       async () => {
         const response = await getNewsRequests(firstPageNum, pageSize);
         return response;
