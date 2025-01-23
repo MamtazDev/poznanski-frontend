@@ -135,8 +135,9 @@ const ArtistTable: React.FC<TableProps> = (props) => {
         <PaginationBar
           selectedPage={props.selectedPage}
           setSelectedPage={props.setSelectedPage}
-          pages={props.pageNum}
-        />
+          pages={props.pageNum} entriesPerPage={0} setEntriesPerPage={function (value: React.SetStateAction<number>): void {
+            throw new Error("Function not implemented.");
+          } }        />
       </div>
     </div>
   );

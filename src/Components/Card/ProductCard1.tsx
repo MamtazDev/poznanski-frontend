@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "./style.css";
 import { getFirstTag } from "../../Pages/Article";
-import artists1 from '../../assets/svg/artists1.svg'
+import artists1 from "../../assets/svg/artists1.svg";
 export interface News {
   type: string;
   img: string | undefined;
@@ -30,9 +30,11 @@ const ProductCard1: React.FC<News> = ({
     navigate(`/news/${_id}`);
   };
 
-  const imageSrc = img
-    ? `${process.env.REACT_APP_FILES_URL}${img}`
-    : artists1;
+  const imageSrc = img ? `${process.env.REACT_APP_FILES_URL}${img}` : artists1;
+
+  const wordArray = tags.split(",").map((word) => word.trim());
+  console.log("wordArray", wordArray);
+
   return (
     <div className={`product-card1 flex w-full`}>
       <Card
@@ -44,11 +46,11 @@ const ProductCard1: React.FC<News> = ({
         _hover={
           !themeMode
             ? {
-                boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
-              }
+              boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
+            }
             : {
-                boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
-              }
+              boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
+            }
         }
         className={`transition-all duration-300 ease-out w-full h-pull`}
       >
@@ -64,28 +66,27 @@ const ProductCard1: React.FC<News> = ({
               <div
                 className={`card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer ${!themeMode && "dark-bg-color"}`}
               >
-                  <Image
-                  src={imageSrc}
+                <Image
+                  src={img ?? imageSrc}
                   className="cursor-pointer object-cover h-full w-full"
                   alt="news image"
                   borderRadius="xl"
                 />
               </div>
               <div className="flex justify-start mt-4">
-              <div className="flex flex-wrap gap-2 mt-2">
-  {tags.split("#").map(
-    (tag, index) =>
-      tag && (
-        <div
-          key={index}
-          className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
-        >
-          {tag.trim()}
-        </div>
-      )
-  )}
-</div>
-
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {wordArray.map(
+                    (tag, index) =>
+                      tag && (
+                        <div
+                          key={index}
+                          className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
+                        >
+                          {tag.trim()}
+                        </div>
+                      )
+                  )}
+                </div>
               </div>
               <div
                 className={`title-text flex mt-2 ${!themeMode && "title-dark-color"}`}
@@ -112,30 +113,29 @@ const ProductCard1: React.FC<News> = ({
                 {date.split("T")[0]}
               </div>
               <Image
-              src={imageSrc}
-              alt="news image"
-              className="cursor-pointer object-cover h-full w-full"
-              borderRadius="xl"
-            />
+                src={imageSrc}
+                alt="news image"
+                className="cursor-pointer object-cover h-full w-full"
+                borderRadius="xl"
+              />
             </div>
             <div className="w-full ml-2">
               <div>
-              <div className="flex flex-wrap gap-2 mt-2">
-              <div className="flex flex-wrap gap-2 mt-2">
-  {tags.split("#").map(
-    (tag, index) =>
-      tag && (
-        <div
-          key={index}
-          className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
-        >
-          {tag.trim()}
-        </div>
-      )
-  )}
-</div>
-
-</div>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {tags.split("#").map(
+                      (tag, index) =>
+                        tag && (
+                          <div
+                            key={index}
+                            className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
+                          >
+                            {tag.trim()}
+                          </div>
+                        )
+                    )}
+                  </div>
+                </div>
 
                 <div
                   className={`title-text-2 mt-2 flex overflow-hidden ${!themeMode && "title-dark-color"}`}

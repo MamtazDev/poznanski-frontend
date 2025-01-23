@@ -7,11 +7,7 @@ interface NewsItem {
   title: string;
   intro?: string;
   content: string;
-  files?: Array<{
-    name: string;
-    url: string;
-    size: number;
-  }>;
+  files?: string[] | undefined;
   nickname?: string;
   email?: string;
   tags?: string;

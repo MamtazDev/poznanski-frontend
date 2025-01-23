@@ -15,9 +15,9 @@ interface PaginationProps {
   setSelectedPage: React.Dispatch<React.SetStateAction<number>>;
   goToPage?: (page: number) => void;
   prevPage?: () => void;
-  nextPage?: () => void; 
+  nextPage?: () => void; // Make nextPage optional
   pages: number;
-  totalPages?: number; 
+  totalPages?: number; // Add totalPages here
   entriesPerPage: number;
   setEntriesPerPage: React.Dispatch<React.SetStateAction<number>>;
 
@@ -41,6 +41,7 @@ const PaginationBar: React.FC<PaginationProps> = ({
       // setSelectedPage(value);
       prevPage?.();
     }
+
   };
 
   const handleIncrease = () => {
@@ -50,6 +51,7 @@ const PaginationBar: React.FC<PaginationProps> = ({
       nextPage?.();
     }
   };
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedPage(Number(e.target.value));

@@ -434,8 +434,9 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <PaginationBar
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
-                pages={pages}
-              />
+                pages={pages} entriesPerPage={0} setEntriesPerPage={function (value: React.SetStateAction<number>): void {
+                  throw new Error("Function not implemented.");
+                } }              />
             </div>
           </div>
         </div>
