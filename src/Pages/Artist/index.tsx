@@ -173,7 +173,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
               </div>
             )}
             <div className="md:mt-7 mt-10">
-              <ContentTitle titleType="ARTISTS" title="Our Top Artists" />
+              <ContentTitle titleType="TOP HITS" title="Our Top Artists" />
             </div>
             <div className="md:mt-6 mt-4">
               <FilterInput type={type} />
@@ -308,11 +308,11 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
             <div
               className={`flex ${type ? "justify-center" : "justify-end"} md:mt-16 mt-8`}
             >
-              {/* <PaginationBar
+              <PaginationBar
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
                 pages={pages}
-              /> */}
+              />
             </div>
           </div>
         </div>
