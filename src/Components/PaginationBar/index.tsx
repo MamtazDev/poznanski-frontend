@@ -68,18 +68,18 @@ const PaginationBar: React.FC<PaginationProps> = ({
   return (
     <div className="flex justify-between items-center w-full">
       <div className="flex items-center gap-2">
-        <span>Show</span>
+        <span className={`${themeMode ?"text-[#252733]" : " text-white"}`}>Show</span>
         <select
           value={entriesPerPage}
           onChange={handleEntriesChange}
-          className="border border-[#E9EBF0] rounded-sm px-2 py-1"
+          className={`border border-[#E9EBF0] rounded-sm px-2 py-1 ${themeMode ?"text-[#252733] bg-red-300" : " text-white bg-[#242526]"}`}
         >
           <option value={5}>5</option>
           <option value={10}>10</option>
           <option value={20}>20</option>
           <option value={50}>50</option>
         </select>
-        <span>entries</span>
+        <span className={`${themeMode ?"text-[#252733]" : " text-white"}`}>entries</span>
       </div>
       <div className="flex gap-2">
         <IconButton
@@ -106,7 +106,7 @@ const PaginationBar: React.FC<PaginationProps> = ({
           icon={
             <BsChevronLeft size={12} color={!themeMode ? "white" : "#6D6E76"} />
           }
-          color={themeMode ? "#252733" : "#FFF"}
+          color={themeMode ? "#FFF" : "#252733 "}
           backgroundColor={themeMode ? "#FFF" : "#242526"}
           border={themeMode ? "1px solid #E9EBF0" : "unset"}
           width="40px"
