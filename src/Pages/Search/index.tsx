@@ -11,6 +11,7 @@ import { getLastPageNumber } from "../../reducers/NewsReducer";
 import { usePaginatedNews } from "../../hooks/useSWRNews";
 import TVCard from "../../Components/Card/TVCard";
 import SearchTV from "./SearchTV";
+import SearchArtist from "./SearchArtist";
 
 const SearchMainPage = ({ themeMode, type }: any) => {
   const currentPage = useSelector((state: RootState) =>
@@ -104,6 +105,7 @@ const SearchMainPage = ({ themeMode, type }: any) => {
            
           </div>
           <SearchTV/>
+          <SearchArtist/>
         </div>
       </div>
     </Layout>
