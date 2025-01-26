@@ -17,6 +17,7 @@ import { ReactComponent as InstagramIcon } from "../../../assets/svg/instagramIc
 import { get } from "lodash";
 import { DelayedLink } from "../../_utility/DelayedLink";
 import { ActionButton } from "../../Button";
+import SearchBar from "./SearchBar";
 
 interface NavBarProps {
   filterText?: string;
@@ -137,7 +138,53 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                 />
               </Link>
 
-              <div
+              {/* <div className={`border border-[#BBBCC0] bg-white py-3 pl-4 pr-3 w-full rounded-md`}>
+                <div className={`flex place-items-center`}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={22}
+                    height={22}
+                    viewBox="0 0 22 22"
+                    fill="none"
+                  >
+                    <path
+                      d="M12.8334 4.5835H18.3334"
+                      stroke="#BBBCC0"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M12.8334 7.3335H15.5834"
+                      stroke="#BBBCC0"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M19.25 10.5418C19.25 15.3543 15.3542 19.2502 10.5417 19.2502C5.72921 19.2502 1.83337 15.3543 1.83337 10.5418C1.83337 5.72933 5.72921 1.8335 10.5417 1.8335"
+                      stroke="#BBBCC0"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M20.1667 20.1668L18.3334 18.3335"
+                      stroke="#BBBCC0"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <input
+                    className="ml-2.5 ml-peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline-none"
+                    placeholder="Search Anything"
+                  ></input>
+                </div>
+              </div> */}
+              <SearchBar/>
+
+              {/* <div
                 className={`w-2/3 mt-2 ${!props.type || !openFilterBox ? "z-50 shadow-2xl" : "-z-10"} transition-transform -translate-y-20 duration-500 ${!props.type ? "-translate-y-1" : openFilterBox && props.type ? " translate-y-14 absolute w-2/3 shadow-2xl" : ""}`}
               >
                 <div
@@ -175,7 +222,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                     </svg>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             {!props.type ? (
               <div className="block w-full">
@@ -229,11 +276,12 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                             color={getIconsColor(props.themeMode)}
                           />
                         ) : (
-                          <SearchIcon
-                            width={34}
-                            height={34}
-                            stroke={getIconsColor(props.themeMode)}
-                          />
+                          // <SearchIcon
+                          //   width={34}
+                          //   height={34}
+                          //   stroke={getIconsColor(props.themeMode)}
+                          // />
+                          ""
                         )}
                       </button>
 
