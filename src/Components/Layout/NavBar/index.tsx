@@ -1,4 +1,5 @@
-import React, { Fragment, useEffect, useState } from "react";
+import type React from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ReactComponent as SummaryIcon } from "../../../assets/svg/summaryIcon.svg";
 import { ReactComponent as FacebookIcon } from "../../../assets/svg/facebookIcon.svg";
@@ -113,24 +114,33 @@ const NavBar: React.FC<NavBarProps> = (props) => {
     <Fragment>
       <div className={`Nav-bar fixed w-full z-50 shadow-xl`}>
         <div
-          className={`Nav-bar-top ${
-            !props.themeMode && "Nav-bar-top-dark"
-          } flex place-items-center justify-center`}
+          className={`Nav-bar-top ${!props.themeMode && "Nav-bar-top-dark"} flex place-items-center justify-center`}
         >
-          <div className="flex justify-between gap-x-1 container py-4">
+          <div className="flex justify-between gap-x-1 container py-4 px-4 md:px-6">
             <div className="flex w-full place-items-center">
               <Link to={"/"} className={isSearchExpanded ? "hidden" : ""}>
                 <PoznanskiLogoIcon
-                  className="mr-4 rounded-full shadow-2xl"
+                  className="mr-4 rounded-full shadow-2xl w-10 h-10 md:w-12 md:h-12"
                   fill={props.themeMode ? "#000" : "#fff"}
                 />
               </Link>
-              
-              <SearchBar onSearchStateChange={handleSearchStateChange} themeMode={true}  />
+              <SearchBar
+                onSearchStateChange={handleSearchStateChange}
+                themeMode={true}
+              />
+              <button
+                onClick={() => setOpenModal(true)}
+                className="md:hidden flex items-center justify-center w-10 h-10"
+              >
+                <MobileMenuIcon
+                  className="w-6 h-6"
+                  stroke={getIconsColor(props.themeMode)}
+                />
+              </button>
             </div>
 
             {!isSearchExpanded && (
-              <div className="block w-full">
+              <div className="hidden md:block w-full">
                 <div className="flex-2 flex place-items-center gap-x-4 h-full justify-end">
                   <div className="grid grid-cols-4 gap-x-4">
                     <YoutubeIcon
@@ -179,9 +189,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
               {menu.map((item, idx) => (
                 <div
                   key={`nav-btn-${idx}`}
-                  className={`Nav-btn ${
-                    !props.themeMode && "Nav-btn-dark"
-                  } ${
+                  className={`Nav-btn ${!props.themeMode && "Nav-btn-dark"} ${
                     item === selectedMenu &&
                     (props.themeMode ? "selected-menu" : "selected-menu-dark")
                   }`}
@@ -197,9 +205,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
       <Modal onClose={onClose} size="full" isOpen={openModal}>
         <ModalOverlay />
         <ModalContent
-          className={`container ${
-            !props.themeMode && "back-dark"
-          } justify-between h-screen`}
+          className={`container ${!props.themeMode && "back-dark"} justify-between h-screen p-4 md:p-6`}
         >
           <div className="flex-col h-full">
             <div className="flex justify-between my-4">
@@ -226,9 +232,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                   key={`nav-vertical-btn-${idx}`}
                   className={`Nav-vertical-btn text-center ${
                     item === selectedMenu &&
-                    (props.themeMode
-                      ? "selected-menu"
-                      : "text-dark-color")
+                    (props.themeMode ? "selected-menu" : "text-dark-color")
                   } h-[15%] content-center`}
                   onClick={() => onClick(item)}
                 >
