@@ -1,8 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import type React from "react";
+import { useState, useRef, useEffect } from "react";
 
-export default function SearchBar() {
+interface SearchBarProps {
+  onSearchStateChange: (isExpanded: boolean) => void;
+}
+
+export default function SearchBar({ onSearchStateChange }: SearchBarProps) {
   const [searchText, setSearchText] = useState<string>("");
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const searchBarRef = useRef<HTMLDivElement | null>(null);
 
   const options: string[] = [
@@ -14,7 +20,10 @@ export default function SearchBar() {
   ];
 
   const handleSearchClick = () => {
-    setShowDropdown(!showDropdown);
+    const newExpandedState = !isExpanded;
+    setShowDropdown(newExpandedState);
+    setIsExpanded(newExpandedState);
+    onSearchStateChange(newExpandedState);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +37,8 @@ export default function SearchBar() {
         !searchBarRef.current.contains(event.target as Node)
       ) {
         setShowDropdown(false);
+        setIsExpanded(false);
+        onSearchStateChange(false);
       }
     };
 
@@ -36,10 +47,13 @@ export default function SearchBar() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [onSearchStateChange]);
 
   return (
-    <div className="relative w-full max-w-md mx-auto" ref={searchBarRef}>
+    <div
+      className={`relative transition-all duration-300 ease-in-out ${isExpanded ? "w-full" : "w-[482px]"}`}
+      ref={searchBarRef}
+    >
       <div className="border border-[#BBBCC0] bg-white py-3 pl-4 pr-3 rounded-md">
         <div className="flex items-center">
           <svg
@@ -85,8 +99,27 @@ export default function SearchBar() {
             placeholder="Search Anything"
             value={searchText}
             onChange={handleInputChange}
-            onFocus={() => setShowDropdown(true)}
+            onFocus={() => {
+              setShowDropdown(true);
+              setIsExpanded(true);
+              onSearchStateChange(true);
+            }}
           />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="27"
+            height="26"
+            viewBox="0 0 27 26"
+            fill="none"
+          >
+            <path
+              d="M6.61914 19.5L19.859 6.5M6.61914 6.5L19.859 19.5"
+              stroke="#6D6E76"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </div>
       </div>
       {showDropdown && (
@@ -99,7 +132,12 @@ export default function SearchBar() {
               <li
                 key={index}
                 className="flex justify-between items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => setSearchText(option)}
+                onClick={() => {
+                  setSearchText(option);
+                  setShowDropdown(false);
+                  setIsExpanded(false);
+                  onSearchStateChange(false);
+                }}
               >
                 <div className="flex items-center">
                   <svg
@@ -109,7 +147,6 @@ export default function SearchBar() {
                     viewBox="0 0 22 22"
                     fill="none"
                     className="cursor-pointer mr-2"
-                    onClick={handleSearchClick}
                   >
                     <path
                       d="M12.8334 4.5835H18.3334"
@@ -152,18 +189,18 @@ export default function SearchBar() {
                   <path
                     d="M5.41602 3.79199L20.5827 18.9587"
                     stroke="#6D6E76"
-                    stroke-width="1.5"
-                    stroke-miterlimit="10"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeMiterlimit="10"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                   <path
                     d="M5.41602 14.9178V3.79199H16.5418"
                     stroke="#6D6E76"
-                    stroke-width="1.5"
-                    stroke-miterlimit="10"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeMiterlimit="10"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </li>

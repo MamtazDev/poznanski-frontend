@@ -3,18 +3,15 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ReactComponent as SummaryIcon } from "../../../assets/svg/summaryIcon.svg";
 import { ReactComponent as FacebookIcon } from "../../../assets/svg/facebookIcon.svg";
 import { ReactComponent as YoutubeIcon } from "../../../assets/svg/youtubeIcon.svg";
-import { ReactComponent as SearchIcon } from "../../../assets/svg/searchIcon.svg";
 import { ReactComponent as MobileMenuIcon } from "../../../assets/svg/mobileMenuIcon.svg";
-import { Modal, ModalOverlay, ModalContent, Tooltip } from "@chakra-ui/react";
-import { AiOutlineClose, AiOutlineRight } from "react-icons/ai";
+import { Modal, ModalOverlay, ModalContent } from "@chakra-ui/react";
+import { AiOutlineClose } from "react-icons/ai";
 import * as common from "../../../Constant/constants";
 import "./style.css";
 import BreadCrumb from "../../BreadCrumb";
-import { ToFixedIfOut } from "../../_utility/ToFixedWhileOut";
 import { PoznanskiLogoIcon } from "../../../assets/svg/poznanskiLogo";
 import { AccountMenu } from "../../AccountMenu/AccountMenu";
 import { ReactComponent as InstagramIcon } from "../../../assets/svg/instagramIcon.svg";
-import { get } from "lodash";
 import { DelayedLink } from "../../_utility/DelayedLink";
 import { ActionButton } from "../../Button";
 import SearchBar from "./SearchBar";
@@ -42,21 +39,9 @@ const NavBar: React.FC<NavBarProps> = (props) => {
   const [selectedMenu, setSelectedMenu] = useState<string>("Home");
   const [openFilterBox, setOpenFilterBox] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    // if (props.setFilterText) {
-    // 	props.setFilterText(e.target.value);
-    // }
-  };
-
-  const handleClear = () => {
-    // if (props.setFilterText) {
-    // 	props.setFilterText('');
-    // }
-  };
 
   useEffect(() => {
     switch (true) {
@@ -119,130 +104,47 @@ const NavBar: React.FC<NavBarProps> = (props) => {
   const onClose = (): void => {
     setOpenModal(false);
   };
+
+  const handleSearchStateChange = (expanded: boolean) => {
+    setIsSearchExpanded(expanded);
+  };
+
   return (
     <Fragment>
-      <div
-        className={`Nav-bar fixed
-
-      w-full z-50 shadow-xl`}
-      >
+      <div className={`Nav-bar fixed w-full z-50 shadow-xl`}>
         <div
-          className={`Nav-bar-top ${!props.themeMode && "Nav-bar-top-dark"} flex place-items-center justify-center`}
+          className={`Nav-bar-top ${
+            !props.themeMode && "Nav-bar-top-dark"
+          } flex place-items-center justify-center`}
         >
           <div className="flex justify-between gap-x-1 container py-4">
-            <div className="flex w-3/4 place-items-center">
-              <Link to={"/"}>
+            <div className="flex w-full place-items-center">
+              <Link to={"/"} className={isSearchExpanded ? "hidden" : ""}>
                 <PoznanskiLogoIcon
                   className="mr-4 rounded-full shadow-2xl"
                   fill={props.themeMode ? "#000" : "#fff"}
                 />
               </Link>
-
-              {/* <div className={`border border-[#BBBCC0] bg-white py-3 pl-4 pr-3 w-full rounded-md`}>
-                <div className={`flex place-items-center`}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width={22}
-                    height={22}
-                    viewBox="0 0 22 22"
-                    fill="none"
-                  >
-                    <path
-                      d="M12.8334 4.5835H18.3334"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M12.8334 7.3335H15.5834"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M19.25 10.5418C19.25 15.3543 15.3542 19.2502 10.5417 19.2502C5.72921 19.2502 1.83337 15.3543 1.83337 10.5418C1.83337 5.72933 5.72921 1.8335 10.5417 1.8335"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M20.1667 20.1668L18.3334 18.3335"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <input
-                    className="ml-2.5 ml-peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline-none"
-                    placeholder="Search Anything"
-                  ></input>
-                </div>
-              </div> */}
-              <SearchBar/>
-
-              {/* <div
-                className={`w-2/3 mt-2 ${!props.type || !openFilterBox ? "z-50 shadow-2xl" : "-z-10"} transition-transform -translate-y-20 duration-500 ${!props.type ? "-translate-y-1" : openFilterBox && props.type ? " translate-y-14 absolute w-2/3 shadow-2xl" : ""}`}
-              >
-                <div
-                  className={`filter-box ${!props.themeMode && "filter-box-dark"} w-full flex place-items-center`}
-                >
-                  <SearchIcon />
-                  <input
-                    className="ml-2.5 ml-peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline-none"
-                    // value={
-                    // 	props.filterText
-                    // 		? props.filterText
-                    // 		: ''
-                    // }
-                    onChange={handleChange}
-                    placeholder="Szukaj..."
-                  ></input>
-                  <div
-                    className={`cursor-pointer ${props.filterText ? "block" : "hidden"}`}
-                    onClick={handleClear}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="27"
-                      height="26"
-                      viewBox="0 0 27 26"
-                      fill="none"
-                    >
-                      <path
-                        d="M6.61914 19.5L19.859 6.5M6.61914 6.5L19.859 19.5"
-                        stroke={getIconsColor(props.themeMode)}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div> */}
+              
+              <SearchBar onSearchStateChange={handleSearchStateChange} />
             </div>
-            {!props.type ? (
+
+            {!isSearchExpanded && (
               <div className="block w-full">
                 <div className="flex-2 flex place-items-center gap-x-4 h-full justify-end">
-                  <div className="grid grid-cols-4 gap-x-4 ">
+                  <div className="grid grid-cols-4 gap-x-4">
                     <YoutubeIcon
                       className="cursor-pointer"
                       stroke={getIconsColor(props.themeMode)}
                     />
-
                     <FacebookIcon
                       className="cursor-pointer"
                       stroke={getIconsColor(props.themeMode)}
                     />
-
                     <InstagramIcon
                       className="cursor-pointer"
                       stroke={getIconsColor(props.themeMode)}
                     />
-
                     <SummaryIcon
                       className="cursor-pointer"
                       stroke={getIconsColor(props.themeMode)}
@@ -251,7 +153,9 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                   <AccountMenu themeMode={props.themeMode} />
                   <Link to={common.CREATE_NEWS}>
                     <div
-                      className={`submit-btn ${!props.themeMode && "submit-btn-dark"} flex place-items-center ml-4 cursor-pointer`}
+                      className={`submit-btn ${
+                        !props.themeMode && "submit-btn-dark"
+                      } flex place-items-center ml-4 cursor-pointer`}
                     >
                       Submit News
                     </div>
@@ -261,62 +165,26 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                   </DelayedLink>
                 </div>
               </div>
-            ) : (
-              <div className="block">
-                <div className=" flex place-items-center h-full justify-end">
-                  <div className="grid grid-cols-2 gap-x-8">
-                    <div className="flex gap-x-6">
-                      <button
-                        className="flex place-items-center cursor-pointer"
-                        onClick={() => setOpenFilterBox(!openFilterBox)}
-                      >
-                        {openFilterBox ? (
-                          <AiOutlineClose
-                            size={34}
-                            color={getIconsColor(props.themeMode)}
-                          />
-                        ) : (
-                          // <SearchIcon
-                          //   width={34}
-                          //   height={34}
-                          //   stroke={getIconsColor(props.themeMode)}
-                          // />
-                          ""
-                        )}
-                      </button>
-
-                      <AccountMenu
-                        width="34"
-                        height="34"
-                        themeMode={props.themeMode}
-                      />
-                    </div>
-                    <button
-                      className="flex justify-center place-items-center cursor-pointer"
-                      onClick={() => setOpenModal(true)}
-                    >
-                      <MobileMenuIcon
-                        width={40}
-                        height={40}
-                        stroke={getIconsColor(props.themeMode)}
-                      />
-                    </button>
-                  </div>
-                </div>
-              </div>
             )}
           </div>
         </div>
 
         {props.type || (
           <div
-            className={`Nav-bar-down ${!props.themeMode && "Nav-bar-down-dark"} space-around`}
+            className={`Nav-bar-down ${
+              !props.themeMode && "Nav-bar-down-dark"
+            } space-around`}
           >
             <div className="flex justify-center gap-10">
               {menu.map((item, idx) => (
                 <div
                   key={`nav-btn-${idx}`}
-                  className={`Nav-btn ${!props.themeMode && "Nav-btn-dark"} ${item === selectedMenu && (props.themeMode ? "selected-menu" : "selected-menu-dark")}`}
+                  className={`Nav-btn ${
+                    !props.themeMode && "Nav-btn-dark"
+                  } ${
+                    item === selectedMenu &&
+                    (props.themeMode ? "selected-menu" : "selected-menu-dark")
+                  }`}
                   onClick={() => onClick(item)}
                 >
                   {item}
@@ -329,7 +197,9 @@ const NavBar: React.FC<NavBarProps> = (props) => {
       <Modal onClose={onClose} size="full" isOpen={openModal}>
         <ModalOverlay />
         <ModalContent
-          className={`container ${!props.themeMode && "back-dark"} justify-between h-screen`}
+          className={`container ${
+            !props.themeMode && "back-dark"
+          } justify-between h-screen`}
         >
           <div className="flex-col h-full">
             <div className="flex justify-between my-4">
@@ -354,7 +224,12 @@ const NavBar: React.FC<NavBarProps> = (props) => {
               {menu.map((item, idx) => (
                 <div
                   key={`nav-vertical-btn-${idx}`}
-                  className={`Nav-vertical-btn text-center ${item === selectedMenu && (props.themeMode ? "selected-menu" : "text-dark-color")} h-[15%] content-center`}
+                  className={`Nav-vertical-btn text-center ${
+                    item === selectedMenu &&
+                    (props.themeMode
+                      ? "selected-menu"
+                      : "text-dark-color")
+                  } h-[15%] content-center`}
                   onClick={() => onClick(item)}
                 >
                   {item}
@@ -367,17 +242,14 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                   className="cursor-pointer"
                   stroke={getIconsColor(props.themeMode)}
                 />
-
                 <FacebookIcon
                   className="cursor-pointer"
                   stroke={getIconsColor(props.themeMode)}
                 />
-
                 <InstagramIcon
                   className="cursor-pointer"
                   stroke={getIconsColor(props.themeMode)}
                 />
-
                 <SummaryIcon
                   className="cursor-pointer"
                   stroke={getIconsColor(props.themeMode)}
@@ -385,16 +257,6 @@ const NavBar: React.FC<NavBarProps> = (props) => {
               </div>
             </div>
           </div>
-
-          {/* <Link to={common.CREATE_NEWS}>
-						<div className='flex items-center mb-6'>
-							<div
-								className={`submit-btn-2 flex place-items-center w-full cursor-pointer ${!props.themeMode && 'btn-dark-bg-color btn-dark-color'}`}
-							>
-								Submit News
-							</div>
-						</div>
-					</Link> */}
         </ModalContent>
       </Modal>
     </Fragment>
