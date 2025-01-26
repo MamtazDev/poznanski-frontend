@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { getLastPageNumber } from "../../reducers/NewsReducer";
 
-const SearchTV = () => {
+const SearchTV = ({themeMode}: any) => {
   const currentPage = useSelector((state: RootState) =>
     getLastPageNumber(state)
   );
@@ -37,7 +37,7 @@ const SearchTV = () => {
   ];
   return (
     <div className="mt-16">
-      <h1 className="text-[#252733] text-2xl font-semibold text-start mb-6">
+      <h1 className={`text-[#252733] text-2xl font-semibold text-start mb-6 ${themeMode ? "text-[#252733]" : "text-white"}`}>
         TV/Radio
       </h1>
 

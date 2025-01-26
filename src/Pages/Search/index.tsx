@@ -51,7 +51,7 @@ const SearchMainPage = ({ themeMode, type }: any) => {
           </div>
 
           <div>
-            <h1 className="text-[#252733] text-2xl font-semibold text-start mb-6">
+            <h1 className={`text-[#252733] text-2xl font-semibold text-start mb-6 ${themeMode ? "text-[#252733]" : "text-white"}`}>
               News
             </h1>
 

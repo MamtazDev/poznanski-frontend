@@ -26,12 +26,12 @@ const SearchArtist = ({ themeMode, type }: any) => {
   });
   return (
     <div className="mt-16">
-      <h1 className="text-[#252733] text-2xl font-semibold text-start mb-6">
+      <h1 className={`text-[#252733] text-2xl font-semibold text-start ${themeMode ? "text-[#252733]" : "text-white"}`}>
         Artists
       </h1>
 
       <div
-        className={`artists-body w-full p-6 md:p-12 md:mt-20 mt-6 ${!themeMode && "artists-body-dark"}`}
+        className={`artists-body w-full mt-6 ${!themeMode && "artists-body-dark"}`}
       >
         {artist && (
           <div className="flex items-start w-full">
@@ -41,7 +41,7 @@ const SearchArtist = ({ themeMode, type }: any) => {
             />
             <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
               <div
-                className={`artist-name md:text-2xl text-start font-semibold text-[#252733] text-md ${!themeMode && "title-dark-color"}`}
+                className={`artist-name md:text-2xl text-start font-semibold text-[#252733] text-md ${themeMode ? "text-[#252733]" : "text-white"}`}
               >
                 {/* {artist.name} */}
                 konika 
