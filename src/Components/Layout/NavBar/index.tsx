@@ -121,9 +121,9 @@ const NavBar: React.FC<NavBarProps> = (props) => {
   return (
     <Fragment>
       <div
-        className={`Nav-bar fixed
+        className={`Nav-bar
 
-      w-full z-50 shadow-xl`}
+      w-full z-50 border-b`}
       >
         <div
           className={`Nav-bar-top ${!props.themeMode && "Nav-bar-top-dark"} flex place-items-center justify-center`}

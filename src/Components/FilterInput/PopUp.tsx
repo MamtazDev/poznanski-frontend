@@ -6,7 +6,7 @@ const PopUp = ({ handleClosePopup } : any) => {
   const [endDate, setEndDate] = useState("");
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white w-full max-w-[750px] rounded-lg shadow-lg p-6 relative">
         <button
           onClick={handleClosePopup}

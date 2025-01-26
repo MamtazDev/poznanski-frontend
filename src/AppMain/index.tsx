@@ -126,7 +126,7 @@ const AppMain: React.FC = () => {
             path="/"
             element={<Home themeMode={themeMode} type={type} />}
           />
-          <Route path="/profile" element={<ProfilePage user={mockUser} />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path={common.NEWS_PATH}>
             <Route
               path=""
