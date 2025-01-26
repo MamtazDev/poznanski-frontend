@@ -126,7 +126,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                 />
               </Link>
               
-              <SearchBar onSearchStateChange={handleSearchStateChange} />
+              <SearchBar onSearchStateChange={handleSearchStateChange} themeMode={true}  />
             </div>
 
             {!isSearchExpanded && (

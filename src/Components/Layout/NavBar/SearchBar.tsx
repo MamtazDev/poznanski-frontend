@@ -1,16 +1,16 @@
 import type React from "react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, FC } from "react";
 
 interface SearchBarProps {
   onSearchStateChange: (isExpanded: boolean) => void;
+  themeMode?: boolean;
 }
 
-export default function SearchBar({ onSearchStateChange }: SearchBarProps) {
+const SearchBar: FC<SearchBarProps> = ({ onSearchStateChange, themeMode }) => {
   const [searchText, setSearchText] = useState<string>("");
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const searchBarRef = useRef<HTMLDivElement | null>(null);
-
   const options: string[] = [
     "Natasha Djalrio",
     "John Doe",
@@ -54,7 +54,9 @@ export default function SearchBar({ onSearchStateChange }: SearchBarProps) {
       className={`relative transition-all duration-300 ease-in-out ${isExpanded ? "w-full" : "w-[482px]"}`}
       ref={searchBarRef}
     >
-      <div className="border border-[#BBBCC0] bg-white py-3 pl-4 pr-3 rounded-md">
+      <div
+        className={`border border-[#BBBCC0]  py-3 pl-4 pr-3 rounded-md bg-white `}
+      >
         <div className="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -220,4 +222,6 @@ export default function SearchBar({ onSearchStateChange }: SearchBarProps) {
       )}
     </div>
   );
-}
+};
+
+export default SearchBar;
