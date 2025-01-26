@@ -105,7 +105,13 @@ export default function SearchBar({ onSearchStateChange }: SearchBarProps) {
               onSearchStateChange(true);
             }}
           />
-          <svg
+         <button  onClick={() => {
+    setIsExpanded(false);
+    setShowDropdown(false);
+    setSearchText("");
+    onSearchStateChange(false);
+  }}>
+         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="27"
             height="26"
@@ -120,6 +126,7 @@ export default function SearchBar({ onSearchStateChange }: SearchBarProps) {
               stroke-linejoin="round"
             />
           </svg>
+         </button>
         </div>
       </div>
       {showDropdown && (
