@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, type FC } from "react";
-import { useNavigate } from "react-router-dom"; // Ensure you are using react-router-dom for navigation
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface SearchBarProps {
   onSearchStateChange: (isExpanded: boolean) => void;
@@ -88,6 +89,7 @@ const SearchBar: FC<SearchBarProps> = ({
     };
   }, [onSearchStateChange]);
 
+ 
   return (
     <div
       className={`relative transition-all duration-300 ease-in-out ${
@@ -127,7 +129,21 @@ const SearchBar: FC<SearchBarProps> = ({
                   onSearchStateChange(false);
                 }}
               >
-                {/* Close icon */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="27"
+                  height="26"
+                  viewBox="0 0 27 26"
+                  fill="none"
+                >
+                  <path
+                    d="M6.61914 19.5L19.859 6.5M6.61914 6.5L19.859 19.5"
+                    stroke="#6D6E76"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
               </button>
             )}
           </div>
@@ -151,6 +167,32 @@ const SearchBar: FC<SearchBarProps> = ({
                 }}
               >
                 {option}
+                <Link to={`/search?query=${option}`}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="26"
+                    height="26"
+                    viewBox="0 0 26 26"
+                    fill="none"
+                  >
+                    <path
+                      d="M5.41602 3.7915L20.5827 18.9582"
+                      stroke="#6D6E76"
+                      stroke-width="1.5"
+                      stroke-miterlimit="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M5.41602 14.9173V3.7915H16.5418"
+                      stroke="#6D6E76"
+                      stroke-width="1.5"
+                      stroke-miterlimit="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </Link>
               </li>
             ))}
         </ul>

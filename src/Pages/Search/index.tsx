@@ -12,10 +12,16 @@ import { usePaginatedNews } from "../../hooks/useSWRNews";
 import TVCard from "../../Components/Card/TVCard";
 import SearchTV from "./SearchTV";
 import SearchArtist from "./SearchArtist";
+import { useLocation } from "react-router-dom";
 
 
 
 const SearchMainPage = ({ themeMode, type }: any) => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const searchText = queryParams.get("query") || "Nothing";
+
+
   const currentPage = useSelector((state: RootState) =>
     getLastPageNumber(state)
   );
@@ -46,7 +52,7 @@ const SearchMainPage = ({ themeMode, type }: any) => {
           )}
           <div>
             <h1 className={` font-bold text-5xl text-start mt-5 mb-16 ${themeMode ? "text-[#252733]" : "text-white"}`}>
-              You searched for “Lorum Ipsum”
+              You searched for “{searchText}”
             </h1>
           </div>
 
