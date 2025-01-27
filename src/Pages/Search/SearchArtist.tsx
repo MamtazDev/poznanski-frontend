@@ -31,7 +31,7 @@ const SearchArtist = ({ themeMode, type }: any) => {
       </h1>
 
       <div
-        className={`artists-body w-full mt-6 ${!themeMode && "artists-body-dark"}`}
+        className={`artists-body w-full mt-6 `}
       >
         {artist && (
           <div className="flex items-start w-full">
