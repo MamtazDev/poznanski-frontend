@@ -1,197 +1,188 @@
-import React, { useState } from "react";
+import { useState, useRef } from "react"
 import {
   Box,
-  Avatar,
-  Text,
-  Stack,
-  Button,
-  Badge,
   Flex,
-  Divider,
-  Input,
+  VStack,
+  HStack,
+  Text,
+  Avatar,
+  useDisclosure,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalCloseButton,
-  ModalBody,
   ModalFooter,
-  useDisclosure,
-  useColorModeValue,
-} from "@chakra-ui/react";
+  ModalBody,
+  ModalCloseButton,
+  FormControl,
+  FormLabel,
+  Grid,
+  GridItem,
+  Container,
+  Divider,
+  Button,
+  Input,
+  Textarea,
+} from "@chakra-ui/react"
 
-import { EditIcon } from "@chakra-ui/icons";
+// Default profile image
+import Defaultimg from "../../assets/png/profileImg1.png";
 
-type UserProfile = {
-  nickname: string;
-  email: string;
-  role: string;
-  profilePicture?: string;
-  isVerified: boolean;
-};
+export default function ProfilePage() {
+  const [email, setEmail] = useState("")
+  const [profileImage, setProfileImage] = useState(Defaultimg)
+  const [editForm, setEditForm] = useState({
+    email: "",
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  })
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-const ProfilePage: React.FC<{ user: UserProfile }> = ({ user }) => {
-  const textColor = useColorModeValue("gray.700", "gray.300");
-  const bgColor = useColorModeValue("white", "gray.800");
-  const cardBg = useColorModeValue("gray.100", "gray.700");
-  const borderColor = useColorModeValue("gray.300", "gray.600");
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const [editedNickname, setEditedNickname] = useState(user.nickname);
-  const [editedEmail, setEditedEmail] = useState(user.email);
-  const [profilePicture, setProfilePicture] = useState(
-    user.profilePicture || ""
-  );
-  const [isEditing, setIsEditing] = useState(false);
-
+  // Handle image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
+      const file = e.target.files[0]
+      const reader = new FileReader()
       reader.onload = () => {
-        setProfilePicture(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+        if (typeof reader.result === "string") {
+          setProfileImage(reader.result)
+        }
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-    onOpen();
-  };
+  // Handle edit form changes
+  const handleEditFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setEditForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
 
-  const handleSaveChanges = () => {
-    setIsEditing(false);
-    onClose();
-  };
+  // Handle form submission
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Add your form submission logic here
+    console.log("Form submitted:", editForm)
+    onClose()
+  }
 
   return (
-    <Box minH="100vh" bg={useColorModeValue("gray.50", "gray.900")} p={4}>
-      <Box
-        maxW="4xl"
-        mx="auto"
-        p={6}
-        mt="150px"
-        borderWidth={1}
-        borderRadius="lg"
-        boxShadow="lg"
-        bg={bgColor}
-        borderColor={borderColor}
-      >
-        {/* Header Section */}
-        <Flex align="center" direction="column" mb={6}>
-          <Avatar size="2xl" src={profilePicture} name={user.nickname} mb={4} />
-          <Button mt={2} size="sm" colorScheme="blue" as="label">
-            Upload Image
-            <Input type="file" hidden onChange={handleImageUpload} />
-          </Button>
-          <Stack spacing={2} textAlign="center">
-            <Text fontSize="3xl" fontWeight="bold" color={textColor}>
-              {user.nickname}
+ <div className="container">
+     <Box minH="100vh" bg="white">
+      <Flex>
+        {/* Sidebar */}
+        <Box w="64" borderRight="1px" borderColor="gray.200" p={6}>
+          <VStack spacing={6}>
+            <Box textAlign="center">
+              <Avatar size="2xl" src={profileImage} mb={4} />
+              <Button onClick={onOpen} colorScheme="blue" size="sm" width="full">
+                Edit profile
+              </Button>
+            </Box>
+            <VStack as="nav" spacing={2} align="stretch" width="full">
+              <Button variant="ghost" justifyContent="flex-start">
+                Account settings
+              </Button>
+              <Button variant="ghost" justifyContent="flex-start">
+                Advanced settings
+              </Button>
+              <Button variant="outline" justifyContent="flex-start">
+                Keluar
+              </Button>
+            </VStack>
+          </VStack>
+        </Box>
+
+        {/* Main Content */}
+        <Box flex={1} p={8}>
+          <Container maxW="3xl">
+            <Text fontSize="2xl" fontWeight="semibold" mb={6}>
+              Public Profile
             </Text>
-            <Text fontSize="md" color={textColor}>
-              {user.email}
-            </Text>
-            {user.isVerified && (
-              <Badge
-                colorScheme="green"
-                mt={2}
-                px={3}
-                py={1}
-                borderRadius="full"
-              >
-                Verified
-              </Badge>
-            )}
-          </Stack>
-          <Button
-            mt={4}
-            colorScheme="blue"
-            onClick={handleEditClick}
-            leftIcon={<EditIcon />}
-          >
-            Edit Profile
-          </Button>
-        </Flex>
-
-        <Divider mb={6} borderColor={borderColor} />
-
-        {/* Profile Details Section */}
-        <Stack
-          spacing={4}
-          bg={cardBg}
-          p={4}
-          borderRadius="md"
-          borderColor={borderColor}
-        >
-          <Flex justify="space-between" align="center">
-            <Text fontWeight="bold" color={textColor}>
-              Role
-            </Text>
-            <Text color={textColor}>{user.role}</Text>
-          </Flex>
-
-          <Flex justify="space-between" align="center">
-            <Text fontWeight="bold" color={textColor}>
-              Nickname
-            </Text>
-            <Text color={textColor}>{editedNickname}</Text>
-          </Flex>
-
-          <Flex justify="space-between" align="center">
-            <Text fontWeight="bold" color={textColor}>
-              Email
-            </Text>
-            <Text color={textColor}>{editedEmail}</Text>
-          </Flex>
-
-          {isEditing && (
-            <Button mt={4} colorScheme="blue" onClick={handleSaveChanges}>
-              Save Changes
-            </Button>
-          )}
-          <Button mt={2} variant="outline" colorScheme="red">
-            Delete Account
-          </Button>
-        </Stack>
-      </Box>
-
-      {/* Edit Modal */}
+            <VStack spacing={6} align="stretch">
+              <FormControl>
+                <FormLabel>Nama</FormLabel>
+                <Input placeholder="Enter your name" />
+                <Text fontSize="sm" color="gray.500" mt={1}>
+                  Use your real name to get verified and help your teammates
+                </Text>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Bio</FormLabel>
+                <Textarea placeholder="Write something about yourself..." minH="32" />
+              </FormControl>
+            </VStack>
+          </Container>
+        </Box>
+      </Flex>
+      {/* Edit Profile Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent bg={bgColor}>
-          <ModalHeader color={textColor}>Edit Details</ModalHeader>
+        <ModalContent>
+          <ModalHeader>Edit Profile</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Stack spacing={4}>
-              <Flex direction="column">
-                <Text fontWeight="bold" color={textColor}>
-                  Nickname
-                </Text>
+            <VStack spacing={4} as="form" onSubmit={handleSubmit}>
+              <FormControl>
+                <FormLabel>Profile Picture</FormLabel>
+                <HStack>
+                  <Avatar size="md" src={profileImage} />
+                  <Button onClick={() => fileInputRef.current?.click()} colorScheme="blue">
+                    Upload Image
+                  </Button>
+                  <Input type="file" accept="image/*" onChange={handleImageUpload} ref={fileInputRef} display="none" />
+                </HStack>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Email</FormLabel>
                 <Input
-                  value={editedNickname}
-                  onChange={(e) => setEditedNickname(e.target.value)}
-                  bg={cardBg}
-                  color={textColor}
+                  name="email"
+                  type="email"
+                  value={editForm.email}
+                  onChange={handleEditFormChange}
+                  placeholder="Enter your email"
                 />
-              </Flex>
-
-              <Flex direction="column">
-                <Text fontWeight="bold" color={textColor}>
-                  Email
-                </Text>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Current Password</FormLabel>
                 <Input
-                  value={editedEmail}
-                  onChange={(e) => setEditedEmail(e.target.value)}
-                  bg={cardBg}
-                  color={textColor}
+                  name="currentPassword"
+                  type="password"
+                  value={editForm.currentPassword}
+                  onChange={handleEditFormChange}
+                  placeholder="Enter current password"
                 />
-              </Flex>
-            </Stack>
+              </FormControl>
+              <FormControl>
+                <FormLabel>New Password</FormLabel>
+                <Input
+                  name="newPassword"
+                  type="password"
+                  value={editForm.newPassword}
+                  onChange={handleEditFormChange}
+                  placeholder="Enter new password"
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Confirm New Password</FormLabel>
+                <Input
+                  name="confirmPassword"
+                  type="password"
+                  value={editForm.confirmPassword}
+                  onChange={handleEditFormChange}
+                  placeholder="Confirm new password"
+                />
+              </FormControl>
+            </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleSaveChanges}>
-              Save
+            <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
+              Save Changes
             </Button>
             <Button variant="ghost" onClick={onClose}>
               Cancel
@@ -200,7 +191,6 @@ const ProfilePage: React.FC<{ user: UserProfile }> = ({ user }) => {
         </ModalContent>
       </Modal>
     </Box>
-  );
-};
-
-export default ProfilePage;
+ </div>
+  )
+}
