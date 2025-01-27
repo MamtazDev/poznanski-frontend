@@ -160,17 +160,9 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   error={errors.passwordRepeat?.message}
                 />
 
-                <Button
-                  className="mt-3"
-                  type="submit"
-                  variant="ghost"
-                  colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
-                >
-                  Załóż konto
-                </Button>
-                <ActionButton   type="submit" >Załóż konto</ActionButton>
+                <ActionButton type="submit" >Załóż konto</ActionButton>
                 <p
-                  className={`mt-3 ${themeMode ? "text-black" : "text-white"}`}
+                  className={`mt-3 text-center ${themeMode ? "text-black" : "text-white"}`}
                 >
                   Masz konto?
                 </p>
@@ -220,7 +212,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 </div>
                 <div className="flex flex-col">
                   <p
-                    className={` mt-3 mb-3 ${themeMode ? "text-black" : "text-white"
+                    className={` mt-3 mb-3 text-center ${themeMode ? "text-black" : "text-white"
                       }`}
                   >
                     lub
