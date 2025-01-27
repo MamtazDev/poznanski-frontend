@@ -28,6 +28,8 @@ const SearchBar: FC<SearchBarProps> = ({
   //   "Sarah Wilson",
   // ];
 
+  console.log("t" , themeMode)
+
   useEffect(() => {
     // Fetch recent searches from localStorage on component mount
     const storedSearches = JSON.parse(
@@ -105,7 +107,7 @@ const SearchBar: FC<SearchBarProps> = ({
           {/* Small device search icon */}
         </div>
       ) : (
-        <div className="border border-[#BBBCC0] py-3 pl-4 pr-3 rounded-md bg-white">
+        <div className={`border py-3 pl-4 pr-3 rounded-md ${themeMode ? "bg-white border-[#BBBCC0]" : "bg-[#14151C] border-[#51525C]"}`}>
           <div className="flex items-center">
             {/* Search icon */}
             <input
@@ -158,7 +160,7 @@ const SearchBar: FC<SearchBarProps> = ({
             .map((option, index) => (
               <li
                 key={index}
-                className="flex justify-between items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                className={`flex justify-between items-center px-4 py-2 cursor-pointer ${themeMode ? "bg-white text-black" : "bg-black text-white"}`}
                 onClick={() => {
                   setSearchText(option);
                   setShowDropdown(false);

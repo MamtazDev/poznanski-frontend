@@ -44,6 +44,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
   const [isSmallDevice, setIsSmallDevice] = useState(false); // Added state for small device
   const navigate = useNavigate();
   const location = useLocation();
+  
 
   useEffect(() => {
     const checkDeviceSize = () => {
@@ -122,6 +123,8 @@ const NavBar: React.FC<NavBarProps> = (props) => {
     setIsSearchExpanded(expanded);
   };
 
+  
+
   return (
     <Fragment>
       <div className={`Nav-bar fixed w-full z-50 shadow-xl`}>
@@ -145,7 +148,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
               </Link>
               <SearchBar
                 onSearchStateChange={handleSearchStateChange}
-                themeMode={true}
+                themeMode={props.themeMode}
                 isSmallDevice={isSmallDevice}
               />
               <button

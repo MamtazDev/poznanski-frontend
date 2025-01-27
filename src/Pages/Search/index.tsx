@@ -18,7 +18,6 @@ import useSWR from "swr";
 
 const SearchMainPage = ({ themeMode, type }: any) => {
   const location = useLocation();
-  console.log("t" , themeMode)
   const [loading, setIsloading] = useState(false);
   const queryParams = new URLSearchParams(location.search);
   const [cardNum, setCardNum] = useState<number>(4);

@@ -35,7 +35,6 @@ const SearchTV = ({themeMode}: any) => {
       link: "https://example.com/video/3",
     },
   ];
-  console.log("theme",themeMode)
   return (
     <div className="mt-16">
       <h1 className={`text-[#252733] text-2xl font-semibold text-start mb-6 ${themeMode ? "text-[#252733]" : "text-white"}`}>
