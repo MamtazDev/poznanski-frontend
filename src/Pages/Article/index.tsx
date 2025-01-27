@@ -143,7 +143,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 width: "100%",
               }}
             >
-              {loading ? (
+              {loading || !data ? (
                 <div
                   className="w-full flex justify-center items-center"
                   style={{
@@ -159,66 +159,24 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   />
                 </div>
               ) : (
-                <div
-                  className={`${"grid"} ${cardNum === 4 && "grid-cols-4"} ${cardNum === 3 && "grid-cols-3"} ${cardNum === 2 && "grid-cols-2"} gap-4 py-5`}
-                >
-                  {data?.map(
-                    (item) =>
-                      item && (
-                        <div
-                          id={item._id}
-                          key={`main-news-card-${item._id}`}
-                          className="w-full"
-                        >
-                          <ProductCard1
-                            type={type ? "vertical" : "horizontal"}
-                            img={item?.files && item.files[0]}
-                            tags={`${item.tags}`}
-                            title={item.title}
-                            date={`${item.date}`.split("T")[0]}
-                            _id={item._id}
-                          />
-                        </div>
-                      )
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div className={`flex ${type ? "justify-center" : "justify-end"}`}>
-              {loading ? (
-                <div
-                  className="w-full flex justify-center items-center"
-                  style={{
-                    minHeight: type ? "776px" : "908px",
-                  }}
-                >
-                  <Spinner
-                    thickness="4px"
-                    speed="0.65s"
-                    emptyColor="gray.200"
-                    color="blue.500"
-                    size="lg"
-                  />
-                </div>
-              ) : (
-                currentPageByLength !== totalPages && (
-                  <div
-                    ref={loadNextPageElementRef}
-                    onClick={() => loadMore()}
-                    className="w-full h-32 flex justify-center items-center"
-                  >
-                    {loadNexPage && (
-                      <Spinner
-                        thickness="4px"
-                        speed="0.65s"
-                        emptyColor="gray.200"
-                        color="blue.500"
-                        size="lg"
+                <div className={`grid lg:grid-cols-3 gap-4 py-5`}>
+                  {data?.map((item) => (
+                    <div
+                      id={item._id}
+                      key={`main-news-card-${item._id}`}
+                      className="w-full"
+                    >
+                      <ProductCard1
+                        type={type ? "vertical" : "horizontal"}
+                        img={item?.files && item.files[0]}
+                        tags={`${item.tags}`}
+                        title={item.title}
+                        date={`${item.date}`.split("T")[0]}
+                        _id={item._id}
                       />
-                    )}
-                  </div>
-                )
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>

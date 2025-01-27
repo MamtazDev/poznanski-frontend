@@ -11,7 +11,7 @@ export interface News {
   img: string | undefined;
   title: string;
   tags: string;
-  date: string;
+  date: any;
   _id: string;
 }
 
@@ -32,15 +32,12 @@ const ProductCard1: React.FC<News> = ({
 
   const imageSrc = img ? `${process.env.REACT_APP_FILES_URL}${img}` : artists1;
 
-  const wordArray = tags.split(",").map((word) => word.trim());
-  console.log("wordArray", wordArray);
+  const wordArray = tags ? tags.split(",").map((word) => word.trim()) : [];
 
   return (
-    <div className={`product-card1 flex w-full`}>
+    <div className={`flex w-full h-full`}>
       <Card
-        padding={type === "horizontal" ? "20px" : "10px"}
         borderRadius="2xl"
-        height={type === "horizontal" ? "401.249px" : "101px"}
         border={themeMode ? "1px solid white" : "1px solid #242526"}
         backgroundColor={themeMode ? "" : "#242526"}
         _hover={
@@ -52,10 +49,9 @@ const ProductCard1: React.FC<News> = ({
               boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
             }
         }
-        className={`transition-all duration-300 ease-out w-full h-pull`}
+        className={`transition-all duration-300 ease-out w-full h-full p-5`}
       >
         {/* <CardBody> */}
-        {type === "horizontal" ? (
           <div className="flex flex-col related justify-between w-full h-full">
             <div
               className={`date-badge absolute top-10 right-10 z-50 ${!themeMode && "btn-dark-bg-color"}`}
@@ -73,6 +69,7 @@ const ProductCard1: React.FC<News> = ({
                   borderRadius="xl"
                 />
               </div>
+
               <div className="flex justify-start mt-4">
                 <div className="flex flex-wrap gap-2 mt-2">
                   {wordArray.map(
@@ -104,56 +101,6 @@ const ProductCard1: React.FC<News> = ({
               </Button>
             </div>
           </div>
-        ) : (
-          <div className="flex h-full">
-            <div className="h-full rounded-md w-36 bg-slate-900 relative overflow-hidden">
-              <div
-                className={`date-badge-2 absolute top-1 right-1 z-50 ${!themeMode && "btn-dark-bg-color"}`}
-              >
-                {date.split("T")[0]}
-              </div>
-              <Image
-                src={imageSrc}
-                alt="news image"
-                className="cursor-pointer object-cover h-full w-full"
-                borderRadius="xl"
-              />
-            </div>
-            <div className="w-full ml-2">
-              <div>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {tags.split("#").map(
-                      (tag, index) =>
-                        tag && (
-                          <div
-                            key={index}
-                            className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
-                          >
-                            {tag.trim()}
-                          </div>
-                        )
-                    )}
-                  </div>
-                </div>
-
-                <div
-                  className={`title-text-2 mt-2 flex overflow-hidden ${!themeMode && "title-dark-color"}`}
-                >
-                  {title}
-                </div>
-              </div>
-              <div className="flex justify-start mr-2">
-                <div
-                  className={`card-more-btn-2 ${!themeMode && "text-dark-color"}`}
-                  onClick={handleClick}
-                >
-                  Czytaj dalej...
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
         {/* </CardBody> */}
       </Card>
     </div>
