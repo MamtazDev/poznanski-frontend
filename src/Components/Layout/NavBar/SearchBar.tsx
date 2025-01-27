@@ -1,5 +1,6 @@
 import type React from "react"
 import { useState, useRef, useEffect, type FC } from "react"
+import { useNavigate } from "react-router-dom"
 
 interface SearchBarProps {
   onSearchStateChange: (isExpanded: boolean) => void
@@ -12,6 +13,8 @@ const SearchBar: FC<SearchBarProps> = ({ onSearchStateChange, themeMode, isSmall
   const [showDropdown, setShowDropdown] = useState<boolean>(false)
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const searchBarRef = useRef<HTMLDivElement | null>(null)
+  const navigate = useNavigate();
+  
   const options: string[] = ["Natasha Djalrio", "John Doe", "Jane Smith", "Michael Brown", "Sarah Wilson"]
 
   const handleSearchClick = () => {
@@ -40,6 +43,14 @@ const SearchBar: FC<SearchBarProps> = ({ onSearchStateChange, themeMode, isSmall
       document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [onSearchStateChange])
+
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      
+      navigate('/search');
+    }
+  };
 
   return (
     <div
@@ -127,6 +138,7 @@ const SearchBar: FC<SearchBarProps> = ({ onSearchStateChange, themeMode, isSmall
               placeholder="Search Anything"
               value={searchText}
               onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
               onFocus={() => {
                 setShowDropdown(true)
                 setIsExpanded(true)
@@ -170,6 +182,7 @@ const SearchBar: FC<SearchBarProps> = ({ onSearchStateChange, themeMode, isSmall
                   setIsExpanded(false)
                   onSearchStateChange(false)
                 }}
+                
               >
                 <div className="flex items-center">
                   <svg
