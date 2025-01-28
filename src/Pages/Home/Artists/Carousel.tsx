@@ -25,7 +25,7 @@ const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
       created() {
         setNewLoaded(true);
       },
-      loop: true,
+      loop: false,
     },
     [
       (slider) => {

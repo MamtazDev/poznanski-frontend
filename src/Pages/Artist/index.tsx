@@ -228,7 +228,8 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
            </div>
          </div>)
         }
-         
+        
+  
           <div className="mt-8">
             <PaginationBar selectedPage={selectedPage} setSelectedPage={setSelectedPage} pages={pages} entriesPerPage={0} setEntriesPerPage={function (value: React.SetStateAction<number>): void {
               throw new Error("Function not implemented.");
