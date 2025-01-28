@@ -49,29 +49,27 @@ export const profileUpdateRequest = async (
   nickname: string,
   profilePicture: string | null
 ) => {
-  const formData = new FormData();
-  formData.append("nickname", nickname);
-
-  if (profilePicture) {
-    formData.append("profilePicture", profilePicture); // Append the image URL to formData
-  }
+  const reqData = {
+    nickname: nickname,
+    profilePicture: profilePicture,
+  };
 
   const path = `/auth/users/${_id}`;
-  await apiPutReq(path, formData, true); // Send the PUT request
+  await apiPutReq(path, reqData);
 };
 
 export const profilePicRequest = async (file: File): Promise<string> => {
   const formData = new FormData();
   formData.append("image", file);
-  const path = "/upload"; // Corrected path if needed
+  const path = "/upload";
   const response = await apiPostReq(path, formData, true);
-  // Assuming the response returns a 'fileUrl' field
-  return response.fileUrl; // Adjusted this line to match the response format
+  return response.fileUrl;
 };
 
 export const verifyEmailRequest = async (token: string) => {
   await apiPostReq(`auth/verify-email/${token}`, {}, false);
 };
+
 // news
 export const createArticleRequest = async (articleData: FormData) => {
   await apiPostReq("news/create-unknown", articleData, true);
