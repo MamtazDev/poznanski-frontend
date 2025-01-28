@@ -1,24 +1,21 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import { Avatar } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { PageBasicProps } from "../../AppMain";
 import BreadCrumb from "../../Components/BreadCrumb";
 import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
-import PaginationBar from "../../Components/PaginationBar";
-import { apiGetReq } from "../../Constant/api-functions";
 import Layout from "../../Components/Layout";
+import PaginationBar from "../../Components/PaginationBar";
 import { fileUrl } from "../../Constant/config";
-import TVCard from "../../Components/Card/TVCard";
-import { Spinner, Avatar } from "@chakra-ui/react";
 import ArtistsCarousel from "../Home/Artists/Carousel";
-import { useSelector } from "react-redux";
-import { RootState } from "../../reducers";
 import "../mainPageStyle.css";
-import { PageBasicProps } from "../../AppMain";
 
 interface ArtistsData {
   id: string;
   name: string;
   img: string;
   description: string;
+  products: [];
 }
 
 interface InputArtistsData {
@@ -55,6 +52,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     name: "",
     img: "",
     description: "",
+    products:[]
   });
   const [cardData, setCardData] = useState<Products[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -101,60 +99,97 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   apiGetReq("/artist/data", {
+  //     rowsPerPage: filterText ? lineNum * filterCardNum : lineNum,
+  //     curPage: selectedPage,
+  //     filter: filterText,
+  //   })
+  //     .then((res) => {
+  //       const newData: ArtistsData[] = res.products.map((item: InputArtistsData) => ({
+  //         id: item._id,
+  //         name: item.name,
+  //         img: fileUrl + item.profileImg,
+  //         description: item.description,
+  //       }));
+
+  //       const totalPages = Math.ceil(res.all / lineNum);
+  //       setPages(totalPages);
+  //       setArtists(newData);
+  //       setLoading(false);
+  //     })
+  //     .catch(() => setLoading(false));
+  // }, [selectedPage, filterText, filterCardNum, lineNum]);
+
+  // useEffect(() => {
+  //   apiGetReq("/artist/top", {}).then((res) => {
+  //     setArtist({
+  //       id: res.artist[0]._id,
+  //       name: res.artist[0].name,
+  //       img: fileUrl + res.artist[0].profileImg,
+  //       description: res.artist[0].description,
+  //     });
+
+  //     const newData: Products[] = res.products.map((item: InputProducts) => {
+  //       const inputDate = new Date(item.date);
+  //       const formattedDate = `${inputDate.getDate()}/${
+  //         inputDate.getMonth() + 1
+  //       }/${inputDate.getFullYear()}`;
+
+  //       return {
+  //         id: item._id,
+  //         title: item.title,
+  //         category: item.category,
+  //         date: formattedDate,
+  //         location: item.location,
+  //         img: fileUrl + item.img,
+  //       };
+  //     });
+
+  //     setCardData(newData);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    setLoading(true);
-    apiGetReq("/artist/data", {
-      rowsPerPage: filterText ? lineNum * filterCardNum : lineNum,
-      curPage: selectedPage,
-      filter: filterText,
-    })
-      .then((res) => {
-        const newData: ArtistsData[] = res.products.map((item: InputArtistsData) => ({
-          id: item._id,
-          name: item.name,
-          img: fileUrl + item.profileImg,
-          description: item.description,
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("http://localhost:8000/api/artist");
+        const jsonData = await response.json();
+  
+
+        const newArtists = jsonData.data.map((item: any) => ({
+          id: item.artist._id,
+          name: item.artist.name,
+          img: fileUrl + item.artist.profileImg, 
+          description: item.artist.description,
+          products: item.products
         }));
-
-        const totalPages = Math.ceil(res.all / lineNum);
-        setPages(totalPages);
-        setArtists(newData);
+  
+        setArtists(newArtists);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
         setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [selectedPage, filterText, filterCardNum, lineNum]);
-
-  useEffect(() => {
-    apiGetReq("/artist/top", {}).then((res) => {
-      setArtist({
-        id: res.artist[0]._id,
-        name: res.artist[0].name,
-        img: fileUrl + res.artist[0].profileImg,
-        description: res.artist[0].description,
-      });
-
-      const newData: Products[] = res.products.map((item: InputProducts) => {
-        const inputDate = new Date(item.date);
-        const formattedDate = `${inputDate.getDate()}/${
-          inputDate.getMonth() + 1
-        }/${inputDate.getFullYear()}`;
-
-        return {
-          id: item._id,
-          title: item.title,
-          category: item.category,
-          date: formattedDate,
-          location: item.location,
-          img: fileUrl + item.img,
-        };
-      });
-
-      setCardData(newData);
-    });
+      }
+    };
+  
+    fetchData();
   }, []);
+  
+
+  console.log("konikka :", artists)
 
   return (
     <Layout themeMode={themeMode} type={type}>
+       {/* {artists.map((item) => (
+    <div key={item.id} className="w-full">
+      <Avatar src={item.img} />
+      <div className="text-xl">{item.name}</div>
+      <div className="text-sm text-gray-500">{item.description}</div>
+    </div>
+  ))} */}
       <div className="flex justify-center">
         <div className="container">
           {!type && (
@@ -168,7 +203,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           <div className="md:mt-6 mt-4">
             <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
           </div>
-          {filterText ? (
+          {/* {
             loading ? (
               <div className="w-full flex justify-center items-center mt-8" style={{ minHeight: type ? "366px" : "448px" }}>
                 <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="lg" />
@@ -179,7 +214,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   <div key={`main-artist-filter-${idx}`} className="w-full">
                     <Avatar src={item.img} />
                     <div className={`md:text-xl text-md ${themeMode ? "artist-filter-name" : "artist-filter-name-dark"}`} style={{ fontSize: type ? "14px" : "24px" }}>
-                      {item.name}
+                      {item.name}  
                     </div>
                     <div className={`${themeMode ? "artist-filter-description" : "artist-filter-description-dark"}`} style={{ fontSize: type ? "12px" : "21px" }}>
                       54 Songs
@@ -188,28 +223,31 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 ))}
               </div>
             )
-          ) : (
-            <div>
-              <div className={`artists-body w-full p-6 md:p-12 md:mt-20 mt-6 ${!themeMode && "artists-body-dark"}`}>
-                {artist && (
-                  <div className="flex items-start w-full">
-                    <Avatar size={window.innerWidth < 768 ? "lg" : "2xl"} src={artist.img} />
-                    <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
-                      <div className={`artist-name md:text-xl text-md ${!themeMode && "title-dark-color"}`}>
-                        {artist.name}
-                      </div>
-                      <div className="artist-description" style={{ fontSize: !type ? "16px" : "12px" }}>
-                        {artist.description}
-                      </div>
-                    </div>
-                  </div>
-                )}
-                <div className="md:pr-16">
-                  {cardData.length > 0 && <ArtistsCarousel cardNum={cardNum} cardData={cardData} />}
-                </div>
-              </div>
-            </div>
-          )}
+          } */}
+        {
+          artists.map(artist => <div>
+            <div className={`artists-body w-full p-6 md:p-12 md:mt-20 mt-6 ${!themeMode && "artists-body-dark"}`}>
+               <div className="flex items-start w-full">
+                 <Avatar size={window.innerWidth < 768 ? "lg" : "2xl"} src={artist.img} />
+                 <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
+                   <div className={`artist-name md:text-xl text-md ${!themeMode && "title-dark-color"}`}>
+                     {artist.name} 
+                   </div>
+                   <div className="artist-description" style={{ fontSize: !type ? "16px" : "12px" }}>
+                     {artist.description}
+                   </div>
+                 </div>
+               </div>
+            
+             <div className="md:pr-16">
+               {artist.products.length > 0 && <ArtistsCarousel cardNum={cardNum} cardData={cardData} />}
+             </div>
+           </div>
+         </div>)
+        }
+         
+            
+        
           <div className="mt-8">
             <PaginationBar selectedPage={selectedPage} setSelectedPage={setSelectedPage} pages={pages} entriesPerPage={0} setEntriesPerPage={function (value: React.SetStateAction<number>): void {
               throw new Error("Function not implemented.");
