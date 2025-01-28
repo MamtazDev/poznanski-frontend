@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 
 const PopUp = ({ handleClosePopup } : any) => {
-  const [quantity, setQuantity] = useState(10);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [quantity, setQuantity] = useState<number>(10);
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [selectedSort, setSelectedSort] = useState<string | null>("A to Z");
+
+  const handleSortSelection = (sortOption: string) => {
+    setSelectedSort(sortOption);
+  };
 
   return (
     <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex justify-center items-center">
@@ -21,10 +26,20 @@ const PopUp = ({ handleClosePopup } : any) => {
             Sort by
           </label>
           <div className="flex items-center gap-2">
-            <button className="flex-1 p-2 text-center bg-[#5A1073] text-white rounded-md">
+            <button   onClick={() => handleSortSelection("A to Z")}
+              className={`flex-1 p-2 text-center rounded-md ${
+                selectedSort === "A to Z"
+                  ? "bg-[#5A1073] text-white"
+                  : "border border-gray-300"
+              }`}>
               <span> A to Z</span>
             </button>
-            <button className="flex-1 p-2 text-center border border-gray-300 rounded-md">
+            <button onClick={() => handleSortSelection("Z to A")}
+              className={`flex-1 p-2 text-center rounded-md ${
+                selectedSort === "Z to A"
+                  ? "bg-[#5A1073] text-white"
+                  : "border border-gray-300"
+              }`}>
               Z to A
             </button>
           </div>
