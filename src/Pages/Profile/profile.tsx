@@ -109,7 +109,7 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
 
   return (
     <Layout themeMode={themeMode}>
-      <Box className="container h-[100vh] mx-auto">
+      <Box className="container  mx-auto mt-10">
         <div className="flex gap-8 justify-center items-center">
           {/* Sidebar */}
           <Box

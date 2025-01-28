@@ -156,7 +156,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
               <ContentTitle titleType="VIDEOS" title="Materials" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} />
+              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText}/>
             </div>
             <div
               className={`md:mt-12 mt-8`}

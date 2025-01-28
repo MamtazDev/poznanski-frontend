@@ -45,6 +45,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+
   useEffect(() => {
     const checkDeviceSize = () => {
       setIsSmallDevice(window.innerWidth < 768); // Adjust the breakpoint as needed
@@ -122,9 +123,11 @@ const NavBar: React.FC<NavBarProps> = (props) => {
     setIsSearchExpanded(expanded);
   };
 
+
+
   return (
     <Fragment>
-      <div className={`Nav-bar w-full z-50 shadow-xl`}>
+      <div className={`Nav-bar  w-full z-50 shadow-xl`}>
         <div
           className={`Nav-bar-top ${!props.themeMode && "Nav-bar-top-dark"} flex place-items-center justify-center`}
         >
@@ -145,7 +148,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
               </Link>
               <SearchBar
                 onSearchStateChange={handleSearchStateChange}
-                themeMode={true}
+                themeMode={props.themeMode}
                 isSmallDevice={isSmallDevice}
               />
               <button

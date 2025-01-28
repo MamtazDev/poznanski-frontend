@@ -13,7 +13,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, themeMode, type }) => {
   return (
-    <div className={`${type ? 'pt-28' : 'pt-32'}`}>
+    <div className={`${type ? 'pt-28' : 'pt-0'}`}>
       {children}
       <div className="middle-back md:mt-28 mt-12 flex justify-center items-center">
         <div className="md:h-40 h-20">

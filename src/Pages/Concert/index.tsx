@@ -174,7 +174,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} />
+              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText}/>
             </div>
             <div className="md:mt-16">
               {/* <Carousel>

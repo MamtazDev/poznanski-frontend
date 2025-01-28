@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "./style.css";
 import PopUp from "./PopUp";
 
 interface FilterInputProps {
-  type?: boolean;
+  type: boolean;
+  filterText: string;
+  setFilterText: React.Dispatch<React.SetStateAction<string>>;
 }
-
-const FilterInput: React.FC<FilterInputProps> = ({ type }) => {
+const FilterInput: React.FC<FilterInputProps> = ({ type,filterText, setFilterText  }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+    console.log(themeMode, "theme pai nai ")
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
 
@@ -21,6 +23,10 @@ const FilterInput: React.FC<FilterInputProps> = ({ type }) => {
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilterText(e.target.value);
   };
 
   return (
@@ -68,6 +74,7 @@ const FilterInput: React.FC<FilterInputProps> = ({ type }) => {
           <input
             className="ml-2.5 ml-peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline-none"
             placeholder="Search Anything"
+            onChange={handleInputChange}
           ></input>
           <div
             className={`w-0 border h-full`}
@@ -137,7 +144,7 @@ const FilterInput: React.FC<FilterInputProps> = ({ type }) => {
           </button>
         </div>
         {isPopupOpen && (
-          <PopUp handleClosePopup={handleClosePopup}/>
+          <PopUp handleClosePopup={handleClosePopup} themeMode={themeMode}/>
         )}
       </div>
     </>

@@ -1,0 +1,224 @@
+{
+  "products" :[
+    {
+      "id": "1",
+      "title": "Top Music Video",
+      "img": "https://via.placeholder.com/150",
+      "category": "Music",
+      "date": "January 20, 2024",
+      "link": "#",
+      "location": "USA",
+      "artist": "John Doe",
+      "star": 5
+    },
+    {
+      "id": "2",
+      "title": "Radio Hit Show",
+      "img": "https://via.placeholder.com/150",
+      "category": "Radio",
+      "date": "February 10, 2024",
+      "link": "#",
+      "location": "Canada",
+      "artist": "Jane Smith",
+      "star": 4
+    },
+    {
+      "id": "3",
+      "title": "Top TV Drama",
+      "img": "https://via.placeholder.com/150",
+      "category": "Drama",
+      "date": "March 5, 2024",
+      "link": "#",
+      "location": "UK",
+      "artist": "Emily Clark",
+      "star": 5
+    },
+    {
+      "id": "4",
+      "title": "Late Night Show",
+      "img": "https://via.placeholder.com/150",
+      "category": "Talk Show",
+      "date": "April 15, 2024",
+      "link": "#",
+      "location": "Australia",
+      "artist": "Chris Evans",
+      "star": 4
+    },
+    {
+      "id": "5",
+      "title": "Global Music Awards",
+      "img": "https://via.placeholder.com/150",
+      "category": "Awards",
+      "date": "May 20, 2024",
+      "link": "#",
+      "location": "USA",
+      "artist": "Adele",
+      "star": 5
+    },
+    {
+      "id": "6",
+      "title": "Trending Pop Hits",
+      "img": "https://via.placeholder.com/150",
+      "category": "Music",
+      "date": "June 10, 2024",
+      "link": "#",
+      "location": "Canada",
+      "artist": "Bruno Mars",
+      "star": 5
+    },
+    {
+      "id": "7",
+      "title": "Classic Radio Hour",
+      "img": "https://via.placeholder.com/150",
+      "category": "Radio",
+      "date": "July 25, 2024",
+      "link": "#",
+      "location": "UK",
+      "artist": "Diana Ross",
+      "star": 4
+    },
+    {
+      "id": "8",
+      "title": "Comedy Night Special",
+      "img": "https://via.placeholder.com/150",
+      "category": "Comedy",
+      "date": "August 5, 2024",
+      "link": "#",
+      "location": "Australia",
+      "artist": "Kevin Hart",
+      "star": 5
+    },
+    {
+      "id": "9",
+      "title": "Action Movie Awards",
+      "img": "https://via.placeholder.com/150",
+      "category": "Awards",
+      "date": "September 15, 2024",
+      "link": "#",
+      "location": "USA",
+      "artist": "Tom Cruise",
+      "star": 5
+    },
+    {
+      "id": "10",
+      "title": "Jazz Evening Show",
+      "img": "https://via.placeholder.com/150",
+      "category": "Music",
+      "date": "October 20, 2024",
+      "link": "#",
+      "location": "Canada",
+      "artist": "Miles Davis",
+      "star": 5
+    },
+    {
+      "id": "11",
+      "title": "Romantic Movie Marathon",
+      "img": "https://via.placeholder.com/150",
+      "category": "Drama",
+      "date": "November 12, 2024",
+      "link": "#",
+      "location": "UK",
+      "artist": "Emma Watson",
+      "star": 4
+    },
+    {
+      "id": "12",
+      "title": "Epic Fantasy Show",
+      "img": "https://via.placeholder.com/150",
+      "category": "Fantasy",
+      "date": "December 5, 2024",
+      "link": "#",
+      "location": "Australia",
+      "artist": "Peter Jackson",
+      "star": 5
+    },
+    {
+      "id": "13",
+      "title": "Sci-Fi Spectacular",
+      "img": "https://via.placeholder.com/150",
+      "category": "Sci-Fi",
+      "date": "January 10, 2025",
+      "link": "#",
+      "location": "USA",
+      "artist": "Elon Musk",
+      "star": 5
+    },
+    {
+      "id": "14",
+      "title": "Indie Music Fest",
+      "img": "https://via.placeholder.com/150",
+      "category": "Music",
+      "date": "February 22, 2025",
+      "link": "#",
+      "location": "Canada",
+      "artist": "Billie Eilish",
+      "star": 4
+    },
+    {
+      "id": "15",
+      "title": "Drama Queen Play",
+      "img": "https://via.placeholder.com/150",
+      "category": "Drama",
+      "date": "March 18, 2025",
+      "link": "#",
+      "location": "UK",
+      "artist": "Helen Mirren",
+      "star": 5
+    },
+    {
+      "id": "16",
+      "title": "Adventure Story Hour",
+      "img": "https://via.placeholder.com/150",
+      "category": "Adventure",
+      "date": "April 2, 2025",
+      "link": "#",
+      "location": "Australia",
+      "artist": "Chris Hemsworth",
+      "star": 5
+    },
+    {
+      "id": "17",
+      "title": "Pop Icon Tribute",
+      "img": "https://via.placeholder.com/150",
+      "category": "Tribute",
+      "date": "May 25, 2025",
+      "link": "#",
+      "location": "USA",
+      "artist": "Michael Jackson",
+      "star": 5
+    },
+    {
+      "id": "18",
+      "title": "Radio Legends",
+      "img": "https://via.placeholder.com/150",
+      "category": "Radio",
+      "date": "June 8, 2025",
+      "link": "#",
+      "location": "Canada",
+      "artist": "Howard Stern",
+      "star": 4
+    },
+    {
+      "id": "19",
+      "title": "Historical Drama Series",
+      "img": "https://via.placeholder.com/150",
+      "category": "Drama",
+      "date": "July 10, 2025",
+      "link": "#",
+      "location": "UK",
+      "artist": "Colin Firth",
+      "star": 5
+    },
+    {
+      "id": "20",
+      "title": "Comedy Star Awards",
+      "img": "https://via.placeholder.com/150",
+      "category": "Comedy",
+      "date": "August 30, 2025",
+      "link": "#",
+      "location": "Australia",
+      "artist": "Amy Schumer",
+      "star": 4
+    }
+  ] 
+} 
