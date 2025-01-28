@@ -22,13 +22,15 @@ interface Product {
 }
 
 const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-  const [selectedPage, setSelectedPage] = useState<number>(1); // Changed type to number
+  const [selectedPage, setSelectedPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(12);
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<Product[]>([]);
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
+  const [displayData, setDisplayData] = useState<Product[]>([]);
+  const [entriesPerPage, setEntriesPerPage] = useState<number>(5);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,8 +73,20 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     };
   }, []);
 
-  // Calculate total pages
-  const pages = Math.ceil(cardData.length / rowsPerPage);
+ 
+  useEffect(() => {
+    const startIdx = (selectedPage - 1) * entriesPerPage;
+    const endIdx = startIdx + entriesPerPage;
+    setDisplayData(cardData.slice(startIdx, endIdx));
+  }, [selectedPage, entriesPerPage, cardData]);
+
+
+  const handleEntriesChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setEntriesPerPage(Number(e.target.value));
+    setSelectedPage(1); 
+  };
+
+  const pages = Math.ceil(cardData.length / entriesPerPage);
 
   return (
     <>
@@ -117,7 +131,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     cardNum === 2 && "grid-cols-2"
                   } gap-4 py-5 mb-16`}
                 >
-                  {cardData.map((item, index) => (
+                  {displayData.map((item, index) => (
                     <div key={`main-video-card-${index}`} className="w-full">
                       <TVCard
                         type={type ? "vertical" : "horizontal"}
@@ -133,7 +147,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <div
                 className={`flex ${type ? "justify-center" : "justify-end"}`}
               >
-                <PaginationBar
+                {/* <PaginationBar
                   selectedPage={selectedPage}
                   setSelectedPage={setSelectedPage}
                   pages={pages}
@@ -143,6 +157,13 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   ): void {
                     throw new Error("Function not implemented.");
                   }}
+                /> */}
+                <PaginationBar
+                  selectedPage={selectedPage}
+                  setSelectedPage={setSelectedPage}
+                  pages={pages}
+                  entriesPerPage={entriesPerPage}
+                  setEntriesPerPage={setEntriesPerPage}
                 />
               </div>
             </div>
