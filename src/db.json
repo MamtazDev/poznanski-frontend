@@ -1,0 +1,123 @@
+[
+    {
+      "title": "Amazing Art Piece 1",
+      "description": "A stunning visual representation of modern art.",
+      "youTube": "https://youtube.com/example1",
+      "artists": ["63f84e1e1d1f23a1f0c8b123"],
+      "userId": "63f84e1e1d1f23a1f0c8b124",
+      "tags": "art, modern, design",
+      "date": "2025-01-01T00:00:00.000Z",
+      "confirmed": true,
+      "confirmationToken": "token123",
+      "commentsSection": {}
+    },
+    {
+      "title": "Masterpiece of the Century",
+      "description": "An incredible blend of colors and emotion.",
+      "youTube": "https://youtube.com/example2",
+      "artists": ["63f84e1e1d1f23a1f0c8b125"],
+      "userId": "63f84e1e1d1f23a1f0c8b126",
+      "tags": "masterpiece, century, emotion",
+      "date": "2025-01-02T00:00:00.000Z",
+      "confirmed": false,
+      "confirmationToken": "token124",
+      "commentsSection": {}
+    },
+    {
+      "title": "The Sound of Visuals",
+      "description": "Art inspired by the beauty of sound.",
+      "youTube": "https://youtube.com/example3",
+      "artists": ["63f84e1e1d1f23a1f0c8b127"],
+      "userId": "63f84e1e1d1f23a1f0c8b128",
+      "tags": "sound, visuals, beauty",
+      "date": "2025-01-03T00:00:00.000Z",
+      "confirmed": true,
+      "confirmationToken": "token125",
+      "commentsSection": {}
+    },
+    {
+      "title": "Color Symphony",
+      "description": "A vibrant explosion of colors.",
+      "youTube": "https://youtube.com/example4",
+      "artists": ["63f84e1e1d1f23a1f0c8b129"],
+      "userId": "63f84e1e1d1f23a1f0c8b130",
+      "tags": "color, symphony, vibrant",
+      "date": "2025-01-04T00:00:00.000Z",
+      "confirmed": false,
+      "confirmationToken": "token126",
+      "commentsSection": {}
+    },
+    {
+      "title": "The Abstract World",
+      "description": "A dive into the abstract realms of creativity.",
+      "youTube": "https://youtube.com/example5",
+      "artists": ["63f84e1e1d1f23a1f0c8b131"],
+      "userId": "63f84e1e1d1f23a1f0c8b132",
+      "tags": "abstract, creativity, dive",
+      "date": "2025-01-05T00:00:00.000Z",
+      "confirmed": true,
+      "confirmationToken": "token127",
+      "commentsSection": {}
+    },
+    {
+      "title": "Nature's Canvas",
+      "description": "Art influenced by the beauty of nature.",
+      "youTube": "https://youtube.com/example6",
+      "artists": ["63f84e1e1d1f23a1f0c8b133"],
+      "userId": "63f84e1e1d1f23a1f0c8b134",
+      "tags": "nature, canvas, beauty",
+      "date": "2025-01-06T00:00:00.000Z",
+      "confirmed": false,
+      "confirmationToken": "token128",
+      "commentsSection": {}
+    },
+    {
+      "title": "Urban Expressions",
+      "description": "A showcase of urban creativity.",
+      "youTube": "https://youtube.com/example7",
+      "artists": ["63f84e1e1d1f23a1f0c8b135"],
+      "userId": "63f84e1e1d1f23a1f0c8b136",
+      "tags": "urban, creativity, showcase",
+      "date": "2025-01-07T00:00:00.000Z",
+      "confirmed": true,
+      "confirmationToken": "token129",
+      "commentsSection": {}
+    },
+    {
+      "title": "Shades of Serenity",
+      "description": "A calming piece full of serene colors.",
+      "youTube": "https://youtube.com/example8",
+      "artists": ["63f84e1e1d1f23a1f0c8b137"],
+      "userId": "63f84e1e1d1f23a1f0c8b138",
+      "tags": "serenity, shades, calm",
+      "date": "2025-01-08T00:00:00.000Z",
+      "confirmed": false,
+      "confirmationToken": "token130",
+      "commentsSection": {}
+    },
+    {
+      "title": "Timeless Creations",
+      "description": "Art that transcends time.",
+      "youTube": "https://youtube.com/example9",
+      "artists": ["63f84e1e1d1f23a1f0c8b139"],
+      "userId": "63f84e1e1d1f23a1f0c8b140",
+      "tags": "timeless, creation, transcend",
+      "date": "2025-01-09T00:00:00.000Z",
+      "confirmed": true,
+      "confirmationToken": "token131",
+      "commentsSection": {}
+    },
+    {
+      "title": "Echoes of Imagination",
+      "description": "Let your imagination run wild.",
+      "youTube": "https://youtube.com/example10",
+      "artists": ["63f84e1e1d1f23a1f0c8b141"],
+      "userId": "63f84e1e1d1f23a1f0c8b142",
+      "tags": "echoes, imagination, wild",
+      "date": "2025-01-10T00:00:00.000Z",
+      "confirmed": false,
+      "confirmationToken": "token132",
+      "commentsSection": {}
+    }
+   
+  ]
