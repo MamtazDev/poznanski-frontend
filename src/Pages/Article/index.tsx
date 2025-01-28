@@ -41,6 +41,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   );
   const [selectedPage, setSelectedPage] = useState<number>(currentPage);
   const [cardNum, setCardNum] = useState<number>(4);
+   const [filterText, setFilterText] = useState<string>("");
   const [loadNexPage, setLoadNextPage] = useState<boolean>(false);
   const loadNextPageElementRef = React.createRef<HTMLDivElement>();
   const lastVisitedId = useSelector((state: RootState) =>
@@ -133,7 +134,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <ContentTitle titleType="NEWS" title="See Our Latest News" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} />
+              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
             </div>
 
             <div

@@ -166,7 +166,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <ContentTitle titleType="TOP HITS" title="Our Top Artists" />
           </div>
           <div className="md:mt-6 mt-4">
-            <FilterInput type={type} />
+            <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
           </div>
           {filterText ? (
             loading ? (
