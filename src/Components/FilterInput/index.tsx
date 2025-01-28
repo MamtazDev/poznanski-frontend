@@ -10,6 +10,7 @@ interface FilterInputProps {
 
 const FilterInput: React.FC<FilterInputProps> = ({ type }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+    console.log(themeMode, "theme pai nai ")
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
 
@@ -137,7 +138,7 @@ const FilterInput: React.FC<FilterInputProps> = ({ type }) => {
           </button>
         </div>
         {isPopupOpen && (
-          <PopUp handleClosePopup={handleClosePopup}/>
+          <PopUp handleClosePopup={handleClosePopup} themeMode={themeMode}/>
         )}
       </div>
     </>
