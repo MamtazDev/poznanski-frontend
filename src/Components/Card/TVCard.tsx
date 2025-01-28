@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import { Card, Image } from "@chakra-ui/react";
+import { Card } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { openPlayer } from "../../reducers/PlayerReducer";
-import "./style.css";
 import { useDispatch } from "react-redux";
 
 interface News {
@@ -21,6 +20,7 @@ const TVCard: React.FC<News> = ({ type, img, title, feature, link }) => {
   const handlePlay = () => {
     dispatch(openPlayer(link));
   };
+
   return (
     <div className="product-card1 flex w-full">
       <Card
@@ -40,19 +40,28 @@ const TVCard: React.FC<News> = ({ type, img, title, feature, link }) => {
         }
         className="transition-all duration-300 ease-out w-full h-pull"
       >
-        {/* <CardBody> */}
         {type === "horizontal" ? (
           <div className="flex flex-col justify-between w-full h-full">
             <div>
               <div
                 className={`tv-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-36 relative z-10 ${!themeMode && "dark-bg-color"}`}
               >
-                <Image
-                  src={img}
-                  className="cursor-pointer object-cover h-full w-full"
-                  alt={img}
-                  borderRadius="lg"
-                />
+                {img.endsWith(".mp4") ? (
+                  <video
+                    src={img}
+                    className="cursor-pointer object-cover h-full w-full"
+                    controls
+                    autoPlay
+                    loop
+                    muted
+                  />
+                ) : (
+                  <img
+                    src={img}
+                    className="cursor-pointer object-cover h-full w-full"
+                    alt={img}
+                  />
+                )}
                 <div
                   className="absolute w-10 h-10 bottom-3 right-3 cursor-pointer z-100"
                   onClick={handlePlay}
@@ -115,12 +124,6 @@ const TVCard: React.FC<News> = ({ type, img, title, feature, link }) => {
         ) : (
           <div className="flex h-full">
             <div className="h-full w-20 relative overflow-hidden">
-              <Image
-                src={img}
-                className="cursor-pointer w-full h-full object-cover"
-                alt={img}
-                borderRadius="md"
-              />
               <div
                 className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
                 onClick={handlePlay}
@@ -197,7 +200,6 @@ const TVCard: React.FC<News> = ({ type, img, title, feature, link }) => {
             </div>
           </div>
         )}
-        {/* </CardBody> */}
       </Card>
     </div>
   );

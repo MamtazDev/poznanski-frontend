@@ -10,6 +10,7 @@ import { PageBasicProps } from "../../AppMain";
 import PaginationBar from "../../Components/PaginationBar";
 
 interface Product {
+  youTube: string;
   id: string;
   title: string;
   img: string;
@@ -36,9 +37,10 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:5000/products");
+        const response = await fetch("http://localhost:8000/api/radio");
         const data = await response.json();
         setCardData(data);
+        console.log(data, "radio data")
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -146,7 +148,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     <div key={`main-video-card-${index}`} className="w-full">
                       <TVCard
                         type={type ? "vertical" : "horizontal"}
-                        img={item.img}
+                        img={item.youTube}
                         feature={item.title}
                         title={item.artist}
                         link={item.link}
