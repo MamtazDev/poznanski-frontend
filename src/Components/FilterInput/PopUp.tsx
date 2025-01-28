@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-const PopUp = ({ handleClosePopup,themeMode } : any) => {
-  console.log(themeMode , "popupppppp")
+const PopUp = ({ handleClosePopup, themeMode }: any) => {
+  console.log(themeMode, "popupppppp");
   const [quantity, setQuantity] = useState<number>(10);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
@@ -13,45 +13,63 @@ const PopUp = ({ handleClosePopup,themeMode } : any) => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex justify-center items-center">
-      <div className={`w-full max-w-[750px] rounded-lg shadow-lg p-6 relative ${themeMode ? "bg-white" : "bg-black"}`}>
+      <div
+        className={`w-full max-w-[750px] rounded-lg shadow-lg p-6 relative ${themeMode ? "bg-white" : "bg-black"}`}
+      >
         <button
           onClick={handleClosePopup}
           className={`absolute top-4 right-4 text-gray-500 `}
         >
           ✖
         </button>
-        <h2 className={`text-xl font-semibold mb-6 text-center ${themeMode ? "text-black" : "text-white"}`}>Filters</h2>
+        <h2
+          className={`text-xl font-semibold mb-6 text-center ${themeMode ? "text-black" : "text-white"}`}
+        >
+          Filters
+        </h2>
 
         <div className="mb-8">
-          <label className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}>
+          <label
+            className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}
+          >
             Sort by
           </label>
           <div className="flex items-center gap-2">
-            <button   onClick={() => handleSortSelection("A to Z")}
+            <button
+              onClick={() => handleSortSelection("A to Z")}
               className={`flex-1 p-2 text-center rounded-md ${
                 selectedSort === "A to Z"
                   ? "bg-[#5A1073] text-white"
-                  : "border border-gray-300"
-              }`}>
+                  : `border border-gray-300 ${themeMode ? "text-black" : "text-white"}`
+              }`}
+            >
               <span> A to Z</span>
             </button>
-            <button onClick={() => handleSortSelection("Z to A")}
+            <button
+              onClick={() => handleSortSelection("Z to A")}
               className={`flex-1 p-2 text-center rounded-md ${
                 selectedSort === "Z to A"
                   ? "bg-[#5A1073] text-white"
-                  : "border border-gray-300"
-              }`}>
+                  : `border border-gray-300 ${themeMode ? "text-black" : "text-white"}`
+              }`}
+            >
               Z to A
             </button>
           </div>
         </div>
 
         <div className="mb-8">
-          <label className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}>
+          <label
+            className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}
+          >
             Quantity
           </label>
           <div className="flex items-center gap-4">
-            <span className={`text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}>10</span>
+            <span
+              className={`text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}
+            >
+              10
+            </span>
             <input
               type="range"
               min="10"
@@ -63,15 +81,23 @@ const PopUp = ({ handleClosePopup,themeMode } : any) => {
                 background: `linear-gradient(to right, #5A1073 ${((quantity - 10) / 90) * 100}%, #F0EFF4 ${((quantity - 10) / 90) * 100}%)`,
               }}
             />
-            <span className={`text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}>100</span>
+            <span
+              className={`text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}
+            >
+              100
+            </span>
           </div>
-          <div className={`text-center mt-2 text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}>
+          <div
+            className={`text-center mt-2 text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}
+          >
             {quantity}
           </div>
         </div>
 
         <div className="mb-8">
-          <label className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}>
+          <label
+            className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}
+          >
             Album Name
           </label>
           <input
@@ -82,7 +108,9 @@ const PopUp = ({ handleClosePopup,themeMode } : any) => {
         </div>
 
         <div className="mb-8">
-          <label className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}>
+          <label
+            className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}
+          >
             Date
           </label>
           <div className="flex items-center gap-2">
@@ -92,7 +120,11 @@ const PopUp = ({ handleClosePopup,themeMode } : any) => {
               onChange={(e) => setStartDate(e.target.value)}
               className={`flex-1 border rounded-[8px] p-2 text-sm focus:ring-2  focus:outline-none ${themeMode ? "bg-white border-[#D9D9D9] focus:ring-[#5A1073]" : "bg-gray-400 border-gray-600"}`}
             />
-            <span className={`text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}>-</span>
+            <span
+              className={`text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}
+            >
+              -
+            </span>
             <input
               type="date"
               value={endDate}
@@ -109,7 +141,7 @@ const PopUp = ({ handleClosePopup,themeMode } : any) => {
           >
             Cancel
           </button>
-          <button className={`px-6 py-2 text-white bg-[#5A1073] rounded-md`}>
+          <button className={`px-6 py-2 text-white bg-[#5A1073] rounded-md`} onClick={handleClosePopup}>
             Apply Filters
           </button>
         </div>
