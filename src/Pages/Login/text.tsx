@@ -1,240 +1,202 @@
-import React, {useEffect} from 'react';
-import {PageBasicProps} from '../../AppMain';
-import Layout from '../../Components/Layout';
-import Input from '../../Components/TextField/Input';
-import {Button} from '@chakra-ui/react';
-import {Typography} from '@mui/material';
-import {useForm} from 'react-hook-form';
-import {apiPostReq} from '../../Constant/api-functions';
+import React, { useState, useRef } from "react";
 import {
-	checkIfLoggedIn,
-	loginRequest,
-	registerRequest,
-	verifyEmailRequest,
-} from '../../Constant/api-requests';
-import PromiseBasedToast, {
-	usePromiseBasedToast,
-	usePromiseToast,
-} from '../../Components/Toast/Toast';
-import {useLocation, useNavigate, useParams} from 'react-router-dom';
-import {useDispatch} from 'react-redux';
-import {setUserLoggedIn} from '../../reducers/user';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../reducers';
+  Box,
+  VStack,
+  HStack,
+  Text,
+  Avatar,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  FormControl,
+  FormLabel,
+  Input,
+  Textarea,
+  Button,
+} from "@chakra-ui/react";
+import Defaultimg from "../../assets/png/profileImg1.png";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCookie } from "../../utils/auth";
+import { logout } from "../../reducers/user";
+import { logoutRequest } from "../../Constant/api-requests";
+import Layout from "../../Components/Layout";
 
-interface SubmitUserForm {
-	email: string;
-	password: string;
-	passwordRepeat: string;
-	nickname: string;
+interface RootState {
+  user: {
+    name: string;
+    bio: string;
+  }; // Replace with actual user state type
 }
 
-export const Login: React.FC<PageBasicProps> = ({themeMode, type}) => {
-	const user = useSelector((state: RootState) => state.user.isLoggedIn);
-	const {token} = useParams<{token: string}>();
-	const location = useLocation();
-	const navigate = useNavigate();
-	const dispatch = useDispatch();
-	const [creatingAccount, setCreatingAccount] =
-		React.useState<boolean>(false);
+const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
+  const userStore = useSelector((state: RootState) => state.user);
+  const [profileImage, setProfileImage] = useState<string>(Defaultimg);
+  const [name, setName] = useState<string>(userStore.name || "Your Name");
+  const [bio, setBio] = useState<string>(userStore.bio || "Your bio goes here...");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const dispatch = useDispatch();
 
-	const {
-		register,
-		handleSubmit,
-		formState: {errors},
-		reset,
-	} = useForm<SubmitUserForm>({
-		defaultValues: {
-			email: '',
-			nickname: '',
-			password: '',
-			passwordRepeat: '',
-		},
-		mode: 'all',
-	});
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          setProfileImage(reader.result);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-	const sendUserData = async (data: Partial<SubmitUserForm>) => {
-		const {email, nickname, password, passwordRepeat} = data;
-		if (creatingAccount && password !== passwordRepeat) {
-			alert('Hasła nie są takie same');
-		} else if (creatingAccount && password === passwordRepeat) {
-			try {
-				await registerRequest(`${password}`, `${email}`, `${nickname}`);
-			} finally {
-				navigate('/login', {replace: true});
-			}
-		} else if (nickname && password) {
-			try {
-				await loginRequest(password, nickname);
-				const user = await checkIfLoggedIn();
-				dispatch(setUserLoggedIn(user));
-			} finally {
-				location.state ? navigate(location.state) : navigate('/');
-				reset();
-			}
-		}
-	};
+  const handleLogout = () => {
+    deleteCookie("accessToken");
+    deleteCookie("refreshToken");
+    dispatch(logout());
+    logoutRequest();
+  };
 
-	const {wrappedSubmit} = usePromiseBasedToast({
-		handleSubmit,
-		onSubmit: sendUserData,
-		toastMessages: {
-			success: {title: 'Login successful', description: 'Welcome back!'},
-			error: {
-				title: 'Zalogowanie nie powiodło się',
-				description: 'Nieprawidłowe dane logowania!',
-			},
-			loading: {title: 'Logging in', description: 'Please wait'},
-		},
-	});
-	const {showPromiseToast} = usePromiseToast({});
-	const verifyEmailWithNotification = (token: string) => {
-		showPromiseToast(async () => await verifyEmailRequest(token), {
-			success: {
-				title: 'Email verified',
-				description: 'You can now log in',
-			},
-			error: {
-				title: 'Email verification failed',
-				description: 'Invalid token',
-			},
-			loading: {title: 'Verifying email', description: 'Please wait'},
-		});
-	};
+  return (
+    <Layout themeMode={themeMode}>
+      <Box className="container h-[100vh] mx-auto">
+        <div className="flex gap-8 justify-center items-center">
+          {/* Sidebar */}
+          <Box
+            className={`p-6 w-[300px] rounded-lg border ${
+              themeMode ? "bg-gray-100 text-white" : "bg-gray-800 text-black"
+            }`}
+          >
+            <div className="flex flex-col items-center space-y-6">
+              <Avatar size="3xl" src={profileImage} mb={4} />
+              <button
+                onClick={onOpen}
+                className={`submit-btn ${
+                  themeMode ? "submit-btn" : "submit-btn-dark"
+                } flex place-items-center w-full cursor-pointer`}
+              >
+                Edit Profile
+              </button>
+              <Button onClick={handleLogout} colorScheme="red" size="sm" width="full">
+                Log Out
+              </Button>
+            </div>
+          </Box>
 
-	useEffect(() => {
-		if (user) {
-			navigate('/');
-		} else if (token) {
-			verifyEmailWithNotification(token);
-			navigate('/login', {replace: true});
-		}
-	}, []);
+          {/* Main Content */}
+          <Box flex={1} p={8}>
+            <h2
+              className={`text-2xl mb-6 font-semibold ${
+                themeMode ? "text-black" : "text-white"
+              }`}
+            >
+              Public Profile
+            </h2>
+            <VStack spacing={6} align="stretch">
+              <FormControl>
+                <FormLabel
+                  className={`mb-6 font-semibold text-2xl ${
+                    themeMode ? "text-black" : "text-white"
+                  }`}
+                >
+                  Name
+                </FormLabel>
+                <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your name"
+                  className={`text-black focus:outline-none ${
+                    themeMode ? "text-black" : "text-white"
+                  }`}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel
+                  className={`text-2xl mb-6 font-semibold ${
+                    themeMode ? "text-black" : "text-white"
+                  }`}
+                >
+                  Bio
+                </FormLabel>
+                <Textarea
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  placeholder="Write something about yourself..."
+                  minH="32"
+                  className={`${themeMode ? "text-black" : "text-white"}`}
+                />
+              </FormControl>
+            </VStack>
+          </Box>
+        </div>
 
-	return (
-		<Layout type={type} themeMode={themeMode}>
-			<form onSubmit={wrappedSubmit}>
-				<div className='flex w-full justify-center mt-20'>
-					<div
-						className={`${themeMode ? 'border border-solid' : 'bg-[#242526]'} w-[500px] shadow-lg rounded-2xl px-6 py-4`}
-					>
-						{creatingAccount ? (
-							<div className='flex flex-col justify-between h-full'>
-								<Input
-									register={register}
-									label='email'
-									name='email'
-									type={type}
-									error={errors.email?.message}
-								/>
-								<Input
-									register={register}
-									label='ksywa'
-									name='nickname'
-									type={type}
-									error={errors.nickname?.message}
-								/>
-								<Input
-									register={register}
-									label='hasło'
-									name='password'
-									type={type}
-									error={errors.password?.message}
-								/>
-								<Input
-									register={register}
-									label='powtórz hasło'
-									name='passwordRepeat'
-									type={type}
-									error={errors.passwordRepeat?.message}
-								/>
-								<Button
-									className='mt-3'
-									type='submit'
-									variant='ghost'
-									colorScheme={
-										themeMode ? 'blackAlpha' : 'whiteAlpha'
-									}
-								>
-									Załóż konto
-								</Button>
-								<p
-									className={`mt-3 ${
-										themeMode ? 'text-black' : 'text-white'
-									}`}
-								>
-									Masz konto?
-								</p>
-								<Button
-									onClick={() => setCreatingAccount(false)}
-									variant='ghost'
-									colorScheme={
-										themeMode ? 'blackAlpha' : 'whiteAlpha'
-									}
-								>
-									Zaloguj się
-								</Button>
-							</div>
-						) : (
-							<div className='flex flex-col justify-between h-full'>
-								<div className='flex flex-col gap-3'>
-									<Input
-										register={register}
-										label='email / ksywa'
-										name='nickname'
-										type={type}
-										error={errors.nickname?.message}
-									/>
-									<Input
-										register={register}
-										label='hasło'
-										name='password'
-										type={type}
-										error={errors.password?.message}
-									/>
-
-									<Button
-										className='mt-6'
-										type='submit'
-										variant='ghost'
-										colorScheme={
-											themeMode
-												? 'blackAlpha'
-												: 'whiteAlpha'
-										}
-									>
-										Zaloguj się
-									</Button>
-								</div>
-								<div className='flex flex-col'>
-									<p
-										className={` mt-8 ${
-											themeMode
-												? 'text-black'
-												: 'text-white'
-										}`}
-									>
-										lub
-									</p>
-									<Button
-										onClick={() => setCreatingAccount(true)}
-										variant='ghost'
-										colorScheme={
-											themeMode
-												? 'blackAlpha'
-												: 'whiteAlpha'
-										}
-									>
-										Załóż konto
-									</Button>
-								</div>
-							</div>
-						)}
-					</div>
-				</div>
-			</form>
-		</Layout>
-	);
+        {/* Edit Profile Modal */}
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Edit Profile</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <VStack spacing={4}>
+                <FormControl>
+                  <FormLabel>Profile Picture</FormLabel>
+                  <HStack>
+                    <Avatar size="md" src={profileImage} />
+                    <Button
+                      onClick={() => fileInputRef.current?.click()}
+                      colorScheme="blue"
+                    >
+                      Upload Image
+                    </Button>
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      ref={fileInputRef}
+                      display="none"
+                    />
+                  </HStack>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Name</FormLabel>
+                  <Input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Enter your name"
+                    className={`px-3 py-4 ${
+                      themeMode ? "text-white" : "text-black"
+                    }`}
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Bio</FormLabel>
+                  <Textarea
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    placeholder="Write something about yourself..."
+                    minH="32"
+                  />
+                </FormControl>
+              </VStack>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                Save Changes
+              </Button>
+              <Button variant="ghost" onClick={onClose}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Box>
+    </Layout>
+  );
 };
 
-export default Login;
+export default ProfilePage;

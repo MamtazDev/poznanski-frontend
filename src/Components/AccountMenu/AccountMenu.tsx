@@ -116,7 +116,7 @@ export const AccountMenu: React.FC<{
 								filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
 								mt: 1.5,
 								'& .MuiAvatar-root': {
-									width: 32,
+									width: 35,
 									height: 32,
 									ml: -0.5,
 									mr: 1,
@@ -148,7 +148,7 @@ export const AccountMenu: React.FC<{
 									position: 'absolute',
 									top: 0,
 									right: 14,
-									width: 10,
+									width: 15,
 									height: 10,
 									bgcolor: themeMode ? 'background.paper' : 'black',
 									transform: 'translateY(-50%) rotate(45deg)',
@@ -161,28 +161,16 @@ export const AccountMenu: React.FC<{
 					anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
 				>
 					<MenuItem onClick={handleClose}>
-					<UserAvatar /> Profile
+					<Link to='/profile' className='flex gap-2 items-center'><UserAvatar /> Profile</Link>
 					</MenuItem>
-					{/* <MenuItem onClick={handleClose}>
-						<Avatar /> My account
-					</MenuItem> */}
 					<Divider />
 					<MenuItem onClick={handleClose}>
-						<ListItemIcon>
-							{/* <PersonAdd fontSize="small" /> */}
-						</ListItemIcon>
-						Tablica
+						<Link to='/notification'>powiadomienie</Link>
 					</MenuItem>
 					<MenuItem onClick={handleClose}>
-						<ListItemIcon>
-							{/* <Settings fontSize="small" /> */}
-						</ListItemIcon>
 						Ustawienia
 					</MenuItem>
 					<MenuItem onClick={handleLogout}>
-						<ListItemIcon>
-							{/* <Logout fontSize="small" /> */}
-						</ListItemIcon>
 						Wyloguj
 					</MenuItem>
 				</Menu>
