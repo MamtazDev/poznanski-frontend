@@ -116,7 +116,7 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
             className={`p-6 w-[300px] rounded-lg border ${themeMode ? "bg-gray-100 text-white" : "bg-gray-800 text-black"
               }`}>
             <div className="flex flex-col items-center space-y-6">
-              <Avatar size="3xl" src={profileImage} mb={4} />
+              <Avatar size="2xl" src={profileImage} mb={4} />
               <button
                 style={{
                   width: 250,
