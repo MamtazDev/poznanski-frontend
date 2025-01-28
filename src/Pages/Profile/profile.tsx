@@ -44,7 +44,15 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
   const userStore = useSelector((state: RootState) => state.user);
   const userInfo = userStore?.user;
   const navigate = useNavigate();
-
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const {
+    isOpen: isResetOpen,
+    onOpen: onResetOpen,
+    onClose: onResetClose,
+  } = useDisclosure();
   // Load initial data from userInfo
   useEffect(() => {
     if (userInfo) {
@@ -84,23 +92,47 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
     navigate("/login");
   };
 
+  const handleResetPassword = () => {
+    if (newPassword !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    if (!currentPassword || !newPassword) {
+      setError("All fields are required");
+      return;
+    }
+    setError(null);
+    console.log("Password reset request sent");
+    // Add API call logic here
+    onResetClose();
+  };
+
   return (
     <Layout themeMode={themeMode}>
       <Box className="container h-[100vh] mx-auto">
         <div className="flex gap-8 justify-center items-center">
           {/* Sidebar */}
           <Box
-            className={`p-6 w-[300px] rounded-lg border ${
-              themeMode ? "bg-gray-100 text-white" : "bg-gray-800 text-black"
-            }`}>
+            className={`p-6 w-[300px] rounded-lg border ${themeMode ? "bg-gray-100 text-white" : "bg-gray-800 text-black"
+              }`}>
             <div className="flex flex-col items-center space-y-6">
               <Avatar size="3xl" src={profileImage} mb={4} />
               <button
+                style={{
+                  width: 250,
+                }
+                }
                 onClick={onOpen}
-                className={`submit-btn ${
-                  themeMode ? "submit-btn" : "submit-btn-dark"
-                } flex place-items-center w-full cursor-pointer`}>
+                className={`submit-btn ${themeMode ? "submit-btn" : "submit-btn-dark"
+                  } flex place-items-center w-full cursor-pointer`}>
                 Edit Profile
+              </button>
+              <button
+                className={`reset-btn ${themeMode ? "reset-btn" : "reset-btn-dark"
+                  } flex place-items-center w-full cursor-pointer`}
+                onClick={onResetOpen}
+              >
+                Reset Password
               </button>
               <Button
                 onClick={handleLogout}
@@ -115,33 +147,29 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
           {/* Main Content */}
           <Box flex={1} p={8}>
             <h2
-              className={`text-2xl mb-6 font-semibold ${
-                themeMode ? "text-black" : "text-white"
-              }`}>
+              className={`text-2xl mb-6 font-semibold ${themeMode ? "text-black" : "text-white"
+                }`}>
               Public Profile
             </h2>
             <VStack spacing={6} align="stretch">
               <FormControl>
                 <FormLabel
-                  className={`mb-6 font-semibold text-2xl ${
-                    themeMode ? "text-black" : "text-white"
-                  }`}>
+                  className={`mb-6 font-semibold text-2xl ${themeMode ? "text-black" : "text-white"
+                    }`}>
                   Name
                 </FormLabel>
                 <Input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter your name"
-                  className={`text-black focus:outline-none ${
-                    themeMode ? "text-black" : "text-white"
-                  }`}
+                  className={`text-black focus:outline-none ${themeMode ? "text-black" : "text-white"
+                    }`}
                 />
               </FormControl>
               <FormControl>
                 <FormLabel
-                  className={`text-2xl mb-6 font-semibold ${
-                    themeMode ? "text-black" : "text-white"
-                  }`}>
+                  className={`text-2xl mb-6 font-semibold ${themeMode ? "text-black" : "text-white"
+                    }`}>
                   Bio
                 </FormLabel>
                 <Textarea
@@ -211,6 +239,56 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
             </ModalFooter>
           </ModalContent>
         </Modal>
+        {/* reset modal  */}
+        <div className="flex justify-center pt-28">
+          <Modal isOpen={isResetOpen} onClose={onResetClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Reset Password</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <VStack spacing={4}>
+                  <FormControl>
+                    <FormLabel>Current Password</FormLabel>
+                    <Input
+                      type="password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      placeholder="Enter current password"
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>New Password</FormLabel>
+                    <Input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Enter new password"
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Confirm New Password</FormLabel>
+                    <Input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Confirm new password"
+                    />
+                  </FormControl>
+                  {error && <p className="text-red-500">{error}</p>}
+                </VStack>
+              </ModalBody>
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={handleResetPassword}>
+                  Reset Password
+                </Button>
+                <Button variant="ghost" onClick={onResetClose}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </div>
       </Box>
     </Layout>
   );
