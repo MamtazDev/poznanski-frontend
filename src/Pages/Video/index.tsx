@@ -88,6 +88,17 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   const pages = Math.ceil(cardData.length / entriesPerPage);
 
+  useEffect(() => {
+    const filteredData = cardData.filter((product) =>
+      product.title.toLowerCase().includes(filterText.toLowerCase())
+    );
+  
+    const startIdx = (selectedPage - 1) * entriesPerPage;
+    const endIdx = startIdx + entriesPerPage;
+    setDisplayData(filteredData.slice(startIdx, endIdx));
+  }, [filterText, selectedPage, entriesPerPage, cardData]);
+  
+
   return (
     <>
       <Layout type={type} themeMode={themeMode}>
@@ -104,7 +115,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <ContentTitle titleType="TOP HITS" title="TV/RADIO" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} />
+              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
             </div>
             <div
               className={`md:mt-12 mt-8`}
