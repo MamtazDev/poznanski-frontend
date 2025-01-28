@@ -15,7 +15,13 @@ interface ArtistsData {
   name: string;
   img: string;
   description: string;
-  products: [];
+  products: [{
+    title: string,
+    location: string;
+    date: string;
+    category: string;
+    img: string;
+  }];
 }
 
 interface InputArtistsData {
@@ -52,7 +58,12 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     name: "",
     img: "",
     description: "",
-    products:[]
+    products:[{title: "",
+      location: "",
+      date: "",
+      category: "",
+      img: "",
+    }]
   });
   const [cardData, setCardData] = useState<Products[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -179,17 +190,10 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   }, []);
   
 
-  console.log("konikka :", artists)
+  console.log("konikka  :", artists)
 
   return (
     <Layout themeMode={themeMode} type={type}>
-       {/* {artists.map((item) => (
-    <div key={item.id} className="w-full">
-      <Avatar src={item.img} />
-      <div className="text-xl">{item.name}</div>
-      <div className="text-sm text-gray-500">{item.description}</div>
-    </div>
-  ))} */}
       <div className="flex justify-center">
         <div className="container">
           {!type && (
@@ -203,27 +207,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           <div className="md:mt-6 mt-4">
             <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
           </div>
-          {/* {
-            loading ? (
-              <div className="w-full flex justify-center items-center mt-8" style={{ minHeight: type ? "366px" : "448px" }}>
-                <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="lg" />
-              </div>
-            ) : (
-              <div className={`grid ${filterCardNum === 4 && "grid-cols-4"} ${filterCardNum === 3 && "grid-cols-3"} ${filterCardNum === 2 && "grid-cols-2"} gap-4 py-5`}>
-                {artists.map((item, idx) => (
-                  <div key={`main-artist-filter-${idx}`} className="w-full">
-                    <Avatar src={item.img} />
-                    <div className={`md:text-xl text-md ${themeMode ? "artist-filter-name" : "artist-filter-name-dark"}`} style={{ fontSize: type ? "14px" : "24px" }}>
-                      {item.name}  
-                    </div>
-                    <div className={`${themeMode ? "artist-filter-description" : "artist-filter-description-dark"}`} style={{ fontSize: type ? "12px" : "21px" }}>
-                      54 Songs
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )
-          } */}
         {
           artists.map(artist => <div>
             <div className={`artists-body w-full p-6 md:p-12 md:mt-20 mt-6 ${!themeMode && "artists-body-dark"}`}>
@@ -240,14 +223,12 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                </div>
             
              <div className="md:pr-16">
-               {artist.products.length > 0 && <ArtistsCarousel cardNum={cardNum} cardData={cardData} />}
+               {artist.products.length > 0 && <ArtistsCarousel cardNum={cardNum} cardData={artist.products} />}
              </div>
            </div>
          </div>)
         }
          
-            
-        
           <div className="mt-8">
             <PaginationBar selectedPage={selectedPage} setSelectedPage={setSelectedPage} pages={pages} entriesPerPage={0} setEntriesPerPage={function (value: React.SetStateAction<number>): void {
               throw new Error("Function not implemented.");

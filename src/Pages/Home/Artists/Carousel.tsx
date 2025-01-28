@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import MaterialCard from "../../../Components/Card/MaterialCard2";
-import "./style.css";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
+import React, { useState } from "react";
 import Arrow from "../../../Components/ArrowBtn/HorizontalArrowBtn";
+import MaterialCard from "../../../Components/Card/MaterialCard2";
+import "./style.css";
 
 interface CarouselProps {
   cardNum: number;
@@ -13,7 +13,7 @@ interface CarouselProps {
     img: string;
     date: string;
     location: string;
-    link?: string;
+    // link?: string;
   }[];
 }
 
