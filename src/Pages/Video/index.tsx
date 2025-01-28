@@ -30,61 +30,21 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Dummy data
-  const dummyData: Product[] = [
-    {
-      id: "1",
-      title: "Top Music Video",
-      img: "https://via.placeholder.com/150",
-      category: "Music",
-      date: "January 20, 2024",
-      link: "#",
-      location: "USA",
-      artist: "John Doe",
-      star: 5,
-    },
-    {
-      id: "2",
-      title: "Radio Hit Show",
-      img: "https://via.placeholder.com/150",
-      category: "Radio",
-      date: "February 10, 2024",
-      link: "#",
-      location: "Canada",
-      artist: "Jane Smith",
-      star: 4,
-    },
-    {
-      id: "3",
-      title: "Top TV Drama",
-      img: "https://via.placeholder.com/150",
-      category: "Drama",
-      date: "March 5, 2024",
-      link: "#",
-      location: "UK",
-      artist: "Emily Clark",
-      star: 5,
-    },
-    {
-      id: "4",
-      title: "Late Night Show",
-      img: "https://via.placeholder.com/150",
-      category: "Talk Show",
-      date: "April 15, 2024",
-      link: "#",
-      location: "Australia",
-      artist: "Chris Evans",
-      star: 4,
-    },
-  ];
-
   useEffect(() => {
-    setLoading(true);
-    // Simulate API call with dummy data
-    setTimeout(() => {
-      setCardData(dummyData); // Set dummy data here
-      setLoading(false);
-    }, 1000); // Simulate 1 second delay
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("http://localhost:5000/products");
+        const data = await response.json();
+        setCardData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -119,7 +79,13 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       <Layout type={type} themeMode={themeMode}>
         <div className="flex justify-center">
           <div className="container">
-            {type ? "" : <div className="md:mt-12 mt-8"><BreadCrumb /></div>}
+            {type ? (
+              ""
+            ) : (
+              <div className="md:mt-12 mt-8">
+                <BreadCrumb />
+              </div>
+            )}
             <div className="md:mt-7 mt-10">
               <ContentTitle titleType="TOP HITS" title="TV/RADIO" />
             </div>
@@ -164,14 +130,21 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   ))}
                 </div>
               )}
-               <div className={`flex ${type ? "justify-center" : "justify-end"}`}>
-                    <PaginationBar
+              <div
+                className={`flex ${type ? "justify-center" : "justify-end"}`}
+              >
+                <PaginationBar
                   selectedPage={selectedPage}
                   setSelectedPage={setSelectedPage}
-                  pages={pages} entriesPerPage={0} setEntriesPerPage={function (value: React.SetStateAction<number>): void {
+                  pages={pages}
+                  entriesPerPage={0}
+                  setEntriesPerPage={function (
+                    value: React.SetStateAction<number>
+                  ): void {
                     throw new Error("Function not implemented.");
-                  } }              />
-               </div>
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
