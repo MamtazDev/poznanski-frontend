@@ -48,6 +48,26 @@
   background-color: #3BD6C6;
   color: #5A1073;
 }
+.reset-btn {
+  height: 40px;
+  flex-shrink: 0;
+  color: #fff;
+  text-align: center;
+  font-family: Urbanist;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: capitalize;
+  justify-content: center;
+  background-color: #683df5;
+  border-radius: 8px;
+}
+
+.reset-btn-dark{
+  background-color: #6b4de8;
+  color: white;
+}
 
 .submit-btn-2 {
     border-radius: 8px;
@@ -159,4 +179,3 @@
     font-weight: 500;
     line-height: normal;
 }
-

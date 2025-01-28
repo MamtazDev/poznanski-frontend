@@ -1,8 +1,6 @@
-import {add} from 'lodash';
-import {apiBaseUrl} from './config';
-import axios, {AxiosInstance} from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { getCookie } from '../utils/auth';
-import { fetchCSRF } from './api-requests';
+import { apiBaseUrl } from './config';
 
 export const attachInterceptors = (axiosInstance: AxiosInstance) => {
     axiosInstance.interceptors.response.use(
