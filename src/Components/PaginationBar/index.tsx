@@ -1,6 +1,5 @@
-import { IconButton } from "@chakra-ui/react";
 import React, { useState, ChangeEvent } from "react";
-import { Input } from "@chakra-ui/react";
+import { IconButton, Input } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import {
@@ -15,13 +14,12 @@ interface PaginationProps {
   setSelectedPage: React.Dispatch<React.SetStateAction<number>>;
   goToPage?: (page: number) => void;
   prevPage?: () => void;
-  nextPage?: () => void; // Make nextPage optional
+  nextPage?: () => void;
   pages: number;
-  totalPages?: number; // Add totalPages here
   entriesPerPage: number;
   setEntriesPerPage: React.Dispatch<React.SetStateAction<number>>;
-
 }
+
 const PaginationBar: React.FC<PaginationProps> = ({
   selectedPage,
   setSelectedPage,
@@ -29,61 +27,63 @@ const PaginationBar: React.FC<PaginationProps> = ({
   goToPage,
   prevPage,
   nextPage,
-  setEntriesPerPage,
   entriesPerPage,
-
+  setEntriesPerPage,
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   const handleDecrease = () => {
     if (selectedPage > 1) {
-      const value = selectedPage - 1;
-      // setSelectedPage(value);
+      setSelectedPage(selectedPage - 1);
       prevPage?.();
     }
-
   };
 
   const handleIncrease = () => {
     if (selectedPage < pages) {
-      const value = selectedPage + 1;
-      // Call nextPage only if it exists
+      setSelectedPage(selectedPage + 1);
       nextPage?.();
     }
   };
 
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSelectedPage(Number(e.target.value));
-    goToPage?.(Number(e.target.value));
+    const page = Math.min(Math.max(Number(e.target.value), 1), pages);
+    setSelectedPage(page);
+    goToPage?.(page);
   };
-
 
   const handleEntriesChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setEntriesPerPage(Number(e.target.value));
-    setSelectedPage(1); // Reset to first page when entries per page change
+    setSelectedPage(1); 
   };
-
 
   return (
     <div className="flex justify-between items-center w-full">
+
       <div className="flex items-center gap-2">
-        <span className={`${themeMode ?"text-[#252733]" : " text-white"}`}>Show</span>
+        <span className={`${themeMode ? "text-[#252733]" : "text-white"}`}>
+          Show
+        </span>
         <select
           value={entriesPerPage}
           onChange={handleEntriesChange}
-          className={`border border-[#E9EBF0] rounded-sm px-2 py-1 ${themeMode ?"text-[#252733] bg-white" : " text-white bg-[#242526]"}`}
+          className={`border border-[#E9EBF0] rounded-sm px-2 py-1 ${
+            themeMode ? "text-[#252733] bg-white" : "text-white bg-[#242526]"
+          }`}
         >
           <option value={5}>5</option>
           <option value={10}>10</option>
           <option value={20}>20</option>
           <option value={50}>50</option>
         </select>
-        <span className={`${themeMode ?"text-[#252733]" : " text-white"}`}>entries</span>
+        <span className={`${themeMode ? "text-[#252733]" : "text-white"}`}>
+          entries
+        </span>
       </div>
+
       <div className="flex gap-2">
         <IconButton
-          aria-label="PrevBtn"
+          aria-label="First Page"
           variant={themeMode ? "outline" : ""}
           icon={
             <BsChevronDoubleLeft
@@ -91,51 +91,49 @@ const PaginationBar: React.FC<PaginationProps> = ({
               color={!themeMode ? "white" : "#6D6E76"}
             />
           }
-          isDisabled={selectedPage === 1 || selectedPage < 1 ? true : false}
+          isDisabled={selectedPage === 1}
           backgroundColor={themeMode ? "#FFF" : "#242526"}
           color={themeMode ? "#252733" : "#FFF"}
-          border={themeMode ? "border: 1px solid #E9EBF0" : "unset"}
+          border={themeMode ? "1px solid #E9EBF0" : "unset"}
           width="40px"
           height="30px"
           onClick={() => setSelectedPage(1)}
         />
         <IconButton
-          aria-label="PrevBtn"
+          aria-label="Previous Page"
           variant={themeMode ? "outline" : ""}
-          isDisabled={selectedPage === 1 || selectedPage < 1 ? true : false}
+          isDisabled={selectedPage === 1}
           icon={
             <BsChevronLeft size={12} color={!themeMode ? "white" : "#6D6E76"} />
           }
-          color={themeMode ? "#FFF" : "#252733 "}
           backgroundColor={themeMode ? "#FFF" : "#242526"}
+          color={themeMode ? "#252733" : "#FFF"}
           border={themeMode ? "1px solid #E9EBF0" : "unset"}
           width="40px"
           height="30px"
-          onClick={() => handleDecrease()}
+          onClick={handleDecrease}
         />
-        <div>
-          <Input
-            value={selectedPage}
-            width={"55px"}
-            height={"30px"}
-            onChange={handleChange}
-            backgroundColor={themeMode ? "#FFF" : "#242526"}
-            color={themeMode ? "#252733" : "#FFF"}
-            border={themeMode ? "1px solid #E9EBF0" : "unset"}
-            textAlign="center"
-          />
-        </div>
+        <Input
+          value={selectedPage}
+          width={"55px"}
+          height={"30px"}
+          onChange={handleChange}
+          backgroundColor={themeMode ? "#FFF" : "#242526"}
+          color={themeMode ? "#252733" : "#FFF"}
+          border={themeMode ? "1px solid #E9EBF0" : "unset"}
+          textAlign="center"
+        />
         <div
-          className={`flex items-center ${themeMode ? "entire-page" : "entire-page-2"}`}
+          className={`flex items-center ${
+            themeMode ? "text-[#252733]" : "text-white"
+          }`}
         >
           of {pages}
         </div>
         <IconButton
-          aria-label="PrevBtn"
+          aria-label="Next Page"
           variant={themeMode ? "outline" : ""}
-          isDisabled={
-            selectedPage === pages || selectedPage > pages ? true : false
-          }
+          isDisabled={selectedPage === pages}
           backgroundColor={themeMode ? "#FFF" : "#242526"}
           color={themeMode ? "#252733" : "#FFF"}
           border={themeMode ? "1px solid #E9EBF0" : "unset"}
@@ -147,10 +145,10 @@ const PaginationBar: React.FC<PaginationProps> = ({
               color={!themeMode ? "white" : "#6D6E76"}
             />
           }
-          onClick={() => handleIncrease()}
+          onClick={handleIncrease}
         />
         <IconButton
-          aria-label="PrevBtn"
+          aria-label="Last Page"
           variant={themeMode ? "outline" : ""}
           icon={
             <BsChevronDoubleRight
@@ -158,9 +156,7 @@ const PaginationBar: React.FC<PaginationProps> = ({
               color={!themeMode ? "white" : "#6D6E76"}
             />
           }
-          isDisabled={
-            selectedPage === pages || selectedPage > pages ? true : false
-          }
+          isDisabled={selectedPage === pages}
           backgroundColor={themeMode ? "#FFF" : "#242526"}
           color={themeMode ? "#252733" : "#FFF"}
           border={themeMode ? "1px solid #E9EBF0" : "unset"}
