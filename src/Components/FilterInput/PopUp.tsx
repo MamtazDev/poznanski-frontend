@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-const PopUp = ({ handleClosePopup } : any) => {
+const PopUp = ({ handleClosePopup,themeMode } : any) => {
+  console.log(themeMode , "popupppppp")
   const [quantity, setQuantity] = useState<number>(10);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
@@ -12,17 +13,17 @@ const PopUp = ({ handleClosePopup } : any) => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white w-full max-w-[750px] rounded-lg shadow-lg p-6 relative">
+      <div className={`w-full max-w-[750px] rounded-lg shadow-lg p-6 relative ${themeMode ? "bg-white" : "bg-black"}`}>
         <button
           onClick={handleClosePopup}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+          className={`absolute top-4 right-4 text-gray-500 `}
         >
           ✖
         </button>
-        <h2 className="text-xl font-semibold mb-6 text-center">Filters</h2>
+        <h2 className={`text-xl font-semibold mb-6 text-center ${themeMode ? "text-black" : "text-white"}`}>Filters</h2>
 
         <div className="mb-8">
-          <label className=" text-sm font-bold text-[#252733] mb-[10px] flex items-start">
+          <label className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}>
             Sort by
           </label>
           <div className="flex items-center gap-2">
@@ -46,11 +47,11 @@ const PopUp = ({ handleClosePopup } : any) => {
         </div>
 
         <div className="mb-8">
-          <label className="text-sm font-bold text-[#252733] mb-[10px] flex items-start">
+          <label className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}>
             Quantity
           </label>
           <div className="flex items-center gap-4">
-            <span className="text-sm font-bold text-[#252733]">10</span>
+            <span className={`text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}>10</span>
             <input
               type="range"
               min="10"
@@ -62,26 +63,26 @@ const PopUp = ({ handleClosePopup } : any) => {
                 background: `linear-gradient(to right, #5A1073 ${((quantity - 10) / 90) * 100}%, #F0EFF4 ${((quantity - 10) / 90) * 100}%)`,
               }}
             />
-            <span className="text-sm font-bold text-[#252733]">100</span>
+            <span className={`text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}>100</span>
           </div>
-          <div className="text-center mt-2 text-sm font-bold text-[#252733]">
+          <div className={`text-center mt-2 text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}>
             {quantity}
           </div>
         </div>
 
         <div className="mb-8">
-          <label className="text-sm font-bold text-[#252733] mb-[10px] flex items-start">
+          <label className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}>
             Album Name
           </label>
           <input
             type="text"
             placeholder="Start typing to see list"
-            className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-[#5A1073] focus:outline-none"
+            className={`w-full border rounded-md p-2 text-sm focus:ring-2 focus:outline-none ${themeMode ? "bg-white border-[#D9D9D9] focus:ring-[#5A1073]" : "bg-gray-400 border-gray-600"}`}
           />
         </div>
 
         <div className="mb-8">
-          <label className="text-sm font-bold text-[#252733] mb-[10px] flex items-start">
+          <label className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}>
             Date
           </label>
           <div className="flex items-center gap-2">
@@ -89,26 +90,26 @@ const PopUp = ({ handleClosePopup } : any) => {
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="flex-1 border border-[#D9D9D9] rounded-[8px] p-2 text-sm focus:ring-2 focus:ring-[#5A1073] focus:outline-none"
+              className={`flex-1 border rounded-[8px] p-2 text-sm focus:ring-2  focus:outline-none ${themeMode ? "bg-white border-[#D9D9D9] focus:ring-[#5A1073]" : "bg-gray-400 border-gray-600"}`}
             />
-            <span className="text-sm font-bold text-[#252733]">-</span>
+            <span className={`text-sm font-bold ${themeMode ? "text-[#252733]" : "text-white"}`}>-</span>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="flex-1 border border-[#D9D9D9] rounded-[8px] p-2 text-sm focus:ring-2 focus:ring-[#5A1073] focus:outline-none"
+              className={`flex-1 border rounded-[8px] p-2 text-sm focus:ring-2 focus:outline-none ${themeMode ? "bg-white border-[#D9D9D9] focus:ring-[#5A1073]" : "bg-gray-400 border-gray-600"}`}
             />
           </div>
         </div>
 
         <div className="flex gap-8 justify-end mt-12">
           <button
-            className="px-6 py-2 text-[#252733]"
+            className={`px-6 py-2 ${themeMode ? "text-[#252733]" : "text-white"}`}
             onClick={handleClosePopup}
           >
             Cancel
           </button>
-          <button className="px-6 py-2 text-white bg-[#5A1073] rounded-md">
+          <button className={`px-6 py-2 text-white bg-[#5A1073] rounded-md`}>
             Apply Filters
           </button>
         </div>
