@@ -121,39 +121,59 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     };
   }, []);
 
-  useEffect(() => {
-    setLoading(true);
-    apiGetReq("/concert", {
-      rowsPerPage: 6,
-      curPage: selectedPage, // This is now a number
-      filter: filterText,
-    })
-      .then((res) => {
-        handleData(res);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-      });
-  }, []);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   apiGetReq("/concert", {
+  //     rowsPerPage: 6,
+  //     curPage: selectedPage, // This is now a number
+  //     filter: filterText,
+  //   })
+  //     .then((res) => {
+  //       handleData(res);
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       setLoading(false);
+  //     });
+  // }, []);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   apiGetReq("/concert", {
+  //     rowsPerPage: 6,
+  //     curPage: selectedPage,
+  //     filter: filterText,
+  //   })
+  //     .then((res) => {
+  //       setLoading(false);
+  //       handleData(res);
+  //     })
+  //     .catch((err) => {
+  //       setLoading(false);
+  //     });
+  // }, [selectedPage, filterText]);
 
   useEffect(() => {
     setLoading(true);
-    apiGetReq("/concert", {
-      rowsPerPage: 6,
-      curPage: selectedPage,
-      filter: filterText,
-    })
-      .then((res) => {
+  
+    fetch("http://localhost:8000/api/concert")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("API Response:", data); 
+  
+        if (data.success) {
+          handleData(data); 
+        }
+  
         setLoading(false);
-        handleData(res);
       })
-      .catch((err) => {
+      .catch((error) => {
+        console.error("Error fetching concerts:", error);
         setLoading(false);
       });
   }, [selectedPage, filterText]);
 
-  console.log("cardData", cardData);
+
 
   return (
     <>
@@ -177,10 +197,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <FilterInput type={type} filterText={filterText} setFilterText={setFilterText}/>
             </div>
             <div className="md:mt-16">
-              {/* <Carousel>
-
-              </Carousel> */}
-
               <Swiper
                 pagination={{
                   dynamicBullets: true,
