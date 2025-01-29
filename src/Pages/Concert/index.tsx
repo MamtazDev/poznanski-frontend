@@ -60,45 +60,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [nonFeaturedProducts, setNonFeaturedProducts] = useState<Product[]>([]);
 
-  // const handleData = (response: any) => {
-  //   let newProducts: Product[] = [];
-  //   const totalPages = Math.ceil(response.all / 6);
-  //   setPages(totalPages); // No need to convert to string
-  //   response.products.forEach((item: inputProducts) => {
-  //     const inputDate1: Date = new Date(item.timeframe.start);
-  //     const inputDate2: Date = new Date(item.timeframe.end);
-  //     const formattedTimeframe =
-  //       inputDate1.getUTCHours() +
-  //       ":" +
-  //       (inputDate1.getUTCMinutes() < 10 ? "0" : "") +
-  //       inputDate1.getUTCMinutes() +
-  //       "-" +
-  //       inputDate2.getUTCHours() +
-  //       ":" +
-  //       (inputDate2.getUTCMinutes() < 10 ? "0" : "") +
-  //       inputDate2.getUTCMinutes();
-  //     const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(
-  //       inputDate1
-  //     );
-  //     const temp: Product = {
-  //       id: item._id,
-  //       name: item.name,
-  //       img: fileUrl + item.img,
-  //       category: item.category,
-  //       month: `${month}`,
-  //       date: `${inputDate1.getDate()}`,
-  //       timeframe: formattedTimeframe,
-  //       link: item.link,
-  //       location: item.location,
-  //       description: item.description,
-  //     };
-  //     newProducts.push(temp);
-  //   });
-  //   setCardData(newProducts);
-    
-  // };
-
-
   const handleData = (response: any) => {
     let newProducts: Product[] = [];
     const totalPages = Math.ceil(response.all / 6);
@@ -174,37 +135,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   apiGetReq("/concert", {
-  //     rowsPerPage: 6,
-  //     curPage: selectedPage, // This is now a number
-  //     filter: filterText,
-  //   })
-  //     .then((res) => {
-  //       handleData(res);
-  //       setLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       setLoading(false);
-  //     });
-  // }, []);
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   apiGetReq("/concert", {
-  //     rowsPerPage: 6,
-  //     curPage: selectedPage,
-  //     filter: filterText,
-  //   })
-  //     .then((res) => {
-  //       setLoading(false);
-  //       handleData(res);
-  //     })
-  //     .catch((err) => {
-  //       setLoading(false);
-  //     });
-  // }, [selectedPage, filterText]);
 
   useEffect(() => {
     setLoading(true);
