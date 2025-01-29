@@ -19,6 +19,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
+import { Link } from "react-router-dom";
 // import ticketImg from "../../assets/png/ticketBanner.png"
 
 interface Product {
@@ -345,10 +346,10 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         </div>
                         {!type && (
                           <div className="md:mt-10 mt-8">
-                            <DetailButton
+                          <Link to={item.link}>  <DetailButton
                               text="buy Tickets Of Concert"
                               btnType="web"
-                            />
+                            /></Link>
                           </div>
                         )}
                       </div>
