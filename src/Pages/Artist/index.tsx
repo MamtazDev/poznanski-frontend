@@ -190,7 +190,12 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   }, []);
   
 
-  console.log("konikka  :", artists)
+  const filteredArtists = artists.filter(
+    (artist) =>
+      artist.name.toLowerCase().includes(filterText.toLowerCase()) ||
+      artist.description.toLowerCase().includes(filterText.toLowerCase())
+  );
+
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -208,7 +213,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
           </div>
         {
-          artists.map(artist => <div>
+          filteredArtists.map(artist => <div>
             <div className={`artists-body w-full p-6 md:p-12 md:mt-20 mt-6 ${!themeMode && "artists-body-dark"}`}>
                <div className="flex items-start w-full">
                  <Avatar size={window.innerWidth < 768 ? "lg" : "2xl"} src={artist.img} />
