@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const PopUp = ({ handleClosePopup, themeMode }: any) => {
   console.log(themeMode, "popupppppp");
@@ -73,6 +73,7 @@ const PopUp = ({ handleClosePopup, themeMode }: any) => {
             <input
               type="range"
               min="10"
+              step ="5"
               max="100"
               value={quantity}
               onChange={(e) => setQuantity(Number(e.target.value))}
@@ -94,7 +95,7 @@ const PopUp = ({ handleClosePopup, themeMode }: any) => {
           </div>
         </div>
 
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <label
             className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}
           >
@@ -105,7 +106,7 @@ const PopUp = ({ handleClosePopup, themeMode }: any) => {
             placeholder="Start typing to see list"
             className={`w-full border rounded-md p-2 text-sm focus:ring-2 focus:outline-none ${themeMode ? "bg-white border-[#D9D9D9] focus:ring-[#5A1073]" : "bg-gray-400 border-gray-600"}`}
           />
-        </div>
+        </div> */}
 
         <div className="mb-8">
           <label

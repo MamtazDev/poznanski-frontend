@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { Spinner } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { PageBasicProps } from "../../AppMain";
 import BreadCrumb from "../../Components/BreadCrumb";
+import MaterialCard from "../../Components/Card/MaterialCard";
 import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
+import Layout from "../../Components/Layout";
 import PaginationBar from "../../Components/PaginationBar";
 import { apiGetReq } from "../../Constant/api-functions";
-import Layout from "../../Components/Layout";
-import { Spinner } from "@chakra-ui/react";
-import MaterialCard from "../../Components/Card/MaterialCard";
 import "../mainPageStyle.css";
-import { PageBasicProps } from "../../AppMain";
 
 interface Product {
   id: string;
@@ -27,6 +27,14 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [cardData, setCardData] = useState<Product[]>([]);
   const [filteredData, setFilteredData] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  
+  
+  const [sortBy, setSortBy] = useState<string>("");
+  const [order, setOrder] = useState<string>("desc");
+  const [startDate, setStartDate] = useState<string>("2025-01-01");
+  const [limit, setLimit] = useState<number>(6);
+  const [endDate, setEndDate] = useState<string>("2025-01-01");
+
 
   const handleData = (response: any) => {
     const materials = response.materials || [];
@@ -50,7 +58,8 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   useEffect(() => {
     setLoading(true);
-    apiGetReq("http://localhost:8000/api/materials", {})
+    // apiGetReq(`http://localhost:8000/api/materials?order=${order}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`, {})
+    apiGetReq(`http://localhost:8000/api/materials?sortBy=title&order=${order}&limit=${limit}&startDate=${startDate}&page=1`, {})
       .then((res) => {
         handleData(res);
         setLoading(false);
@@ -74,6 +83,14 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       filtered.slice((selectedPage - 1) * rowsPerPage, selectedPage * rowsPerPage)
     );
   }, [filterText, cardData, selectedPage, rowsPerPage]);
+
+
+
+
+
+// console.log("filtered data", data)
+
+
 
   return (
     <Layout themeMode={themeMode}>
@@ -105,7 +122,6 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       feature={item.tags}
                       title={item.title}
                       date={item.date}
-                      location={""}
                       link={item.youTube}
                     />
                   </div>

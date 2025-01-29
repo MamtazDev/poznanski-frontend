@@ -36,7 +36,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                       title={cardData[index].title}
                       date={cardData[index].date}
                       link={cardData[index].link}
-                      location={cardData[index].location}
+
                     />
                   </div>
                 )
@@ -63,9 +63,6 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                               title={cardData[idx * cardNum * 2 + index].title}
                               date={cardData[idx * cardNum * 2 + index].date}
                               link={cardData[idx * cardNum * 2 + index].link}
-                              location={
-                                cardData[idx * cardNum * 2 + index].location
-                              }
                             />
                           </div>
                         )
@@ -94,7 +91,6 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                       title={cardData[index].title}
                       date={cardData[index].date}
                       link={cardData[index].link}
-                      location={cardData[index].location}
                     />
                   );
                 }
@@ -120,7 +116,6 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                             title={cardData[idx * 4 + index].title}
                             date={cardData[idx * 4 + index].date}
                             link={cardData[idx * 4 + index].link}
-                            location={cardData[idx * 4 + index].location}
                           />
                         );
                       }

@@ -1,10 +1,9 @@
+import { Card } from "@chakra-ui/react";
 import React from "react";
-import { Card, Image } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { openPlayer } from "../../reducers/PlayerReducer";
 import "./style.css";
-import { useDispatch } from "react-redux";
 
 interface News {
   type: string;
@@ -12,7 +11,6 @@ interface News {
   title: string;
   feature: string;
   date: string;
-  location: string;
   link: string;
 }
 
@@ -22,7 +20,6 @@ const MaterialCard: React.FC<News> = ({
   title,
   feature,
   date,
-  location,
   link,
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
@@ -308,7 +305,6 @@ const MaterialCard: React.FC<News> = ({
                       />
                     </svg>
                   </div>
-                  <div className="mx-1 location2">{location}</div>
                   <div className="mx-1">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
