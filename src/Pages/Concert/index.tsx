@@ -45,6 +45,7 @@ interface inputProducts {
   link: string;
   location: string;
   description: string;
+  isFeatured:boolean
 }
 
 const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
@@ -55,11 +56,56 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [nonFeaturedProducts, setNonFeaturedProducts] = useState<Product[]>([]);
+
+  // const handleData = (response: any) => {
+  //   let newProducts: Product[] = [];
+  //   const totalPages = Math.ceil(response.all / 6);
+  //   setPages(totalPages); // No need to convert to string
+  //   response.products.forEach((item: inputProducts) => {
+  //     const inputDate1: Date = new Date(item.timeframe.start);
+  //     const inputDate2: Date = new Date(item.timeframe.end);
+  //     const formattedTimeframe =
+  //       inputDate1.getUTCHours() +
+  //       ":" +
+  //       (inputDate1.getUTCMinutes() < 10 ? "0" : "") +
+  //       inputDate1.getUTCMinutes() +
+  //       "-" +
+  //       inputDate2.getUTCHours() +
+  //       ":" +
+  //       (inputDate2.getUTCMinutes() < 10 ? "0" : "") +
+  //       inputDate2.getUTCMinutes();
+  //     const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(
+  //       inputDate1
+  //     );
+  //     const temp: Product = {
+  //       id: item._id,
+  //       name: item.name,
+  //       img: fileUrl + item.img,
+  //       category: item.category,
+  //       month: `${month}`,
+  //       date: `${inputDate1.getDate()}`,
+  //       timeframe: formattedTimeframe,
+  //       link: item.link,
+  //       location: item.location,
+  //       description: item.description,
+  //     };
+  //     newProducts.push(temp);
+  //   });
+  //   setCardData(newProducts);
+    
+  // };
+
 
   const handleData = (response: any) => {
     let newProducts: Product[] = [];
     const totalPages = Math.ceil(response.all / 6);
-    setPages(totalPages); // No need to convert to string
+    setPages(totalPages);
+    
+    let featured: Product[] = [];
+    let nonFeatured: Product[] = [];
+
     response.products.forEach((item: inputProducts) => {
       const inputDate1: Date = new Date(item.timeframe.start);
       const inputDate2: Date = new Date(item.timeframe.end);
@@ -73,9 +119,8 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         ":" +
         (inputDate2.getUTCMinutes() < 10 ? "0" : "") +
         inputDate2.getUTCMinutes();
-      const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(
-        inputDate1
-      );
+      const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(inputDate1);
+      
       const temp: Product = {
         id: item._id,
         name: item.name,
@@ -88,9 +133,16 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         location: item.location,
         description: item.description,
       };
-      newProducts.push(temp);
+
+      if (item.isFeatured) {
+        featured.push(temp);
+      } else {
+        nonFeatured.push(temp);
+      }
     });
-    setCardData(newProducts);
+
+    setFeaturedProducts(featured);
+    setNonFeaturedProducts(nonFeatured);
   };
 
   useEffect(() => {
@@ -204,7 +256,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 modules={[Pagination]}
                 className="mySwiper"
               >
-                {cardData.map((item, idx) => (
+                {featuredProducts.map((item, idx) => (
                   <SwiperSlide className="p-2 md:mb-16 mb-8">
                     <div
                       key={`ticket-detail-${idx}`}
@@ -335,7 +387,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 <div
                   className={`${themeMode ? "book-back" : "book-back-dark"}`}
                 >
-                  {cardData.map(
+                  {nonFeaturedProducts.map(
                     (item, idx) =>
                       item &&
                       (!type ? (
