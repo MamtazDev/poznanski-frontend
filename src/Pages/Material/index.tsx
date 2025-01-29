@@ -25,6 +25,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [rowsPerPage, setRowsPerPage] = useState<number>(12);
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<Product[]>([]);
+  const [filteredData, setFilteredData] = useState<Product[]>([]);
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,28 +38,22 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     let newProducts: Product[] = [];
     const pages = Math.ceil(response.materials.length / rowsPerPage);
     setPages(pages.toString());
-    response.materials.map((item: any) => {
-      const inputDate: Date = new Date(item.date);
-      const options: object = {
+
+    newProducts = response.materials.map((item: any) => ({
+      id: item._id,
+      title: item.title,
+      description: item.description,
+      youTube: item.youTube,
+      tags: item.tags,
+      date: new Date(item.date).toLocaleDateString("en-US", {
         year: "numeric",
-        day: "numeric",
         month: "long",
-      };
-      const formattedDate: string = inputDate.toLocaleDateString(
-        "en-US",
-        options
-      );
-      const temp: Product = {
-        id: item._id,
-        title: item.title,
-        description: item.description,
-        youTube: item.youTube,
-        tags: item.tags,
-        date: formattedDate,
-      };
-      newProducts.push(temp);
-    });
+        day: "numeric",
+      }),
+    }));
+
     setCardData(newProducts);
+    setFilteredData(newProducts); 
   };
 
   useEffect(() => {
@@ -66,17 +61,13 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       if (window.innerWidth > 1280) {
         setCardNum(4);
         setLineNum(3);
-      } else {
-        setLineNum(3);
+      } else if (window.innerWidth < 1280) {
         setCardNum(3);
-        if (window.innerWidth < 1024) {
-          setLineNum(3);
-          setCardNum(2);
-          if (window.innerWidth < 768) {
-            setCardNum(1);
-            setLineNum(7);
-          }
-        }
+      } else if (window.innerWidth < 1024) {
+        setCardNum(2);
+      } else if (window.innerWidth < 768) {
+        setCardNum(1);
+        setLineNum(7);
       }
     };
     handleResize();
@@ -98,10 +89,25 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         handleData(res);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setLoading(false);
       });
   }, [selectedPage, rowsPerPage, filterText]);
+
+
+  useEffect(() => {
+    if (filterText) {
+      const filtered = cardData.filter(
+        (item) =>
+          item.title.toLowerCase().includes(filterText.toLowerCase()) ||
+          item.description.toLowerCase().includes(filterText.toLowerCase())
+      );
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(cardData);
+    }
+  }, [filterText, cardData]);
+
 
   return (
     <>
@@ -150,7 +156,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     cardNum === 2 && "grid-cols-2"
                   } gap-4 py-5`}
                 >
-                  {cardData.map((item, index) => (
+                  {filteredData.map((item, index) => (
                     <div key={`main-video-card-${index}`} className="w-full">
                       <MaterialCard
                         type={type ? "vertical" : "horizontal"}
