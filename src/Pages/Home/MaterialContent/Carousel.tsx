@@ -31,7 +31,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                   <div key={`card-${index}-0`} className="w-full">
                     <MaterialCard
                       type="horizontal"
-                      img={cardData[index].img}
+                      video={cardData[index].img}
                       feature={cardData[index].feature}
                       title={cardData[index].title}
                       date={cardData[index].date}
@@ -56,7 +56,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                           <div key={`card-${index}-0`} className="w-full">
                             <MaterialCard
                               type="horizontal"
-                              img={cardData[idx * cardNum * 2 + index].img}
+                              video={cardData[idx * cardNum * 2 + index].img}
                               feature={
                                 cardData[idx * cardNum * 2 + index].feature
                               }
@@ -89,7 +89,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                     <MaterialCard
                       key={`material-carousel-${index}-0-2`}
                       type="vertical"
-                      img={cardData[index].img}
+                      video={cardData[index].img}
                       feature={cardData[index].feature}
                       title={cardData[index].title}
                       date={cardData[index].date}
@@ -115,7 +115,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                           <MaterialCard
                             key={`material-carousel-${index}-${idx}-2`}
                             type="vertical"
-                            img={cardData[idx * 4 + index].img}
+                            video={cardData[idx * 4 + index].img}
                             feature={cardData[idx * 4 + index].feature}
                             title={cardData[idx * 4 + index].title}
                             date={cardData[idx * 4 + index].date}

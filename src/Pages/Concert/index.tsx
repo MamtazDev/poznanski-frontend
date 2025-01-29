@@ -282,7 +282,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         </div>
                         {!type && (
                           <div className="md:mt-10 mt-8">
-                            <Link to={item.link}>
+                            <Link to={item.link} target="_blank">
                               {" "}
                               <DetailButton text="buy Tickets Of Concert" btnType="web" />
                             </Link>

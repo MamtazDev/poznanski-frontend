@@ -50,7 +50,7 @@ const SearchTV = ({themeMode}: any) => {
             <TVCard
               key={index}
               type={news.type}
-              img={news.img}
+              video={news.img}
               title={news.title}
               feature={news.feature}
               link={news.link}

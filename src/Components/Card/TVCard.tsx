@@ -7,13 +7,13 @@ import { useDispatch } from "react-redux";
 
 interface News {
   type: string;
-  img: string;
+  video: string;
   title: string;
   feature: string;
   link: string;
 }
 
-const TVCard: React.FC<News> = ({ type, img, title, feature, link }) => {
+const TVCard: React.FC<News> = ({ type, video, title, feature, link }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
 
@@ -46,22 +46,11 @@ const TVCard: React.FC<News> = ({ type, img, title, feature, link }) => {
               <div
                 className={`tv-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-36 relative z-10 ${!themeMode && "dark-bg-color"}`}
               >
-                {img.endsWith(".mp4") ? (
-                  <video
-                    src={img}
-                    className="cursor-pointer object-cover h-full w-full"
-                    controls
-                    autoPlay
-                    loop
-                    muted
-                  />
-                ) : (
-                  <img
-                    src={img}
-                    className="cursor-pointer object-cover h-full w-full"
-                    alt={img}
-                  />
-                )}
+<video width={320} height={240} controls>
+  <source src={video} type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
                 <div
                   className="absolute w-10 h-10 bottom-3 right-3 cursor-pointer z-100"
                   onClick={handlePlay}

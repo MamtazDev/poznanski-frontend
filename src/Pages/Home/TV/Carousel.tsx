@@ -27,7 +27,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                   <div key={`card-${index}-0`} className="w-full">
                     <TVCard
                       type="horizontal"
-                      img={cardData[index].img}
+                      video={cardData[index].img}
                       feature={cardData[index].feature}
                       title={cardData[index].title}
                       link={cardData[index].link}
@@ -50,7 +50,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                           <div key={`card-${index}-0`} className="w-full">
                             <TVCard
                               type="horizontal"
-                              img={cardData[idx * cardNum * 2 + index].img}
+                              video={cardData[idx * cardNum * 2 + index].img}
                               feature={
                                 cardData[idx * cardNum * 2 + index].feature
                               }
@@ -80,7 +80,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                       <TVCard
                         key={`tv-carousel-${index}-2`}
                         type="vertical"
-                        img={cardData[index].img}
+                        video={cardData[index].img}
                         feature={cardData[index].feature}
                         title={cardData[index].title}
                         link={cardData[index].link}
@@ -109,7 +109,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                             <TVCard
                               key={`tv-carousel-${index}-2`}
                               type="vertical"
-                              img={cardData[idx * 4 + index].img}
+                              video={cardData[idx * 4 + index].img}
                               feature={cardData[idx * 4 + index].feature}
                               title={cardData[idx * 4 + index].title}
                               link={cardData[idx * 4 + index].link}

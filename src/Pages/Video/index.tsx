@@ -148,7 +148,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     <div key={`main-video-card-${index}`} className="w-full">
                       <TVCard
                         type={type ? "vertical" : "horizontal"}
-                        img={item.youTube}
+                        video={item.youTube}
                         feature={item.title}
                         title={item.artist}
                         link={item.link}

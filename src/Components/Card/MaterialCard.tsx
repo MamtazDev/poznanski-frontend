@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 
 interface News {
   type: string;
-  img: string;
+  video: string;
   title: string;
   feature: string;
   date: string;
@@ -18,7 +18,7 @@ interface News {
 
 const MaterialCard: React.FC<News> = ({
   type,
-  img,
+  video,
   title,
   feature,
   date,
@@ -59,12 +59,11 @@ const MaterialCard: React.FC<News> = ({
               <div
                 className={`material-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-48 relative ${!themeMode && "dark-bg-color"}`}
               >
-                <Image
-                  src={img}
-                  className="cursor-pointer object-cover h-full w-full"
-                  alt={img}
-                  borderRadius="lg"
-                />
+              <video width={320} height={240} controls>
+  <source src={video} type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
                 <div
                   className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
                   onClick={handlePlay}
@@ -253,12 +252,11 @@ const MaterialCard: React.FC<News> = ({
         ) : (
           <div className="flex h-full">
             <div className="h-full w-36 relative overflow-hidden">
-              <Image
-                src={img}
-                className="cursor-pointer w-full h-full object-cover"
-                alt={img}
-                borderRadius="md"
-              />
+            <video width={320} height={240} controls>
+  <source src={video} type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
               <div
                 className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
                 onClick={handlePlay}
