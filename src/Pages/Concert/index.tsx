@@ -1,76 +1,79 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
-import BreadCrumb from "../../Components/BreadCrumb";
-import ContentTitle from "../../Components/ContentTitle";
-import FilterInput from "../../Components/FilterInput";
-import PaginationBar from "../../Components/PaginationBar";
-import { apiGetReq } from "../../Constant/api-functions";
-import DetailButton from "../../Components/Buttons/DetailButton";
-import Layout from "../../Components/Layout";
-import { fileUrl } from "../../Constant/config";
-import { Button, Image } from "@chakra-ui/react";
-import { Spinner } from "@chakra-ui/react";
-import Carousel from "../../Components/Carousel";
-import { useSelector } from "react-redux";
-import { RootState } from "../../reducers";
-import "../mainPageStyle.css";
-import { PageBasicProps } from "../../AppMain";
-import { Swiper, SwiperSlide } from "swiper/react";
+import type React from "react"
+import { ChangeEvent, useState, useEffect, useMemo } from "react"
+import BreadCrumb from "../../Components/BreadCrumb"
+import ContentTitle from "../../Components/ContentTitle"
+import FilterInput from "../../Components/FilterInput"
+import PaginationBar from "../../Components/PaginationBar"
+import { apiGetReq } from "../../Constant/api-functions"
+import DetailButton from "../../Components/Buttons/DetailButton"
+import Layout from "../../Components/Layout"
+import { fileUrl } from "../../Constant/config"
+import { Button, Image } from "@chakra-ui/react"
+import { Spinner } from "@chakra-ui/react"
+import Carousel from "../../Components/Carousel"
+import { useSelector } from "react-redux"
+import { RootState } from "../../reducers"
+import "../mainPageStyle.css"
+import type { PageBasicProps } from "../../AppMain"
+import { Swiper, SwiperSlide } from "swiper/react"
 
-import "swiper/css";
-import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
-import { Link } from "react-router-dom";
+import "swiper/css"
+import "swiper/css/pagination"
+import { Pagination } from "swiper/modules"
+import { Link } from "react-router-dom"
 // import ticketImg from "../../assets/png/ticketBanner.png"
 
 interface Product {
-  id: string;
-  name: string;
-  img: string;
-  category: string;
-  month: string;
-  date: string;
-  timeframe: string;
-  link: string;
-  location: string;
-  description: string;
+  id: string
+  name: string
+  img: string
+  category: string
+  month: string
+  date: string
+  timeframe: string
+  link: string
+  location: string
+  description: string
 }
 interface inputProducts {
-  _id: string;
-  name: string;
-  img: string;
-  category: string;
+  _id: string
+  name: string
+  img: string
+  category: string
   timeframe: {
-    start: string | Date;
-    end: string | Date;
-  };
-  link: string;
-  location: string;
-  description: string;
-  isFeatured:boolean
+    start: string | Date
+    end: string | Date
+  }
+  link: string
+  location: string
+  description: string
+  isFeatured: boolean
 }
 
 const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-  const [selectedPage, setSelectedPage] = useState<number>(1);
-  const [pages, setPages] = useState<number>(0);
-  const [filterText, setFilterText] = useState<string>("");
-  const [cardData, setCardData] = useState<Product[]>([]);
-  const [cardNum, setCardNum] = useState<number>(4);
-  const [lineNum, setLineNum] = useState<number>(3);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  const [nonFeaturedProducts, setNonFeaturedProducts] = useState<Product[]>([]);
+  const [selectedPage, setSelectedPage] = useState<number>(1)
+  const [pages, setPages] = useState<number>(0)
+  const [filterText, setFilterText] = useState<string>("")
+  const [cardData, setCardData] = useState<Product[]>([])
+  const [cardNum, setCardNum] = useState<number>(4)
+  const [lineNum, setLineNum] = useState<number>(3)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
+  const [nonFeaturedProducts, setNonFeaturedProducts] = useState<Product[]>([])
+  const [entriesPerPage, setEntriesPerPage] = useState<number>(5)
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
 
   const handleData = (response: any) => {
-    let newProducts: Product[] = [];
-    const totalPages = Math.ceil(response.all / 6);
-    setPages(totalPages);
-    
-    let featured: Product[] = [];
-    let nonFeatured: Product[] = [];
+    const newProducts: Product[] = []
+    const totalPages = Math.ceil(response.all / 6)
+    setPages(totalPages)
+
+    const featured: Product[] = []
+    const nonFeatured: Product[] = []
 
     response.products.forEach((item: inputProducts) => {
-      const inputDate1: Date = new Date(item.timeframe.start);
-      const inputDate2: Date = new Date(item.timeframe.end);
+      const inputDate1: Date = new Date(item.timeframe.start)
+      const inputDate2: Date = new Date(item.timeframe.end)
       const formattedTimeframe =
         inputDate1.getUTCHours() +
         ":" +
@@ -80,9 +83,9 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         inputDate2.getUTCHours() +
         ":" +
         (inputDate2.getUTCMinutes() < 10 ? "0" : "") +
-        inputDate2.getUTCMinutes();
-      const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(inputDate1);
-      
+        inputDate2.getUTCMinutes()
+      const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(inputDate1)
+
       const temp: Product = {
         id: item._id,
         name: item.name,
@@ -94,69 +97,82 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         link: item.link,
         location: item.location,
         description: item.description,
-      };
+      }
 
       if (item.isFeatured) {
-        featured.push(temp);
+        featured.push(temp)
       } else {
-        nonFeatured.push(temp);
+        nonFeatured.push(temp)
       }
-    });
+    })
 
-    setFeaturedProducts(featured);
-    setNonFeaturedProducts(nonFeatured);
-  };
+    setFeaturedProducts(featured)
+    setNonFeaturedProducts(nonFeatured)
+  }
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 1280) {
-        setCardNum(4);
-        setLineNum(3);
+        setCardNum(4)
+        setLineNum(3)
       } else {
-        setLineNum(3);
+        setLineNum(3)
 
-        setCardNum(3);
+        setCardNum(3)
         if (window.innerWidth < 1024) {
-          setLineNum(3);
-          setCardNum(2);
+          setLineNum(3)
+          setCardNum(2)
           if (window.innerWidth < 768) {
-            setCardNum(1);
-            setLineNum(8);
+            setCardNum(1)
+            setLineNum(8)
           }
         }
       }
-    };
-    handleResize();
+    }
+    handleResize()
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize)
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
 
   useEffect(() => {
-    setLoading(true);
-  
+    setLoading(true)
+
     fetch("http://localhost:8000/api/concert")
       .then((res) => res.json())
       .then((data) => {
-        console.log("API Response:", data); 
-  
+        console.log("API Response:", data)
+
         if (data.success) {
-          handleData(data); 
+          handleData(data)
         }
-  
-        setLoading(false);
+
+        setLoading(false)
       })
       .catch((error) => {
-        console.error("Error fetching concerts:", error);
-        setLoading(false);
-      });
-  }, [selectedPage, filterText]);
+        console.error("Error fetching concerts:", error)
+        setLoading(false)
+      })
+  }, [])
 
+  useEffect(() => {
+    const filtered = nonFeaturedProducts.filter(
+      (product) =>
+        product.name.toLowerCase().includes(filterText.toLowerCase()) ||
+        product.description.toLowerCase().includes(filterText.toLowerCase()),
+    )
+    setFilteredProducts(filtered)
+    setPages(Math.ceil(filtered.length / entriesPerPage))
+  }, [nonFeaturedProducts, filterText, entriesPerPage])
 
+  const paginatedProducts = useMemo(() => {
+    const start = (selectedPage - 1) * entriesPerPage
+    const end = start + entriesPerPage
+    return filteredProducts.slice(start, end)
+  }, [filteredProducts, selectedPage, entriesPerPage])
 
   return (
     <>
@@ -171,13 +187,10 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </div>
             )}
             <div className="md:mt-7 mt-10">
-              <ContentTitle
-                titleType="TOP HITS"
-                title="Book Your Spot In Events"
-              />
+              <ContentTitle titleType="TOP HITS" title="Book Your Spot In Events" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText}/>
+              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
             </div>
             <div className="md:mt-16">
               <Swiper
@@ -189,13 +202,10 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               >
                 {featuredProducts.map((item, idx) => (
                   <SwiperSlide className="p-2 md:mb-16 mb-8">
-                    <div
-                      key={`ticket-detail-${idx}`}
-                      className={`grid md:grid-cols-2 grid-cols-1 md:gap-20 gap-6`}
-                    >
+                    <div key={`ticket-detail-${idx}`} className={`grid md:grid-cols-2 grid-cols-1 md:gap-20 gap-6`}>
                       <div className={`relative`}>
                         <Image
-                          // src={item?.img}
+                          // src={item?.img || "/placeholder.svg"}
                           src={"https://i.ibb.co.com/5KchHq8/ticket-Banner.png"}
                           className="cursor-pointer object-cover h-full w-full"
                           alt={item.img}
@@ -209,14 +219,10 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         >
                           {item.name}
                         </div>
-                        <div
-                          className={`${themeMode ? "ticket-detail" : "ticket-detail-dark"} md:mt-6 mt-3`}
-                        >
+                        <div className={`${themeMode ? "ticket-detail" : "ticket-detail-dark"} md:mt-6 mt-3`}>
                           {item.description}
                         </div>
-                        <div
-                          className={`flex md:mt-4 mt-3 ${themeMode ? "" : ""}`}
-                        >
+                        <div className={`flex md:mt-4 mt-3 ${themeMode ? "" : ""}`}>
                           <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -276,10 +282,10 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         </div>
                         {!type && (
                           <div className="md:mt-10 mt-8">
-                          <Link to={item.link}>  <DetailButton
-                              text="buy Tickets Of Concert"
-                              btnType="web"
-                            /></Link>
+                            <Link to={item.link}>
+                              {" "}
+                              <DetailButton text="buy Tickets Of Concert" btnType="web" />
+                            </Link>
                           </div>
                         )}
                       </div>
@@ -289,36 +295,22 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </Swiper>
               {type && (
                 <div className="md:mt-10 mt-8">
-                  <DetailButton
-                    text="buy Tickets Of Concert"
-                    btnType="mobile"
-                  />
+                  <DetailButton text="buy Tickets Of Concert" btnType="mobile" />
                 </div>
               )}
             </div>
 
-            <div
-              className={`md:mt-16 mt-8`}
-              style={{ minHeight: type ? "689px" : "450px", width: "100%" }}
-            >
+            <div className={`md:mt-16 mt-8`} style={{ minHeight: type ? "689px" : "450px", width: "100%" }}>
               {loading ? (
                 <div
                   className="w-full flex justify-center items-center"
                   style={{ minHeight: type ? "689px" : "450px" }}
                 >
-                  <Spinner
-                    thickness="4px"
-                    speed="0.65s"
-                    emptyColor="gray.200"
-                    color="blue.500"
-                    size="lg"
-                  />
+                  <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="lg" />
                 </div>
               ) : (
-                <div
-                  className={`${themeMode ? "book-back" : "book-back-dark"}`}
-                >
-                  {nonFeaturedProducts.map(
+                <div className={`${themeMode ? "book-back" : "book-back-dark"}`}>
+                  {paginatedProducts.map(
                     (item, idx) =>
                       item &&
                       (!type ? (
@@ -327,27 +319,17 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                           style={{ height: 75 }}
                         >
                           <div className="flex items-center">
-                            <div
-                              className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}
-                            >
-                              {item.date}
-                            </div>
-                            <div
-                              className={`ticket-month ${!themeMode && "text-dark-color"}`}
-                            >
+                            <div className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}>{item.date}</div>
+                            <div className={`ticket-month ${!themeMode && "text-dark-color"}`}>
                               <div>{item.month}</div>
                               <div>{item.timeframe}</div>
                             </div>
                           </div>
-                          <div
-                            className={`ticket-type text-center ${!themeMode && "title-dark-color"}`}
-                          >
+                          <div className={`ticket-type text-center ${!themeMode && "title-dark-color"}`}>
                             {item.name}
                           </div>
                           <div className="flex  justify-center items-center">
-                            <div
-                              className={`ticket-category ${!themeMode && "btn-dark-bg-color"}`}
-                            >
+                            <div className={`ticket-category ${!themeMode && "btn-dark-bg-color"}`}>
                               {item.category}
                             </div>
                           </div>
@@ -371,31 +353,18 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                           </div>
                         </div>
                       ) : (
-                        <div
-                          key={`book-mobile-${idx}`}
-                          className={`${idx !== 0 && "ticket-top-border"} p-3`}
-                        >
+                        <div key={`book-mobile-${idx}`} className={`${idx !== 0 && "ticket-top-border"} p-3`}>
                           <div className={`flex justify-between `}>
-                            <div
-                              className={`ticket-date-2 ${!themeMode && "title-dark-color"}`}
-                            >
+                            <div className={`ticket-date-2 ${!themeMode && "title-dark-color"}`}>
                               {item.date} {item.month}
                             </div>
-                            <div
-                              className={`ticket-timeframe ${!themeMode && "title-dark-color"}`}
-                            >
+                            <div className={`ticket-timeframe ${!themeMode && "title-dark-color"}`}>
                               {item.timeframe}
                             </div>
                           </div>
                           <div className="flex justify-between mt-3">
-                            <div
-                              className={`ticket-type-2 ${!themeMode && "title-dark-color"}`}
-                            >
-                              {item.name}
-                            </div>
-                            <div
-                              className={`ticket-category-2 ${!themeMode && "btn-dark-bg-color"}`}
-                            >
+                            <div className={`ticket-type-2 ${!themeMode && "title-dark-color"}`}>{item.name}</div>
+                            <div className={`ticket-category-2 ${!themeMode && "btn-dark-bg-color"}`}>
                               {item.category}
                             </div>
                           </div>
@@ -430,31 +399,26 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                             </Button>
                           </div>
                         </div>
-                      ))
+                      )),
                   )}
                 </div>
               )}
             </div>
-            <div
-              className={`md:mt-16 mt-8 flex ${type ? "justify-center" : "justify-end"}`}
-            >
+            <div className={`md:mt-16 mt-8 flex ${type ? "justify-center" : "justify-end"}`}>
               <PaginationBar
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
                 pages={pages}
-                entriesPerPage={0}
-                setEntriesPerPage={function (
-                  value: React.SetStateAction<number>
-                ): void {
-                  throw new Error("Function not implemented.");
-                }}
+                entriesPerPage={entriesPerPage}
+                setEntriesPerPage={setEntriesPerPage}
               />
             </div>
           </div>
         </div>
       </Layout>
     </>
-  );
-};
+  )
+}
 
-export default ConcertMainPage;
+export default ConcertMainPage
+
