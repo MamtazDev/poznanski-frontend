@@ -30,8 +30,22 @@ const MaterialCard: React.FC<News> = ({
   const dispatch = useDispatch();
 
   const handlePlay = () => {
-    dispatch(openPlayer(link));
-  };
+    dispatch(openPlayer(link))
+  }
+
+
+  const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
+    <div className="relative w-full h-full" style={{ paddingBottom: "56.25%" }}>
+      <iframe
+        src={`${video.replace("watch?v=", "embed/")}`}
+        title={title}
+        className="absolute top-0 left-0 w-full h-full"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      ></iframe>
+    </div>
+  )
 
   return (
     <div className="product-card1 flex w-full">
@@ -59,16 +73,17 @@ const MaterialCard: React.FC<News> = ({
               <div
                 className={`material-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-48 relative ${!themeMode && "dark-bg-color"}`}
               >
-              <video width={320} height={240} controls>
+              {/* <video  controls>
   <source src={video} type="video/mp4" />
   Your browser does not support the video tag.
-</video>
+</video> */}
+<YouTubeEmbed video={video} title={title} />
 
                 <div
                   className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
                   onClick={handlePlay}
                 >
-                  {themeMode ? (
+                  {/* {themeMode ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="58"
@@ -106,7 +121,7 @@ const MaterialCard: React.FC<News> = ({
                         fill="#111217"
                       />
                     </svg>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="flex justify-start mt-4">
@@ -215,10 +230,11 @@ const MaterialCard: React.FC<News> = ({
         ) : (
           <div className="flex h-full">
             <div className="h-full w-36 relative overflow-hidden">
-            <video width={320} height={240} controls>
+            {/* <video width={320} height={240} controls>
   <source src={video} type="video/mp4" />
   Your browser does not support the video tag.
-</video>
+</video> */}
+<YouTubeEmbed video={video} title={title} />
 
               <div
                 className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"

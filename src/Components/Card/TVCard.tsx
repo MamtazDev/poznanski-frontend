@@ -17,10 +17,23 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
 
-  const handlePlay = () => {
-    dispatch(openPlayer(link));
-  };
-
+   const handlePlay = () => {
+     dispatch(openPlayer(link))
+   }
+ 
+ 
+   const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
+     <div className="relative w-full h-full" style={{ paddingBottom: "56.25%" }}>
+       <iframe
+         src={`${video.replace("watch?v=", "embed/")}`}
+         title={title}
+         className="absolute top-0 left-0 w-full h-full"
+         frameBorder="0"
+         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+         allowFullScreen
+       ></iframe>
+     </div>
+   )
   return (
     <div className="product-card1 flex w-full">
       <Card
@@ -46,16 +59,12 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link }) => {
               <div
                 className={`tv-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-36 relative z-10 ${!themeMode && "dark-bg-color"}`}
               >
-<video width={320} height={240} controls>
-  <source src={video} type="video/mp4" />
-  Your browser does not support the video tag.
-</video>
-
+<YouTubeEmbed video={video} title={title} />
                 <div
                   className="absolute w-10 h-10 bottom-3 right-3 cursor-pointer z-100"
                   onClick={handlePlay}
                 >
-                  {themeMode ? (
+                  {/* {themeMode ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="40"
@@ -93,7 +102,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link }) => {
                         fill="#111217"
                       />
                     </svg>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="flex justify-start mt-4">
