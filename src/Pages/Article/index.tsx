@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from "react";
+import { Spinner } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { PageBasicProps } from "../../AppMain";
 import BreadCrumb from "../../Components/BreadCrumb";
+import ProductCard1 from "../../Components/Card/ProductCard1";
 import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
 import Layout from "../../Components/Layout";
-import ProductCard1 from "../../Components/Card/ProductCard1";
-import { Button, Spinner } from "@chakra-ui/react";
-import "../mainPageStyle.css";
-import { useDispatch, useSelector } from "react-redux";
+import { isInViewport } from "../../Constant/helpers";
+import { usePaginatedNews } from "../../hooks/useSWRNews";
 import { RootState } from "../../reducers";
 import {
   addLastVisited,
   getLastPageNumber,
   getLastVisitedId,
 } from "../../reducers/NewsReducer";
-import { isInViewport } from "../../Constant/helpers";
-import DelayedComponent from "../../Components/_utility/DelayedComponent";
-import useBreadCrumb from "../../Components/BreadCrumb";
-import { PageBasicProps } from "../../AppMain";
-import { useParams } from "react-router-dom";
-import { usePaginatedNews } from "../../hooks/useSWRNews";
+import "../mainPageStyle.css";
 
 export const getFirstTag = (tags: string) => {
   return tags.split("#")[0];
@@ -41,7 +38,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   );
   const [selectedPage, setSelectedPage] = useState<number>(currentPage);
   const [cardNum, setCardNum] = useState<number>(4);
-   const [filterText, setFilterText] = useState<string>("");
+  const [filterText, setFilterText] = useState<string>("");
   const [loadNexPage, setLoadNextPage] = useState<boolean>(false);
   const loadNextPageElementRef = React.createRef<HTMLDivElement>();
   const lastVisitedId = useSelector((state: RootState) =>
@@ -123,7 +120,6 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   return (
     <>
-      <h1 className="text-white">Here is will come news data</h1>
       <Layout type={type} themeMode={themeMode}>
         <div className="flex justify-center">
           <div className="container">
