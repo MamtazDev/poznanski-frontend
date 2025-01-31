@@ -1,15 +1,15 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import { Spinner } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import useSWR from "swr";
+import { PageBasicProps } from "../../AppMain";
 import BreadCrumb from "../../Components/BreadCrumb";
+import NewReleaseCard from "../../Components/Card/NewReleaseCard";
 import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
-import PaginationBar from "../../Components/PaginationBar";
-import { apiGetReq } from "../../Constant/api-functions";
 import Layout from "../../Components/Layout";
+import { apiGetReq } from "../../Constant/api-functions";
 import { fileUrl } from "../../Constant/config";
-import NewReleaseCard from "../../Components/Card/NewReleaseCard";
-import { Spinner } from "@chakra-ui/react";
 import "../mainPageStyle.css";
-import { PageBasicProps } from "../../AppMain";
 
 interface Product {
   id: string;
@@ -34,7 +34,7 @@ interface inputProducts {
   star: number;
 }
 
-const AlbumsMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
+const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<string>("1");
   const [pages, setPages] = useState<string>("0");
   const [rowsPerPage, setRowsPerPage] = useState<number>(12);
@@ -106,7 +106,7 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 
   useEffect(() => {
     setLoading(true);
-    apiGetReq("/product", {
+    apiGetReq("/album", {
       rowsPerPage: rowsPerPage,
       curPage: selectedPage,
       filter: filterText,
@@ -122,7 +122,7 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
 
   useEffect(() => {
     setLoading(true);
-    apiGetReq("/product", {
+    apiGetReq("/album", {
       rowsPerPage: rowsPerPage,
       curPage: selectedPage,
       filter: filterText,
@@ -135,6 +135,28 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
         setLoading(false);
       });
   }, [selectedPage, rowsPerPage, filterText]);
+
+
+  let urlEndoint = "http://localhost:8000/api/album"
+  const fetcher = () => fetch(`http://localhost:8000/api/album`).then((res) => res.json());
+
+  const { data, error } = useSWR(`${urlEndoint}`, fetcher);
+
+  const [album, setAlbum] = useState(null);
+
+  useEffect(() => {
+    if (data) {
+      console.log("Fetched data album:", data);
+      setAlbum(data);
+
+      console.log("Title:", data?.title);
+      console.log("Tags:", data?.tags);
+    }
+  }, [data]);
+
+  if (error) return <div>Error loading data.</div>;
+  if (!album) return <div>Loading...</div>;
+
 
   return (
     <>
@@ -152,11 +174,10 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
               <ContentTitle titleType="NEW RELEASES" title="New Releases" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText}/>
+              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
             </div>
+
             <div
-              className={`md:mt-12 mt-8`}
-              style={{ minHeight: type ? "816px" : "1147px", width: "100%" }}
             >
               {loading ? (
                 <div
@@ -173,26 +194,23 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
                 </div>
               ) : (
                 <div
-                  className={`grid ${cardNum === 4 && "grid-cols-4"} ${cardNum === 3 && "grid-cols-3"} ${cardNum === 2 && "grid-cols-2"} gap-4 py-5`}
+                  className={`grid md:grid-cols-4 grid-cols-1 gap-5 mt-10 `}
                 >
-                  {cardData.map(
-                    (item, index) =>
-                      item && (
-                        <div
-                          key={`main-relases-card-${index}`}
-                          className="w-full"
-                        >
-                          <NewReleaseCard
-                            type={type ? "vertical" : "horizontal"}
-                            img={item.img}
-                            feature={item.category}
-                            title={item.artist}
-                            date={item.date}
-                            link={item.link}
-                          />
-                        </div>
-                      )
-                  )}
+                  {data.map((categoryItem: any, index: React.Key) => (
+                    // categoryItem.songs.map((song: any, index: React.Key | null | undefined) => (
+                    <NewReleaseCard
+                      key={index}
+                      data={categoryItem}
+                      youTube="https://www.youtube.com/embed/6JYIGclVQdw"
+                      title={categoryItem.title}
+                      nickname='nickname'
+                      date="12/12/2003"
+                      // description={categoryItem.description}
+                      link={categoryItem.title}
+                    />
+                    // ))
+
+                  ))}
                 </div>
               )}
             </div>

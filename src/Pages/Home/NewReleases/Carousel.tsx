@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DetailButton from "../../../Components/Buttons/DetailButton";
 import NewReleaseCard from "../../../Components/Card/NewReleaseCard";
 import Carousel from "../../../Components/Carousel";
@@ -27,7 +27,8 @@ const ReleaseCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                   cardData[index] && (
                     <div key={`card-${index}-0`} className="w-full">
                       <NewReleaseCard
-                        type="horizontal"
+                        data=''
+                        youTube=''
                         img={cardData[index].img}
                         feature={cardData[index].feature}
                         title={cardData[index].title}
@@ -51,7 +52,8 @@ const ReleaseCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                           cardData[idx * cardNum + index] && (
                             <div key={`card-${index}-0`} className="w-full">
                               <NewReleaseCard
-                                type="horizontal"
+                                data=''
+                                youTube=''
                                 img={cardData[idx * cardNum + index].img}
                                 feature={
                                   cardData[idx * cardNum + index].feature
@@ -82,8 +84,9 @@ const ReleaseCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                 if (cardData[index]) {
                   return (
                     <NewReleaseCard
+                      data=''
                       key={`newRelease-caraousel-0-${index}-2`}
-                      type="vertical"
+                      youTube=''
                       img={cardData[index].img}
                       feature={cardData[index].feature}
                       title={cardData[index].title}
@@ -111,8 +114,9 @@ const ReleaseCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                         if (cardData[idx * 5 + index]) {
                           return (
                             <NewReleaseCard
+                              data=''
                               key={`newRelease-caraousel-${idx}-${index}-2`}
-                              type="vertical"
+                              youTube=''
                               img={cardData[idx * 5 + index].img}
                               feature={cardData[idx * 5 + index].feature}
                               title={cardData[idx * 5 + index].title}

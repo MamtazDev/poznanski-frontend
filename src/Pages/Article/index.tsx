@@ -37,7 +37,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     getLastPageNumber(state)
   );
   const [selectedPage, setSelectedPage] = useState<number>(currentPage);
-  const [cardNum, setCardNum] = useState<number>(4);
+  const [, setCardNum] = useState<number>(4);
   const [filterText, setFilterText] = useState<string>("");
   const [loadNexPage, setLoadNextPage] = useState<boolean>(false);
   const loadNextPageElementRef = React.createRef<HTMLDivElement>();
@@ -50,10 +50,10 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   //   selectedPage
   // );
 
-  const { data, loading, forceRevalidateAll, totalPages, error } =
+  const { data, loading, forceRevalidateAll, totalPages } =
     usePaginatedNews(pageSize, selectedPage);
 
-  const currentPageByLength = Math.ceil(data.length / pageSize);
+  // const currentPageByLength = Math.ceil(data.length / pageSize);
 
   if (lastVisitedId) {
     setTimeout(() => {
@@ -76,6 +76,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     return () => clearInterval(interval);
   }, [forceRevalidateAll]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const checkVisibility = () => {
     if (loadNextPageElementRef.current) {
       setLoadNextPage(isInViewport(loadNextPageElementRef.current));
@@ -113,7 +114,9 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     if (loadNexPage) {
       loadMore();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadNexPage]);
+  // eslint-disable-next-line no-lone-blocks
   {
     console.log(data, "daaaaaaaaaa");
   }

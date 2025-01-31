@@ -1,13 +1,13 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import { Spinner } from "@chakra-ui/react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { PageBasicProps } from "../../AppMain";
 import BreadCrumb from "../../Components/BreadCrumb";
+import TVCard from "../../Components/Card/TVCard";
 import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
 import Layout from "../../Components/Layout";
-import { Spinner } from "@chakra-ui/react";
-import TVCard from "../../Components/Card/TVCard";
-import "../mainPageStyle.css";
-import { PageBasicProps } from "../../AppMain";
 import PaginationBar from "../../Components/PaginationBar";
+import "../mainPageStyle.css";
 
 interface Product {
   youTube: string;
@@ -75,7 +75,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     };
   }, []);
 
- 
+
   useEffect(() => {
     const startIdx = (selectedPage - 1) * entriesPerPage;
     const endIdx = startIdx + entriesPerPage;
@@ -85,7 +85,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   const handleEntriesChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setEntriesPerPage(Number(e.target.value));
-    setSelectedPage(1); 
+    setSelectedPage(1);
   };
 
   const pages = Math.ceil(cardData.length / entriesPerPage);
@@ -94,12 +94,12 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     const filteredData = cardData.filter((product) =>
       product.title.toLowerCase().includes(filterText.toLowerCase())
     );
-  
+
     const startIdx = (selectedPage - 1) * entriesPerPage;
     const endIdx = startIdx + entriesPerPage;
     setDisplayData(filteredData.slice(startIdx, endIdx));
   }, [filterText, selectedPage, entriesPerPage, cardData]);
-  
+
 
   return (
     <>
@@ -138,11 +138,9 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 </div>
               ) : (
                 <div
-                  className={`grid ${
-                    cardNum === 4 && "grid-cols-4"
-                  } ${cardNum === 3 && "grid-cols-3"} ${
-                    cardNum === 2 && "grid-cols-2"
-                  } gap-4 py-5 mb-16`}
+                  className={`grid ${cardNum === 4 && "grid-cols-4"
+                    } ${cardNum === 3 && "grid-cols-3"} ${cardNum === 2 && "grid-cols-2"
+                    } gap-4 py-5 mb-16`}
                 >
                   {displayData.map((item, index) => (
                     <div key={`main-video-card-${index}`} className="w-full">

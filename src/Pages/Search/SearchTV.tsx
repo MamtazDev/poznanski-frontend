@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { getLastPageNumber } from "../../reducers/NewsReducer";
 
-const SearchTV = ({themeMode}: any) => {
+const SearchTV = ({ themeMode }: any) => {
   const currentPage = useSelector((state: RootState) =>
     getLastPageNumber(state)
   );
