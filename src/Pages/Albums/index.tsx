@@ -43,6 +43,13 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
+    const [filters, setFilters] = useState({
+      sort: "A to Z",
+      limit: 7,
+      startDate: "",
+      endDate: "",
+      order:"desc"
+    });
 
   const handleData = (response: any) => {
     let newProducts: Product[] = [];
@@ -152,7 +159,7 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({themeMode, type}) => {
               <ContentTitle titleType="NEW RELEASES" title="New Releases" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText}/>
+              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters}/>
             </div>
             <div
               className={`md:mt-12 mt-8`}

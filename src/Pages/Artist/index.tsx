@@ -72,6 +72,13 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [filterText, setFilterText] = useState<string>("");
   const [lineNum, setLineNum] = useState<number>(3);
   const [filterCardNum, setFilterCardNum] = useState<number>(4);
+  const [filters, setFilters] = useState({
+    sort: "A to Z",
+    limit: 7,
+    startDate: "",
+    endDate: "",
+    order:"desc"
+  });
 
   useEffect(() => {
     const handleResize = () => {
@@ -210,7 +217,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <ContentTitle titleType="TOP HITS" title="Our Top Artists" />
           </div>
           <div className="md:mt-6 mt-4">
-            <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
+            <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters}/>
           </div>
         {
           filteredArtists.map(artist => <div>
