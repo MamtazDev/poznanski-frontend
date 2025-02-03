@@ -1,13 +1,13 @@
-import React, { useState, ChangeEvent } from "react";
 import { IconButton, Input } from "@chakra-ui/react";
+import React, { ChangeEvent } from "react";
+import {
+  BsChevronDoubleLeft,
+  BsChevronDoubleRight,
+  BsChevronLeft,
+  BsChevronRight,
+} from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
-import {
-  BsChevronDoubleRight,
-  BsChevronDoubleLeft,
-  BsChevronRight,
-  BsChevronLeft,
-} from "react-icons/bs";
 
 interface PaginationProps {
   selectedPage: number;
@@ -54,7 +54,7 @@ const PaginationBar: React.FC<PaginationProps> = ({
 
   const handleEntriesChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setEntriesPerPage(Number(e.target.value));
-    setSelectedPage(1); 
+    setSelectedPage(1);
   };
 
   return (
@@ -67,9 +67,8 @@ const PaginationBar: React.FC<PaginationProps> = ({
         <select
           value={entriesPerPage}
           onChange={handleEntriesChange}
-          className={`border border-[#E9EBF0] rounded-sm px-2 py-1 ${
-            themeMode ? "text-[#252733] bg-white" : "text-white bg-[#242526]"
-          }`}
+          className={`border border-[#E9EBF0] rounded-sm px-2 py-1 ${themeMode ? "text-[#252733] bg-white" : "text-white bg-[#242526]"
+            }`}
         >
           <option value={5}>5</option>
           <option value={10}>10</option>
@@ -124,9 +123,8 @@ const PaginationBar: React.FC<PaginationProps> = ({
           textAlign="center"
         />
         <div
-          className={`flex items-center ${
-            themeMode ? "text-[#252733]" : "text-white"
-          }`}
+          className={`flex items-center ${themeMode ? "text-[#252733]" : "text-white"
+            }`}
         >
           of {pages}
         </div>

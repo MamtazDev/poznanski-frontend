@@ -1,6 +1,5 @@
-import { useState, useRef, useEffect, type FC } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState, type FC } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 interface SearchBarProps {
   onSearchStateChange: (isExpanded: boolean) => void;
@@ -93,9 +92,8 @@ const SearchBar: FC<SearchBarProps> = ({
 
   return (
     <div
-      className={`relative transition-all duration-300 ease-in-out ${
-        isExpanded ? "w-full" : isSmallDevice ? "w-10" : "w-[482px]"
-      }`}
+      className={`relative transition-all duration-300 ease-in-out ${isExpanded ? "w-full" : isSmallDevice ? "w-10" : "w-[482px]"
+        }`}
       ref={searchBarRef}
     >
       {isSmallDevice && !isExpanded ? (
@@ -120,30 +118,30 @@ const SearchBar: FC<SearchBarProps> = ({
               <path
                 d="M12.8333 4.58398H18.3333"
                 stroke="#51525C"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M12.8333 7.33398H15.5833"
                 stroke="#51525C"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M19.2499 10.5423C19.2499 15.3548 15.3541 19.2507 10.5416 19.2507C5.72909 19.2507 1.83325 15.3548 1.83325 10.5423C1.83325 5.72982 5.72909 1.83398 10.5416 1.83398"
                 stroke="#51525C"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M20.1666 20.1673L18.3333 18.334"
                 stroke="#51525C"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
             <input
@@ -177,9 +175,9 @@ const SearchBar: FC<SearchBarProps> = ({
                   <path
                     d="M6.61914 19.5L19.859 6.5M6.61914 6.5L19.859 19.5"
                     stroke="#6D6E76"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </button>
@@ -216,18 +214,18 @@ const SearchBar: FC<SearchBarProps> = ({
                     <path
                       d="M5.41602 3.7915L20.5827 18.9582"
                       stroke="#6D6E76"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeMiterlimit="10"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M5.41602 14.9173V3.7915H16.5418"
                       stroke="#6D6E76"
-                      stroke-width="1.5"
-                      stroke-miterlimit="10"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeMiterlimit="10"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </Link>
