@@ -78,7 +78,9 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <ContentTitle titleType="NEW RELEASES" title="New Releases" />
           </div>
           <div className="md:mt-6 mt-4">
-            <FilterInput type={type} filterText={searchQuery} setFilterText={setSearchQuery} />
+            <FilterInput type={type} filterText={searchQuery} setFilterText={setSearchQuery} setFilters={function (value: any): void {
+              throw new Error("Function not implemented.");
+            }} filters={undefined} />
           </div>
 
           <div>

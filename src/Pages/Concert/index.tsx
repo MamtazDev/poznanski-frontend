@@ -62,6 +62,13 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [nonFeaturedProducts, setNonFeaturedProducts] = useState<Product[]>([])
   const [entriesPerPage, setEntriesPerPage] = useState<number>(5)
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const [filters, setFilters] = useState({
+    sort: "A to Z",
+    limit: 7,
+    startDate: "",
+    endDate: "",
+    order:"desc"
+  });
 
   const handleData = (response: any) => {
     const newProducts: Product[] = []
@@ -190,7 +197,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <ContentTitle titleType="TOP HITS" title="Book Your Spot In Events" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
+              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters}/>
             </div>
             <div className="md:mt-16">
               <Swiper

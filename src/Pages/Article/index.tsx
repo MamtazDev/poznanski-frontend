@@ -41,6 +41,14 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [filterText, setFilterText] = useState<string>("");
   const [loadNexPage, setLoadNextPage] = useState<boolean>(false);
   const loadNextPageElementRef = React.createRef<HTMLDivElement>();
+  const [filters, setFilters] = useState({
+    sort: "A to Z",
+    limit: 7,
+    startDate: "",
+    endDate: "",
+    order:"desc"
+  });
+  
   const lastVisitedId = useSelector((state: RootState) =>
     getLastVisitedId(state)
   );
@@ -72,7 +80,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       forceRevalidateAll();
-    }, 30000); // Revalidate every 30 seconds
+    }, 30000); 
     return () => clearInterval(interval);
   }, [forceRevalidateAll]);
 
@@ -119,7 +127,11 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   // eslint-disable-next-line no-lone-blocks
   {
     console.log(data, "daaaaaaaaaa");
+
   }
+  const filteredData = data?.filter((item) =>
+    item.title.toLowerCase().includes(filterText.toLowerCase())
+  );
 
   return (
     <>
@@ -133,7 +145,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <ContentTitle titleType="NEWS" title="See Our Latest News" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
+              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters}/>
             </div>
 
             <div
@@ -160,7 +172,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 </div>
               ) : (
                 <div className={`grid lg:grid-cols-3 gap-4 py-5`}>
-                  {data?.map((item) => (
+                  {filteredData?.map((item) => (
                     <div
                       id={item._id}
                       key={`main-news-card-${item._id}`}

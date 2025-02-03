@@ -32,6 +32,13 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [displayData, setDisplayData] = useState<Product[]>([]);
   const [entriesPerPage, setEntriesPerPage] = useState<number>(5);
+  const [filters, setFilters] = useState({
+    sort: "A to Z",
+    limit: 7,
+    startDate: "",
+    endDate: "",
+    order:"desc"
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,7 +124,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <ContentTitle titleType="TOP HITS" title="TV/RADIO" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
+              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
             </div>
             <div
               className={`md:mt-12 mt-8`}
