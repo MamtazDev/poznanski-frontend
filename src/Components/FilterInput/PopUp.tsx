@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PopUp = ({ handleClosePopup, themeMode,setFilters,filters }: any) => {
   console.log(themeMode, "popupppppp");
@@ -8,6 +8,14 @@ const PopUp = ({ handleClosePopup, themeMode,setFilters,filters }: any) => {
   const [selectedSort, setSelectedSort] = useState<string | null>("A to Z");
 
 
+  useEffect(() => {
+    setQuantity(filters?.quantity || 10);
+    setStartDate(filters?.startDate || "");
+    setEndDate(filters?.endDate || "");
+    setSelectedSort(filters?.sort || "A to Z");
+  }, [filters]);
+
+  
   const handleSortSelection = (sortOption: string) => {
     setSelectedSort(sortOption);
   };
