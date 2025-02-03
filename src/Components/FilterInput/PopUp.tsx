@@ -13,7 +13,7 @@ const PopUp = ({ handleClosePopup, themeMode }: any) => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex justify-center items-center" onClick={handleClosePopup}>
-      <div
+      <div onClick={(e) => e.stopPropagation()}
         className={`w-full max-w-[750px] rounded-lg shadow-lg p-6 relative ${themeMode ? "bg-white" : "bg-black"}`}
       >
         <button
