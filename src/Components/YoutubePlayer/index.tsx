@@ -50,31 +50,32 @@ const YoutubePlayer: React.FC<PlayerProps> = ({isOpen, type}) => {
 	  };
 
 	return (
-		<div
-			className={`fixed z-50 flex bottom-2 right-2 transform transition-transform ${
-				isOpen ? 'translate-x-0' : ' translate-x-80'
-			} duration-500 ease-in-out`}
-		>
-			{videoId && (
-				<button
-					onClick={isOpen ? onClose : onOpen}
-					className={`${type ? '' : isOpen ? 'mx-2' : 'mx-4'} my-auto z-50 items-center`}
-				>
-					<img
-						className={`w-[120px] rounded-full shadow-2xl transition-transform duration-500 ease-in-out ${isOpen ? 'rotate-360' : 'rotate-0'}`}
-						src={YoutubeSilverButton}
-					/>
-				</button>
-			)}
-			<YouTube
-				videoId={videoId}
-				opts={opts}
-				onReady={onReady}
-				// onReady={onLoad}
-				iframeClassName='rounded-lg'
+		// <div
+		// 	className={`fixed z-50 flex bottom-2 right-2 transform transition-transform ${
+		// 		isOpen ? 'translate-x-0' : ' translate-x-80'
+		// 	} duration-500 ease-in-out`}
+		// >
+		// 	{videoId && (
+		// 		<button
+		// 			onClick={isOpen ? onClose : onOpen}
+		// 			className={`${type ? '' : isOpen ? 'mx-2' : 'mx-4'} my-auto z-50 items-center`}
+		// 		>
+		// 			<img
+		// 				className={`w-[120px] rounded-full shadow-2xl transition-transform duration-500 ease-in-out ${isOpen ? 'rotate-360' : 'rotate-0'}`}
+		// 				src={YoutubeSilverButton}
+		// 			/>
+		// 		</button>
+		// 	)}
+		// 	<YouTube
+		// 		videoId={videoId}
+		// 		opts={opts}
+		// 		onReady={onReady}
+		// 		// onReady={onLoad}
+		// 		iframeClassName='rounded-lg'
 
-			/>
-		</div>
+		// 	/>
+		// </div>
+    <h1></h1>
 	);
 };
 
