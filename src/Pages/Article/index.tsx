@@ -75,7 +75,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       forceRevalidateAll();
-    }, 30000); // Revalidate every 30 seconds
+    }, 30000); 
     return () => clearInterval(interval);
   }, [forceRevalidateAll]);
 
@@ -119,7 +119,11 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   }, [loadNexPage]);
   {
     console.log(data, "daaaaaaaaaa");
+
   }
+  const filteredData = data?.filter((item) =>
+    item.title.toLowerCase().includes(filterText.toLowerCase())
+  );
 
   return (
     <>
@@ -161,7 +165,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 </div>
               ) : (
                 <div className={`grid lg:grid-cols-3 gap-4 py-5`}>
-                  {data?.map((item) => (
+                  {filteredData?.map((item) => (
                     <div
                       id={item._id}
                       key={`main-news-card-${item._id}`}
