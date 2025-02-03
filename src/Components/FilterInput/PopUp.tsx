@@ -7,8 +7,28 @@ const PopUp = ({ handleClosePopup, themeMode }: any) => {
   const [endDate, setEndDate] = useState<string>("");
   const [selectedSort, setSelectedSort] = useState<string | null>("A to Z");
 
+  const [filters, setFilters] = useState({
+    sort: "A to Z",
+    quantity: 10,
+    startDate: "",
+    endDate: "",
+  });
+
   const handleSortSelection = (sortOption: string) => {
     setSelectedSort(sortOption);
+  };
+
+
+  const handleApplyFilters = () => {
+    const updatedFilters = {
+      sort: selectedSort ?? "A to Z",
+      quantity: quantity,
+      startDate: startDate,
+      endDate: endDate,
+    };
+    setFilters(updatedFilters);
+    console.log("Applied Filters:", updatedFilters);
+    handleClosePopup();
   };
 
   return (
@@ -128,7 +148,7 @@ const PopUp = ({ handleClosePopup, themeMode }: any) => {
           >
             Cancel
           </button>
-          <button className={`px-6 py-2 text-white bg-[#5A1073] rounded-md`}>
+          <button className={`px-6 py-2 text-white bg-[#5A1073] rounded-md`} onClick={handleApplyFilters}>
             Apply Filters
           </button>
         </div>

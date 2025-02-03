@@ -9,7 +9,7 @@ interface FilterInputProps {
   filterText: string;
   setFilterText: React.Dispatch<React.SetStateAction<string>>;
 }
-const FilterInput: React.FC<FilterInputProps> = ({ type,filterText, setFilterText  }) => {
+const FilterInput: React.FC<FilterInputProps> = ({ type,filterText, setFilterText,  }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
     console.log(themeMode, "theme pai nai ")
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -144,7 +144,7 @@ const FilterInput: React.FC<FilterInputProps> = ({ type,filterText, setFilterTex
           </button>
         </div>
         {isPopupOpen && (
-          <PopUp handleClosePopup={handleClosePopup} themeMode={themeMode}/>
+          <PopUp handleClosePopup={handleClosePopup} themeMode={themeMode} />
         )}
       </div>
     </>
