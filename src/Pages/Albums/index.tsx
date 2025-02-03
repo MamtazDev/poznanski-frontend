@@ -22,24 +22,22 @@ interface Product {
   star: number;
 }
 
-interface inputProducts {
-  _id: string;
-  title: string;
-  img: string;
-  category: string;
-  date: string | Date;
-  link: string;
-  location: string;
-  artist: string;
-  star: number;
-}
-
+// interface inputProducts {
+//   _id: string;
+//   title: string;
+//   img: string;
+//   category: string;
+//   date: string | Date;
+//   link: string;
+//   location: string;
+//   artist: string;
+//   star: number;
+// }
 const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<number>(1);
-  const albumsPerPage = 5; // Show 5 albums per page
-  const [filterText, setFilterText] = useState<string>("");
+  const albumsPerPage = 5;
   const [album, setAlbum] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading,] = useState<boolean>(false);
   const [pages, setPages] = useState<number>(0);
 
   const fetcher = () => fetch(`http://localhost:8000/api/album`).then((res) => res.json());
@@ -50,13 +48,11 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       setAlbum(data);
     }
   }, [data]);
-
   // Filtering albums based on search text
   const [searchQuery, setSearchQuery] = useState<string>("");
   const filteredAlbums = album.filter((album) => (album.title || "").toLowerCase().includes(searchQuery.toLowerCase())
   );
-  // albums.filter((album) => (album.name || "").toLowerCase().includes(searchQuery.toLowerCase()))
-  // Pagination calculations
+
   const indexOfLastAlbum = selectedPage * albumsPerPage;
   const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
   const currentAlbums = filteredAlbums.slice(indexOfFirstAlbum, indexOfLastAlbum);
@@ -124,8 +120,8 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               selectedPage={selectedPage}
               setSelectedPage={setSelectedPage}
               pages={pages}
-              entriesPerPage={albumsPerPage}  // Add this
-              setEntriesPerPage={() => { }}    // Add this (handle it properly if needed)
+              entriesPerPage={albumsPerPage}
+              setEntriesPerPage={() => { }}
             />
           </div>
         </div>
