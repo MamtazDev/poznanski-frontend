@@ -12,7 +12,7 @@ const PopUp = ({ handleClosePopup, themeMode }: any) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex justify-center items-center" onClick={handleClosePopup}>
       <div
         className={`w-full max-w-[750px] rounded-lg shadow-lg p-6 relative ${themeMode ? "bg-white" : "bg-black"}`}
       >
@@ -94,20 +94,6 @@ const PopUp = ({ handleClosePopup, themeMode }: any) => {
             {quantity}
           </div>
         </div>
-
-        {/* <div className="mb-8">
-          <label
-            className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}
-          >
-            Album Name
-          </label>
-          <input
-            type="text"
-            placeholder="Start typing to see list"
-            className={`w-full border rounded-md p-2 text-sm focus:ring-2 focus:outline-none ${themeMode ? "bg-white border-[#D9D9D9] focus:ring-[#5A1073]" : "bg-gray-400 border-gray-600"}`}
-          />
-        </div> */}
-
         <div className="mb-8">
           <label
             className={`text-sm font-bold mb-[10px] flex items-start ${themeMode ? "text-[#252733]" : "text-white"}`}
@@ -142,7 +128,7 @@ const PopUp = ({ handleClosePopup, themeMode }: any) => {
           >
             Cancel
           </button>
-          <button className={`px-6 py-2 text-white bg-[#5A1073] rounded-md`} onClick={handleClosePopup}>
+          <button className={`px-6 py-2 text-white bg-[#5A1073] rounded-md`}>
             Apply Filters
           </button>
         </div>
