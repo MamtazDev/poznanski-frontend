@@ -84,14 +84,6 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     );
   }, [filterText, cardData, selectedPage, rowsPerPage]);
 
-
-
-
-
-// console.log("filtered data", data)
-
-
-
   return (
     <Layout themeMode={themeMode}>
       <div className="flex justify-center">
