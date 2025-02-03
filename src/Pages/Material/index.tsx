@@ -29,11 +29,19 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [loading, setLoading] = useState<boolean>(false);
   
   
-  const [sortBy, setSortBy] = useState<string>("");
-  const [order, setOrder] = useState<string>("desc");
-  const [startDate, setStartDate] = useState<string>("2025-01-01");
-  const [limit, setLimit] = useState<number>(6);
-  const [endDate, setEndDate] = useState<string>("2025-01-01");
+  // const [sortBy, setSortBy] = useState<string>("");
+  // const [order, setOrder] = useState<string>("desc");
+  // const [startDate, setStartDate] = useState<string>("2025-01-01");
+  // const [limit, setLimit] = useState<number>(6);
+  // const [endDate, setEndDate] = useState<string>("2025-01-01");
+
+  const [filters, setFilters] = useState({
+    sort: "A to Z",
+    limit: 7,
+    startDate: "",
+    endDate: "",
+    order:"desc"
+  });
 
 
   const handleData = (response: any) => {
@@ -59,7 +67,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   useEffect(() => {
     setLoading(true);
     // apiGetReq(`http://localhost:8000/api/materials?order=${order}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`, {})
-    apiGetReq(`http://localhost:8000/api/materials?sortBy=title&order=${order}&limit=${limit}&startDate=${startDate}&page=1`, {})
+    apiGetReq(`http://localhost:8000/api/materials?sortBy=title&order=${filters.order}&limit=${filters.limit}&startDate=${filters.startDate}&page=1`, {})
       .then((res) => {
         handleData(res);
         setLoading(false);
@@ -97,7 +105,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <ContentTitle titleType="VIDEOS" title="Materials" />
           </div>
           <div className="md:mt-6 mt-4">
-            <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} />
+            <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters}/>
           </div>
           <div className="md:mt-12 mt-8" style={{ minHeight: "908px", width: "100%" }}>
             {loading ? (

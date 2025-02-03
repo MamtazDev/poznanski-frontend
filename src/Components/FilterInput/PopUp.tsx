@@ -1,18 +1,12 @@
 import { useState } from "react";
 
-const PopUp = ({ handleClosePopup, themeMode }: any) => {
+const PopUp = ({ handleClosePopup, themeMode,setFilters,filters }: any) => {
   console.log(themeMode, "popupppppp");
   const [quantity, setQuantity] = useState<number>(10);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [selectedSort, setSelectedSort] = useState<string | null>("A to Z");
 
-  const [filters, setFilters] = useState({
-    sort: "A to Z",
-    quantity: 10,
-    startDate: "",
-    endDate: "",
-  });
 
   const handleSortSelection = (sortOption: string) => {
     setSelectedSort(sortOption);
