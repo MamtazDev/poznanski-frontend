@@ -5,7 +5,7 @@ import apiClient from "./apiClient";
 interface FileItem {
   url: string;
 }
-interface NewsItem {
+export interface NewsItem {
   _id: string;
   title: string;
   intro?: string;
