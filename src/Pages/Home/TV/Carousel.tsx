@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DetailButton from "../../../Components/Buttons/DetailButton";
 import TVCard from "../../../Components/Card/TVCard";
 import Carousel from "../../../Components/Carousel";
@@ -11,10 +11,12 @@ interface CarouselProps {
     feature: string;
     img: string;
     link: string;
+    youTube?: string;
   }[];
 }
 
 const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
+
   return (
     <div>
       {cardNum &&
@@ -26,11 +28,14 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                 cardData[index] && (
                   <div key={`card-${index}-0`} className="w-full">
                     <TVCard
+                      key={index}
                       type="horizontal"
-                      video={cardData[index].img}
-                      feature={cardData[index].feature}
-                      title={cardData[index].title}
-                      link={cardData[index].link}
+                      video=""
+                      title={cardData[index]?.title || ""}
+                      feature={cardData[index]?.feature || ""}
+                      youTube={cardData[index]?.youTube || ""}
+                      data={null}
+                      link={cardData[index]?.link || ""}
                     />
                   </div>
                 )
@@ -49,13 +54,14 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                         cardData[idx * cardNum * 2 + index] && (
                           <div key={`card-${index}-0`} className="w-full">
                             <TVCard
+                              key={index}
                               type="horizontal"
-                              video={cardData[idx * cardNum * 2 + index].img}
-                              feature={
-                                cardData[idx * cardNum * 2 + index].feature
-                              }
-                              title={cardData[idx * cardNum * 2 + index].title}
-                              link={cardData[idx * cardNum * 2 + index].link}
+                              video=""
+                              title={cardData[index]?.title || ""}
+                              feature={cardData[index]?.feature || ""}
+                              youTube={cardData[index]?.youTube || ""}
+                              data={null}
+                              link={cardData[index]?.link || ""}
                             />
                           </div>
                         )
@@ -78,12 +84,14 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                   if (cardData[index]) {
                     return (
                       <TVCard
-                        key={`tv-carousel-${index}-2`}
-                        type="vertical"
-                        video={cardData[index].img}
-                        feature={cardData[index].feature}
-                        title={cardData[index].title}
-                        link={cardData[index].link}
+                        key={index}
+                        type="horizontal"
+                        video=""
+                        title={cardData[index]?.title || ""}
+                        feature={cardData[index]?.feature || ""}
+                        youTube={cardData[index]?.youTube || ""}
+                        data={null}
+                        link={cardData[index]?.link || ""}
                       />
                     );
                   }
@@ -107,12 +115,14 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                         if (cardData[idx * 4 + index]) {
                           return (
                             <TVCard
-                              key={`tv-carousel-${index}-2`}
-                              type="vertical"
-                              video={cardData[idx * 4 + index].img}
-                              feature={cardData[idx * 4 + index].feature}
-                              title={cardData[idx * 4 + index].title}
-                              link={cardData[idx * 4 + index].link}
+                              key={index}
+                              type="horizontal"
+                              video=""
+                              title={cardData[index]?.title || ""}
+                              feature={cardData[index]?.feature || ""}
+                              youTube={cardData[index]?.youTube || ""}
+                              data={null}
+                              link={cardData[index]?.link || ""}
                             />
                           );
                         }

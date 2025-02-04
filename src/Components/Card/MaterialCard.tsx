@@ -12,6 +12,7 @@ interface News {
   feature: string;
   date: string;
   link: string;
+  data: any
 }
 
 const MaterialCard: React.FC<News> = ({
@@ -21,15 +22,24 @@ const MaterialCard: React.FC<News> = ({
   feature,
   date,
   link,
+  data
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   const dispatch = useDispatch();
 
+  // const handlePlay = () => {
+  //   dispatch(openPlayer(link))
+  // }
   const handlePlay = () => {
-    dispatch(openPlayer(link))
-  }
-
+    if (data?.youTube) {
+      const videoId = data?.youTube.split("v=")[1]?.split("&")[0];
+      console.log("Extracted Video ID:", videoId);
+      if (videoId) {
+        dispatch(openPlayer(videoId));
+      }
+    }
+  };
 
   const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
     <div className="relative w-full h-full" style={{ paddingBottom: "56.25%" }}>
@@ -55,11 +65,11 @@ const MaterialCard: React.FC<News> = ({
         _hover={
           !themeMode
             ? {
-                boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
-              }
+              boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
+            }
             : {
-                boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
-              }
+              boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
+            }
         }
         className="transition-all duration-300 ease-out w-full h-pull"
       >
@@ -70,12 +80,22 @@ const MaterialCard: React.FC<News> = ({
               <div
                 className={`material-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-48 relative ${!themeMode && "dark-bg-color"}`}
               >
-              {/* <video  controls>
+                {/* <video  controls>
   <source src={video} type="video/mp4" />
   Your browser does not support the video tag.
 </video> */}
-<YouTubeEmbed video={video} title={title} />
+                {/* <YouTubeEmbed video={video} title={title} /> */}
 
+                <div
+                  className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden"
+                  onClick={handlePlay}
+                >
+                  <img
+                    src={`https://img.youtube.com/vi/${data.youTube.split("v=")[1]}/hqdefault.jpg`}
+                    className="w-full h-full object-cover"
+                    alt="YouTube Thumbnail"
+                  />
+                </div>
                 <div
                   className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
                   onClick={handlePlay}
@@ -227,11 +247,11 @@ const MaterialCard: React.FC<News> = ({
         ) : (
           <div className="flex h-full">
             <div className="h-full w-36 relative overflow-hidden">
-            {/* <video width={320} height={240} controls>
+              {/* <video width={320} height={240} controls>
   <source src={video} type="video/mp4" />
   Your browser does not support the video tag.
 </video> */}
-<YouTubeEmbed video={video} title={title} />
+              <YouTubeEmbed video={video} title={title} />
 
               <div
                 className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"

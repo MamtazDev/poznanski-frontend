@@ -30,7 +30,13 @@ const NewReleaseCard: React.FC<News> = ({
   console.log("|data", data.songs[0]?.youTube)
 
   const handlePlay = () => {
-    dispatch(openPlayer(link));
+    if (data.songs[0]?.youTube) {
+      const videoId = data.songs[0]?.youTube.split("v=")[1]?.split("&")[0];
+      console.log("Extracted Video ID:", videoId);
+      if (videoId) {
+        dispatch(openPlayer(videoId));
+      }
+    }
   };
 
   return (
@@ -45,17 +51,13 @@ const NewReleaseCard: React.FC<News> = ({
         className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden"
         onClick={handlePlay}
       >
-        <iframe
+        <img
+          src={`https://img.youtube.com/vi/${data.songs[0]?.youTube.split("v=")[1]}/hqdefault.jpg`}
           className="w-full h-full object-cover"
-          src={
-            data.songs[0]?.youTube.includes("youtube.com/watch")
-              ? `https://www.youtube.com/embed/${data.songs[0]?.youTube.split("v=")[1]}`
-              : "https://www.youtube.com/embed/6JYIGclVQdw"
-          }
-          title={title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        ></iframe>
+          alt="YouTube Thumbnail"
+        />
       </div>
+
       <h3 className="mt-2 text-md font-semibold " style={{
         color: themeMode ? "#000000" : "#FFFFFF",
       }}>{title}</h3>

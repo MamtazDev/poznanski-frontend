@@ -1,39 +1,45 @@
-import React, { useEffect } from "react";
 import { Card } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { openPlayer } from "../../reducers/PlayerReducer";
-import { useDispatch } from "react-redux";
 
 interface News {
   type: string;
   video: string;
   title: string;
   feature: string;
+  youTube: string;
+  data: any;
   link: string;
 }
 
-const TVCard: React.FC<News> = ({ type, video, title, feature, link }) => {
+const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, data }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
 
-   const handlePlay = () => {
-     dispatch(openPlayer(link))
-   }
- 
- 
-   const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
-     <div className="relative w-full h-full" style={{ paddingBottom: "56.25%" }}>
-       <iframe
-         src={`${video.replace("watch?v=", "embed/")}`}
-         title={title}
-         className="absolute top-0 left-0 w-full h-full"
-         frameBorder="0"
-         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-         allowFullScreen
-       ></iframe>
-     </div>
-   )
+  const handlePlay = () => {
+    if (youTube) {
+      const videoId = youTube.split("v=")[1]?.split("&")[0];
+      console.log("Extracted Video ID:", videoId);
+      if (videoId) {
+        dispatch(openPlayer(videoId));
+      }
+    }
+  };
+
+  const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
+    <div className="relative w-full h-full" style={{ paddingBottom: "56.25%" }}>
+      <iframe
+        src={`${video.replace("watch?v=", "embed/")}`}
+        title={title}
+        className="absolute top-0 left-0 w-full h-full"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      ></iframe>
+    </div>
+  )
   return (
     <div className="product-card1 flex w-full">
       <Card
@@ -45,11 +51,11 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link }) => {
         _hover={
           !themeMode
             ? {
-                boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
-              }
+              boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
+            }
             : {
-                boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
-              }
+              boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
+            }
         }
         className="transition-all duration-300 ease-out w-full h-pull"
       >
@@ -59,50 +65,20 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link }) => {
               <div
                 className={`tv-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-36 relative z-10 ${!themeMode && "dark-bg-color"}`}
               >
-<YouTubeEmbed video={video} title={title} />
+                {/* <YouTubeEmbed video={video} title={title} /> */}
                 <div
-                  className="absolute w-10 h-10 bottom-3 right-3 cursor-pointer z-100"
+                  className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden"
                   onClick={handlePlay}
                 >
-                  {/* {themeMode ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="40"
-                      height="40"
-                      viewBox="0 0 40 40"
-                      fill="none"
-                    >
-                      <circle
-                        cx="20.027"
-                        cy="20.317"
-                        r="19.5289"
-                        fill="#5A1073"
-                      />
-                      <path
-                        d="M15.5738 12.3581L28.9246 20.3801L15.3019 27.9312L15.5738 12.3581Z"
-                        fill="white"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="40"
-                      height="41"
-                      viewBox="0 0 40 41"
-                      fill="none"
-                    >
-                      <circle
-                        cx="20.2079"
-                        cy="20.4821"
-                        r="19.5289"
-                        fill="#2FC4B2"
-                      />
-                      <path
-                        d="M15.7547 12.5232L29.1055 20.5451L15.4828 28.0963L15.7547 12.5232Z"
-                        fill="#111217"
-                      />
-                    </svg>
-                  )} */}
+                  <img
+                    src={
+                      youTube
+                        ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
+                        : "default-thumbnail.jpg" // Fallback for undefined youTube
+                    }
+                    className="w-full h-full object-cover"
+                    alt="YouTube Thumbnail"
+                  />
                 </div>
               </div>
               <div className="flex justify-start mt-4">

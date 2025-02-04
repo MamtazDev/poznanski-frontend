@@ -1,18 +1,17 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
 import { Spinner } from "@chakra-ui/react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../reducers";
-import * as common from "../Constant/constants";
+import { Route, Routes } from "react-router-dom";
+import NavBar from "../Components/Layout/NavBar";
 import ScrollToTopOnPageChange from "../Components/ScrollToTop";
 import YoutubePlayer from "../Components/YoutubePlayer";
-import { RouteChangeTracker, initGA } from "../utils/analytics";
-import NavBar from "../Components/Layout/NavBar";
-import { logout, setUserLoggedIn } from "../reducers/user";
-import { deleteCookie, getCookie, parseJwt } from "../utils/auth";
 import { checkIfLoggedIn } from "../Constant/api-requests";
-import { setType } from "../reducers/ThemeReducer";
+import * as common from "../Constant/constants";
 import ProfilePage from "../Pages/Profile/profile";
+import { RootState } from "../reducers";
+import { setType } from "../reducers/ThemeReducer";
+import { logout } from "../reducers/user";
+import { deleteCookie, getCookie, parseJwt } from "../utils/auth";
 
 const Home = lazy(() => import("../Pages/Home"));
 const SubmitPage = lazy(() => import("../Pages/Submit"));
@@ -128,6 +127,10 @@ const AppMain: React.FC = () => {
             path="/"
             element={<Home themeMode={themeMode} type={type} />}
           />
+          {/* <Route
+            path="/test-artist"
+            element={<TestArtist />}
+          /> */}
           <Route path="/profile" element={<ProfilePage themeMode={themeMode} />} />
           <Route path={common.NEWS_PATH}>
             <Route
@@ -163,13 +166,13 @@ const AppMain: React.FC = () => {
             path={common.CREATE_NEWS}
             element={<SubmitPage themeMode={themeMode} type={type} />}
           />
-		  <Route
-						path={common.SEARCH_PATH}
-						element={
-							// <ArtistMainPage themeMode={themeMode} type={type} />
-							<SearchMainPage themeMode={themeMode} type={type}/>
-						}
-					/>
+          <Route
+            path={common.SEARCH_PATH}
+            element={
+              // <ArtistMainPage themeMode={themeMode} type={type} />
+              <SearchMainPage themeMode={themeMode} type={type} />
+            }
+          />
           <Route
             path={common.LOGIN_PATH}
             element={<LoginPage themeMode={themeMode} type={type} />}

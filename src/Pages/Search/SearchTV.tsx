@@ -1,8 +1,8 @@
 import { Spinner } from "@chakra-ui/react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import TVCard from "../../Components/Card/TVCard";
 import { usePaginatedNews } from "../../hooks/useSWRNews";
-import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { getLastPageNumber } from "../../reducers/NewsReducer";
 
@@ -51,6 +51,8 @@ const SearchTV = ({ themeMode }: any) => {
               key={index}
               type={news.type}
               video={news.img}
+              youTube=''
+              data='fakeNews'
               title={news.title}
               feature={news.feature}
               link={news.link}

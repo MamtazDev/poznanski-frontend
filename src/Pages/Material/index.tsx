@@ -9,6 +9,7 @@ import Layout from "../../Components/Layout";
 import PaginationBar from "../../Components/PaginationBar";
 import { apiGetReq } from "../../Constant/api-functions";
 import "../mainPageStyle.css";
+import { data } from 'autoprefixer';
 
 interface Product {
   id: string;
@@ -22,13 +23,13 @@ interface Product {
 const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<number>(1);
   const [pages, setPages] = useState<number>(1);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(5); 
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<Product[]>([]);
   const [filteredData, setFilteredData] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  
-  
+
+
   // const [sortBy, setSortBy] = useState<string>("");
   // const [order, setOrder] = useState<string>("desc");
   // const [startDate, setStartDate] = useState<string>("2025-01-01");
@@ -40,7 +41,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     limit: 7,
     startDate: "",
     endDate: "",
-    order:"desc"
+    order: "desc"
   });
 
 
@@ -80,10 +81,10 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   useEffect(() => {
     const filtered = filterText
       ? cardData.filter(
-          (item) =>
-            item.title.toLowerCase().includes(filterText.toLowerCase()) ||
-            item.description.toLowerCase().includes(filterText.toLowerCase())
-        )
+        (item) =>
+          item.title.toLowerCase().includes(filterText.toLowerCase()) ||
+          item.description.toLowerCase().includes(filterText.toLowerCase())
+      )
       : cardData;
 
     setPages(Math.ceil(filtered.length / rowsPerPage));
@@ -105,7 +106,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <ContentTitle titleType="VIDEOS" title="Materials" />
           </div>
           <div className="md:mt-6 mt-4">
-            <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters}/>
+            <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
           </div>
           <div className="md:mt-12 mt-8" style={{ minHeight: "908px", width: "100%" }}>
             {loading ? (
@@ -119,6 +120,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     <MaterialCard
                       type={type ? "vertical" : "horizontal"}
                       video={item.youTube}
+                      data={item}
                       feature={item.tags}
                       title={item.title}
                       date={item.date}
