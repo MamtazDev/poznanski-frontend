@@ -31,45 +31,24 @@ const scrollToById = (id: string) => {
   }
 };
 
-interface Item {
-  id: number;
-  title: string;
-}
-
 const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const dispatch = useDispatch();
-  const currentPage = useSelector((state: RootState) =>
-    getLastPageNumber(state)
-  );
-  const [selectedPage, setSelectedPage] = useState<number>(currentPage);
-  const [, setCardNum] = useState<number>(4);
+
   const [filterText, setFilterText] = useState<string>("");
-  const [loadNexPage, setLoadNextPage] = useState<boolean>(false);
-  const loadNextPageElementRef = React.createRef<HTMLDivElement>();
 
-  const [displayedItems, setDisplayedItems] = useState<NewsItem[]>([]);
-// Show first 10 items initially
-
-
+  // Show first 10 items initially
 
   const [filters, setFilters] = useState({
     sort: "A to Z",
     limit: 7,
     startDate: "",
     endDate: "",
-    order:"desc"
+    order: "desc",
   });
-  
+
   const lastVisitedId = useSelector((state: RootState) =>
     getLastVisitedId(state)
   );
-  const pageSize = 18;
- 
-
-  const { data, loading, forceRevalidateAll, totalPages } =
-    usePaginatedNews(pageSize, selectedPage);
-    console.log('dataaaaaaaaa',data)
-
 
   if (lastVisitedId) {
     setTimeout(() => {
@@ -77,51 +56,13 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       dispatch(addLastVisited(""));
     }, 300);
   }
-  
-  const loadMore = () => {
-    setSelectedPage((prevPage) => {
-      if (prevPage < totalPages) {
-        return prevPage + 1;
-      }
-      return prevPage;
-    });
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      forceRevalidateAll();
-    }, 30000); 
-    return () => clearInterval(interval);
-  }, [forceRevalidateAll]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const checkVisibility = () => {
-    if (loadNextPageElementRef.current) {
-      setLoadNextPage(isInViewport(loadNextPageElementRef.current));
-    }
-  };
-  
-  const filteredData = data?.filter((item) =>
-    item.title.toLowerCase().includes(filterText.toLowerCase())
-  );
-
-
-  // const setDisplayUpdatedName = () => {
-  //   setDisplayedItems(filteredData.slice(0, visibleCount));
-
-  // }
-  
-
-
-  // const [items, setItems] = useState(Array.from({ length: 20 }, (_, i) => i + 1));
-  // const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
-  
- 
 
   // useEffect(() => {
-  //   setDisplayUpdatedName()
-  // }, [ displayedItems, filteredData,visibleCount]);
+  //   const interval = setInterval(() => {
+  //     forceRevalidateAll();
+  //   }, 30000);
+  //   return () => clearInterval(interval);
+  // }, [forceRevalidateAll]);
 
   return (
     <>
@@ -135,10 +76,15 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <ContentTitle titleType="NEWS" title="See Our Latest News" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters}/>
+              <FilterInput
+                type={type}
+                filterText={filterText}
+                setFilterText={setFilterText}
+                setFilters={setFilters}
+                filters={filters}
+              />
             </div>
-            <Articles/>
-
+            <Articles />
           </div>
         </div>
       </Layout>

@@ -14,7 +14,7 @@ const Articles = ({ themeMode, type }: any) => {
   const pageSize = 18;
 
   const [isloading, setLoading] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(3);
+  const [visibleCount, setVisibleCount] = useState(4);
   const [displayedItems, setDisplayedItems] = useState<NewsItem[]>([]);
   const { data, loading, forceRevalidateAll, totalPages } = usePaginatedNews(
     pageSize,
@@ -54,8 +54,8 @@ const Articles = ({ themeMode, type }: any) => {
   return (
     <div>
       <div
-        ref={scrollContainerRef}
-        className={`md:mt-12 mt-8 max-h-[80vh] overflow-y-auto rounded-lg p-2 scrollbar-hide`}
+        ref={scrollContainerRef} //scrollbar-hide
+        className={`md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide`}
         style={{
           width: "100%",
         }}
