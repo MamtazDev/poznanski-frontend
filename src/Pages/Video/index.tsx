@@ -37,7 +37,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     limit: 7,
     startDate: "",
     endDate: "",
-    order:"desc"
+    order: "desc"
   });
 
   useEffect(() => {
@@ -150,10 +150,12 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     } gap-4 py-5 mb-16`}
                 >
                   {displayData.map((item, index) => (
-                    <div key={`main-video-card-${index}`} className="w-full">
+                    <div key={index} className="w-full">
                       <TVCard
+                        data={item}
+                        video=""
                         type={type ? "vertical" : "horizontal"}
-                        video={item.youTube}
+                        youTube={item.youTube}
                         feature={item.title}
                         title={item.artist}
                         link={item.link}
@@ -165,17 +167,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <div
                 className={`flex ${type ? "justify-center" : "justify-end"}`}
               >
-                {/* <PaginationBar
-                  selectedPage={selectedPage}
-                  setSelectedPage={setSelectedPage}
-                  pages={pages}
-                  entriesPerPage={0}
-                  setEntriesPerPage={function (
-                    value: React.SetStateAction<number>
-                  ): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                /> */}
                 <PaginationBar
                   selectedPage={selectedPage}
                   setSelectedPage={setSelectedPage}

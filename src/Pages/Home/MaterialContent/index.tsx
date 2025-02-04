@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import ContentTitle from "../../../Components/ContentTitle";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DetailButton from "../../../Components/Buttons/DetailButton";
-import CarouselComponent from "./Carousel";
+import ContentTitle from "../../../Components/ContentTitle";
 import { apiGetReq } from "../../../Constant/api-functions";
 import { fileUrl } from "../../../Constant/config";
-import { useNavigate } from "react-router-dom";
+import CarouselComponent from "./Carousel";
 import "./style.css";
 
 interface MaterialData {
