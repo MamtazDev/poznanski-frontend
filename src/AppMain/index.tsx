@@ -12,6 +12,7 @@ import { RootState } from "../reducers";
 import { setType } from "../reducers/ThemeReducer";
 import { logout } from "../reducers/user";
 import { deleteCookie, getCookie, parseJwt } from "../utils/auth";
+import ArtistDetailsPage from "../Pages/Artist/ArtistDetailsPage";
 
 const Home = lazy(() => import("../Pages/Home"));
 const SubmitPage = lazy(() => import("../Pages/Submit"));
@@ -159,9 +160,19 @@ const AppMain: React.FC = () => {
             element={<AlbumsMainPage themeMode={themeMode} type={type} />}
           />
           <Route
-            path={common.ARTISTS_PATH}
-            element={<ArtistMainPage themeMode={themeMode} type={type} />}
-          />
+            path={common.ARTISTS_PATH}>
+            <Route
+              path=""
+              element={<ArtistMainPage themeMode={themeMode} type={type} />}
+            />
+            <Route
+              path=":id"
+              element={<ArtistDetailsPage  themeMode={themeMode} type={type}/>}
+            />
+          </Route>
+
+
+
           <Route
             path={common.CREATE_NEWS}
             element={<SubmitPage themeMode={themeMode} type={type} />}
