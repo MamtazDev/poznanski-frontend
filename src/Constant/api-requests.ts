@@ -82,8 +82,12 @@ export const verifyNewsAuthorRequest = async (
   await apiPutReq(`news/verify-author`, { confirmationToken, userData });
 };
 
-export const createArticleByUserRequest = async (articleData: FormData) => {
-  await apiPostReq("news/create", articleData, true);
+// export const createArticleByUserRequest = async (articleData: FormData) => {
+//   await apiPostReq("/news", articleData, true);
+// };
+
+export const createArticleByUserRequest = async (articleData: object) => {
+  await apiPostReq("/news", articleData, false);
 };
 
 // export const editArticleRequest = async (articleData: ArticleData, articleId: string) => {
