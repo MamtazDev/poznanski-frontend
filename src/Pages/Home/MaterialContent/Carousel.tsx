@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DetailButton from "../../../Components/Buttons/DetailButton";
 import MaterialCard from "../../../Components/Card/MaterialCard";
 import Carousel from "../../../Components/Carousel/index";
@@ -30,6 +30,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                 cardData[index] && (
                   <div key={`card-${index}-0`} className="w-full">
                     <MaterialCard
+                      data=''
                       type="horizontal"
                       video={cardData[index].img}
                       feature={cardData[index].feature}
@@ -55,6 +56,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                         cardData[idx * cardNum * 2 + index] && (
                           <div key={`card-${index}-0`} className="w-full">
                             <MaterialCard
+                              data=''
                               type="horizontal"
                               video={cardData[idx * cardNum * 2 + index].img}
                               feature={
@@ -84,6 +86,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                 if (cardData[index]) {
                   return (
                     <MaterialCard
+                      data=''
                       key={`material-carousel-${index}-0-2`}
                       type="vertical"
                       video={cardData[index].img}
@@ -109,6 +112,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                       if (cardData[idx * 4 + index]) {
                         return (
                           <MaterialCard
+                            data=''
                             key={`material-carousel-${index}-${idx}-2`}
                             type="vertical"
                             video={cardData[idx * 4 + index].img}

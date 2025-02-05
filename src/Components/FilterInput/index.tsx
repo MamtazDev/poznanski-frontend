@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
-import "./style.css";
 import PopUp from "./PopUp";
+import "./style.css";
 
 interface FilterInputProps {
   type: boolean;
@@ -13,7 +13,7 @@ interface FilterInputProps {
 }
 const FilterInput: React.FC<FilterInputProps> = ({ type,filterText, setFilterText, setFilters,filters }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-    console.log(themeMode, "theme pai nai ")
+    // console.log(themeMode, "theme pai nai ")
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
 

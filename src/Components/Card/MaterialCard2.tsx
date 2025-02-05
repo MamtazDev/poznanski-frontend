@@ -1,5 +1,5 @@
-import React from "react";
 import { Card, Image } from "@chakra-ui/react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import "./style.css";
@@ -34,11 +34,11 @@ const MaterialCard: React.FC<News> = ({
         _hover={
           !themeMode
             ? {
-                boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
-              }
+              boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
+            }
             : {
-                boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
-              }
+              boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
+            }
         }
         className="transition-all duration-300 ease-out w-full h-pull"
       >

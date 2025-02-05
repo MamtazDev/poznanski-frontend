@@ -66,6 +66,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }]
   });
   const [cardData, setCardData] = useState<Products[]>([]);
+   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedPage, setSelectedPage] = useState<number>(1);
   const [pages, setPages] = useState<number>(0);
@@ -79,6 +80,13 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     endDate: "",
     order:"desc"
   });
+
+
+    useEffect(() => {
+      console.log("hover:", hoveredCard);
+    }, [hoveredCard]);
+
+    
 
   useEffect(() => {
     const handleResize = () => {
@@ -219,7 +227,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           <div className="md:mt-6 mt-4">
             <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters}/>
           </div>
-        {
+        {/* {
           filteredArtists.map(artist => <div>
             <div className={`artists-body w-full p-6 md:p-12 md:mt-20 mt-6 ${!themeMode && "artists-body-dark"}`}>
                <div className="flex items-start w-full">
@@ -239,8 +247,44 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
              </div>
            </div>
          </div>)
+        } */}
+        {
+           filteredArtists.map((artist, _idx_) => (
+            <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3 md:mt-20 mt-6">
+              <div
+                className={`p-5 ${hoveredCard === `${_idx_}` && (themeMode ? "artists-body" : "artists-body-dark")}`}
+                style={{
+                  borderRadius: "20px",
+                  transition: "1s ease-in-out",
+                }}
+                onMouseEnter={() => setHoveredCard(`${_idx_}`)}
+                onMouseLeave={() => setHoveredCard(null)}
+              >
+                <div className="flex items-start w-full">
+                  <div className="md:block hidden">
+                  <Avatar size={window.innerWidth < 768 ? "lg" : "2xl"} src={artist.img} />
+                  </div>
+                  <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
+                    <div
+                      className={`artist-name md:text-xl text-md ${!themeMode && "title-dark-color"}`}
+                    >
+                      {artist.name}
+                    </div>
+                    <div className="artist-description ">
+                      {artist.description}
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "h-72" : "h-0 overflow-hidden"}`}
+                >
+                  {artist.products.length > 0 && <ArtistsCarousel cardNum={cardNum} cardData={artist.products} />}
+                  
+                </div>
+              </div>
+            </div>
+          ))
         }
-        
   
           <div className="mt-8">
             <PaginationBar selectedPage={selectedPage} setSelectedPage={setSelectedPage} pages={pages} entriesPerPage={0} setEntriesPerPage={function (value: React.SetStateAction<number>): void {

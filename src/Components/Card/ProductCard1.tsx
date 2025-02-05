@@ -1,11 +1,10 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
 import { Button, Card, Image } from "@chakra-ui/react";
+import React from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import artists1 from "../../assets/svg/artists1.svg";
 import { RootState } from "../../reducers";
 import "./style.css";
-import { getFirstTag } from "../../Pages/Article";
-import artists1 from "../../assets/svg/artists1.svg";
 export interface News {
   type: string;
   img: string | undefined;
@@ -52,55 +51,55 @@ const ProductCard1: React.FC<News> = ({
         className={`transition-all duration-300 ease-out w-full h-full p-5`}
       >
         {/* <CardBody> */}
-          <div className="flex flex-col related justify-between w-full h-full">
+        <div className="flex flex-col related justify-between w-full h-full">
+          <div
+            className={`date-badge absolute top-10 right-10 z-50 ${!themeMode && "btn-dark-bg-color"}`}
+          >
+            {date.split("T")[0]}
+          </div>
+          <div>
             <div
-              className={`date-badge absolute top-10 right-10 z-50 ${!themeMode && "btn-dark-bg-color"}`}
+              className={`card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer ${!themeMode && "dark-bg-color"}`}
             >
-              {date.split("T")[0]}
+              <Image
+                src={img ?? imageSrc}
+                className="cursor-pointer object-cover h-full w-full"
+                alt="news image"
+                borderRadius="xl"
+              />
             </div>
-            <div>
-              <div
-                className={`card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer ${!themeMode && "dark-bg-color"}`}
-              >
-                <Image
-                  src={img ?? imageSrc}
-                  className="cursor-pointer object-cover h-full w-full"
-                  alt="news image"
-                  borderRadius="xl"
-                />
-              </div>
 
-              <div className="flex justify-start mt-4">
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {wordArray.map(
-                    (tag, index) =>
-                      tag && (
-                        <div
-                          key={index}
-                          className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
-                        >
-                          {tag.trim()}
-                        </div>
-                      )
-                  )}
-                </div>
-              </div>
-              <div
-                className={`title-text flex mt-2 ${!themeMode && "title-dark-color"}`}
-              >
-                {title}
+            <div className="flex justify-start mt-4">
+              <div className="flex flex-wrap gap-2 mt-2">
+                {wordArray.map(
+                  (tag, index) =>
+                    tag && (
+                      <div
+                        key={index}
+                        className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
+                      >
+                        {tag.trim()}
+                      </div>
+                    )
+                )}
               </div>
             </div>
-            <div className="flex justify-start mt-2">
-              <Button
-                variant="ghost"
-                className={`card-more-btn ${!themeMode && "text-dark-color"}`}
-                onClick={handleClick}
-              >
-                Czytaj więcej...
-              </Button>
+            <div
+              className={`title-text flex mt-2 ${!themeMode && "title-dark-color"}`}
+            >
+              {title}
             </div>
           </div>
+          <div className="flex justify-start mt-2">
+            <Button
+              variant="ghost"
+              className={`card-more-btn ${!themeMode && "text-dark-color"}`}
+              onClick={handleClick}
+            >
+              Czytaj więcej...
+            </Button>
+          </div>
+        </div>
         {/* </CardBody> */}
       </Card>
     </div>
