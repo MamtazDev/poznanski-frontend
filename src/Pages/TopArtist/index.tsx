@@ -80,13 +80,13 @@ const TopArtist: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 loop={true}
 
                 breakpoints={{
-                  1200: { slidesPerView: 3 },
-                  900: { slidesPerView: 2 },
-                  600: { slidesPerView: 1 },
+                  1200: { slidesPerView: 4 },
+                  1024: { slidesPerView: 2 },
+                  768: { slidesPerView: 2 },
                   425: { slidesPerView: 1 },
                 }}
               >
-                {[1, 2, 3, 4].map((_, index) => (
+                {[1, 2, 3, 4,5].map((_, index) => (
                   <SwiperSlide key={index}>
                     <div className='p-5 rounded-3xl mt-6'
                       style={{

@@ -79,7 +79,7 @@ const CommentSection: React.FC<PageBasicProps> = ({ themeMode }) => {
         </h3>
         {/* Input Fields */}
         <div className="space-y-4">
-          <div className="flex gap-6">
+          <div className="lg:flex gap-6">
             <div className="w-full space-y-3">
               <label
                 htmlFor="name"
