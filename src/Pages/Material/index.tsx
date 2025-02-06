@@ -131,12 +131,11 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     fetchData();
   }, []);
 
-  const handleSearch = (inputValue: string) => {
-    console.log("Searched value: ", inputValue);
-    console.log("Filters value: ", filters);
-    fetchData(filters);
-  };
-
+ const handleSearch = (inputValue: string) => {
+  console.log("Searched value: ", inputValue);
+  console.log("Filters value: ", filters);
+  fetchData(filters)
+}
   useEffect(() => {
     console.log("Filtered worked");
     fetchData(filters);
