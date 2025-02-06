@@ -6,7 +6,7 @@ import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
 import Layout from "../../Components/Layout";
 import PaginationBar from "../../Components/PaginationBar";
-import { fileUrl } from "../../Constant/config";
+import { apiBaseUrl, fileUrl } from "../../Constant/config";
 import ArtistsCarousel from "../Home/Artists/Carousel";
 import "../mainPageStyle.css";
 import { useNavigate } from "react-router-dom";
@@ -52,24 +52,21 @@ interface Products {
 //   location: string;
 // }
 
+interface filterProperties{
+  sort: string,
+  quantity: number,
+    startDate: string,
+    endDate: string,
+    order: string,
+    search: string | undefined
+  }
+
+
 const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const navigate = useNavigate();
   const [cardNum, setCardNum] = useState<number>(4);
   const [state, setState] = useState<boolean>(false);
   const [artists, setArtists] = useState<ArtistsData[]>([]);
-  // const [artist, setArtist] = useState<ArtistsData>({
-  //   id: "",
-  //   name: "",
-  //   img: "",
-  //   description: "",
-  //   products:[{title: "",
-  //     location: "",
-  //     date: "",
-  //     category: "",
-  //     img: "",
-  //   }]
-  // });
-  // const [cardData, setCardData] = useState<Products[]>([]);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedPage, setSelectedPage] = useState<number>(1);
@@ -77,13 +74,16 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [filterText, setFilterText] = useState<string>("");
   const [lineNum, setLineNum] = useState<number>(3);
   const [filterCardNum, setFilterCardNum] = useState<number>(4);
-  const [filters, setFilters] = useState({
-    sort: "A to Z",
-    limit: 7,
-    startDate: "",
-    endDate: "",
-    order: "desc"
-  });
+
+   const [filters, setFilters] = useState<filterProperties>({
+     sort: "A to Z",
+     quantity: 5,
+     startDate: "",
+     endDate: "",
+     order: "desc",
+     search: ""
+   });
+   
 
 
   useEffect(() => {
@@ -129,95 +129,108 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     };
   }, []);
 
+
   // useEffect(() => {
-  //   setLoading(true);
-  //   apiGetReq("/artist/data", {
-  //     rowsPerPage: filterText ? lineNum * filterCardNum : lineNum,
-  //     curPage: selectedPage,
-  //     filter: filterText,
-  //   })
-  //     .then((res) => {
-  //       const newData: ArtistsData[] = res.products.map((item: InputArtistsData) => ({
-  //         id: item._id,
-  //         name: item.name,
-  //         img: fileUrl + item.profileImg,
-  //         description: item.description,
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const response = await fetch("http://localhost:8000/api/artist");
+  //       const jsonData = await response.json();
+
+  //       console.log("Fetched Data:", jsonData);
+
+  //       const newArtists = jsonData.data.map((item: any) => ({
+  //         id: item.artist._id,
+  //         name: item.artist.name,
+  //         img: fileUrl + item.artist.profileImg,
+  //         description: item.artist.description,
+  //         products: item.products
   //       }));
 
-  //       const totalPages = Math.ceil(res.all / lineNum);
-  //       setPages(totalPages);
-  //       setArtists(newData);
+  //       console.log("Formatted Artists Data:", newArtists);
+
+  //       setArtists(newArtists);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     } finally {
   //       setLoading(false);
-  //     })
-  //     .catch(() => setLoading(false));
-  // }, [selectedPage, filterText, filterCardNum, lineNum]);
+  //     }
+  //   };
 
-  // useEffect(() => {
-  //   apiGetReq("/artist/top", {}).then((res) => {
-  //     setArtist({
-  //       id: res.artist[0]._id,
-  //       name: res.artist[0].name,
-  //       img: fileUrl + res.artist[0].profileImg,
-  //       description: res.artist[0].description,
-  //     });
-
-  //     const newData: Products[] = res.products.map((item: InputProducts) => {
-  //       const inputDate = new Date(item.date);
-  //       const formattedDate = `${inputDate.getDate()}/${
-  //         inputDate.getMonth() + 1
-  //       }/${inputDate.getFullYear()}`;
-
-  //       return {
-  //         id: item._id,
-  //         title: item.title,
-  //         category: item.category,
-  //         date: formattedDate,
-  //         location: item.location,
-  //         img: fileUrl + item.img,
-  //       };
-  //     });
-
-  //     setCardData(newData);
-  //   });
+  //   fetchData();
   // }, []);
 
+  const fetchData = async (inputValue?: filterProperties) => {
+    setLoading(true);
+    console.log("inputValue.search", inputValue);
+  
+    let url = `${apiBaseUrl}/artist`;
+    let searchQuery = [];
+  
+    if (inputValue?.search) {
+      searchQuery.push(`search=${encodeURIComponent(inputValue.search)}`);
+    }
+  
+    if (inputValue?.sort) {
+      searchQuery.push(`order=${encodeURIComponent(inputValue.sort)}`);
+    }
+  
+    if (inputValue?.quantity) {
+      console.log("inputValue?.limit", inputValue?.quantity);
+      searchQuery.push(`limit=${inputValue.quantity}`);
+    }
+  
+    if (inputValue?.startDate) {
+      searchQuery.push(`startDate=${encodeURIComponent(inputValue.startDate)}`);
+    }
+  
+    if (inputValue?.endDate) {
+      searchQuery.push(`endDate=${encodeURIComponent(inputValue.endDate)}`);
+    }
+  
+    if (searchQuery.length > 0) {
+      url = `${url}?${searchQuery.join("&")}`;
+    }
+  
+    try {
+      const response = await fetch(url);
+      const jsonData = await response.json();
+  
+      console.log("Fetched Data:", jsonData);
+  
+      const newArtists = jsonData.data.map((item: any) => ({
+        id: item.artist._id,
+        name: item.artist.name,
+        img: fileUrl + item.artist.profileImg,
+        description: item.artist.description,
+        products: item.products,
+      }));
+  
+      console.log("Formatted Artists Data:", newArtists);
+  
+      setArtists(newArtists);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch("http://localhost:8000/api/artist");
-        const jsonData = await response.json();
-
-        console.log("Fetched Data:", jsonData);
-
-        const newArtists = jsonData.data.map((item: any) => ({
-          id: item.artist._id,
-          name: item.artist.name,
-          img: fileUrl + item.artist.profileImg,
-          description: item.artist.description,
-          products: item.products
-        }));
-
-        console.log("Formatted Artists Data:", newArtists);
-
-        setArtists(newArtists);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 
+  const handleSearch = (inputValue: string) => {
+    console.log("Searched value: ", inputValue);
+    console.log("Filters value: ", filters);
+    fetchData(filters);
+  };
 
+  useEffect(() => {
+    console.log("Filtered worked");
+    fetchData(filters);
+  }, [filters]);
 
-  const filteredArtists = artists.filter(
-    (artist) =>
-      artist.name.toLowerCase().includes(filterText.toLowerCase()) ||
-      artist.description.toLowerCase().includes(filterText.toLowerCase())
-  );
 
   const handleClick = (id: string) => {
     navigate(`/artist/${id}`);
@@ -237,11 +250,11 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <ContentTitle titleType="TOP HITS" title="Our Top Artists" />
           </div>
           <div className="md:mt-6 mt-4">
-            <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
+            <FilterInput type={type} handler={handleSearch} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
           </div>
           {/* id wise data add here */}
           {
-            filteredArtists.map((artist, _idx_) => (
+            artists.map((artist, _idx_) => (
               <div
                 id={artist._id}
 
@@ -279,11 +292,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </div>
             ))
           }
-          <div className="mt-8">
-            <PaginationBar selectedPage={selectedPage} setSelectedPage={setSelectedPage} pages={pages} entriesPerPage={0} setEntriesPerPage={function (value: React.SetStateAction<number>): void {
-              throw new Error("Function not implemented.");
-            }} />
-          </div>
         </div>
       </div>
     </Layout>
