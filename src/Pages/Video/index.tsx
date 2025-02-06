@@ -22,7 +22,7 @@ interface Product {
   star: number;
 }
 
-interface filterProperties{
+export interface filterProperties{
   sort: string,
   quantity: number,
     startDate: string,
@@ -37,14 +37,16 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
+
   const [filters, setFilters] = useState<filterProperties>({
-    sort: "A to Z",
+    sort: "asc",
     quantity: 5,
     startDate: "",
     endDate: "",
     order: "desc",
     search: ""
   });
+  
   const fetchData = async (inputValue?: filterProperties) => {
     setLoading(true);
     console.log("inputValue.search", inputValue);

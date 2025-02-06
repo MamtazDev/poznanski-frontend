@@ -35,7 +35,7 @@ const FilterInput: React.FC<FilterInputProps> = ({ type, handler, setFilterText,
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value); // Update inputValue on change
-    setFilters({...filters,search: e.target.value })
+   
   };
 
   return (
@@ -89,6 +89,7 @@ const FilterInput: React.FC<FilterInputProps> = ({ type, handler, setFilterText,
               if (e.key === "Enter") {
                 // If the handler function is provided, call it with the current input value
                 if (handler) {
+                  setFilters({...filters,search: inputValue })
                   handler(inputValue);
                 }
               }
