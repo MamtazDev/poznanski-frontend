@@ -45,15 +45,10 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     order: "desc",
     search: ""
   });
-
-
   const fetchData = async (inputValue?: filterProperties) => {
     setLoading(true);
-
     console.log("inputValue.search", inputValue);
-
     let url = `${apiBaseUrl}/radio`; // Default URL
-
     // Building the query string based on available filter properties
     let searchQuery = [];
 
