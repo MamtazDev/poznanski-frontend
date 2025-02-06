@@ -29,16 +29,9 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [filteredData, setFilteredData] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-
-  // const [sortBy, setSortBy] = useState<string>("");
-  // const [order, setOrder] = useState<string>("desc");
-  // const [startDate, setStartDate] = useState<string>("2025-01-01");
-  // const [limit, setLimit] = useState<number>(6);
-  // const [endDate, setEndDate] = useState<string>("2025-01-01");
-
   const [filters, setFilters] = useState({
     sort: "A to Z",
-    limit: 7,
+    limit: 5,
     startDate: "",
     endDate: "",
     order: "desc"
