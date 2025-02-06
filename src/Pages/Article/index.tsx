@@ -15,8 +15,9 @@ import {
   getLastVisitedId,
 } from "../../reducers/NewsReducer";
 import "../mainPageStyle.css";
-
 import Articles from "./artices";
+
+
 
 export const getFirstTag = (tags: string) => {
   return tags.split("#")[0];
