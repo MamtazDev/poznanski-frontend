@@ -1,10 +1,12 @@
 export const ADMIN_PATH = "/admin";
 export const HOME_PATH = "/";
 export const TV_RADIO_PATH = "/video";
+export const TOP_ARTIST_PATH = "/top-artist"; //new
 export const CONCERT_PATH = "/concert";
 export const SEARCH_PATH = "/search";
 export const NEWS_PATH = "/news";
-export const ARTISTS_PATH = "/artists";
+export const ARTISTS_PATH = "/artist";
+export const ARTIST_DETAILS_PATH = "/artists/:id";
 export const CREATE_NEWS = "/news/create";
 export const MATERIAL_PATH = "/material";
 export const NEWRELEASE_PATH = "/releases";

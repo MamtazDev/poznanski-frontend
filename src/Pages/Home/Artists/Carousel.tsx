@@ -1,6 +1,6 @@
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Arrow from "../../../Components/ArrowBtn/HorizontalArrowBtn";
 import MaterialCard from "../../../Components/Card/MaterialCard2";
 import "./style.css";
@@ -13,51 +13,23 @@ interface CarouselProps {
     img: string;
     date: string;
     location: string;
-    // link?: string;
+    youTube?: string | undefined;
   }[];
 }
 
 const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
   const [newLoaded, setNewLoaded] = useState(false);
-  const [newSliderRef, newInstanceRef] = useKeenSlider<HTMLDivElement>(
-    {
-      initial: 0,
-      created() {
-        setNewLoaded(true);
-      },
-      loop: false,
+  const [newSliderRef, newInstanceRef] = useKeenSlider<HTMLDivElement>({
+    initial: 0,
+    loop: true,
+    created() {
+      setNewLoaded(true);
     },
-    [
-      (slider) => {
-        let timeout: ReturnType<typeof setTimeout>;
-        let mouseOver = false;
-        function clearNextTimeout() {
-          clearTimeout(timeout);
-        }
-        function nextTimeout() {
-          clearTimeout(timeout);
-          if (mouseOver) return;
-          timeout = setTimeout(() => {
-            slider.next();
-          }, 2000);
-        }
-        slider.on("created", () => {
-          slider.container.addEventListener("mouseover", () => {
-            mouseOver = true;
-            clearNextTimeout();
-          });
-          slider.container.addEventListener("mouseout", () => {
-            mouseOver = false;
-            nextTimeout();
-          });
-          nextTimeout();
-        });
-        slider.on("dragStarted", clearNextTimeout);
-        slider.on("animationEnded", nextTimeout);
-        slider.on("updated", nextTimeout);
-      },
-    ]
-  );
+  });
+
+  useEffect(() => {
+    console.log("Instance Ref: ", newInstanceRef.current);
+  }, [newInstanceRef, newLoaded]);
 
   return (
     <div className="w-full">
@@ -72,14 +44,14 @@ const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                 key={`carousel-grid-${idx}-0`}
                 className="keen-slider__slide px-2"
               >
-                <div className={`grid  ${"grid-cols-" + cardNum} gap-4 py-5`}>
+                <div className={`grid ${"grid-cols-" + cardNum} gap-4 py-5`}>
                   {[...Array(Math.ceil(cardNum))].map(
                     (_, index) =>
                       cardData[idx * cardNum + index] && (
                         <div key={`card-${index}-0`} className="w-full">
                           <MaterialCard
                             type="horizontal"
-                            img={cardData[idx * cardNum + index].img}
+                            youTube={cardData[idx * cardNum + index].youTube ?? ""}
                             feature={cardData[idx * cardNum + index].category}
                             title={cardData[idx * cardNum + index].title}
                             date={cardData[idx * cardNum + index].date}
@@ -92,28 +64,30 @@ const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
               </div>
             ))}
           </div>
+
+          {/* Arrows for Navigation */}
           {newLoaded && newInstanceRef.current && (
             <>
               <Arrow
-                onClick={(e: any) =>
-                  e.stopPropagation() || newInstanceRef.current?.next()
-                }
-                // disabled={
-                //   newCurrentSlide ===
-                //   newInstanceRef.current.track.details.slides.length - 1
-                // }
+                onClick={() => newInstanceRef.current?.prev()}
+                disabled={false}
+              />
+              <Arrow
+                onClick={() => newInstanceRef.current?.next()}
                 disabled={false}
               />
             </>
           )}
         </div>
       )}
-      {cardNum && cardNum === 1 && (
+
+      {/* Single Card Display */}
+      {cardNum === 1 && (
         <div className="mt-4 w-full gap-3 flex-col flex">
           {cardData[0] && (
             <MaterialCard
+            youTube={cardData[0].youTube ?? ""}
               type="vertical"
-              img={cardData[0]?.img}
               feature={cardData[0].category}
               title={cardData[0].title}
               date={cardData[0].date}
@@ -122,8 +96,9 @@ const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
           )}
           {cardData[1] && (
             <MaterialCard
+            youTube={cardData[0].youTube ?? ""}
               type="vertical"
-              img={cardData[1]?.img}
+              // img={cardData[1]?.img}
               feature={cardData[1].category}
               title={cardData[1].title}
               date={cardData[1].date}
