@@ -1,4 +1,3 @@
-
 import { Spinner } from "@chakra-ui/react";
 import DelayedComponent from "../../Components/_utility/DelayedComponent";
 import BreadCrumb from "../../Components/BreadCrumb";
@@ -21,39 +20,40 @@ const SearchMainPage = ({ themeMode, type }: any) => {
   const [loading, setIsloading] = useState(false);
   const queryParams = new URLSearchParams(location.search);
   const [cardNum, setCardNum] = useState<number>(4);
+
   const searchText = queryParams.get("query") || "Nothing";
-let urlEndoint = "http://localhost:8000/api/search";
-const fetcher = () =>
-  fetch(`http://localhost:8000/api/search/search?query=${searchText}`).then(
-    (res) => res.json()
-  );
+  let urlEndoint = "http://localhost:8000/api/search";
+  const fetcher = () =>
+    fetch(`http://localhost:8000/api/search/search?query=${searchText}`).then(
+      (res) => res.json()
+    );
   const { data, error } = useSWR(`${urlEndoint}/query=${searchText}`, fetcher);
 
-// const { data, error } = useSWR(
-//   `${urlEndoint}/search?query=${searchText}`,
-//   fetcher
-// );
+  // const { data, error } = useSWR(
+  //   `${urlEndoint}/search?query=${searchText}`,
+  //   fetcher
+  // );
 
-// Local state to store the response
-const [news, setNews] = useState(null);
+  // Local state to store the response
+  const [news, setNews] = useState(null);
 
-// When the data is fetched, set it to the local state
-// useEffect(() => {
-//   if (data) {
-//     console.log("Fetched data:", data.data["Concert"]);
-//     console.log("Fetched data:", data.data["newsData"]);
+  // When the data is fetched, set it to the local state
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log("Fetched data:", data.data["Concert"]);
+  //     console.log("Fetched data:", data.data["newsData"]);
 
-//     // Access the nested 'news' object
-//     console.log("Intro:", data.news?.intro); // Logs the intro of the news
-//     console.log("Title:", data.news?.title); // Logs the title of the news
-//     console.log("Tags:", data.news?.tags); // Logs the tags of the news
-//   }
-// }, [data]);
-// // Handle loading and error states
-// if (error) return <div>Error loading data.</div>;
-// if (!news) return <div>Loading...</div>;
+  //     // Access the nested 'news' object
+  //     console.log("Intro:", data.news?.intro); // Logs the intro of the news
+  //     console.log("Title:", data.news?.title); // Logs the title of the news
+  //     console.log("Tags:", data.news?.tags); // Logs the tags of the news
+  //   }
+  // }, [data]);
+  // // Handle loading and error states
+  // if (error) return <div>Error loading data.</div>;
+  // if (!news) return <div>Loading...</div>;
 
-const newsData = data?.data?.newsData || [];
+  const newsData = data?.data?.newsData || [];
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -107,29 +107,26 @@ const newsData = data?.data?.newsData || [];
                     className={`${"grid"} ${cardNum === 4 && "grid-cols-4"} ${cardNum === 3 && "grid-cols-3"} ${cardNum === 2 && "grid-cols-2"} gap-4 py-5`}
                   >
                     {/* <p>Title: {data?.data["newsData"].length}</p> */}
-                    {newsData.map(
-                      (item: any) =>
-                          <div
-                            id={item._id}
-                            key={`main-news-card-${item._id}`}
-                            className="w-full"
-                          >
-                            <ProductCard1
-                              type={type ? "vertical" : "horizontal"}
-                              img={item?.files?.[0]}
-                              tags={`${item.tags}`}
-                              title={item.title}
-                              date={`${item.date}`.split("T")[0]}
-                              _id={item._id}
-                            />
-                            {/* <p className="text-5xl text-red-500">{item.title}</p> */}
-                          </div>
-                    
-                    )}
+                    {newsData.map((item: any) => (
+                      <div
+                        id={item._id}
+                        key={`main-news-card-${item._id}`}
+                        className="w-full"
+                      >
+                        <ProductCard1
+                          type={type ? "vertical" : "horizontal"}
+                          img={item?.files?.[0]}
+                          tags={`${item.tags}`}
+                          title={item.title}
+                          date={`${item.date}`.split("T")[0]}
+                          _id={item._id}
+                        />
+                        {/* <p className="text-5xl text-red-500">{item.title}</p> */}
+                      </div>
+                    ))}
                   </div>
-                  
                 )}
-              </DelayedComponent> 
+              </DelayedComponent>
             </div>
           </div>
           <SearchTV themeMode={themeMode} />
@@ -141,7 +138,3 @@ const newsData = data?.data?.newsData || [];
 };
 
 export default SearchMainPage;
-
-
-
-
