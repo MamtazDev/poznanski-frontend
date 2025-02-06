@@ -8,27 +8,34 @@ interface FilterInputProps {
   type: boolean;
   filterText: string;
   setFilterText: React.Dispatch<React.SetStateAction<string>>;
-  setFilters: React.Dispatch<React.SetStateAction<any>>; 
-  filters: any; 
+  setFilters: React.Dispatch<React.SetStateAction<any>>;
+  filters: any;
+  handler?: (inputValue: string) => void; // Update handler to accept inputValue as a string
 }
-const FilterInput: React.FC<FilterInputProps> = ({ type,filterText, setFilterText, setFilters,filters }) => {
+
+const FilterInput: React.FC<FilterInputProps> = ({ type, handler, setFilterText, setFilters,filters }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const [inputValue, setInputValue] = useState(""); // State for input value
+
     // console.log(themeMode, "theme pai nai ")
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-
 
   const handleShowPopup = () => {
     setIsPopupOpen(true);
   };
 
-
   const handleClosePopup = () => {
     setIsPopupOpen(false);
   };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFilterText(e.target.value);
+  // const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setFilterText(e.target.value);
+  // };
+
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value); // Update inputValue on change
+    setFilters({...filters,search: e.target.value })
   };
 
   return (
@@ -76,8 +83,18 @@ const FilterInput: React.FC<FilterInputProps> = ({ type,filterText, setFilterTex
           <input
             className="ml-2.5 ml-peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline-none"
             placeholder="Search Anything"
+            value={inputValue}
             onChange={handleInputChange}
-          ></input>
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                // If the handler function is provided, call it with the current input value
+                if (handler) {
+                  handler(inputValue);
+                }
+              }
+            }}
+          />
+
           <div
             className={`w-0 border h-full`}
             style={{
