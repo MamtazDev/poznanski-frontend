@@ -51,31 +51,35 @@ const TopArtist: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           <div className='mt-12'>
             <h1 className='text-xl font-semibold ' style={{ color: themeMode ? "black" : "#fff" }}>Related Videos</h1>
             {/* card */}
-            <div className='p-5 rounded-3xl mt-6'
-              style={{
-                backgroundColor: themeMode ? "#FFF" : "#242526",
-                color: themeMode ? "black" : "#fff",
-                borderRadius:"25px",
-                border: `2px solid ${themeMode ? "#f8f8ff" : "#242526"}`
-              }}>
-              <img src={singer} alt='img' className='' />
-              <button className='py-1 px-5 text-center rounded-full font-semibold mt-4'
-                style={{
-                  backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
-                  color: themeMode ? "#5A1073" : "#5A1073"
-                }}>Wildlife</button>
-              <p className='mt-2 text-lg font-semibold' >Drake Ignites the Stage with Spectacular New Concert Experience!</p>
-              <div className='flex gap-2 items-center'>
-                <p className='flex gap-1 items-center' style={{
-                 color: themeMode ? "#9B9CA1" : "#9B9CA1"
-              }}><IoLocationOutline /> New York</p>
-  <GoDotFill style={{ color: themeMode ? "#D9D9D9" : "D9D9D9", }} />
-                <p className='flex gap-1 items-center' style={{
-                  color: themeMode ? "#9B9CA1" : "#9B9CA1"
-                }}><BsCalendar2Date />20/4/2023</p></div>
+            <div className='flex gap-6'>
+              {[1, 2, 3, 4].map((_, index) => (
+                <div key={index} className='p-5 rounded-3xl mt-6'
+                  style={{
+                    backgroundColor: themeMode ? "#FFF" : "#242526",
+                    color: themeMode ? "black" : "#fff",
+                    borderRadius: "25px",
+                    border: `2px solid ${themeMode ? "#f8f8ff" : "#242526"}`
+                  }}>
+                  <img src={singer} alt='img' className='w-full' />
+                  <button className='py-1 px-5 text-center rounded-full font-semibold mt-4'
+                    style={{
+                      backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
+                      color: themeMode ? "#5A1073" : "#5A1073"
+                    }}>Wildlife</button>
+                  <p className='mt-2 text-lg font-semibold' >Drake Ignites the Stage with Spectacular New Concert Experience!</p>
+                  <div className='flex gap-2 items-center'>
+                    <p className='flex gap-1 items-center' style={{
+                      color: themeMode ? "#9B9CA1" : "#9B9CA1"
+                    }}><IoLocationOutline /> New York</p>
+                    <GoDotFill style={{ color: themeMode ? "#D9D9D9" : "D9D9D9", }} />
+                    <p className='flex gap-1 items-center' style={{
+                      color: themeMode ? "#9B9CA1" : "#9B9CA1"
+                    }}><BsCalendar2Date />20/4/2023</p></div>
+                </div>
+              ))}
             </div>
           </div>
-                <CommentSection themeMode={themeMode} type={type}/>
+          <CommentSection themeMode={themeMode} type={type} />
         </div>
       </div>
     </Layout>
