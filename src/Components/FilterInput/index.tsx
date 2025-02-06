@@ -13,17 +13,11 @@ interface FilterInputProps {
   handler?: (inputValue: string) => void; // Update handler to accept inputValue as a string
 }
 
-const FilterInput: React.FC<FilterInputProps> = ({
-  type,
-  handler,
-  setFilterText,
-  setFilters,
-  filters,
-}) => {
+const FilterInput: React.FC<FilterInputProps> = ({ type, handler, setFilterText, setFilters,filters }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [inputValue, setInputValue] = useState(""); // State for input value
 
-  // console.log(themeMode, "theme pai nai ")
+    // console.log(themeMode, "theme pai nai ")
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleShowPopup = () => {
@@ -38,9 +32,10 @@ const FilterInput: React.FC<FilterInputProps> = ({
   //   setFilterText(e.target.value);
   // };
 
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value); // Update inputValue on change
-    setFilters({ ...filters, search: e.target.value });
+   
   };
 
   return (
@@ -94,6 +89,7 @@ const FilterInput: React.FC<FilterInputProps> = ({
               if (e.key === "Enter") {
                 // If the handler function is provided, call it with the current input value
                 if (handler) {
+                  setFilters({...filters,search: inputValue })
                   handler(inputValue);
                 }
               }
@@ -168,12 +164,7 @@ const FilterInput: React.FC<FilterInputProps> = ({
           </button>
         </div>
         {isPopupOpen && (
-          <PopUp
-            handleClosePopup={handleClosePopup}
-            themeMode={themeMode}
-            setFilters={setFilters}
-            filters={filters}
-          />
+          <PopUp handleClosePopup={handleClosePopup} themeMode={themeMode} setFilters={setFilters} filters={filters}/>
         )}
       </div>
     </>

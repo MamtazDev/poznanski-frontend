@@ -22,7 +22,7 @@ interface Product {
   star: number;
 }
 
-interface filterProperties{
+export interface filterProperties{
   sort: string,
   quantity: number,
     startDate: string,
@@ -39,7 +39,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [filters, setFilters] = useState<filterProperties>({
-    sort: "A to Z",
+    sort: "asc",
     quantity: 5,
     startDate: "",
     endDate: "",
