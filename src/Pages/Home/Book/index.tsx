@@ -109,11 +109,8 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                   width={!mobileState ? "180px" : "150px"}
                   background={themeMode ? "#E8ECFE" : "#FFF"}
                   fontSize={!mobileState ? "16px" : "12px"}
-                  placeholder="Weekdays"
-                >
-                  <option value="1">
-                    <div className="p-4">Monday</div>
-                  </option>
+                  placeholder="Weekdays">
+                  <option value="1">Monday</option>
                   <option value="2">Tuesday</option>
                   <option value="3">Wednesday</option>
                   <option value="4">Thursday</option>
@@ -126,8 +123,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                   width={!mobileState ? "180px" : "150px"}
                   background={themeMode ? "#E8ECFE" : "#FFF"}
                   fontSize={!mobileState ? "16px" : "12px"}
-                  placeholder="Event Type"
-                >
+                  placeholder="Event Type">
                   <option value="1">Concert Name</option>
                 </Select>
 
@@ -138,8 +134,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                   width={!mobileState ? "180px" : "150px"}
                   background={themeMode ? "#E8ECFE" : "#FFF"}
                   fontSize={!mobileState ? "16px" : "12px"}
-                  placeholder="Category"
-                >
+                  placeholder="Category">
                   <option value="1">Wildlife</option>
                 </Select>
               </div>

@@ -1,47 +1,55 @@
-import axios, { AxiosInstance } from 'axios';
-import { getCookie } from '../utils/auth';
-import { apiBaseUrl } from './config';
+import axios, { AxiosInstance } from "axios";
+import { getCookie } from "../utils/auth";
+import { apiBaseUrl } from "./config";
 
 export const attachInterceptors = (axiosInstance: AxiosInstance) => {
-    axiosInstance.interceptors.response.use(
-        (response) => response,
-        async (error) => {
-            const originalRequest = error.config;
+  axiosInstance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
 
-            if (error.response && error.response.status === 401 && !originalRequest._retry) {
-                originalRequest._retry = true;
-                console.log('Attempting to refresh token...');
+      if (
+        error.response &&
+        error.response.status === 401 &&
+        !originalRequest._retry
+      ) {
+        originalRequest._retry = true;
+        console.log("Attempting to refresh token...");
 
-                try {
-                    // Create a separate Axios instance for the refresh token request
-                    const refreshInstance = axios.create({
-                        baseURL: apiBaseUrl,
-                        withCredentials: true,
-                    });
+        try {
+          // Create a separate Axios instance for the refresh token request
+          const refreshInstance = axios.create({
+            baseURL: apiBaseUrl,
+            withCredentials: true,
+          });
 
-                    const csrfToken = getCookie('XSRF-TOKEN');
-                    const { data } = await refreshInstance.post('/auth/refresh-token', {}, {
-                        headers: { 'CSRF-Token': csrfToken || '' },
-                    });
-
-                    console.log('Token refreshed');
-
-                    // Update the cookies with the new CSRF token if needed
-                    document.cookie = `XSRF-TOKEN=${data.csrfToken}; path=/`;
-
-                    // Update the headers of the original request
-                    originalRequest.headers['CSRF-Token'] = data.csrfToken || '';
-
-                    return axiosInstance(originalRequest);
-                } catch (err) {
-                    console.error('Token refresh failed:', err);
-                    return Promise.reject(err);
-                }
+          const csrfToken = getCookie("XSRF-TOKEN");
+          const { data } = await refreshInstance.post(
+            "/auth/refresh-token",
+            {},
+            {
+              headers: { "CSRF-Token": csrfToken || "" },
             }
+          );
 
-            return Promise.reject(error);
+          console.log("Token refreshed");
+
+          // Update the cookies with the new CSRF token if needed
+          document.cookie = `XSRF-TOKEN=${data.csrfToken}; path=/`;
+
+          // Update the headers of the original request
+          originalRequest.headers["CSRF-Token"] = data.csrfToken || "";
+
+          return axiosInstance(originalRequest);
+        } catch (err) {
+          console.error("Token refresh failed:", err);
+          return Promise.reject(err);
         }
-    );
+      }
+
+      return Promise.reject(error);
+    }
+  );
 };
 
 // export const fetchCSRF = async (): Promise<string> => {
@@ -53,60 +61,68 @@ export const attachInterceptors = (axiosInstance: AxiosInstance) => {
 //     return csrfToken || '';
 // };
 
-const createAxiosInstance = async (contentType: string): Promise<AxiosInstance> => {
-    const csrfToken = getCookie('XSRF-TOKEN')
+const createAxiosInstance = async (
+  contentType: string
+): Promise<AxiosInstance> => {
+  const csrfToken = getCookie("XSRF-TOKEN");
 
-    const instance = axios.create({
-        baseURL: apiBaseUrl,
-        headers: {
-            'Content-Type': contentType,
-            'CSRF-Token': csrfToken || '',
-        },
-        withCredentials: true,
-    });
+  const instance = axios.create({
+    baseURL: apiBaseUrl,
+    headers: {
+      "Content-Type": contentType,
+      "CSRF-Token": csrfToken || "",
+    },
+    withCredentials: true,
+  });
 
-    attachInterceptors(instance);
-    return instance;
+  attachInterceptors(instance);
+  return instance;
 };
 
 export const getApiCallJsonInstance = () =>
-	createAxiosInstance('application/json');
+  createAxiosInstance("application/json");
 export const getApiCallMultipartInstance = () =>
-	createAxiosInstance('multipart/form-data');
+  createAxiosInstance("multipart/form-data");
 
 const apiCall = async (
-	method: 'get' | 'post' | 'put' | 'delete',
-	path: string,
-	data: any = null,
-	formData: boolean = false
+  method: "get" | "post" | "put" | "delete",
+  path: string,
+  data: any = null,
+  formData: boolean = false
 ) => {
-	const instance = formData
-		? await getApiCallMultipartInstance()
-		: await getApiCallJsonInstance();
+  const instance = formData
+    ? await getApiCallMultipartInstance()
+    : await getApiCallJsonInstance();
 
-	try {
-		const response = await instance[method](path, data);
-		return response.data;
-	} catch (error) {
-		console.error(`Error in ${method.toUpperCase()} request:`, error);
-		throw error;
-	}
+  try {
+    const response = await instance[method](path, data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error in ${method.toUpperCase()} request:`, error);
+    throw error;
+  }
 };
 
 export const apiPostReq = (
-	path: string,
-	body: object,
-	formData: boolean = false
-) => apiCall('post', path, body, formData);
+  path: string,
+  body: object,
+  formData: boolean = false
+) => apiCall("post", path, body, formData);
 
-export const apiGetReq = (path: string, params: object, formData: boolean = false) =>
-	apiCall('get', path, params, formData);
+export const apiGetReq = (
+  path: string,
+  params: object,
+  formData: boolean = false
+) => apiCall("get", path, params, formData);
 
-export const apiPutReq = (path: string, body: object, formData: boolean = false) =>
-	apiCall('put', path, body, formData);
+export const apiPutReq = (
+  path: string,
+  body: object,
+  formData: boolean = false
+) => apiCall("put", path, body, formData);
 
 export const apiDeleteReq = (path: string, params: object) =>
-	apiCall('delete', path, params);
+  apiCall("delete", path, params);
 
 // export async function apiPostReq(
 // 	path: string,

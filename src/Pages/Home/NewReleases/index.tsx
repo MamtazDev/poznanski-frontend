@@ -30,30 +30,30 @@ const NewReleases: React.FC<{ filter: string }> = ({ filter }) => {
   const [cardData, setCardData] = useState<NewReleaseData[]>([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    apiGetReq("/product/new", { filter }).then((res) => {
-      let newData: NewReleaseData[] = [];
-      res.newProducts.map((item: inputData) => {
-        const inputDate: Date = new Date(item.date);
-        const formattedDate =
-          inputDate.getDate() +
-          "/" +
-          (inputDate.getMonth() + 1) +
-          "/" +
-          inputDate.getFullYear();
-        const temp: NewReleaseData = {
-          id: item._id,
-          title: item.artist,
-          feature: item.title,
-          img: fileUrl + item.img,
-          date: formattedDate,
-          link: item.link,
-        };
-        newData.push(temp);
-      });
-      setCardData(newData);
-    });
-  }, [filter]);
+  // useEffect(() => {
+  //   apiGetReq("/product/new", { filter }).then((res) => {
+  //     let newData: NewReleaseData[] = [];
+  //     res.newProducts.map((item: inputData) => {
+  //       const inputDate: Date = new Date(item.date);
+  //       const formattedDate =
+  //         inputDate.getDate() +
+  //         "/" +
+  //         (inputDate.getMonth() + 1) +
+  //         "/" +
+  //         inputDate.getFullYear();
+  //       const temp: NewReleaseData = {
+  //         id: item._id,
+  //         title: item.artist,
+  //         feature: item.title,
+  //         img: fileUrl + item.img,
+  //         date: formattedDate,
+  //         link: item.link,
+  //       };
+  //       newData.push(temp);
+  //     });
+  //     setCardData(newData);
+  //   });
+  // }, [filter]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -65,13 +65,12 @@ const NewReleases: React.FC<{ filter: string }> = ({ filter }) => {
       }
     };
     handleResize();
-
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
   return cardData?.length ? (
     <div className="flex justify-center">
       <div className="container md:mt-36 md:pt-1.5 mt-20">
