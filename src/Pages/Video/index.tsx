@@ -1,13 +1,13 @@
 import { Spinner } from "@chakra-ui/react";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PageBasicProps } from "../../AppMain";
 import BreadCrumb from "../../Components/BreadCrumb";
 import TVCard from "../../Components/Card/TVCard";
 import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
 import Layout from "../../Components/Layout";
-import PaginationBar from "../../Components/PaginationBar";
 import "../mainPageStyle.css";
+import { apiBaseUrl } from "../../Constant/config";
 
 interface Product {
   youTube: string;
@@ -22,39 +22,81 @@ interface Product {
   star: number;
 }
 
+interface filterProperties{
+  sort: string,
+  quantity: number,
+    startDate: string,
+    endDate: string,
+    order: string,
+    search: string | undefined
+  }
+
 const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-  const [selectedPage, setSelectedPage] = useState<number>(1);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(12);
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<Product[]>([]);
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
-  const [displayData, setDisplayData] = useState<Product[]>([]);
-  const [entriesPerPage, setEntriesPerPage] = useState<number>(5);
-  const [filters, setFilters] = useState({
+
+  const [filters, setFilters] = useState<filterProperties>({
     sort: "A to Z",
-    limit: 7,
+    quantity: 5,
     startDate: "",
     endDate: "",
-    order: "desc"
+    order: "desc",
+    search: ""
   });
+  
+  const fetchData = async (inputValue?: filterProperties) => {
+    setLoading(true);
+    console.log("inputValue.search", inputValue);
+    let url = `${apiBaseUrl}/radio`; // Default URL
+    // Building the query string based on available filter properties
+    let searchQuery = [];
+
+    if (inputValue?.search) {
+      searchQuery.push(`search=${encodeURIComponent(inputValue.search)}`);
+    }
+
+    if (inputValue?.sort) {
+      searchQuery.push(`order=${encodeURIComponent(inputValue.sort)}`);
+    }
+
+    if (inputValue?.quantity) {
+      console.log("inputValue?.limit",inputValue?.quantity)
+      searchQuery.push(`limit=${inputValue.quantity}`);
+    }
+
+    if (inputValue?.startDate) {
+      searchQuery.push(`startDate=${encodeURIComponent(inputValue.startDate)}`);
+    }
+
+    if (inputValue?.endDate) {
+      searchQuery.push(`endDate=${encodeURIComponent(inputValue.endDate)}`);
+    }
+
+    // if (inputValue?.order) {
+    //   searchQuery.push(`order=${encodeURIComponent(inputValue.order)}`);
+    // }
+
+    // If there are query parameters, append them to the URL
+    if (searchQuery.length > 0) {
+      url = `${url}?${searchQuery.join('&')}`;
+    }
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      setCardData(data.records);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch("http://localhost:8000/api/radio");
-        const data = await response.json();
-        setCardData(data);
-        console.log(data, "radio data")
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -83,29 +125,19 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   }, []);
 
 
-  useEffect(() => {
-    const startIdx = (selectedPage - 1) * entriesPerPage;
-    const endIdx = startIdx + entriesPerPage;
-    setDisplayData(cardData.slice(startIdx, endIdx));
-  }, [selectedPage, entriesPerPage, cardData]);
+//search fucntionalities
+
+const handleSearch = (inputValue: string) => {
+  console.log("Searched value: ", inputValue);
+  console.log("Filters value: ", filters);
+  fetchData(filters)
+}
 
 
-  const handleEntriesChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setEntriesPerPage(Number(e.target.value));
-    setSelectedPage(1);
-  };
-
-  const pages = Math.ceil(cardData.length / entriesPerPage);
-
-  useEffect(() => {
-    const filteredData = cardData.filter((product) =>
-      product.title.toLowerCase().includes(filterText.toLowerCase())
-    );
-
-    const startIdx = (selectedPage - 1) * entriesPerPage;
-    const endIdx = startIdx + entriesPerPage;
-    setDisplayData(filteredData.slice(startIdx, endIdx));
-  }, [filterText, selectedPage, entriesPerPage, cardData]);
+useEffect(() => {
+console.log("Filtered worked")
+fetchData(filters)
+}, [filters])
 
 
   return (
@@ -124,7 +156,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <ContentTitle titleType="TOP HITS" title="TV/RADIO" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
+              <FilterInput type={type} handler={handleSearch} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
             </div>
             <div
               className={`md:mt-12 mt-8`}
@@ -149,7 +181,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     } ${cardNum === 3 && "grid-cols-3"} ${cardNum === 2 && "grid-cols-2"
                     } gap-4 py-5 mb-16`}
                 >
-                  {displayData.map((item, index) => (
+                  {cardData.length>0? cardData.map((item, index) => (
                     <div key={index} className="w-full">
                       <TVCard
                         data={item}
@@ -161,20 +193,10 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         link={item.link}
                       />
                     </div>
-                  ))}
+                  )): <p className="text-red-50">There is no data</p>}
                 </div>
               )}
-              <div
-                className={`flex ${type ? "justify-center" : "justify-end"}`}
-              >
-                <PaginationBar
-                  selectedPage={selectedPage}
-                  setSelectedPage={setSelectedPage}
-                  pages={pages}
-                  entriesPerPage={entriesPerPage}
-                  setEntriesPerPage={setEntriesPerPage}
-                />
-              </div>
+
             </div>
           </div>
         </div>

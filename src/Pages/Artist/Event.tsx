@@ -173,7 +173,7 @@ const Event: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   return (
     <>
-      <Layout themeMode={themeMode} type={type}>
+      <div >
         <div className="flex justify-center">
           <div className="container">
             <div className="md:mt-16">
@@ -282,7 +282,7 @@ const Event: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           </div>
         </div>
         </div>
-      </Layout>
+      </div>
     </>
   )
 }

@@ -37,30 +37,21 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<number>(1);
   const albumsPerPage = 5;
   const [album, setAlbum] = useState<Product[]>([]);
-  const [loading,] = useState<boolean>(false);
+  const [loading] = useState<boolean>(false);
   const [pages, setPages] = useState<number>(0);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const fetcher = () => fetch(`http://localhost:8000/api/album`).then((res) => res.json());
+  const fetcher = () =>
+    fetch(`http://localhost:8000/api/album`).then((res) => res.json());
+
   const { data, error } = useSWR(`http://localhost:8000/api/album`, fetcher);
+  console.log("data", data?.albums);
 
   useEffect(() => {
     if (data) {
-      setAlbum(data);
+      setAlbum(data?.albums);
     }
   }, [data]);
-  // Filtering albums based on search text
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const filteredAlbums = album.filter((album) => (album.title || "").toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const indexOfLastAlbum = selectedPage * albumsPerPage;
-  const indexOfFirstAlbum = indexOfLastAlbum - albumsPerPage;
-  const currentAlbums = filteredAlbums.slice(indexOfFirstAlbum, indexOfLastAlbum);
-
-  // Update total pages whenever filteredAlbums changes
-  useEffect(() => {
-    setPages(Math.ceil(filteredAlbums.length / albumsPerPage));
-  }, [filteredAlbums]);
 
   if (error) return <div>Error loading data.</div>;
   if (!album.length) return <div>Loading...</div>;
@@ -78,9 +69,15 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <ContentTitle titleType="NEW RELEASES" title="New Releases" />
           </div>
           <div className="md:mt-6 mt-4">
-            <FilterInput type={type} filterText={searchQuery} setFilterText={setSearchQuery} setFilters={function (value: any): void {
-              throw new Error("Function not implemented.");
-            }} filters={undefined} />
+            <FilterInput
+              type={type}
+              filterText={searchQuery}
+              setFilterText={setSearchQuery}
+              setFilters={function (value: any): void {
+                throw new Error("Function not implemented.");
+              }}
+              filters={undefined}
+            />
           </div>
 
           <div>
@@ -98,9 +95,11 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 />
               </div>
             ) : (
-              <div className={`grid md:grid-cols-4 grid-cols-1 gap-5 mt-10 mb-10`}>
-                {currentAlbums.length > 0 ? (
-                  currentAlbums.map((categoryItem, index) => (
+              <div
+                className={`grid md:grid-cols-4 grid-cols-1 gap-5 mt-10 mb-10`}
+              >
+                {album.length > 0 ? (
+                  album.map((categoryItem, index) => (
                     <NewReleaseCard
                       key={index}
                       data={categoryItem}
@@ -112,7 +111,9 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     />
                   ))
                 ) : (
-                  <div className="text-center text-gray-500">No results found</div>
+                  <div className="text-center text-gray-500">
+                    No results found
+                  </div>
                 )}
               </div>
             )}
@@ -123,7 +124,7 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               setSelectedPage={setSelectedPage}
               pages={pages}
               entriesPerPage={albumsPerPage}
-              setEntriesPerPage={() => { }}
+              setEntriesPerPage={() => {}}
             />
           </div>
         </div>

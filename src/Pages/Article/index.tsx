@@ -19,6 +19,16 @@ import Articles from "./artices";
 
 
 
+interface filterProperties{
+  sort: string,
+  quantity: number,
+    startDate: string,
+    endDate: string,
+    order: string,
+    search: string | undefined
+  }
+
+
 export const getFirstTag = (tags: string) => {
   return tags.split("#")[0];
 };
@@ -39,14 +49,16 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   // Show first 10 items initially
 
-  const [filters, setFilters] = useState({
+ const [filters, setFilters] = useState<filterProperties>({
     sort: "A to Z",
-    limit: 7,
+    quantity: 5,
     startDate: "",
     endDate: "",
     order: "desc",
+    search: ""
   });
 
+  
   const lastVisitedId = useSelector((state: RootState) =>
     getLastVisitedId(state)
   );

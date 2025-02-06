@@ -16,14 +16,15 @@ const Articles = ({ themeMode, type }: any) => {
   const [isloading, setLoading] = useState(false);
   const [visibleCount, setVisibleCount] = useState(4);
   const [displayedItems, setDisplayedItems] = useState<NewsItem[]>([]);
+  
   const { data, loading, forceRevalidateAll, totalPages } = usePaginatedNews(
     pageSize,
     selectedPage
   );
+
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const setDisplayUpdatedName = () => {
-    console.log("visibleCount", visibleCount);
     setDisplayedItems(data.slice(0, visibleCount));
   };
 
@@ -39,10 +40,16 @@ const Articles = ({ themeMode, type }: any) => {
 
   const handleScroll = () => {
     if (!scrollContainerRef.current) return;
-    const { scrollTop, scrollHeight, clientHeight } =
-      scrollContainerRef.current;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
 
     if (scrollTop + clientHeight >= scrollHeight - 5) {
+      loadMoreItems();
+    }
+  };
+
+  const handleWindowScroll = () => {
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 10) {
       loadMoreItems();
     }
   };
@@ -51,40 +58,28 @@ const Articles = ({ themeMode, type }: any) => {
     setDisplayUpdatedName();
   }, [displayedItems, data, visibleCount]);
 
+  useEffect(() => {
+    window.addEventListener("scroll", handleWindowScroll);
+    return () => window.removeEventListener("scroll", handleWindowScroll);
+  }, []);
+
   return (
     <div>
       <div
-        ref={scrollContainerRef} //scrollbar-hide
-        className={`md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide`}
-        style={{
-          width: "100%",
-        }}
+        ref={scrollContainerRef}
+        className="md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
+        style={{ width: "100%" }}
         onScroll={handleScroll}
       >
         {loading || !data ? (
-          <div
-            className="w-full flex justify-center items-center"
-            style={{
-              minHeight: type ? "776px" : "908px",
-            }}
-          >
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="lg"
-            />
+          <div className="w-full flex justify-center items-center" style={{ minHeight: type ? "776px" : "908px" }}>
+            <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="lg" />
           </div>
         ) : (
           <>
-            <div className={`grid lg:grid-cols-3 gap-4 py-5`}>
+            <div className="grid lg:grid-cols-3 gap-4 py-5">
               {displayedItems?.map((item) => (
-                <div
-                  id={item._id}
-                  key={`main-news-card-${item._id}`}
-                  className="w-full"
-                >
+                <div id={item._id} key={`main-news-card-${item._id}`} className="w-full">
                   <ProductCard1
                     type={type ? "vertical" : "horizontal"}
                     img={item?.files && item.files[0]}
