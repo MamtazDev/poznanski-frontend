@@ -130,7 +130,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <CommonTitleText title='News' data={newsData}/>
             <CommonTitleText title='TV/Radio' data={tvRadioData}/>
             <CommonTitleText title='Albums' data={albumData}/>
-            <Event type={} themeMode={}/>
+            <Event themeMode={themeMode} type={type}/>
           </div>
         </div>
       </Layout>

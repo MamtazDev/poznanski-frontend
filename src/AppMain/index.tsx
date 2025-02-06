@@ -13,6 +13,7 @@ import { setType } from "../reducers/ThemeReducer";
 import { logout } from "../reducers/user";
 import { deleteCookie, getCookie, parseJwt } from "../utils/auth";
 import ArtistDetailsPage from "../Pages/Artist/ArtistDetailsPage";
+import TopArtist from "../Pages/TopArtist";
 
 const Home = lazy(() => import("../Pages/Home"));
 const SubmitPage = lazy(() => import("../Pages/Submit"));
@@ -133,6 +134,7 @@ const AppMain: React.FC = () => {
             element={<TestArtist />}
           /> */}
           <Route path="/profile" element={<ProfilePage themeMode={themeMode} />} />
+          {/* <Route path="/top-artist" element={<TopArtist themeMode={themeMode} type={type} />} /> */}
           <Route path={common.NEWS_PATH}>
             <Route
               path=""
@@ -146,6 +148,12 @@ const AppMain: React.FC = () => {
           <Route
             path={common.TV_RADIO_PATH}
             element={<VideoMainPage themeMode={themeMode} type={type} />}
+          />
+
+          {/* top-artist */}
+          <Route
+            path={common.TOP_ARTIST_PATH}
+            element={<TopArtist themeMode={themeMode} type={type} />}
           />
           <Route
             path={common.MATERIAL_PATH}
