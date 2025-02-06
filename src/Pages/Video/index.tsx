@@ -46,7 +46,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       try {
         const response = await fetch("http://localhost:8000/api/radio");
         const data = await response.json();
-        setCardData(data);
+        setCardData(data.records);
         console.log(data, "radio data")
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -149,7 +149,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     } ${cardNum === 3 && "grid-cols-3"} ${cardNum === 2 && "grid-cols-2"
                     } gap-4 py-5 mb-16`}
                 >
-                  {displayData.map((item, index) => (
+                  {cardData.map((item, index) => (
                     <div key={index} className="w-full">
                       <TVCard
                         data={item}
