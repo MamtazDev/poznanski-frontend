@@ -1,4 +1,3 @@
-import { Avatar } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { PageBasicProps } from "../../AppMain";
 import BreadCrumb from "../../Components/BreadCrumb";
@@ -10,12 +9,13 @@ import { fileUrl } from "../../Constant/config";
 import ArtistsCarousel from "../Home/Artists/Carousel";
 import "../mainPageStyle.css";
 import { useNavigate } from "react-router-dom";
-
+import avatar from "../../assets/png/profileImage2.png"
 interface ArtistsData {
   id: string;
   _id?: string;
   name: string;
   img: string;
+  profileImg: any;
   description: string;
   products: [{
     title: string,
@@ -23,6 +23,7 @@ interface ArtistsData {
     date: string;
     category: string;
     img: string;
+    profileImg: string;
   }];
 }
 
@@ -129,58 +130,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   apiGetReq("/artist/data", {
-  //     rowsPerPage: filterText ? lineNum * filterCardNum : lineNum,
-  //     curPage: selectedPage,
-  //     filter: filterText,
-  //   })
-  //     .then((res) => {
-  //       const newData: ArtistsData[] = res.products.map((item: InputArtistsData) => ({
-  //         id: item._id,
-  //         name: item.name,
-  //         img: fileUrl + item.profileImg,
-  //         description: item.description,
-  //       }));
-
-  //       const totalPages = Math.ceil(res.all / lineNum);
-  //       setPages(totalPages);
-  //       setArtists(newData);
-  //       setLoading(false);
-  //     })
-  //     .catch(() => setLoading(false));
-  // }, [selectedPage, filterText, filterCardNum, lineNum]);
-
-  // useEffect(() => {
-  //   apiGetReq("/artist/top", {}).then((res) => {
-  //     setArtist({
-  //       id: res.artist[0]._id,
-  //       name: res.artist[0].name,
-  //       img: fileUrl + res.artist[0].profileImg,
-  //       description: res.artist[0].description,
-  //     });
-
-  //     const newData: Products[] = res.products.map((item: InputProducts) => {
-  //       const inputDate = new Date(item.date);
-  //       const formattedDate = `${inputDate.getDate()}/${
-  //         inputDate.getMonth() + 1
-  //       }/${inputDate.getFullYear()}`;
-
-  //       return {
-  //         id: item._id,
-  //         title: item.title,
-  //         category: item.category,
-  //         date: formattedDate,
-  //         location: item.location,
-  //         img: fileUrl + item.img,
-  //       };
-  //     });
-
-  //     setCardData(newData);
-  //   });
-  // }, []);
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -194,6 +143,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           id: item.artist._id,
           name: item.artist.name,
           img: fileUrl + item.artist.profileImg,
+          profileImg: item.artist.profileImg,
           description: item.artist.description,
           products: item.products
         }));
@@ -216,12 +166,15 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const filteredArtists = artists.filter(
     (artist) =>
       artist.name.toLowerCase().includes(filterText.toLowerCase()) ||
-      artist.description.toLowerCase().includes(filterText.toLowerCase())
+      artist.description.toLowerCase().includes(filterText.toLowerCase())||
+      artist.profileImg
   );
 
   const handleClick = (id: string) => {
     navigate(`/artist/${id}`);
   };
+
+
 
 
   return (
@@ -257,7 +210,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 >
                   <div className="flex items-start w-full">
                     <div className="md:block hidden" onClick={() => handleClick(artist.id)}>
-                      <Avatar size={window.innerWidth < 768 ? "lg" : "2xl"} src={artist.img} />
+                    <img src={artist?.profileImg || avatar} className='w-[100px] h-[80px] rounded-full' alt='img' />
                     </div>
                     <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
                       <div

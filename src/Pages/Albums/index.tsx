@@ -45,7 +45,7 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   useEffect(() => {
     if (data) {
-      setAlbum(data);
+      setAlbum(data.albums);
     }
   }, [data]);
   // Filtering albums based on search text

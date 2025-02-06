@@ -66,14 +66,14 @@ const MaterialCard: React.FC<News> = ({
                   onClick={handlePlay}
                 >
                   <img
-                    src={
-                      youTube
-                        ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
-                        : "default-thumbnail.jpg"
-                    }
-                    className="w-full h-full object-cover"
-                    alt="YouTube Thumbnail"
-                  />
+                src={
+                  youTube
+                    ? `https://img.youtube.com/vi/${youTube.split("v=")[1]?.split("&")[0]}/hqdefault.jpg`
+                    : "default-thumbnail.jpg"
+                }
+                className="w-full h-full object-cover"
+                alt="YouTube Thumbnail"
+              />
                 </div>
                 <div className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2">
                   {themeMode ? (
