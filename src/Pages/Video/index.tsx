@@ -10,6 +10,7 @@ import "../mainPageStyle.css";
 import { apiBaseUrl } from "../../Constant/config";
 
 interface Product {
+  _id: unknown;
   youTube: string;
   id: string;
   title: string;
@@ -46,7 +47,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     order: "desc",
     search: ""
   });
-  
+
   const fetchData = async (inputValue?: filterProperties) => {
     setLoading(true);
     console.log("inputValue.search", inputValue);
@@ -185,6 +186,7 @@ fetchData(filters)
                     <div key={index} className="w-full">
                       <TVCard
                         data={item}
+                        id={item._id}
                         video=""
                         type={type ? "vertical" : "horizontal"}
                         youTube={item.youTube}

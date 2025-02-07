@@ -43,12 +43,11 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [loading, setLoading] = useState(true);
   const swiperRef = useRef<SwiperInstance | null>(null);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+   const navigate = useNavigate();
 
-  const handleClick = (id: string) => {
-    console.log(id);
-    navigate(`/album/${id}`);  // Update the path accordingly
-  };
+   const handleClick = (id: string) => {
+     navigate(`/radio/${id}`);
+   };
 
   const handleNext = () => {
     if (swiperRef.current) {
@@ -81,8 +80,6 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       console.error("Invalid YouTube URL:", youTube);
     }
   };
-
-
 
   const fetcher = async (url: string) => {
     const response = await fetch(url);
@@ -161,7 +158,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             {albums?.length>0&&(
               <CommonTitleText
               data={albums.map(album => ({
-                _id: album._id || "",
+                id: album.id || "",
                 title: album.title,
                 location: album.location,
                 tags: album.tags,
@@ -276,6 +273,9 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                               <p className='flex gap-1 items-center' style={{
                                 color: themeMode ? "#9B9CA1" : "#9B9CA1"
                               }}><BsCalendar2Date />{radio.date}</p>
+                            </>}
+                            {radio && <>
+                              <button onClick={() => handleClick(radio.id)} className='flex gap-1 items-center'style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}>view details</button>
                             </>}
                           </div>
                         </div>

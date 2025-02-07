@@ -3,6 +3,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { openPlayer } from "../../reducers/PlayerReducer";
+import { useNavigate } from "react-router-dom";
 
 interface News {
   type: string;
@@ -11,13 +12,14 @@ interface News {
   feature: string;
   youTube: string;
   data: any;
+  id?: any;
   link: string;
 }
 
-const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, data }) => {
+const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, data, id }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handlePlay = () => {
     if (youTube) {
       const videoId = youTube.split("v=")[1]?.split("&")[0];
@@ -27,7 +29,9 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
       }
     }
   };
-
+  const handleClick = (id: string) => {
+    navigate(`/radio/${id}`);
+  };
   const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
     <div className="relative w-full h-full" style={{ paddingBottom: "56.25%" }}>
       <iframe
@@ -93,6 +97,14 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
               >
                 {title}
               </div>
+              <button
+                onClick={() => handleClick(id)}
+                className='mt-4 font-bold'
+                style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
+
+              >
+                view details
+              </button>
             </div>
           </div>
         ) : (

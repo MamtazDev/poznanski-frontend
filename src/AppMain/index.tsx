@@ -14,6 +14,7 @@ import { logout } from "../reducers/user";
 import { deleteCookie, getCookie, parseJwt } from "../utils/auth";
 import TopArtist from "../Pages/TopArtist";
 import ArtistDetailsPage from "../Pages/Artist/ArtistDetailsPage";
+import TvRadioDetails from "../Pages/Video/TvRadioDetails";
 
 const Home = lazy(() => import("../Pages/Home"));
 const SubmitPage = lazy(() => import("../Pages/Submit"));
@@ -145,11 +146,6 @@ const AppMain: React.FC = () => {
               element={<ArticleDetailPage themeMode={themeMode} type={type} />}
             />
           </Route>
-          <Route
-            path={common.TV_RADIO_PATH}
-            element={<VideoMainPage themeMode={themeMode} type={type} />}
-          />
-
           {/* top-artist */}
           <Route
             path={common.TOP_ARTIST_PATH}
@@ -164,16 +160,28 @@ const AppMain: React.FC = () => {
             element={<ConcertMainPage themeMode={themeMode} type={type} />}
           />
 
-              <Route   path={common.NEWRELEASE_PATH}>
-              <Route
-                path=''
-                  element={<AlbumsMainPage themeMode={themeMode} type={type} />}
-                 />
-                 <Route
-                  path=":id"
-                  element={<TopArtist themeMode={themeMode} type={type} />}
+          <Route path={common.NEWRELEASE_PATH}>
+            <Route
+              path=''
+              element={<AlbumsMainPage themeMode={themeMode} type={type} />}
             />
-              </Route>
+            <Route
+              path=":id"
+              element={<TopArtist themeMode={themeMode} type={type} />}
+            />
+          </Route>
+
+          {/* radios  */}
+          <Route path={common.TV_RADIO_PATH}>
+            <Route
+              path=''
+              element={<VideoMainPage themeMode={themeMode} type={type} />}
+            />
+            <Route
+              path=":id"
+              element={<TvRadioDetails themeMode={themeMode} type={type} />}
+            />
+          </Route>
 
 
           <Route
@@ -184,9 +192,12 @@ const AppMain: React.FC = () => {
             />
             <Route
               path=":id"
-              element={<ArtistDetailsPage themeMode={themeMode} type={type}/>}
+              element={<ArtistDetailsPage themeMode={themeMode} type={type} />}
             />
+
           </Route>
+
+
           <Route
             path={common.CREATE_NEWS}
             element={<SubmitPage themeMode={themeMode} type={type} />}

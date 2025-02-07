@@ -2,9 +2,11 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { openPlayer } from "../../reducers/PlayerReducer";
+import { useNavigate } from "react-router-dom";
 
 interface News {
   title: string;
+  id?: any;
   description?: string;
   youTube: string;
   img?: string;
@@ -12,6 +14,7 @@ interface News {
   date?: string;
   nickname?: string;
   link: string;
+  btn?: string;
   data: any
 }
 
@@ -22,12 +25,13 @@ const NewReleaseCard: React.FC<News> = ({
   nickname,
   youTube,
   link,
+  btn,
+  id,
   data
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
-
-  console.log("|data", data.songs[0]?.youTube)
+  const navigate = useNavigate();
 
   const handlePlay = () => {
     if (data.songs[0]?.youTube) {
@@ -39,6 +43,10 @@ const NewReleaseCard: React.FC<News> = ({
     }
   };
 
+  const handleClick = (id: string) => {
+    navigate(`/album/${id}`);
+  };
+
   return (
     <div
       style={{
@@ -47,7 +55,7 @@ const NewReleaseCard: React.FC<News> = ({
       }}
       className="rounded-lg shadow-lg p-4 transition-all duration-300"
     >
-      <div
+      {data.songs[0]?.youTube && <div
         className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden"
         onClick={handlePlay}
       >
@@ -56,14 +64,11 @@ const NewReleaseCard: React.FC<News> = ({
           className="w-full h-full object-cover"
           alt="YouTube Thumbnail"
         />
-      </div>
+      </div>}
 
-      <h3 className="mt-2 text-md font-semibold " style={{
-        color: themeMode ? "#000000" : "#FFFFFF",
-      }}>{title}</h3>
-      <h3 className="mt-2  " style={{
-        color: themeMode ? "#BBBCC0" : "#9B9CA1",
-      }}>{data.artists[0]?.nickname}</h3>
+      {title && <h3 className="mt-2 text-md font-semibold " style={{ color: themeMode ? "#000000" : "#FFFFFF", }}>{title}</h3>}
+      {data.artists[0]?.nickname && <h3 className="mt-2  " style={{ color: themeMode ? "#BBBCC0" : "#9B9CA1", }}>{data.artists[0]?.nickname}</h3>}
+
       {description && (
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 "
           style={{
@@ -80,13 +85,16 @@ const NewReleaseCard: React.FC<News> = ({
           {data.songs[0]?.date}
         </p>
       )}
+      {data &&
       <button
-                    className='mt-4 font-bold'
-                    style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
+      onClick={() => handleClick(id)}
+        className='mt-4 font-bold'
+        style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
 
-                  >
-                   See Details
-                  </button>
+      >
+        {btn}
+      </button>}
+
     </div>
   );
 };

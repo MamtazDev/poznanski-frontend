@@ -22,12 +22,12 @@ type Song = {
 
 type IProps = {
   headTitle: string;
-  data: { _id: string; title?: string; location?: string; tags?: string; date?: string; songs?: Song[] }[];
+  data: { id: string; title?: string; location?: string; tags?: string; date?: string; songs?: Song[] }[];
 
 };
 
 type Product = {
-  _id: string;
+  id: string;
   title?: string;
   location?: string;
   tags?: string;
@@ -35,20 +35,13 @@ type Product = {
   songs?: Song[];
 };
 
-const fetcher = async (url: string): Promise<any> => {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error("Failed to fetch data");
-  return response.json();
-};
 
 const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const navigate = useNavigate();
 
   const handleClick = (id: string) => {
-    console.log(id);
-    navigate(`/${id}`);
-
+    navigate(`/album/${id}`);
   };
   const swiperRef = useRef<SwiperInstance | null>(null);
 
@@ -69,38 +62,38 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
 
   const getYouTubeID = (url: string) => {
     if (!url) {
-        console.error("YouTube URL is invalid or missing.");
-        return ""; // or return null, based on your logic
+      console.error("YouTube URL is invalid or missing.");
+      return ""; // or return null, based on your logic
     }
 
     let videoId = "";
     if (url.includes("youtube.com/watch")) {
-        videoId = url.split("v=")[1]?.split("&")[0];
+      videoId = url.split("v=")[1]?.split("&")[0];
     } else if (url.includes("youtu.be/")) {
-        videoId = url.split("youtu.be/")[1]?.split("?")[0];
+      videoId = url.split("youtu.be/")[1]?.split("?")[0];
     }
     return videoId;
-};
+  };
 
 
   const handlePlay = (youTube?: string) => {
     if (!youTube) {
-        console.error("YouTube URL is missing.");
-        return;
+      console.error("YouTube URL is missing.");
+      return;
     }
     const videoId = getYouTubeID(youTube);
     if (!videoId) {
-        console.error("Invalid YouTube video ID.");
-        return;
+      console.error("Invalid YouTube video ID.");
+      return;
     }
     dispatch(openPlayer(videoId));
-};
+  };
 
 
-    if (!Array.isArray(data)) {
-      console.error("Expected an array, received:", data);
-      return <p>No data available</p>;
-    }
+  if (!Array.isArray(data)) {
+    console.error("Expected an array, received:", data);
+    return <p>No data available</p>;
+  }
   return (
     <div className="mt-12 relative">
       <h2
@@ -131,7 +124,7 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
             >
 
               <div className='p-5 rounded-3xl mt-6'
-            onClick={() => handleClick(item._id)}
+                onClick={() => handleClick(item._id)}
                 style={{
                   backgroundColor: themeMode ? "#FFF" : "#242526",
                   color: themeMode ? "black" : "#fff",
@@ -142,10 +135,10 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
                 <div
                   className={`relative bg-gray-100 cursor-pointer h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"
                     }`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handlePlay(item.songs?.[0]?.youTube);
-                    }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePlay(item.songs?.[0]?.youTube);
+                  }}
                 >
                   {/* YouTube Thumbnail */}
                   <img
@@ -215,6 +208,11 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
                     <p className='flex gap-1 items-center' style={{
                       color: themeMode ? "#9B9CA1" : "#9B9CA1"
                     }}><BsCalendar2Date />{item.date}</p>
+                  </>}
+                  {item && <>
+                    <button
+                          onClick={() => handleClick(item._id)}
+                      className='flex gap-1 items-center' style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}>view details</button>
                   </>}
                 </div>
               </div>

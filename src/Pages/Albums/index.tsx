@@ -11,6 +11,7 @@ import PaginationBar from "../../Components/PaginationBar";
 import "../mainPageStyle.css";
 
 interface Product {
+  _id: any;
   id: string;
   title: string;
   img: string;
@@ -21,18 +22,6 @@ interface Product {
   artist: string;
   star: number;
 }
-
-// interface inputProducts {
-//   _id: string;
-//   title: string;
-//   img: string;
-//   category: string;
-//   date: string | Date;
-//   link: string;
-//   location: string;
-//   artist: string;
-//   star: number;
-// }
 const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<number>(1);
   const albumsPerPage = 5;
@@ -99,15 +88,17 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 className={`grid md:grid-cols-4 grid-cols-1 gap-5 mt-10 mb-10`}
               >
                 {album.length > 0 ? (
-                  album.map((categoryItem, index) => (
+                  album.map((categoryItem) => (
                     <NewReleaseCard
-                      key={index}
+                    id={categoryItem._id}
+                      key={categoryItem._id}
                       data={categoryItem}
                       youTube="https://www.youtube.com/embed/6JYIGclVQdw"
                       title={categoryItem.title}
                       nickname="nickname"
                       date="12/12/2003"
                       link={categoryItem.title}
+                      btn="See Details"
                     />
                   ))
                 ) : (
