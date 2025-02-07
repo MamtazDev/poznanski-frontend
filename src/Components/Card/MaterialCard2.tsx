@@ -25,12 +25,22 @@ const MaterialCard: React.FC<News> = ({
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
 
-  const handlePlay = () => {
-    if (youTube) {
-      const videoId = youTube.split("v=")[1]?.split("&")[0];
-      if (videoId) {
-        dispatch(openPlayer(videoId));
-      }
+  const getYouTubeID = (url: string) => {
+    let videoId = "";
+    if (url.includes("youtube.com/watch")) {
+      videoId = url.split("v=")[1]?.split("&")[0];
+    } else if (url.includes("youtu.be/")) {
+      videoId = url.split("youtu.be/")[1]?.split("?")[0];
+    }
+    return videoId;
+  };
+
+  const handlePlay = (youTube: string) => {
+    const videoId = getYouTubeID(youTube);
+    if (videoId) {
+      dispatch(openPlayer(videoId));
+    } else {
+      console.error("Invalid YouTube URL:", youTube);
     }
   };
 
@@ -50,19 +60,13 @@ const MaterialCard: React.FC<News> = ({
         className="transition-all duration-300 ease-out w-full h-pull"
       >
         <div className="flex flex-col justify-between w-full h-full">
-          <div
-            className={`relative bg-gray-100 cursor-pointer h-48 rounded-md overflow-hidden ${
-              !themeMode && "dark-bg-color"
+          <div className={`relative bg-gray-100 cursor-pointer h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"
             }`}
-            onClick={handlePlay}
+            onClick={() => handlePlay(youTube)}
           >
             {/* YouTube Thumbnail */}
             <img
-              src={
-                youTube
-                  ? `https://img.youtube.com/vi/${youTube.split("v=")[1]?.split("&")[0]}/hqdefault.jpg`
-                  : "default-thumbnail.jpg"
-              }
+              src={youTube ? `https://img.youtube.com/vi/${getYouTubeID(youTube)}/hqdefault.jpg` : "default-thumbnail.jpg"}
               className="w-full h-full object-cover"
               alt="YouTube Thumbnail"
             />
@@ -104,9 +108,8 @@ const MaterialCard: React.FC<News> = ({
           {/* Feature Text */}
           <div className="flex justify-start mt-3">
             <div
-              className={`px-5 py-1 rounded ${
-                !themeMode && "btn-dark-bg-color"
-              }`}
+              className={`px-5 py-1 rounded ${!themeMode && "btn-dark-bg-color"
+                }`}
             >
               {feature}
             </div>
@@ -114,9 +117,8 @@ const MaterialCard: React.FC<News> = ({
 
           {/* Title */}
           <div
-            className={`mt-2 font-semibold text-lg ${
-              !themeMode && "title-dark-color"
-            }`}
+            className={`mt-2 font-semibold text-lg ${!themeMode && "title-dark-color"
+              }`}
           >
             {title}
           </div>

@@ -166,7 +166,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const filteredArtists = artists.filter(
     (artist) =>
       artist.name.toLowerCase().includes(filterText.toLowerCase()) ||
-      artist.description.toLowerCase().includes(filterText.toLowerCase())||
+      artist.description.toLowerCase().includes(filterText.toLowerCase()) ||
       artist.profileImg
   );
 
@@ -210,7 +210,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 >
                   <div className="flex items-start w-full">
                     <div className="md:block hidden" onClick={() => handleClick(artist.id)}>
-                    <img src={artist?.profileImg || avatar} className='w-[100px] h-[80px] rounded-full' alt='img' />
+                      <img src={artist?.profileImg || avatar} className='w-[100px] h-[80px] rounded-full' alt='img' />
                     </div>
                     <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
                       <div
@@ -223,11 +223,16 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       </div>
                     </div>
                   </div>
-                  <div
-                    className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "h-72" : "h-0 overflow-hidden"}`}
-                  >
-                    {artist.products.length > 0 && <ArtistsCarousel cardNum={cardNum} cardData={artist.products} />}
-                  </div>
+                  {
+                    artist.products.length > 0 && (
+                      <div
+                        className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "h-72" : "h-0 overflow-hidden"}`}
+                      >
+                        {<ArtistsCarousel cardNum={cardNum} cardData={artist.products} />}
+                      </div>
+                    )
+                  }
+
                 </div>
               </div>
             ))
