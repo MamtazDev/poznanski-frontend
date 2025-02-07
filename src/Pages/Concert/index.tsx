@@ -16,7 +16,6 @@ import { RootState } from "../../reducers";
 import "../mainPageStyle.css";
 import type { PageBasicProps } from "../../AppMain";
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
@@ -35,6 +34,7 @@ interface Product {
   location: string;
   description: string;
 }
+
 interface inputProducts {
   _id: string;
   name: string;
@@ -194,12 +194,14 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 <BreadCrumb />
               </div>
             )}
+
             <div className="md:mt-7 mt-10">
               <ContentTitle
                 titleType="TOP HITS"
                 title="Book Your Spot In Events"
               />
             </div>
+
             <div className="md:mt-6 mt-4">
               <FilterInput
                 type={type}
@@ -209,8 +211,8 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 filters={filters}
               />
             </div>
-            <div className="md:mt-16">
 
+            <div className="md:mt-16">
               <Swiper
                 pagination={{
                   dynamicBullets: true,
@@ -218,8 +220,8 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 modules={[Pagination]}
                 className="mySwiper">
                 {featuredProducts.map((item, idx) => {
-                  console.log(item, "concert item")
-                  return(
+                  console.log(item, "concert item");
+                  return (
                     <SwiperSlide className="p-2 md:mb-16 mb-8">
                       <div
                         key={`ticket-detail-${idx}`}
@@ -227,7 +229,9 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         <div className={`relative`}>
                           <Image
                             // src={item?.img || "/placeholder.svg"}
-                            src={"https://i.ibb.co.com/5KchHq8/ticket-Banner.png"}
+                            src={
+                              "https://i.ibb.co.com/5KchHq8/ticket-Banner.png"
+                            }
                             className="cursor-pointer object-cover h-full w-full"
                             alt={item.img}
                             borderRadius={type ? "18px" : "25px"}
@@ -312,7 +316,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         </div>
                       </div>
                     </SwiperSlide>
-                  )
+                  );
                 })}
               </Swiper>
 
@@ -449,6 +453,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 </div>
               )}
             </div>
+
             <div
               className={`md:mt-16 mt-8 flex ${type ? "justify-center" : "justify-end"}`}>
               <PaginationBar

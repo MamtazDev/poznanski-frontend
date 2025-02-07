@@ -184,7 +184,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                     />
                   </div>
                   <AccountMenu themeMode={props.themeMode} />
-                  <Link to={common.CREATE_NEWS}>
+                  {/* <Link to={common.CREATE_NEWS}>
                     <div
                       className={`submit-btn ${
                         !props.themeMode && "submit-btn-dark"
@@ -192,7 +192,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                     >
                       Submit News
                     </div>
-                  </Link>
+                  </Link> */}
                   <DelayedLink to={common.CREATE_NEWS} state={""}>
                     <ActionButton type="button">Dodaj newsa</ActionButton>
                   </DelayedLink>
