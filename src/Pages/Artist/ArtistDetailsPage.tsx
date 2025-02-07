@@ -7,7 +7,7 @@ import { GoDotFill } from "react-icons/go";
 import CommonTitleText from '../../Components/CommonTitleText/CommonTitleText';
 import useSWR from 'swr';
 import Event from './Event';
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { IoLocationOutline } from 'react-icons/io5';
 import { BsCalendar2Date } from 'react-icons/bs';
@@ -43,7 +43,12 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [loading, setLoading] = useState(true);
   const swiperRef = useRef<SwiperInstance | null>(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  // const handleClick = () => {
+  //   console.log(_id);
+  //   navigate(`/artist/${_id}`);
+  // };
   const handleNext = () => {
     if (swiperRef.current) {
       swiperRef.current.slideNext();
@@ -76,15 +81,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
   };
 
-  const handleSongPlay = (youTube: string) => {
-    if (!youTube) return;
-    const videoId = getYouTubeID(youTube);
-    if (videoId) {
-      dispatch(openPlayer(videoId));
-    } else {
-      console.error("Invalid YouTube URL:", youTube);
-    }
-  };
+
 
   const fetcher = async (url: string) => {
     const response = await fetch(url);
