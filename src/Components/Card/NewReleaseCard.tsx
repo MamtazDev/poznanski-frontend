@@ -80,6 +80,13 @@ const NewReleaseCard: React.FC<News> = ({
           {data.songs[0]?.date}
         </p>
       )}
+      <button
+                    className='mt-4 font-bold'
+                    style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
+
+                  >
+                   See Details
+                  </button>
     </div>
   );
 };

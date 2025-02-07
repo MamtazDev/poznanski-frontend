@@ -134,7 +134,7 @@ const AppMain: React.FC = () => {
             element={<TestArtist />}
           /> */}
           <Route path="/profile" element={<ProfilePage themeMode={themeMode} />} />
-          {/* <Route path="/top-artist" element={<TopArtist themeMode={themeMode} type={type} />} /> */}
+
           <Route path={common.NEWS_PATH}>
             <Route
               path=""
@@ -163,10 +163,19 @@ const AppMain: React.FC = () => {
             path={common.CONCERT_PATH}
             element={<ConcertMainPage themeMode={themeMode} type={type} />}
           />
-          <Route
-            path={common.NEWRELEASE_PATH}
-            element={<AlbumsMainPage themeMode={themeMode} type={type} />}
-          />
+
+              <Route   path={common.NEWRELEASE_PATH}>
+              <Route
+                path=''
+                  element={<AlbumsMainPage themeMode={themeMode} type={type} />}
+                 />
+                 <Route
+                  path=":id"
+                  element={<TopArtist themeMode={themeMode} type={type} />}
+            />
+              </Route>
+
+
           <Route
             path={common.ARTISTS_PATH}>
             <Route
