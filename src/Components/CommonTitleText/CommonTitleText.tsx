@@ -14,6 +14,7 @@ import { BsCalendar2Date } from "react-icons/bs";
 import singer from "../../assets/svg/artists1.svg"
 import { useDispatch } from "react-redux";
 import { openPlayer } from "../../reducers/PlayerReducer";
+import { useNavigate } from "react-router-dom";
 
 type Song = {
   youTube?: string;
@@ -22,6 +23,7 @@ type Song = {
 type IProps = {
   headTitle: string;
   data: { _id: string; title?: string; location?: string; tags?: string; date?: string; songs?: Song[] }[];
+
 };
 
 type Product = {
@@ -41,7 +43,13 @@ const fetcher = async (url: string): Promise<any> => {
 
 const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const navigate = useNavigate();
 
+  const handleClick = (id: string) => {
+    console.log(id);
+    navigate(`/${id}`);
+
+  };
   const swiperRef = useRef<SwiperInstance | null>(null);
 
   const handleNext = () => {
@@ -123,6 +131,7 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
             >
 
               <div className='p-5 rounded-3xl mt-6'
+            onClick={() => handleClick(item._id)}
                 style={{
                   backgroundColor: themeMode ? "#FFF" : "#242526",
                   color: themeMode ? "black" : "#fff",
@@ -133,7 +142,10 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
                 <div
                   className={`relative bg-gray-100 cursor-pointer h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"
                     }`}
-                    onClick={() => handlePlay(item.songs?.[0]?.youTube)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePlay(item.songs?.[0]?.youTube);
+                    }}
                 >
                   {/* YouTube Thumbnail */}
                   <img

@@ -45,10 +45,11 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const handleClick = () => {
-  //   console.log(_id);
-  //   navigate(`/artist/${_id}`);
-  // };
+  const handleClick = (id: string) => {
+    console.log(id);
+    navigate(`/album/${id}`);  // Update the path accordingly
+  };
+
   const handleNext = () => {
     if (swiperRef.current) {
       swiperRef.current.slideNext();
