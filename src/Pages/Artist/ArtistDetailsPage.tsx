@@ -275,7 +275,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                               }}><BsCalendar2Date />{radio.date}</p>
                             </>}
                             {radio && <>
-                              <button onClick={() => handleClick(radio.id)} className='flex gap-1 items-center'style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}>view details</button>
+                              <button onClick={() => handleClick(radio._id)} className='flex gap-1 items-center'style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}>view details</button>
                             </>}
                           </div>
                         </div>
