@@ -31,7 +31,7 @@ const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
           <MainBack type={type} themeMode={themeMode} scrollToBottom={scrollToBottom} />
         </div>
         <div ref={pageBottomRef} />
-        {/* <NewsContent filterText={filterText} /> */}
+        <NewsContent filterText={filterText} />
         <TV filter={filterText} />
         <div className="middle-back md:mt-28 mt-12 flex justify-center items-center">
           <div className="md:h-40 h-20">
@@ -40,10 +40,10 @@ const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
         </div>
         <Book filter={filterText} />
         <MaterialContent filter={filterText} />
-        {/* <NewReleases filter={filterText} />
+        {/* <NewReleases filter={filterText} /> */}
         <Artists filter={filterText} />
         <Subscription />
-        <MarkCarousel /> */}
+        <MarkCarousel />
         <Footer />
       </div>
     </Fragment>
