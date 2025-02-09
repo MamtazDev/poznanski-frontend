@@ -1,4 +1,3 @@
-import { Avatar } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { PageBasicProps } from "../../AppMain";
 import BreadCrumb from "../../Components/BreadCrumb";
@@ -10,22 +9,23 @@ import { apiBaseUrl, fileUrl } from "../../Constant/config";
 import ArtistsCarousel from "../Home/Artists/Carousel";
 import "../mainPageStyle.css";
 import { useNavigate } from "react-router-dom";
-
+import avatar from "../../assets/png/profileImage2.png"
+import { Avatar } from "@chakra-ui/react";
 interface ArtistsData {
   id: string;
   _id?: string;
   name: string;
   img: string;
+  profileImg: any;
   description: string;
-  products: [
-    {
-      title: string;
-      location: string;
-      date: string;
-      category: string;
-      img: string;
-    },
-  ];
+  products: [{
+    title: string,
+    location: string;
+    date: string;
+    category: string;
+    img: string;
+    profileImg: string;
+  }];
 }
 
 interface InputArtistsData {
