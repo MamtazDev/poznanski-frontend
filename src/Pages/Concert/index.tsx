@@ -538,7 +538,7 @@ const Card = ({ item, themeMode, idx }: any) => {
             <Button
               size="md"
               height="35px"
-              width="110px"
+              width="100%"
               border="2px"
               borderColor={themeMode ? "#5A1073" : "#2FC4B2"}
               borderWidth="1px"
