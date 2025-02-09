@@ -89,7 +89,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
     fetch("http://localhost:8000/api/concert")
       .then((res) => res.json())
       .then((data) => {
-        console.log("API Response hhhh:", data);
+        // console.log("API Response hhhh:", data);
   
         if (data.success) {
           const featuredItems = data.isFeatured.map((item: any) => ({
@@ -103,7 +103,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
           }));
   
           setData(featuredItems);
-          console.log("Featured Data:", featuredItems);
+          // console.log("Featured Data:", featuredItems);
         }
   
         setLoading(false);
@@ -213,7 +213,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
 export default Book;
 
 const Card = ({ item, themeMode, idx }: any) => {
-  console.log(item);
+  // console.log(item);
 
   return (
     <div>

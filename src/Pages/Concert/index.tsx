@@ -463,7 +463,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 export default ConcertMainPage;
 
 const Card = ({ item, themeMode, idx }: any) => {
-  console.log(item);
+  // console.log(item);
 
   return (
     <div>

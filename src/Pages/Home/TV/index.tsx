@@ -48,7 +48,7 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
         const data = await response.json();
 
         if (!data || !Array.isArray(data.records)) {
-          console.error("Invalid API response: ", data);
+          // console.error("Invalid API response: ", data);
           setLoading(false);
           return;
         }
@@ -62,7 +62,7 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
         }));
 
         setCardData(newData);
-        console.log("new data on landing page", newData);
+        // console.log("new data on landing page", newData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
