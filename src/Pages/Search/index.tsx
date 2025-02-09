@@ -29,36 +29,12 @@ const SearchMainPage = ({ themeMode, type }: any) => {
     );
   const { data, error } = useSWR(`${urlEndoint}/query=${searchText}`, fetcher);
 
-  // const { data, error } = useSWR(
-  //   `${urlEndoint}/search?query=${searchText}`,
-  //   fetcher
-  // );
-
-  // Local state to store the response
-  const [news, setNews] = useState(null);
-
-  // When the data is fetched, set it to the local state
-  // useEffect(() => {
-  //   if (data) {
-  //     console.log("Fetched data:", data.data["Concert"]);
-  //     console.log("Fetched data:", data.data["newsData"]);
-
-  //     // Access the nested 'news' object
-  //     console.log("Intro:", data.news?.intro); // Logs the intro of the news
-  //     console.log("Title:", data.news?.title); // Logs the title of the news
-  //     console.log("Tags:", data.news?.tags); // Logs the tags of the news
-  //   }
-  // }, [data]);
-  // // Handle loading and error states
-  // if (error) return <div>Error loading data.</div>;
-  // if (!news) return <div>Loading...</div>;
-
   const newsData = data?.data?.newsData || [];
 
   return (
     <Layout themeMode={themeMode} type={type}>
       <div className="flex justify-center">
-        <div className="container">
+        <div className="container mx-auto px-4">
           {type ? (
             ""
           ) : (
@@ -68,7 +44,7 @@ const SearchMainPage = ({ themeMode, type }: any) => {
           )}
           <div>
             <h1
-              className={` font-bold text-5xl text-start mt-5 mb-16 ${themeMode ? "text-[#252733]" : "text-white"}`}
+              className={`font-bold text-3xl sm:text-4xl md:text-5xl text-start mt-5 mb-8 sm:mb-12 ${themeMode ? "text-[#252733]" : "text-white"}`}
             >
               You searched for “{searchText}”
             </h1>
@@ -76,16 +52,12 @@ const SearchMainPage = ({ themeMode, type }: any) => {
 
           <div>
             <h1
-              className={`text-[#252733] text-2xl font-semibold text-start mb-6 ${themeMode ? "text-[#252733]" : "text-white"}`}
+              className={`text-[#252733] text-xl sm:text-2xl font-semibold text-start mb-4 sm:mb-6 ${themeMode ? "text-[#252733]" : "text-white"}`}
             >
               News
             </h1>
 
-            <div
-              style={{
-                width: "100%",
-              }}
-            >
+            <div style={{ width: "100%" }}>
               <DelayedComponent delay={200}>
                 {loading ? (
                   <div
@@ -104,9 +76,8 @@ const SearchMainPage = ({ themeMode, type }: any) => {
                   </div>
                 ) : (
                   <div
-                    className={`${"grid"} ${cardNum === 4 && "grid-cols-4"} ${cardNum === 3 && "grid-cols-3"} ${cardNum === 2 && "grid-cols-2"} gap-4 py-5`}
+                    className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${cardNum} lg:grid-cols-4 gap-4 py-5`}
                   >
-                    {/* <p>Title: {data?.data["newsData"].length}</p> */}
                     {newsData.map((item: any) => (
                       <div
                         id={item._id}
@@ -121,7 +92,6 @@ const SearchMainPage = ({ themeMode, type }: any) => {
                           date={`${item.date}`.split("T")[0]}
                           _id={item._id}
                         />
-                        {/* <p className="text-5xl text-red-500">{item.title}</p> */}
                       </div>
                     ))}
                   </div>
