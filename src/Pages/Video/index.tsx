@@ -88,6 +88,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       const response = await fetch(url);
       const data = await response.json();
       setCardData(data.records);
+      // console.log(data.records ,"datttatta")
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
