@@ -261,13 +261,12 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     fetchData();
   }, []);
 
-  
   const handleSearch = (inputValue: string) => {
     console.log("Searched value: ", inputValue);
     console.log("Filters value: ", filters);
     fetchData(filters);
   };
-  
+
   useEffect(() => {
     console.log("Filtered worked");
     fetchData(filters);
@@ -463,54 +462,96 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 export default ConcertMainPage;
 
 const Card = ({ item, themeMode, idx }: any) => {
-  // console.log(item);
-
   return (
-    <div>
-      <div
-        className={`grid grid-cols-4 ${idx !== 0 && "ticket-top-border"} items-center px-3 shadow-md rounded-2xl`}
-        style={{ height: 75 }}
-      >
-        <div className="flex items-center">
-          <div
-            className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}
-          >
-            {item.date}
-          </div>
-          <div className={`ticket-month ${!themeMode && "text-dark-color"}`}>
-            <div>{item.month}</div>
-            <div>{item.timeframe.start}</div>
-          </div>
-        </div>
+    <div className="px-3">
+      <div className={`py-4 ${idx !== 0 && "ticket-top-border"}`}>
         <div
-          className={`ticket-type text-center ${!themeMode && "title-dark-color"}`}
+          className="hidden md:grid grid-cols-4 items-center px-3"
+          style={{ height: 75 }}
         >
-          {item.name}
-        </div>
-        <div className="flex  justify-center items-center">
+          <div className="flex items-center">
+            <div
+              className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}
+            >
+              {item.date}
+            </div>
+            <div className={`ticket-month ${!themeMode && "text-dark-color"}`}>
+              <div>{item.month}</div>
+              <div>{item.timeframe.start}</div>
+            </div>
+          </div>
           <div
-            className={`ticket-category ${!themeMode && "btn-dark-bg-color"}`}
+            className={`ticket-type text-center ${!themeMode && "title-dark-color"}`}
           >
-            {item.category}
+            {item.name}
+          </div>
+          <div className="flex justify-center items-center">
+            <div
+              className={`ticket-category ${!themeMode && "btn-dark-bg-color"}`}
+            >
+              {item.category}
+            </div>
+          </div>
+          <div>
+            <Button
+              size="md"
+              height="30px"
+              width="105px"
+              border="2px"
+              borderColor={themeMode ? "#5A1073" : "#2FC4B2"}
+              borderWidth="1px"
+              borderRadius="5px"
+              color={themeMode ? "#5A1073" : "#2FC4B2"}
+              fontFamily="Urbanist"
+              fontSize="14px"
+              fontWeight="600"
+              backgroundColor={themeMode ? "#FFF" : "#242526"}
+            >
+              Buy Ticket
+            </Button>
           </div>
         </div>
-        <div>
-          <Button
-            size="md"
-            height="30px"
-            width="105px"
-            border="2px"
-            borderColor={themeMode ? "#5A1073" : "#2FC4B2"}
-            borderWidth="1px"
-            borderRadius="5px"
-            color={themeMode ? "#5A1073" : "#2FC4B2"}
-            fontFamily="Urbanist"
-            fontSize="14px"
-            fontWeight="600"
-            backgroundColor={themeMode ? "#FFF" : "#242526"}
-          >
-            Buy Ticket
-          </Button>
+
+        <div className="flex flex-col gap-2 md:hidden">
+          <div className="flex justify-between items-center text-sm text-gray-700">
+            <div  className={`${!themeMode && "text-dark-color"}`}>
+               2feb {item.date} {item.month}
+            </div>
+            <div className={`${!themeMode && "text-dark-color"}`}>
+                {item.timeframe.start}
+            </div>
+          </div>
+
+
+          <div className="flex justify-between items-center">
+            <div
+              className={`text-base font-medium ${!themeMode && "title-dark-color"}`}
+            >
+              {item.name}
+            </div>
+            <div className="px-2 py-1 text-xs rounded-lg bg-purple-100 text-purple-700">
+              {item.category}
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <Button
+              size="md"
+              height="35px"
+              width="110px"
+              border="2px"
+              borderColor={themeMode ? "#5A1073" : "#2FC4B2"}
+              borderWidth="1px"
+              borderRadius="8px"
+              color={themeMode ? "#5A1073" : "#2FC4B2"}
+              fontFamily="Urbanist"
+              fontSize="14px"
+              fontWeight="600"
+              backgroundColor="#FFF"
+            >
+              Buy Ticket
+            </Button>
+          </div>
         </div>
       </div>
     </div>

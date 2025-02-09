@@ -45,7 +45,6 @@ const NavBar: React.FC<NavBarProps> = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-
   useEffect(() => {
     const checkDeviceSize = () => {
       setIsSmallDevice(window.innerWidth < 768); // Adjust the breakpoint as needed
@@ -123,8 +122,6 @@ const NavBar: React.FC<NavBarProps> = (props) => {
     setIsSearchExpanded(expanded);
   };
 
-
-
   return (
     <Fragment>
       <div className={`Nav-bar  w-full z-50 shadow-xl`}>
@@ -132,7 +129,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
           className={`Nav-bar-top ${!props.themeMode && "Nav-bar-top-dark"} flex place-items-center justify-center`}
         >
           <div className="flex justify-between gap-x-1 container py-4 px-4 md:px-6">
-            <div className="flex w-full place-items-center">
+            <div className="flex w-full">
               <Link
                 to={"/"}
                 className={
@@ -146,20 +143,22 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                   fill={props.themeMode ? "#000" : "#fff"}
                 />
               </Link>
-              <SearchBar
-                onSearchStateChange={handleSearchStateChange}
-                themeMode={props.themeMode}
-                isSmallDevice={isSmallDevice}
-              />
-              <button
-                onClick={() => setOpenModal(true)}
-                className={`md:hidden flex items-center justify-center w-10 h-10 ${isSearchExpanded ? "hidden" : ""}`}
-              >
-                <MobileMenuIcon
-                  className="w-6 h-6"
-                  stroke={getIconsColor(props.themeMode)}
+              <div className="flex-grow flex justify-end md:justify-start">
+                <SearchBar
+                  onSearchStateChange={handleSearchStateChange}
+                  themeMode={props.themeMode}
+                  isSmallDevice={isSmallDevice}
                 />
-              </button>
+                <button
+                  onClick={() => setOpenModal(true)}
+                  className={`md:hidden flex items-center justify-center w-10 h-10 ${isSearchExpanded ? "hidden" : ""}`}
+                >
+                  <MobileMenuIcon
+                    className="w-6 h-6"
+                    stroke={getIconsColor(props.themeMode)}
+                  />
+                </button>
+              </div>
             </div>
 
             {!isSearchExpanded && (
