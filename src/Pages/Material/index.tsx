@@ -166,7 +166,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           </div>
           <div
             className="md:mt-12 mt-8"
-            style={{ minHeight: "908px", width: "100%" }}
+            // style={{ minHeight: "908px", width: "100%" }}
           >
             {loading ? (
               <div
@@ -182,7 +182,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 />
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
                 {cardData?.map((item, index) => (
                   <div key={`main-video-card-${index}`} className="w-full">
                     <MaterialCard

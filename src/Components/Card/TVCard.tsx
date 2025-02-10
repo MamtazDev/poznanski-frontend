@@ -79,7 +79,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
               src={
                 youTube
                   ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
-                  : "default-thumbnail.jpg" // Fallback for undefined youTube
+                  : "default-thumbnail.jpg"
               }
               className="md:w-full w-[69px] h-full  object-cover"
               alt="YouTube Thumbnail"

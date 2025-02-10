@@ -109,7 +109,8 @@ const TopArtist: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         <GoDotFill style={{ color: themeMode ? "#D9D9D9" : "D9D9D9", }} />
                         <p className='flex gap-1 items-center' style={{
                           color: themeMode ? "#9B9CA1" : "#9B9CA1"
-                        }}><BsCalendar2Date />20/4/2023</p></div>
+                        }}><BsCalendar2Date />20/4/2023</p>
+                        </div>
                     </div>
                   </SwiperSlide>
                 ))}
