@@ -209,8 +209,8 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   onMouseLeave={() => setHoveredCard(null)}
                 >
                   <div className="flex items-start w-full">
-                    <div className="md:block hidden" onClick={() => handleClick(artist.id)}>
-                      <img src={artist?.profileImg || avatar} className='w-[100px] h-[80px] rounded-full' alt='img' />
+                    <div className="" onClick={() => handleClick(artist.id)}>
+                      <img src={artist?.profileImg || avatar} className='md:w-[100px] w-[80px]  md:h-[80px]  h-[50px] rounded-full' alt='img' />
                     </div>
                     <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
                       <div
@@ -224,7 +224,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     </div>
                   </div>
                   { artist.products.length > 0 && (
-                      <div className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "h-72" : "h-0 overflow-hidden"}`}>
+                      <div className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "md:h-[350px] h-72" : "h-0 overflow-hidden"}`}>
                         {<ArtistsCarousel cardNum={cardNum} cardData={artist.products} />}
                       </div>
                      )}
