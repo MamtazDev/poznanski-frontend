@@ -25,6 +25,7 @@ const ProductCard1: React.FC<News> = ({
   const navigate = useNavigate();
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const handleClick = () => {
+    console.log(_id);
     navigate(`/news/${_id}`);
   };
 
@@ -70,10 +71,16 @@ const ProductCard1: React.FC<News> = ({
 
             <div className="flex justify-start mt-4">
               <div className="flex flex-wrap gap-2 mt-2">
-                {wordArray?.map((tag, index) =>
-                  <div key={index} className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}>
-                    {tag.trim()}
-                  </div>
+                {wordArray.map(
+                  (tag, index) =>
+                    tag && (
+                      <div
+                        key={index}
+                        className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
+                      >
+                        {tag.trim()}
+                      </div>
+                    )
                 )}
               </div>
             </div>

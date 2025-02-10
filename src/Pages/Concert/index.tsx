@@ -395,7 +395,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
           <div
             className={`md:mt-16 mt-8`}
-            style={{ minHeight: type ? "689px" : "450px", width: "100%" }}>
+            style={{ minHeight: type ? "250px" : "150px", width: "100%" }}>
             {loading ? (
               <div
                 className="w-full flex justify-center items-center"
