@@ -85,7 +85,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 	const wordArray = tags ? data?.news?.tags.split(",").map((word: string) => word.trim()) : [];
 	return (
 		<Layout themeMode={themeMode} type={type}>
-			<div className='flex justify-between '>
+			<div className='flex justify-center '>
 				<div className='container'>
 					{type ? (
 						''
@@ -129,81 +129,27 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 							</DelayedComponent>
 						</div>
 						<div className={`md:w-2/6 w-full`} style={{ marginTop: type ? '0px' : '300px' }}>
-							<div
-								className={`${!type ? (themeMode ? 'right-card' : 'right-card-dark') : ''
-									} mb-6 w-full py-4 px-3`}
-							>
-								<div
-									className={`${themeMode ? 'tag-card-title' : 'tag-card-title-dark'} text-left md:mb-3 mb-4`}
-								>
-									Tagi
-								</div>
-								<div className="flex justify-start mt-4">
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {wordArray.map(
-                    (tag: string, index: React.Key | null | undefined) =>
-                      tag && (
-                        <div
-                          key={index}
-                          className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
-                        >
-                          {tag.trim()}
-                        </div>
-                      )
-                  )}
-                </div>
-              </div>
-              {filteredRelatedData.length > 0 && (
-                <div
-                  className={`${themeMode ? "right-card" : "right-card-dark"} px-3 py-4`}
-                >
-                  <div
-                    className={`${themeMode ? "tag-card-title" : "tag-card-title-dark"} text-left`}
-                  >
-                    Zobacz również
-                  </div>
-                  <div className={`flex flex-col gap-3 md:mt-3 mt-4`}>
-                    {filteredRelatedData &&
-                      filteredRelatedData.map((item) => (
-                        <Link replace to={`/news/${item._id}`} key={item._id}>
-                          <div className={`flex gap-3`}>
-                            <Image
-                              src={`${process.env.REACT_APP_FILES_URL + item.files[0].url}`}
-                              className="cursor-pointer object-cover"
-                              height={type ? "54px" : "62px"}
-                              width={type ? "54px" : "62px"}
-                              alt={item.files[0].name}
-                              borderRadius={type ? "8px" : "10px"}
-                            />
-                            <div
-                              className={`flex flex-col justify-center overflow-hidden`}
-                            >
-                              <div
-                                className={`${themeMode ? "tag-title" : "tag-title-dark"} w-full text-left`}
-                                style={{
-                                  fontSize: type ? "14px" : "12px",
-                                }}
-                              >
-                                {item.title}
-                              </div>
-                              <p
-                                className={`mt-1 ${themeMode ? "text-stone-500" : "text-stone-300"} w-full text-left text-xs`}
-                              >
-                                {item.intro.slice(0, type ? 100 : 75) + "..."}
-                              </p>
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                  </div>
-                </div>
-              )}
-              <SocialShare
-                themeMode={themeMode}
-                url={url}
-                title={`${pageData?.title}`}
-              />
-            </div>
+            <div className={`${themeMode ? 'right-card' : 'right-card-dark'} mb-6 py-4 px-3`}>
+  <div className={`${themeMode ? 'tag-card-title' : 'tag-card-title-dark'} text-left md:mb-3 mb-4`}>
+    Tagi
+  </div>
+  {tags ? (
+    <div className="flex flex-wrap gap-2 mt-2 md:mt-0 ">
+      {wordArray.map((tag:any, index:any) => tag && (
+        <span key={index} className={`px-2 py-1 rounded-full md:text-sm text-[8px] font-semibold ${!themeMode && "btn-dark-bg-color"}`}
+          style={{
+            backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
+            color: themeMode ? "#5A1073" : "#5A1073",
+          }}>
+          {tag}
+        </span>
+      ))}
+    </div>
+  ) : (
+    <p style={{ color: themeMode ? "black" : "white" }}>no tags here</p>
+  )}
+</div>
+
           </div>
           {/* {targetNewsSelected && pageData ? (
             <div className='flex md:flex-row flex-col gap-8'>
