@@ -98,15 +98,6 @@ const AppMain: React.FC = () => {
     };
   }, []);
 
-  const mockUser = {
-    nickname: "JohnDoe",
-    email: "john.doe@example.com",
-    profilePicture: "",
-    role: "user",
-    isVerified: true,
-    resetPasswordExpires: "2025-01-30T23:59:59.999Z",
-  };
-
   return (
     <div className={` ${!themeMode && "back-dark"}`}>
       <NavBar themeMode={themeMode} type={type} />

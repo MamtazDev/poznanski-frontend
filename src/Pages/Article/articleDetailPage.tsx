@@ -1,76 +1,77 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import BreadCrumb from '../../Components/BreadCrumb';
-import ContentTitle from '../../Components/ContentTitle';
-import Layout from '../../Components/Layout';
-import CommentForm from '../../Components/Comment';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { Image } from '@chakra-ui/react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../reducers';
-import '../mainPageStyle.css';
-import { PageBasicProps } from '../../AppMain';
-import { ArticleToDisplay } from '../Home/NewsContent/Carousel';
+import React, { useState, useEffect, useMemo } from "react";
+import BreadCrumb from "../../Components/BreadCrumb";
+import ContentTitle from "../../Components/ContentTitle";
+import Layout from "../../Components/Layout";
+import CommentForm from "../../Components/Comment";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { Image } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../reducers";
+import "../mainPageStyle.css";
+import { PageBasicProps } from "../../AppMain";
+import { ArticleToDisplay } from "../Home/NewsContent/Carousel";
 import {
-	addLastVisited,
-	get5RandomNewsByTags,
-	getLastVisitedId,
-	getTargetNews,
-} from '../../reducers/NewsReducer';
-import useSWR from 'swr';
-import TipTap from '../../Components/TipTap/TipTap';
-import DelayedComponent from '../../Components/_utility/DelayedComponent';
-import SocialShare from '../../Components/SocialShare/SocialShare';
-import { PostModels } from '../../Constant/api-requests';
-import defaultimg from "../../assets/svg/userIcon.svg"
+  addLastVisited,
+  get5RandomNewsByTags,
+  getLastVisitedId,
+  getTargetNews,
+} from "../../reducers/NewsReducer";
+import useSWR from "swr";
+import TipTap from "../../Components/TipTap/TipTap";
+import DelayedComponent from "../../Components/_utility/DelayedComponent";
+import SocialShare from "../../Components/SocialShare/SocialShare";
+import { PostModels } from "../../Constant/api-requests";
+import defaultimg from "../../assets/svg/userIcon.svg";
 interface CommentForm {
-	id: string;
-	img: string;
-	comment: string;
+  id: string;
+  img: string;
+  comment: string;
 }
 
 const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-	const { id } = useParams<{ id: string }>();
-	const targetNewsSelected = useSelector((state: RootState) =>
-		getTargetNews(state, id)
-	);
-	const url = useLocation().pathname;
-	const lastVisitedId = useSelector((state: RootState) =>
-		getLastVisitedId(state)
-	);
-	const dispatch = useDispatch();
-	const [pageData, setPageData] = useState<ArticleToDisplay>();
-	const [, ...tagsToRemap] = targetNewsSelected?.tags?.split('#') || [];
-	const tags = tagsToRemap;
-	const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
+  const { id } = useParams<{ id: string }>();
+  const targetNewsSelected = useSelector((state: RootState) =>
+    getTargetNews(state, id)
+  );
+  const url = useLocation().pathname;
+  const lastVisitedId = useSelector((state: RootState) =>
+    getLastVisitedId(state)
+  );
+  const dispatch = useDispatch();
+  const [pageData, setPageData] = useState<ArticleToDisplay>();
+  const [, ...tagsToRemap] = targetNewsSelected?.tags?.split("#") || [];
+  const tags = tagsToRemap;
+  const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
 
-	const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
-		get5RandomNewsByTags(state, pageDataTags || [])
-	);
-	const filteredRelatedData = useMemo(() => {
-		return relatedData.filter((news) => data.news._id !== id);
-	}, [relatedData, id]);
+  const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
+    get5RandomNewsByTags(state, pageDataTags || [])
+  );
+  const filteredRelatedData = useMemo(() => {
+    return relatedData.filter((news) => data.news._id !== id);
+  }, [relatedData, id]);
 
 	useEffect(() => {
 		setPageData(targetNewsSelected);
 	}, [targetNewsSelected]);
 
-	useEffect(() => {
-		if (!lastVisitedId || lastVisitedId !== id) {
-			dispatch(addLastVisited(`${id}`));
-		}
-	}, [lastVisitedId, id, dispatch]);
+  useEffect(() => {
+    if (!lastVisitedId || lastVisitedId !== id) {
+      dispatch(addLastVisited(`${id}`));
+    }
+  }, [lastVisitedId, id, dispatch]);
 
-	// dihan
+  // dihan
 
-	// create a function to fetch from api
-	// set data to a useState
-	let urlEndoint = "http://localhost:8000/api/news"
-	const fetcher = () => fetch(`http://localhost:8000/api/news/${id}`).then((res) => res.json());
+  // create a function to fetch from api
+  // set data to a useState
+  let urlEndoint = "http://localhost:8000/api/news";
+  const fetcher = () =>
+    fetch(`http://localhost:8000/api/news/${id}`).then((res) => res.json());
 
-	const { data, error } = useSWR(`${urlEndoint}/${id}`, fetcher);
+  const { data, error } = useSWR(`${urlEndoint}/${id}`, fetcher);
 
-	// Local state to store the response
-	const [news, setNews] = useState(null);
+  // Local state to store the response
+  const [news, setNews] = useState(null);
 
 	// When the data is fetched, set it to the local state
 	useEffect(() => {
@@ -117,6 +118,10 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 									content={pageData?.content}
 									editable={false}
 								/>
+								 <div
+      className="bg-gray-100 p-4 mt-4 border border-gray-300 rounded-md min-h-[200px]"
+      dangerouslySetInnerHTML={{ __html: data?.news?.content || "" }}
+    />
 								<CommentForm
 									postModel={PostModels.news}
 									commentData={pageData?.commentsSection ?? null}
@@ -148,56 +153,59 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   )}
                 </div>
               </div>
-							</div>
-							{filteredRelatedData.length > 0 && (
-								<div className={`${themeMode ? 'right-card' : 'right-card-dark'} px-3 py-4`}>
-									<div
-										className={`${themeMode ? 'tag-card-title' : 'tag-card-title-dark'} text-left`}
-									>
-										Zobacz również
-									</div>
-									<div className={`flex flex-col gap-3 md:mt-3 mt-4`}>
-										{filteredRelatedData &&
-											filteredRelatedData.map((item) => (
-												<Link replace to={`/news/${item._id}`} key={item._id}>
-													<div className={`flex gap-3`}>
-														<Image
-															src={`${process.env.REACT_APP_FILES_URL + item.files[0].url}`}
-															className='cursor-pointer object-cover'
-															height={type ? '54px' : '62px'}
-															width={type ? '54px' : '62px'}
-															alt={item.files[0].name}
-															borderRadius={type ? '8px' : '10px'}
-														/>
-														<div className={`flex flex-col justify-center overflow-hidden`}>
-															<div
-																className={`${themeMode ? 'tag-title' : 'tag-title-dark'} w-full text-left`}
-																style={{
-																	fontSize: type ? '14px' : '12px',
-																}}
-															>
-																{item.title}
-															</div>
-															<p
-																className={`mt-1 ${themeMode ? 'text-stone-500' : 'text-stone-300'} w-full text-left text-xs`}
-															>
-																{item.intro.slice(0, type ? 100 : 75) + '...'}
-															</p>
-														</div>
-													</div>
-												</Link>
-											))}
-									</div>
-								</div>
-							)}
-							<SocialShare
-								themeMode={themeMode}
-								url={url}
-								title={`${pageData?.title}`}
-							/>
-						</div>
-					</div>
-					{/* {targetNewsSelected && pageData ? (
+              {filteredRelatedData.length > 0 && (
+                <div
+                  className={`${themeMode ? "right-card" : "right-card-dark"} px-3 py-4`}
+                >
+                  <div
+                    className={`${themeMode ? "tag-card-title" : "tag-card-title-dark"} text-left`}
+                  >
+                    Zobacz również
+                  </div>
+                  <div className={`flex flex-col gap-3 md:mt-3 mt-4`}>
+                    {filteredRelatedData &&
+                      filteredRelatedData.map((item) => (
+                        <Link replace to={`/news/${item._id}`} key={item._id}>
+                          <div className={`flex gap-3`}>
+                            <Image
+                              src={`${process.env.REACT_APP_FILES_URL + item.files[0].url}`}
+                              className="cursor-pointer object-cover"
+                              height={type ? "54px" : "62px"}
+                              width={type ? "54px" : "62px"}
+                              alt={item.files[0].name}
+                              borderRadius={type ? "8px" : "10px"}
+                            />
+                            <div
+                              className={`flex flex-col justify-center overflow-hidden`}
+                            >
+                              <div
+                                className={`${themeMode ? "tag-title" : "tag-title-dark"} w-full text-left`}
+                                style={{
+                                  fontSize: type ? "14px" : "12px",
+                                }}
+                              >
+                                {item.title}
+                              </div>
+                              <p
+                                className={`mt-1 ${themeMode ? "text-stone-500" : "text-stone-300"} w-full text-left text-xs`}
+                              >
+                                {item.intro.slice(0, type ? 100 : 75) + "..."}
+                              </p>
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                  </div>
+                </div>
+              )}
+              <SocialShare
+                themeMode={themeMode}
+                url={url}
+                title={`${pageData?.title}`}
+              />
+            </div>
+          </div>
+          {/* {targetNewsSelected && pageData ? (
             <div className='flex md:flex-row flex-col gap-8'>
               <div className='md:w-4/6 w-full'>
                 <div className='md:mt-7 mt-10'>
@@ -305,10 +313,11 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           ) : (
             <div>No content available</div>
           )} */}
-				</div>
-			</div>
-		</Layout>
-	);
+        </div>
+      </div>
+      </div>
+    </Layout>
+  );
 };
 
 export default ArticleDetailPage;
