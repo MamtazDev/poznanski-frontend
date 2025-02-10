@@ -48,23 +48,23 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     search: "",
   });
 
-  const handleData = (response: any) => {
-    const materials = response.materials || [];
-    const formattedProducts: Product[] = materials.map((item: any) => ({
-      id: item._id,
-      title: item.title,
-      description: item.description,
-      youTube: item.youTube,
-      tags: item.tags,
-      date: new Date(item.date).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-    }));
+  // const handleData = (response: any) => {
+  //   const materials = response.materials || [];
+  //   const formattedProducts: Product[] = materials.map((item: any) => ({
+  //     id: item._id,
+  //     title: item.title,
+  //     description: item.description,
+  //     youTube: item.youTube,
+  //     tags: item.tags,
+  //     date: new Date(item.date).toLocaleDateString("en-US", {
+  //       year: "numeric",
+  //       month: "long",
+  //       day: "numeric",
+  //     }),
+  //   }));
 
-    setCardData(formattedProducts);
-  };
+  //   setCardData(formattedProducts);
+  // };
 
   // useEffect(() => {
   //   setLoading(true);
@@ -79,68 +79,69 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   //     });
   // }, []);
 
-  const fetchData = async (inputValue?: filterProperties) => {
-    setLoading(true);
-    console.log("inputValue.search", inputValue);
-    let url = `${apiBaseUrl}/materials`; // Default URL
-    // Building the query string based on available filter properties
-    let searchQuery = [];
+    const fetchData = async (inputValue?: filterProperties) => {
+      setLoading(true);
+      let url = `${apiBaseUrl}/materials`;
+      let searchQuery = [];
 
-    if (inputValue?.search) {
-      searchQuery.push(`search=${encodeURIComponent(inputValue.search)}`);
-    }
+      if (inputValue?.search) {
+        searchQuery.push(`search=${encodeURIComponent(inputValue.search)}`);
+      }
 
-    if (inputValue?.sort) {
-      searchQuery.push(`order=${encodeURIComponent(inputValue.sort)}`);
-    }
+      if (inputValue?.sort) {
+        searchQuery.push(`order=${encodeURIComponent(inputValue.sort)}`);
+      }
 
-    if (inputValue?.quantity) {
-      console.log("inputValue?.limit", inputValue?.quantity);
-      searchQuery.push(`limit=${inputValue.quantity}`);
-    }
+      if (inputValue?.quantity) {
+        searchQuery.push(`limit=${inputValue.quantity}`);
+      }
 
-    if (inputValue?.startDate) {
-      searchQuery.push(`startDate=${encodeURIComponent(inputValue.startDate)}`);
-    }
+      if (inputValue?.startDate) {
+        searchQuery.push(`startDate=${encodeURIComponent(inputValue.startDate)}`);
+      }
 
-    if (inputValue?.endDate) {
-      searchQuery.push(`endDate=${encodeURIComponent(inputValue.endDate)}`);
-    }
+      if (inputValue?.endDate) {
+        searchQuery.push(`endDate=${encodeURIComponent(inputValue.endDate)}`);
+      }
 
-    // if (inputValue?.order) {
-    //   searchQuery.push(`order=${encodeURIComponent(inputValue.order)}`);
-    // }
+      if (searchQuery.length > 0) {
+        url = `${url}?${searchQuery.join("&")}`;
+      }
 
-    // If there are query parameters, append them to the URL
-    if (searchQuery.length > 0) {
-      url = `${url}?${searchQuery.join("&")}`;
-    }
+      try {
+        const response = await fetch(url);
+        const jsonData = await response.json();
+        const newArtists = jsonData.materials.map((item: any) => ({
+          id: item._id,
+          title: item.title,
+          description: item.description,
+          youTube: item.youTube,
+          tags: item.tags,
+          date: new Date(item.date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+        }));
 
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      setCardData(data.materials);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setCardData(newArtists);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+    useEffect(() => {
+      fetchData();
+    }, []);
 
-  const handleSearch = (inputValue: string) => {
-    console.log("Searched value: ", inputValue);
-    console.log("Filters value: ", filters);
-    fetchData(filters);
-  };
-
-  useEffect(() => {
-    console.log("Filtered worked");
-    fetchData(filters);
-  }, [filters]);
+    const handleSearch = (inputValue: string) => {
+      fetchData(filters);
+    };
+    useEffect(() => {
+      fetchData(filters);
+    }, [filters]);
 
   return (
     <Layout themeMode={themeMode}>
@@ -166,7 +167,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           </div>
           <div
             className="md:mt-12 mt-8"
-            style={{ minHeight: "908px", width: "100%" }}
+            // style={{ minHeight: "908px", width: "100%" }}
           >
             {loading ? (
               <div
@@ -183,7 +184,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5">
-                {cardData?.map((item, index) => (
+                {cardData.length > 0 ?cardData?.map((item, index) => (
                   <div key={`main-video-card-${index}`} className="w-full">
                     <MaterialCard
                       type={type ? "vertical" : "horizontal"}
@@ -195,7 +196,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       link={item.youTube}
                     />
                   </div>
-                ))}
+                )):<p className="text-blue-500 text-5xl py-3 text-center">There is no data</p>}
               </div>
             )}
           </div>

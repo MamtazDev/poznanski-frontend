@@ -7,23 +7,23 @@ import { useNavigate } from "react-router-dom";
 
 interface News {
   type: string;
-  video: string;
-  title: string;
-  feature: string;
-  youTube: string;
+  video?: string;
+  title?: string;
+  feature?: string;
+  youTube?: string;
   data: any;
   id?: any;
   link: string;
+  name?: string;
 }
 
-const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, data, id }) => {
+const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, data, id, name }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handlePlay = () => {
     if (youTube) {
       const videoId = youTube.split("v=")[1]?.split("&")[0];
-      console.log("Extracted Video ID:", videoId);
       if (videoId) {
         dispatch(openPlayer(videoId));
       }
@@ -45,149 +45,114 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
     </div>
   )
   return (
-    <div className="product-card1 flex w-full">
-      <Card
-        padding={type === "horizontal" ? "20px" : "10px"}
-        borderRadius="2xl"
-        height={type === "horizontal" ? "292px" : "83px"}
-        border={themeMode ? "1px solid white" : "1px solid #242526"}
-        backgroundColor={themeMode ? "" : "#242526"}
-        _hover={
-          !themeMode
-            ? {
-              boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
-            }
-            : {
-              boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
-            }
-        }
+    <div className="flex w-full">
+      <div
         className="transition-all duration-300 ease-out w-full h-pull"
+        onClick={() => handleClick(id)}
       >
-        {type === "horizontal" ? (
-          <div className="flex flex-col justify-between w-full h-full">
-            <div>
-              <div
-                className={`tv-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-36 relative z-10 ${!themeMode && "dark-bg-color"}`}
-              >
-                {/* <YouTubeEmbed video={video} title={title} /> */}
-                <div
-                  className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden"
-                  onClick={handlePlay}
-                >
-                  <img
-                    src={
-                      youTube
-                        ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
-                        : "default-thumbnail.jpg" // Fallback for undefined youTube
-                    }
-                    className="w-full h-full object-cover"
-                    alt="YouTube Thumbnail"
-                  />
-                </div>
-              </div>
-              <div className="flex justify-start mt-4">
-                <div
-                  className={`tv-feature-text py-1 ${!themeMode && "title-dark-color"}`}
-                >
-                  {feature}
-                </div>
-              </div>
-              <div
-                className={`tv-title-text flex mt-2 ${!themeMode && "title-dark-color"}`}
-              >
-                {title}
-              </div>
-              <button
-                onClick={() => handleClick(id)}
-                className='mt-4 font-bold'
-                style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
+        <div
+          className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl
+      ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
+      ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
+      `}
+          style={{
+            boxShadow: themeMode
+              ? "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)"
+              : "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
+            backgroundColor: themeMode ? "" : "#242526",
+            border: themeMode ? "1px solid white" : "1px solid #242526",
+            borderRadius: "2xl",
+          }}
+        >
 
-              >
-                view details
-              </button>
+
+          {/* YouTube Thumbnail */}
+          <div
+            className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handlePlay();
+            }}
+          >
+            <img
+              src={
+                youTube
+                  ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
+                  : "default-thumbnail.jpg"
+              }
+              className="md:w-full w-[69px] h-full  object-cover"
+              alt="YouTube Thumbnail"
+            />
+
+            {/* Play Button */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              {themeMode ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="58" height="57" viewBox="0 0 58 57" fill="none" className="w-[20px] md:w-[58px]">
+                  <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+                  <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55" fill="none" className="w-[20px] md:w-[58px]">
+                  <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
+                  <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
+                </svg>
+              )}
             </div>
           </div>
-        ) : (
-          <div className="flex h-full">
-            <div className="h-full w-20 relative overflow-hidden">
-              <div
-                className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
-                onClick={handlePlay}
+          <div>
+
+            {/* paly btn btn  */}
+            <div
+              className={`lg:hidden md:hidden relative lg:bg-gray-100 cursor-pointer md:h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePlay();
+              }}
+            >
+              {/* Styled Button */}
+              <button
+                className="flex items-center gap-2 px-2 py-1 text-[8px] rounded-full text-[#5A1073] font-medium"
+                style={{
+                  backgroundColor: themeMode ? "#E8E9FC" : "#2FC4B2",
+                }}
               >
+                Play
                 {themeMode ? (
+
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="30"
-                    viewBox="0 0 20 20"
+                    viewBox="0 0 58 57"
                     fill="none"
+                    className="w-[10px] lg:w-[58px]"
                   >
-                    <circle cx="10" cy="10" r="10" fill="#5A1073" />
-                    <path
-                      d="M7.71963 5.92482L14.5561 10.0326L7.58044 13.8992L7.71963 5.92482Z"
-                      fill="white"
-                    />
+                    <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+                    <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
                   </svg>
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
+                    viewBox="0 0 58 57"
                     fill="none"
+                    className="w-[10px] lg:w-[58px]"
                   >
-                    <circle cx="10" cy="10" r="10" fill="#2FC4B2" />
-                    <path
-                      d="M7.71963 5.92579L14.5561 10.0335L7.58044 13.9002L7.71963 5.92579Z"
-                      fill="#121318"
-                    />
+                    <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+                    <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
                   </svg>
                 )}
-              </div>
+              </button>
             </div>
-            <div className="w-full ml-2">
-              <div className="flex justify-start mb-2">
-                <div
-                  className={`feature-text-2 flex items-center ${!themeMode && "btn-dark-bg-color"}`}
-                >
-                  <div className="mr-1">Play</div>
-                  <div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="8"
-                      height="8"
-                      viewBox="0 0 8 8"
-                      fill="none"
-                    >
-                      <circle cx="4" cy="4" r="4" fill="#5A1073" />
-                      <path
-                        d="M3.08788 2.37071L5.82245 4.0138L3.0322 5.56046L3.08788 2.37071Z"
-                        fill="white"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-start mb-2">
-                  <div
-                    className={`tv-feature-text-2 py-0 ${!themeMode && "title-dark-color overflow-hidden flex flex-nowrap"}`}
-                  >
-                    {feature}
-                  </div>
-                </div>
-                <div
-                  className={`tv-title-text-2 flex ${!themeMode && "title-dark-color"}`}
-                >
-                  {title}
-                </div>
-              </div>
-              <div className="flex justify-start mt-2"></div>
+            <div className={`md:text-xl font-semibold mt-2 md:mt-3 line-clamp-1 ${!themeMode && "title-dark-color"}`}>
+              {feature}
+            </div>
+            <div className={`md:mt-2 mt-1 font-medium text-xs md:text-sm`} style={{ color: themeMode ? "#BBBCC0" : "#BBBCC0" }} >
+              {title}
             </div>
           </div>
-        )}
-      </Card>
+
+        </div>
+      </div>
     </div>
+
   );
 };
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 const PopUp = ({ handleClosePopup, themeMode,setFilters,filters }: any) => {
-  console.log(themeMode, "popupppppp");
   const [quantity, setQuantity] = useState<number>(10);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
@@ -29,7 +28,6 @@ const PopUp = ({ handleClosePopup, themeMode,setFilters,filters }: any) => {
       endDate: endDate,
     };
     setFilters(updatedFilters);
-    console.log("Applied Filters:", updatedFilters);
     handleClosePopup();
   };
 

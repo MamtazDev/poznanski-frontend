@@ -10,8 +10,6 @@ export const attachInterceptors = (axiosInstance: AxiosInstance) => {
 
             if (error.response && error.response.status === 401 && !originalRequest._retry) {
                 originalRequest._retry = true;
-                console.log('Attempting to refresh token...');
-
                 try {
                     // Create a separate Axios instance for the refresh token request
                     const refreshInstance = axios.create({
@@ -23,8 +21,6 @@ export const attachInterceptors = (axiosInstance: AxiosInstance) => {
                     const { data } = await refreshInstance.post('/auth/refresh-token', {}, {
                         headers: { 'CSRF-Token': csrfToken || '' },
                     });
-
-                    console.log('Token refreshed');
 
                     // Update the cookies with the new CSRF token if needed
                     document.cookie = `XSRF-TOKEN=${data.csrfToken}; path=/`;

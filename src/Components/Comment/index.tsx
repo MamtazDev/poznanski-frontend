@@ -195,7 +195,6 @@ const useComments = (
 	noComments = false,
 	parentCommentId?: string
 ) => {
-	console.log(parentCommentId);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(0);
 	const [commentsState, setCommentsState] = useState<CommentWithReplies[]>(
@@ -876,8 +875,6 @@ const Comment: React.FC<{
 	);
 
 	useEffect(() => {
-		console.log(data);
-
 		if (data?.comments) {
 			if (data.currentPage > 1 && data.comments.length === 0) {
 				setRepliesPage(1);
@@ -964,7 +961,7 @@ const Comment: React.FC<{
 	// const shouldDisplayFetchButton = maxPages > Math.ceil(fetchedComments / 10);
 
 	const dataToRender = replies ?? [];
-	// console.log(data);
+
 	return comment ? (
 		<div
 			key={comment._id}

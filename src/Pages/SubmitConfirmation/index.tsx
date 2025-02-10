@@ -46,7 +46,6 @@ const SubmitConfirmation: FC = () => {
 	// 			setIsVerified(true);
 	// 		}
 	// 	} catch (e) {
-	// 		console.log(e);
 	// 	}
 	// };
 	const author = params.get('author');
@@ -58,7 +57,6 @@ const SubmitConfirmation: FC = () => {
 	// 			setIsVerified(true);
 	// 		} catch (e) {
 	// 			setIsVerified(false);
-	// 			console.log(e);
 	// 		}
 	// 	}
 	// };

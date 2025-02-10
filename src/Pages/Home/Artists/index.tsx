@@ -96,7 +96,6 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
         setLoading(false);
       });
   }, [filter, curPage, rowsPerPage]);

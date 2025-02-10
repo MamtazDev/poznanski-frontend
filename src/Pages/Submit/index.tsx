@@ -132,11 +132,6 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
   };
 
 	// const onSubmit = async (data: SubmitArticleForm) => {
-  //   console.log("Form Data:", data);
-  //   // console.log("Article Content:", article);
-  //   // console.log("Tags:", tags);
-  //   // console.log("Image Data:", imgData);
-  //   // console.log("Attached Files:", files);
 
 	// 	if (!imgData) {
 	// 		throw Error('Dodaj zdjęcie');
@@ -189,8 +184,6 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 	// };
 
   const onSubmit = async (data: SubmitArticleForm) => {
-    console.log("Form Data:", data);
-
     if (!imgData) {
       throw Error('Dodaj zdjęcie');
     }

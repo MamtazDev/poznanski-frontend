@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import ContentTitle from "../../../Components/ContentTitle";
 import DetailButton from "../../../Components/Buttons/DetailButton";
 import CarouselComponent from "./Carousel";
-import { apiGetReq } from "../../../Constant/api-functions";
-import { fileUrl } from "../../../Constant/config";
+import { apiBaseUrl, fileUrl } from "../../../Constant/config";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
+import TVCard from "../../../Components/Card/TVCard";
+
 interface TVData {
   id: string;
   title: string;
@@ -21,6 +22,7 @@ interface inputData {
   img: string;
   link: string;
 }
+
 const TV: React.FC<{ filter: string }> = ({ filter }) => {
   const [cardNum, setCardNum] = useState<number>(4);
   const [cardData, setCardData] = useState<TVData[]>([]);
@@ -28,27 +30,46 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setLoading(true);
-    apiGetReq("/product/radio", { filter })
-      .then((res) => {
-        let newData: TVData[] = [];
-        res.radio.map((item: inputData) => {
-          const temp: TVData = {
-            id: item._id,
-            title: item.category,
-            feature: item.title,
-            img: fileUrl + item.img,
-            link: item.link,
-          };
-          newData.push(temp);
-        });
+    const fetchData = async () => {
+      setLoading(true);
+      let url = `${apiBaseUrl}/radio`;
+      let searchQuery = [];
+
+      if (filter) {
+        searchQuery.push(`search=${encodeURIComponent(filter)}`);
+      }
+
+      if (searchQuery.length > 0) {
+        url = `${url}?${searchQuery.join("&")}`;
+      }
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (!data || !Array.isArray(data.records)) {
+          // console.error("Invalid API response: ", data);
+          setLoading(false);
+          return;
+        }
+
+        const newData: TVData[] = data.records.map((item: inputData) => ({
+          id: item._id,
+          title: item.category,
+          feature: item.title,
+          img: fileUrl + item.img,
+          link: item.link,
+        }));
+
         setCardData(newData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        throw err;
-      });
+      }
+    };
+
+    fetchData();
   }, [filter]);
 
   useEffect(() => {
@@ -68,6 +89,7 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
   return cardData.length ? (
     <div className="flex justify-center">
       <div className="container md:mt-36 md:pt-1.5 mt-20">
@@ -83,9 +105,20 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
             </div>
           </div>
         </div>
-        {cardData?.length && (
-          <div className="md:mt-16 mt-6">
-            <CarouselComponent cardNum={cardNum} cardData={cardData} />
+        {cardData?.length > 0 && (
+          <div className="md:mt-16 mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {cardData.map((item) => (
+              <TVCard
+                key={item.id}
+                data={item}
+                video=""
+                type="horizontal"
+                youTube={item.img}
+                feature={item.feature}
+                title={item.title}
+                link={item.link}
+              />
+            ))}
           </div>
         )}
       </div>

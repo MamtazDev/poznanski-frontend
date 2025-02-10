@@ -110,7 +110,6 @@ const EditModal: React.FC<ModalProps> = ({
     setData({ ...data, feature: value });
   };
   const createNewTag = (value: string) => {
-    console.log(value);
     apiPostReq("/tag", { name: value })
       .then((res) => {
         if (res.success) {
@@ -125,7 +124,6 @@ const EditModal: React.FC<ModalProps> = ({
         }
       })
       .catch((err) => {
-        console.log(err);
         throw err;
       });
   };
