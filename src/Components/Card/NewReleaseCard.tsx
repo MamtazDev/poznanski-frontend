@@ -53,21 +53,28 @@ const NewReleaseCard: React.FC<News> = ({
         backgroundColor: themeMode ? "#FFFFFF" : "#1F2937",
         color: themeMode ? "#FFFFFF" : "#000000",
       }}
-      className="rounded-lg shadow-lg p-4 transition-all duration-300"
+      className="rounded-lg shadow-lg p-4 transition-all duration-300 flex md:flex-col gap-5"
+      onClick={() => handleClick(id)}
     >
-      {data.songs[0]?.youTube && <div
-        className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden"
-        onClick={handlePlay}
+      {data.songs[0]?.youTube &&
+      <div
+        // className="relative cursor-pointer overflow-hidden"
+        onClick={(e) => {
+          e.stopPropagation();
+          handlePlay();
+        }}
       >
         <img
           src={`https://img.youtube.com/vi/${data.songs[0]?.youTube.split("v=")[1]}/hqdefault.jpg`}
-          className="w-full h-full object-cover"
+          className="object-cover md:w-full w-[69px] md:h-[200px] h-full rounded-md"
           alt="YouTube Thumbnail"
         />
-      </div>}
+      </div>
+      }
 
-      {title && <h3 className="mt-2 text-md font-semibold " style={{ color: themeMode ? "#000000" : "#FFFFFF", }}>{title}</h3>}
-      {data.artists[0]?.nickname && <h3 className="mt-2  " style={{ color: themeMode ? "#BBBCC0" : "#9B9CA1", }}>{data.artists[0]?.nickname}</h3>}
+      <div>
+      {title && <h3 className="mt-2 text-md font-semibold line-clamp-1" style={{ color: themeMode ? "#000000" : "#FFFFFF", }}>{title}</h3>}
+      {nickname && <h3 className="mt-2  " style={{ color: themeMode ? "#BBBCC0" : "#9B9CA1", }}>{nickname}</h3>}
 
       {description && (
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 "
@@ -85,15 +92,7 @@ const NewReleaseCard: React.FC<News> = ({
           {data.songs[0]?.date}
         </p>
       )}
-      {data &&
-      <button
-      onClick={() => handleClick(id)}
-        className='mt-4 font-bold'
-        style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
-
-      >
-        {btn}
-      </button>}
+      </div>
 
     </div>
   );

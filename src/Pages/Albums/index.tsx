@@ -11,39 +11,43 @@ import PaginationBar from "../../Components/PaginationBar";
 import "../mainPageStyle.css";
 
 interface Product {
+  artists: any;
   _id: any;
   id: string;
   title: string;
   img: string;
   category: string;
-  date: string;
+  date: string; // Ensure date is a valid ISO string
   link: string;
   location: string;
   artist: string;
   star: number;
 }
+
 const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<number>(1);
-  const albumsPerPage = 5;
   const [album, setAlbum] = useState<Product[]>([]);
-  const [loading] = useState<boolean>(false);
-  const [pages, setPages] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const fetcher = () =>
     fetch(`http://localhost:8000/api/album`).then((res) => res.json());
 
   const { data, error } = useSWR(`http://localhost:8000/api/album`, fetcher);
-  console.log("data", data?.albums);
 
   useEffect(() => {
     if (data) {
-      setAlbum(data?.albums);
+      // Sort albums by date (latest first) and select the latest 3
+      const sortedAlbums = data.albums
+        .sort((a: Product, b: Product) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 4);
+      setAlbum(sortedAlbums);
+      setLoading(false);
     }
   }, [data]);
 
   if (error) return <div>Error loading data.</div>;
-  if (!album.length) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -84,27 +88,23 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 />
               </div>
             ) : (
-              <div
-                className={`grid md:grid-cols-4 grid-cols-1 gap-5 mt-10 mb-10`}
-              >
+              <div className={`grid md:grid-cols-4 grid-cols-1 gap-5 mt-10 mb-10`}>
                 {album.length > 0 ? (
                   album.map((categoryItem) => (
                     <NewReleaseCard
-                    id={categoryItem._id}
+                      id={categoryItem._id}
                       key={categoryItem._id}
                       data={categoryItem}
                       youTube="https://www.youtube.com/embed/6JYIGclVQdw"
                       title={categoryItem.title}
-                      nickname="nickname"
-                      date="12/12/2003"
-                      link={categoryItem.title}
+                      nickname={categoryItem.artists[0]?.name}
+                      date={categoryItem.date}
+                      link={categoryItem.link}
                       btn="See Details"
                     />
                   ))
                 ) : (
-                  <div className="text-center text-gray-500">
-                    No results found
-                  </div>
+                  <div className="text-center text-gray-500">No results found</div>
                 )}
               </div>
             )}
@@ -113,8 +113,8 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <PaginationBar
               selectedPage={selectedPage}
               setSelectedPage={setSelectedPage}
-              pages={pages}
-              entriesPerPage={albumsPerPage}
+              pages={1} // Pagination not required for 3 items
+              entriesPerPage={3}
               setEntriesPerPage={() => {}}
             />
           </div>
