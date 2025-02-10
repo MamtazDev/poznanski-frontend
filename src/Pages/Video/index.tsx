@@ -1,5 +1,5 @@
 import { Spinner } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { PageBasicProps } from "../../AppMain";
 import BreadCrumb from "../../Components/BreadCrumb";
 import TVCard from "../../Components/Card/TVCard";
@@ -39,6 +39,10 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [visibleCount, setVisibleCount] = useState(4);
+  const [displayedItems, setDisplayedItems] = useState<Product[]>([]);
+
 
   const [filters, setFilters] = useState<filterProperties>({
     sort: "asc",
@@ -48,6 +52,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     order: "desc",
     search: ""
   });
+
 
   const fetchData = async (inputValue?: filterProperties) => {
     setLoading(true);
@@ -94,6 +99,38 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       setLoading(false);
     }
   };
+
+
+  
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const setDisplayUpdatedName = () => {
+    setDisplayedItems(cardData.slice(0, 2));
+  };
+  const loadMoreItems = () => {
+    if (loading || visibleCount >= cardData.length) return;
+    setLoading(true);
+
+    setTimeout(() => {
+      setVisibleCount((prev) => prev + 3);
+      setLoading(false);
+    }, 1000);
+  };
+
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+
+    if (scrollTop + clientHeight >= scrollHeight - 5) {
+      loadMoreItems();
+    }
+  };
+
+
+  useEffect(() => {
+    setDisplayUpdatedName();
+  }, [displayedItems, cardData, visibleCount]);
 
 
   useEffect(() => {
@@ -156,7 +193,9 @@ fetchData(filters)
               <FilterInput type={type} handler={handleSearch} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
             </div>
             <div
-              className={`md:mt-12 mt-8`}
+              className={`md:mt-12 mt-8 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide`}
+              ref={scrollContainerRef}
+              onScroll={handleScroll}
               // style={{ minHeight: type ? "776px" : "908px", width: "100%" }}
             >
               {loading ? (

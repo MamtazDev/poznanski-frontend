@@ -85,7 +85,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 	const wordArray = tags ? data?.news?.tags.split(",").map((word: string) => word.trim()) : [];
 	return (
 		<Layout themeMode={themeMode} type={type}>
-			<div className='flex justify-between'>
+			<div className='flex justify-between '>
 				<div className='container'>
 					{type ? (
 						''
@@ -119,9 +119,9 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 									editable={false}
 								/>
 								 <div
-      className="bg-gray-100 p-4 mt-4 border border-gray-300 rounded-md min-h-[200px]"
-      dangerouslySetInnerHTML={{ __html: data?.news?.content || "" }}
-    />
+                    className={`${themeMode ? "editorContainer" : "editorContainerDark"} min-h-screen ${themeMode === true ? "bg-gray-100" : "bg-gray-800"} p-4 mt-4 border border-gray-300 rounded-md min-h-[200px]`}
+                    dangerouslySetInnerHTML={{ __html: data?.news?.content || "" }}
+                  />
 								<CommentForm
 									postModel={PostModels.news}
 									commentData={pageData?.commentsSection ?? null}

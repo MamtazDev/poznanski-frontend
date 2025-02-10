@@ -1,5 +1,5 @@
 import { Spinner } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import { PageBasicProps } from "../../AppMain";
 import BreadCrumb from "../../Components/BreadCrumb";
@@ -29,11 +29,47 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [album, setAlbum] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>("");
+    const [visibleCount, setVisibleCount] = useState(4);
+    const [displayedItems, setDisplayedItems] = useState<Product[]>([]);
 
   const fetcher = () =>
     fetch(`http://localhost:8000/api/album`).then((res) => res.json());
 
   const { data, error } = useSWR(`http://localhost:8000/api/album`, fetcher);
+
+
+  
+    
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  
+    const setDisplayUpdatedName = () => {
+      setDisplayedItems(album.slice(0, 2));
+    };
+    const loadMoreItems = () => {
+      if (loading || visibleCount >= album.length) return;
+      setLoading(true);
+  
+      setTimeout(() => {
+        setVisibleCount((prev) => prev + 3);
+        setLoading(false);
+      }, 1000);
+    };
+  
+    const handleScroll = () => {
+      if (!scrollContainerRef.current) return;
+  
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+  
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
+        loadMoreItems();
+      }
+    };
+  
+  
+    useEffect(() => {
+      setDisplayUpdatedName();
+    }, [displayedItems, album, visibleCount]);
+  
 
   useEffect(() => {
     if (data) {
@@ -73,7 +109,11 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             />
           </div>
 
-          <div>
+          <div
+          className="md:mt-12 mt-8 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"            
+             ref={scrollContainerRef}
+              onScroll={handleScroll}
+            >
             {loading ? (
               <div
                 className="w-full flex justify-center items-center"

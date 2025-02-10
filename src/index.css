@@ -189,3 +189,15 @@ code {
   color: black;
   width: 2px;
 }
+
+
+.editorContainer {
+  h1,h2,h3,h4,h5,h5,p,b{
+    color: rgb(2, 1, 1)!important ;
+  }
+}
+.editorContainerDark {
+  h1,h2,h3,h4,h5,h5,p,b{
+    color: rgb(201, 201, 201)!important ;
+  }
+}
