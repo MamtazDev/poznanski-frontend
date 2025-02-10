@@ -56,7 +56,6 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   // Update local state when data is available
   useEffect(() => {
     if (data) {
-      console.log("Fetched artist data:", data);
       setArtist(data.artist);
       setLoading(false);
     }
@@ -94,7 +93,6 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         const response = await fetch("http://localhost:8000/api/radio");
         const data = await response.json();
         settvRadioData(data.records);
-        console.log(data, "radio data")
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -112,7 +110,6 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         const response = await fetch("http://localhost:8000/api/album");
         const data = await response.json();
         setAlbumData(data.albums);
-        console.log(data, "radio data")
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

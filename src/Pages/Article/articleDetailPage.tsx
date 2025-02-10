@@ -50,10 +50,9 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     return relatedData.filter((news) => data.news._id !== id);
   }, [relatedData, id]);
 
-  useEffect(() => {
-    console.log("Target News Selected:", targetNewsSelected); // Check if the data is correct
-    setPageData(targetNewsSelected);
-  }, [targetNewsSelected]);
+	useEffect(() => {
+		setPageData(targetNewsSelected);
+	}, [targetNewsSelected]);
 
   useEffect(() => {
     if (!lastVisitedId || lastVisitedId !== id) {
@@ -74,105 +73,84 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   // Local state to store the response
   const [news, setNews] = useState(null);
 
-  // When the data is fetched, set it to the local state
-  useEffect(() => {
-    if (data) {
-      console.log("Fetched data:", data); // Log the raw data before setting it
-      setNews(data); // Set the fetched data to local state
-
-      // Access the nested 'news' object
-      console.log("Intro:", data.news?.intro); // Logs the intro of the news
-      console.log("Title:", data.news?.title); // Logs the title of the news
-      console.log("Tags:", data.news?.tags); // Logs the tags of the news
-    }
-  }, [data]);
-  // Handle loading and error states
-  if (error) return <div>Error loading data.</div>;
-  if (!news) return <div>Loading...</div>;
-  const wordArray = tags
-    ? data?.news?.tags.split(",").map((word: string) => word.trim())
-    : [];
-  // console.log("news", news)
-  return (
-    <Layout themeMode={themeMode} type={type}>
-      <div className="flex justify-between">
-        <div className="container">
-          {type ? (
-            ""
-          ) : (
-            <div className="md:mt-12 mt-8">
-              <BreadCrumb />
-            </div>
-          )}
-          <div className="flex md:flex-row flex-col gap-8">
-            <div className="md:w-4/6 w-full">
-              <div className="md:mt-7 mt-10">
-                <ContentTitle
-                  titleType="NEWS"
-                  title={data.news?.title || "News Page Title"}
-                />
-              </div>
-              <p
-                className={`py-5 text-left ${!themeMode ? "text-[#BBBCC0]" : "text-[#6D6E76]"}`}
-              >
-                <b>{data.news?.intro}</b>
-              </p>
-              <Image
-                src={data?.news?.files?.[0] || defaultimg}
-                alt="Uploaded file"
-                className="rounded-2xl mx-auto border-solid border"
-              />
-              <h1 className="text-2xl text-white  mt-2 ">
-                Here ypou can get the content coming from editor
-              </h1>
-              <DelayedComponent delay={200}>
-                <TipTap
-                  themeMode={themeMode}
-                  content={pageData?.content}
-                  editable={false}
-                />
-
-                <div
-                //   className="bg-gray-100 p-4 mt-4 border border-gray-300 rounded-md min-h-[200px]"
-                  dangerouslySetInnerHTML={{ __html: data?.news.content || "" }}
-                />
-                <h1 className="text-2xl text-white  mt-2 ">
-                  Here ypou can get the content coming from editor
-                </h1>
-                <CommentForm
-                  postModel={PostModels.news}
-                  commentData={pageData?.commentsSection ?? null}
-                />
-              </DelayedComponent>
-            </div>
-            <div
-              className={`md:w-2/6 w-full`}
-              style={{ marginTop: type ? "0px" : "300px" }}
-            >
-              <div
-                className={`${
-                  !type ? (themeMode ? "right-card" : "right-card-dark") : ""
-                } mb-6 w-full py-4 px-3`}
-              >
-                <div
-                  className={`${themeMode ? "tag-card-title" : "tag-card-title-dark"} text-left md:mb-3 mb-4`}
-                >
-                  Tagi
-                </div>
-                <div className="flex justify-start mt-4">
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {wordArray.map(
-                      (tag: string, index: React.Key | null | undefined) =>
-                        tag && (
-                          <div
-                            key={index}
-                            className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
-                          >
-                            {tag.trim()}
-                          </div>
-                        )
-                    )}
-                  </div>
+	// When the data is fetched, set it to the local state
+	useEffect(() => {
+		if (data) {
+			setNews(data);  // Set the fetched data to local state
+		}
+	}, [data]);
+	// Handle loading and error states
+	if (error) return <div>Error loading data.</div>;
+	if (!news) return <div>Loading...</div>;
+	const wordArray = tags ? data?.news?.tags.split(",").map((word: string) => word.trim()) : [];
+	return (
+		<Layout themeMode={themeMode} type={type}>
+			<div className='flex justify-between'>
+				<div className='container'>
+					{type ? (
+						''
+					) : (
+						<div className='md:mt-12 mt-8'>
+							<BreadCrumb />
+						</div>
+					)}
+					<div className='flex md:flex-row flex-col gap-8'>
+						<div className='md:w-4/6 w-full'>
+							<div className='md:mt-7 mt-10'>
+								<ContentTitle
+									titleType='NEWS'
+									title={data.news?.title || 'News Page Title'}
+								/>
+							</div>
+							<p
+								className={`py-5 text-left ${!themeMode ? 'text-[#BBBCC0]' : 'text-[#6D6E76]'}`}
+							>
+								<b>{data.news?.intro}</b>
+							</p>
+							<Image
+								src={data?.news?.files?.[0] || defaultimg}
+								alt="Uploaded file"
+								className="rounded-2xl mx-auto border-solid border"
+							/>
+							<DelayedComponent delay={200}>
+								<TipTap
+									themeMode={themeMode}
+									content={pageData?.content}
+									editable={false}
+								/>
+								 <div
+      className="bg-gray-100 p-4 mt-4 border border-gray-300 rounded-md min-h-[200px]"
+      dangerouslySetInnerHTML={{ __html: data?.news?.content || "" }}
+    />
+								<CommentForm
+									postModel={PostModels.news}
+									commentData={pageData?.commentsSection ?? null}
+								/>
+							</DelayedComponent>
+						</div>
+						<div className={`md:w-2/6 w-full`} style={{ marginTop: type ? '0px' : '300px' }}>
+							<div
+								className={`${!type ? (themeMode ? 'right-card' : 'right-card-dark') : ''
+									} mb-6 w-full py-4 px-3`}
+							>
+								<div
+									className={`${themeMode ? 'tag-card-title' : 'tag-card-title-dark'} text-left md:mb-3 mb-4`}
+								>
+									Tagi
+								</div>
+								<div className="flex justify-start mt-4">
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {wordArray.map(
+                    (tag: string, index: React.Key | null | undefined) =>
+                      tag && (
+                        <div
+                          key={index}
+                          className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
+                        >
+                          {tag.trim()}
+                        </div>
+                      )
+                  )}
                 </div>
               </div>
               {filteredRelatedData.length > 0 && (
@@ -336,6 +314,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <div>No content available</div>
           )} */}
         </div>
+      </div>
       </div>
     </Layout>
   );

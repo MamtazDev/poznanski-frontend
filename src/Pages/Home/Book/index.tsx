@@ -40,7 +40,6 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
   //   setLoading(true);
   //   apiGetReq(`${apiBaseUrl}/concert`, { filter })
   //     .then((res) => {
-  //       console.log("API Response:", res); // Log the entire API response
   //       if (res.success) {
   //         let newData: ticketData[] = [];
   //         res.concert.map((item: inputData) => {
@@ -69,7 +68,6 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
   //           };
   //           newData.push(temp);
   //         });
-  //         console.log("Mapped Data hhhhhhhhh:", newData); // Check the mapped data
   //         setData(newData);
   //       } else {
   //         console.error("API Response success is false");
@@ -77,35 +75,32 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
   //       setLoading(false);
   //     })
   //     .catch((err) => {
-  //       console.log("API Error:", err); // Log the error if any
   //       setLoading(false);
   //     });
   // }, [filter]);
-  
 
   useEffect(() => {
     setLoading(true);
-  
+
     fetch("http://localhost:8000/api/concert")
       .then((res) => res.json())
       .then((data) => {
-        // console.log("API Response hhhh:", data);
-  
         if (data.success) {
           const featuredItems = data.isFeatured.map((item: any) => ({
             id: item._id,
             type: item.name,
             category: item.location,
-            name:item.name,
-            month: new Date(item.timeframe.start).toLocaleString("en-US", { month: "long" }),
+            name: item.name,
+            month: new Date(item.timeframe.start).toLocaleString("en-US", {
+              month: "long",
+            }),
             date: new Date(item.timeframe.start).getDate().toString(),
             timeframe: `${new Date(item.timeframe.start).getUTCHours()}:${new Date(item.timeframe.start).getUTCMinutes()} - ${new Date(item.timeframe.end).getUTCHours()}:${new Date(item.timeframe.end).getUTCMinutes()}`,
           }));
-  
+
           setData(featuredItems);
-          // console.log("Featured Data:", featuredItems);
         }
-  
+
         setLoading(false);
       })
       .catch((error) => {
@@ -113,7 +108,6 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
         setLoading(false);
       });
   }, []);
-  
 
   useEffect(() => {
     const handleResize = () => {
@@ -151,11 +145,8 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                   width={!mobileState ? "180px" : "150px"}
                   background={themeMode ? "#E8ECFE" : "#FFF"}
                   fontSize={!mobileState ? "16px" : "12px"}
-                  placeholder="Weekdays"
-                >
-                  <option value="1">
-                    <div className="p-4">Monday</div>
-                  </option>
+                  placeholder="Weekdays">
+                  <option value="1">Monday</option>
                   <option value="2">Tuesday</option>
                   <option value="3">Wednesday</option>
                   <option value="4">Thursday</option>
@@ -168,8 +159,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                   width={!mobileState ? "180px" : "150px"}
                   background={themeMode ? "#E8ECFE" : "#FFF"}
                   fontSize={!mobileState ? "16px" : "12px"}
-                  placeholder="Event Type"
-                >
+                  placeholder="Event Type">
                   <option value="1">Concert Name</option>
                 </Select>
 
@@ -180,8 +170,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                   width={!mobileState ? "180px" : "150px"}
                   background={themeMode ? "#E8ECFE" : "#FFF"}
                   fontSize={!mobileState ? "16px" : "12px"}
-                  placeholder="Category"
-                >
+                  placeholder="Category">
                   <option value="1">Wildlife</option>
                 </Select>
               </div>
@@ -200,13 +189,15 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
         <div className="md:mt-20 mt-10">
           {/* <BookVerticalCarousel state={mobileState} data={data} /> */}
           {data?.map((item, idx) => (
-                    <Card idx={idx} themeMode={themeMode} item={item} />
-                  ))}
+            <React.Fragment key={idx}>
+              <Card idx={idx} themeMode={themeMode} item={item} />
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </div>
   ) : (
-    <div>No data available</div> 
+    <div>No data available</div>
   );
 };
 
@@ -218,12 +209,10 @@ const Card = ({ item, themeMode, idx }: any) => {
       <div className={`py-4 ${idx !== 0 && "ticket-top-border"}`}>
         <div
           className="hidden md:grid grid-cols-4 items-center px-3"
-          style={{ height: 75 }}
-        >
+          style={{ height: 75 }}>
           <div className="flex items-center">
             <div
-              className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}
-            >
+              className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}>
               {item.date}
             </div>
             <div className={`ticket-month ${!themeMode && "text-dark-color"}`}>
@@ -232,14 +221,12 @@ const Card = ({ item, themeMode, idx }: any) => {
             </div>
           </div>
           <div
-            className={`ticket-type text-center ${!themeMode && "title-dark-color"}`}
-          >
+            className={`ticket-type text-center ${!themeMode && "title-dark-color"}`}>
             {item.name}
           </div>
           <div className="flex justify-center items-center">
             <div
-              className={`ticket-category ${!themeMode && "btn-dark-bg-color"}`}
-            >
+              className={`ticket-category ${!themeMode && "btn-dark-bg-color"}`}>
               {item.category}
             </div>
           </div>
@@ -256,8 +243,7 @@ const Card = ({ item, themeMode, idx }: any) => {
               fontFamily="Urbanist"
               fontSize="14px"
               fontWeight="600"
-              backgroundColor={themeMode ? "#FFF" : "#242526"}
-            >
+              backgroundColor={themeMode ? "#FFF" : "#242526"}>
               Buy Ticket
             </Button>
           </div>
@@ -265,19 +251,17 @@ const Card = ({ item, themeMode, idx }: any) => {
 
         <div className="flex flex-col gap-2 md:hidden">
           <div className="flex justify-between items-center text-sm text-gray-700">
-            <div  className={`${!themeMode && "text-dark-color"}`}>
-               2feb {item.date} {item.month}
+            <div className={`${!themeMode && "text-dark-color"}`}>
+              2feb {item.date} {item.month}
             </div>
             <div className={`${!themeMode && "text-dark-color"}`}>
-                {item.timeframe.start}
+              {item.timeframe.start}
             </div>
           </div>
 
-
           <div className="flex justify-between items-center">
             <div
-              className={`text-base font-medium ${!themeMode && "title-dark-color"}`}
-            >
+              className={`text-base font-medium ${!themeMode && "title-dark-color"}`}>
               {item.name}
             </div>
             <div className="px-2 py-1 text-xs rounded-lg bg-purple-100 text-purple-700">
@@ -298,8 +282,7 @@ const Card = ({ item, themeMode, idx }: any) => {
               fontFamily="Urbanist"
               fontSize="14px"
               fontWeight="600"
-              backgroundColor="#FFF"
-            >
+              backgroundColor="#FFF">
               Buy Ticket
             </Button>
           </div>
