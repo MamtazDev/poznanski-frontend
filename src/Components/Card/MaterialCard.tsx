@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { openPlayer } from "../../reducers/PlayerReducer";
 import "./style.css";
+import CalenderIcon from "../../assets/png/calender_icon.png";
 
 interface News {
   type: string;
@@ -12,7 +13,7 @@ interface News {
   feature: string;
   date: string;
   link: string;
-  data: any
+  data: any;
 }
 
 const MaterialCard: React.FC<News> = ({
@@ -22,7 +23,7 @@ const MaterialCard: React.FC<News> = ({
   feature,
   date,
   link,
-  data
+  data,
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
@@ -49,10 +50,9 @@ const MaterialCard: React.FC<News> = ({
         className="absolute top-0 left-0 w-full h-full"
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      ></iframe>
+        allowFullScreen></iframe>
     </div>
-  )
+  );
 
   return (
     <div className="product-card1 flex w-full">
@@ -65,31 +65,19 @@ const MaterialCard: React.FC<News> = ({
         _hover={
           !themeMode
             ? {
-              boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
-            }
+                boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
+              }
             : {
-              boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
-            }
+                boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
+              }
         }
-        className="transition-all duration-300 ease-out w-full h-pull"
-      >
+        className="transition-all duration-300 ease-out w-full h-pull">
         {/* <CardBody> */}
         {type === "horizontal" ? (
           <div className="flex flex-col related justify-between w-full h-full">
             <div>
-              <div
-                className={`material-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-48 relative ${!themeMode && "dark-bg-color"}`}
-              >
-                {/* <video  controls>
-  <source src={video} type="video/mp4" />
-  Your browser does not support the video tag.
-</video> */}
-                {/* <YouTubeEmbed video={video} title={title} /> */}
-
-                <div
-                  className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden"
-                  onClick={handlePlay}
-                >
+              <div className={`material-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-48 relative ${!themeMode && "dark-bg-color"}`}>
+                <div className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden" onClick={handlePlay}>
                   <img
                     src={`https://img.youtube.com/vi/${data.youTube.split("v=")[1]}/hqdefault.jpg`}
                     className="w-full h-full object-cover"
@@ -98,147 +86,23 @@ const MaterialCard: React.FC<News> = ({
                 </div>
                 <div
                   className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
-                  onClick={handlePlay}
-                >
-                  {/* {themeMode ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="58"
-                      height="57"
-                      viewBox="0 0 58 57"
-                      fill="none"
-                    >
-                      <circle
-                        cx="29.0083"
-                        cy="28.6963"
-                        r="28.0302"
-                        fill="#5A1073"
-                      />
-                      <path
-                        d="M22.6165 17.2738L41.7791 28.7878L22.2263 39.6261L22.6165 17.2738Z"
-                        fill="white"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="55"
-                      height="55"
-                      viewBox="0 0 55 55"
-                      fill="none"
-                    >
-                      <circle
-                        cx="27.0083"
-                        cy="27.0083"
-                        r="27.0083"
-                        fill="#2FC4B2"
-                      />
-                      <path
-                        d="M20.8495 16.0019L39.3135 27.0962L20.4736 37.5393L20.8495 16.0019Z"
-                        fill="#111217"
-                      />
-                    </svg>
-                  )} */}
-                </div>
+                  onClick={handlePlay}></div>
               </div>
               <div className="flex justify-start mt-4">
                 <div
-                  className={`feature-text px-5 py-1 ${!themeMode && "btn-dark-bg-color"}`}
-                >
+                  className={`feature-text px-5 py-1 ${!themeMode && "btn-dark-bg-color"}`}>
                   {feature}
                 </div>
               </div>
               <div
-                className={`title-text flex mt-2 ${!themeMode && "title-dark-color"}`}
-              >
+                className={`title-text flex mt-2 ${!themeMode && "title-dark-color"}`}>
                 {title}
               </div>
             </div>
             <div className="flex justify-start mt-2">
               <div className="flex items-center">
                 <div className="mx-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="25"
-                    height="26"
-                    viewBox="0 0 25 26"
-                    fill="none"
-                  >
-                    <path
-                      d="M8.37292 2.85938V5.97289"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.55676"
-                      strokeMiterlimit="10"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M16.6755 2.85938V5.97289"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.55676"
-                      strokeMiterlimit="10"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M3.70264 10.2178H21.3459"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.55676"
-                      strokeMiterlimit="10"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M21.8648 9.60618V18.4278C21.8648 21.5413 20.308 23.617 16.6756 23.617H8.37291C4.74047 23.617 3.18372 21.5413 3.18372 18.4278V9.60618C3.18372 6.49267 4.74047 4.41699 8.37291 4.41699H16.6756C20.308 4.41699 21.8648 6.49267 21.8648 9.60618Z"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.55676"
-                      strokeMiterlimit="10"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M16.3588 15.0023H16.3681"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.55676"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M16.3588 18.1166H16.3681"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.55676"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M12.5196 15.0023H12.5289"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.55676"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M12.5196 18.1166H12.5289"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.55676"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M8.67838 15.0023H8.6877"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.55676"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M8.67838 18.1166H8.6877"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.55676"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  <img src={CalenderIcon} alt="icon" />
                 </div>
                 <div className="mx-1 location">{date}</div>
               </div>
@@ -247,24 +111,17 @@ const MaterialCard: React.FC<News> = ({
         ) : (
           <div className="flex h-full">
             <div className="h-full w-36 relative overflow-hidden">
-              {/* <video width={320} height={240} controls>
-  <source src={video} type="video/mp4" />
-  Your browser does not support the video tag.
-</video> */}
               <YouTubeEmbed video={video} title={title} />
-
               <div
                 className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2"
-                onClick={handlePlay}
-              >
+                onClick={handlePlay}>
                 {themeMode ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="21"
                     height="21"
                     viewBox="0 0 21 21"
-                    fill="none"
-                  >
+                    fill="none">
                     <circle cx="10.17" cy="10.17" r="10.17" fill="#5A1073" />
                     <path
                       d="M7.85096 6.02554L14.8036 10.2031L7.7094 14.1355L7.85096 6.02554Z"
@@ -277,8 +134,7 @@ const MaterialCard: React.FC<News> = ({
                     width="21"
                     height="21"
                     viewBox="0 0 21 21"
-                    fill="none"
-                  >
+                    fill="none">
                     <circle cx="10.17" cy="10.17" r="10.17" fill="#2FC4B2" />
                     <path
                       d="M7.85096 6.02652L14.8036 10.2041L7.7094 14.1365L7.85096 6.02652Z"
@@ -292,14 +148,12 @@ const MaterialCard: React.FC<News> = ({
               <div>
                 <div className="flex justify-start mb-2">
                   <div
-                    className={`feature-text-2 ${!themeMode && "btn-dark-bg-color"}`}
-                  >
+                    className={`feature-text-2 ${!themeMode && "btn-dark-bg-color"}`}>
                     {feature}
                   </div>
                 </div>
                 <div
-                  className={`title-text-2 flex ${!themeMode && "title-dark-color"}`}
-                >
+                  className={`title-text-2 flex ${!themeMode && "title-dark-color"}`}>
                   {title}
                 </div>
               </div>
@@ -311,8 +165,7 @@ const MaterialCard: React.FC<News> = ({
                       width="17"
                       height="17"
                       viewBox="0 0 17 17"
-                      fill="none"
-                    >
+                      fill="none">
                       <path
                         d="M8.15001 9.12081C9.3203 9.12081 10.269 8.1721 10.269 7.00181C10.269 5.83152 9.3203 4.88281 8.15001 4.88281C6.97971 4.88281 6.03101 5.83152 6.03101 7.00181C6.03101 8.1721 6.97971 9.12081 8.15001 9.12081Z"
                         stroke="#BBBCC0"
@@ -331,8 +184,7 @@ const MaterialCard: React.FC<News> = ({
                       width="6"
                       height="6"
                       viewBox="0 0 6 6"
-                      fill="none"
-                    >
+                      fill="none">
                       <circle
                         cx="2.61889"
                         cy="2.53784"
@@ -347,8 +199,7 @@ const MaterialCard: React.FC<News> = ({
                       width="17"
                       height="17"
                       viewBox="0 0 17 17"
-                      fill="none"
-                    >
+                      fill="none">
                       <path
                         d="M5.5144 1.3584V3.3959"
                         stroke="#BBBCC0"

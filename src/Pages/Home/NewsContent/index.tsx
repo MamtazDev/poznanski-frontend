@@ -12,7 +12,7 @@ interface Product {
   youTube?: string;
   tags: string;
   date: string;
-  files?: string[]; 
+  files?: string[];
 }
 
 interface CartInterface {
@@ -29,12 +29,11 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const fetchNews = async () => {
       try {
         setLoading(true);
-        setCardData(null); 
+        setCardData(null);
 
         const response = await fetch(`${apiBaseUrl}/news/all`);
         if (!response.ok) {
@@ -92,16 +91,18 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
         </div>
 
         <div className="md:mt-16 mt-6 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {cardData.news.map((item) => (
-            <ProductCard1
-              key={item.id}
-              type={cardNum === 1 ? "vertical" : "horizontal"}
-              img={item.files && item.files[0]} 
-              tags={item.tags}
-              title={item.title}
-              date={item.date.split("T")[0]} 
-              _id={item.id}
-            />
+          {cardData.news.map((item, index) => (
+            <React.Fragment key={index}>
+              <ProductCard1
+                key={item.id}
+                type={cardNum === 1 ? "vertical" : "horizontal"}
+                img={item.files && item.files[0]}
+                tags={item.tags}
+                title={item.title}
+                date={item.date.split("T")[0]}
+                _id={item.id}
+              />
+            </React.Fragment>
           ))}
         </div>
       </div>
