@@ -7,6 +7,7 @@ import "./style.css";
 import { IoLocationOutline } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { BsCalendar2Date } from "react-icons/bs";
+import moment from "moment";
 
 interface News {
   type: string;
@@ -32,7 +33,7 @@ const MaterialCard: React.FC<News> = ({
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   const dispatch = useDispatch();
-
+  const dateFormated = moment(date).format("MM/ DD/ YYYY");
   // const handlePlay = () => {
   //   dispatch(openPlayer(link))
   // }
@@ -124,6 +125,10 @@ const MaterialCard: React.FC<News> = ({
                       <div
                         key={index}
                         className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
+                        style={{
+                          backgroundColor: themeMode? "#E8ECFE":"#2FC4B2",
+                          color: themeMode? "#5A1073":"#5A1073"
+                        }}
                       >
                         {tag.trim()}
                       </div>
@@ -166,7 +171,7 @@ const MaterialCard: React.FC<News> = ({
                     <path d="M8.29431 16.6992H8.30329" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </>
-                {date}
+                {dateFormated}
               </p>
               }
             </div>

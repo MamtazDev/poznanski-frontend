@@ -6,6 +6,7 @@ import { openPlayer } from "../../reducers/PlayerReducer";
 import "./style.css";
 import { IoLocationOutline } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
+import moment from "moment";
 
 interface News {
   type: string;
@@ -26,6 +27,7 @@ const MaterialCard: React.FC<News> = ({
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
+  const dateFormated = moment(date).format("DD/ MM / YYYY");
 
   const getYouTubeID = (url: string) => {
     let videoId = "";
@@ -236,7 +238,7 @@ const MaterialCard: React.FC<News> = ({
                     <path d="M8.29431 16.6992H8.30329" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </>
-                {date}
+                {dateFormated}
               </p>
               }
             </div>

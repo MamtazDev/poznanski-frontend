@@ -97,8 +97,7 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       youTube="https://www.youtube.com/embed/6JYIGclVQdw"
                       title={categoryItem.title}
                       nickname={categoryItem.artists[0]?.name}
-
-                      date={categoryItem.date}
+                      date={`${categoryItem.date}`.split("T")[0]}
                       link={categoryItem.link}
                       btn="See Details"
                     />

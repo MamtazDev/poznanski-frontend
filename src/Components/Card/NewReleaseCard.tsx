@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { openPlayer } from "../../reducers/PlayerReducer";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 interface News {
   title: string;
@@ -32,7 +33,7 @@ const NewReleaseCard: React.FC<News> = ({
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const dateFormated = moment(date).format(" DD/ MM/ YYYY");
   const handlePlay = () => {
     if (data.songs[0]?.youTube) {
       const videoId = data.songs[0]?.youTube.split("v=")[1]?.split("&")[0];
@@ -88,7 +89,7 @@ const NewReleaseCard: React.FC<News> = ({
           style={{
             color: themeMode ? "#BBBCC0" : "#9B9CA1",
           }}>
-          {data.songs[0]?.date}
+          {dateFormated}
         </p>
       )}
       </div>
