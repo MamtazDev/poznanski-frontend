@@ -34,7 +34,7 @@ const ProductCard1: React.FC<News> = ({
   const imageSrc = img ? `${process.env.REACT_APP_FILES_URL}${img}` : artists1;
 
   const wordArray = tags ? tags.split(",").map((word) => word.trim()) : [];
-  const dateFormatted = moment(date).format(" DD MMMM YYYY");
+  const dateFormatted = moment(date).format("MM DD, YYYY");
 
   return (
     <div className="flex w-full h-full">

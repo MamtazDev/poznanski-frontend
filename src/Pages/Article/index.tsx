@@ -70,13 +70,6 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }, 300);
   }
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     forceRevalidateAll();
-  //   }, 30000);
-  //   return () => clearInterval(interval);
-  // }, [forceRevalidateAll]);
-
   return (
     <>
       <Layout type={type} themeMode={themeMode}>

@@ -83,7 +83,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
                 data={item}
                 feature={item.tags} // Joining tags if you want to display them as a string
                 title={item.title}
-                date={`${item.date}`.split("T")[0]}
+                date={item.date}
                 link={item.youTube}
               />
             </React.Fragment>
