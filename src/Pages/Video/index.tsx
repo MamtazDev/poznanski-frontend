@@ -178,9 +178,7 @@ fetchData(filters)
                 </div>
               ) : (
                 <div
-                  className={`grid ${cardNum === 4 && "grid-cols-4"
-                    } ${cardNum === 3 && "grid-cols-3"} ${cardNum === 2 && "grid-cols-2"
-                    } gap-4 py-5 mb-16`}
+                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-5 mb-16`}
                 >
                   {cardData.length>0? cardData.map((item, index) => (
                     <div key={index} className="w-full">
