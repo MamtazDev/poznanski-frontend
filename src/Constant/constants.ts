@@ -1,4 +1,5 @@
 export const ADMIN_PATH = "/admin";
+export const PROFILE_PATH = "/profile";
 export const HOME_PATH = "/";
 export const TV_RADIO_PATH = "/video";
 export const TOP_ARTIST_PATH = "/top-artist"; //new
@@ -12,3 +13,4 @@ export const MATERIAL_PATH = "/material";
 export const NEWRELEASE_PATH = "/releases";
 export const LOGIN_PATH = "/login";
 export const VERIFY_PATH = "/verify";
+export const VERIFY_EMAIL = "/verify-email/:token";

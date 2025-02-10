@@ -46,7 +46,6 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ isOpen, type }) => {
       event.target.playVideo();
     }, 500);
     // Call the user's onReady event if provided
-
   };
 
   return (
