@@ -1,14 +1,14 @@
-import { Card, Image } from "@chakra-ui/react";
+import { Card } from "@chakra-ui/react";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../reducers";
-import "./style.css";
-import { useDispatch } from "react-redux";
 import { openPlayer } from "../../reducers/PlayerReducer";
+import "./style.css";
+import { IoLocationOutline } from "react-icons/io5";
+import { GoDotFill } from "react-icons/go";
 
 interface News {
   type: string;
-  // img: string;
   title: string;
   feature: string;
   date: string;
@@ -18,15 +18,25 @@ interface News {
 
 const MaterialCard: React.FC<News> = ({
   type,
-  // img,
   title,
   feature,
   date,
   location,
-  youTube
+  youTube,
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
+
+  const getYouTubeID = (url: string) => {
+    let videoId = "";
+    if (url.includes("youtube.com/watch")) {
+      videoId = url.split("v=")[1]?.split("&")[0];
+    } else if (url.includes("youtu.be/")) {
+      videoId = url.split("youtu.be/")[1]?.split("?")[0];
+    }
+    return videoId;
+  };
+
   const handlePlay = () => {
     if (youTube) {
       const videoId = youTube.split("v=")[1]?.split("&")[0];
@@ -35,230 +45,195 @@ const MaterialCard: React.FC<News> = ({
       }
     }
   };
-  return (
-    <div className="product-card1 flex w-full">
-      <Card
-        padding={type === "horizontal" ? "14px" : "9px"}
-        borderRadius="2xl"
-        border={themeMode ? "" : "1px solid #242526"}
-        backgroundColor={themeMode ? "#FFF" : "#242526"}
-        height={type === "horizontal" ? "264.537" : "91.577px"}
-        _hover={
-          !themeMode
-            ? {
-              boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
-            }
-            : {
-              boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
-            }
-        }
-        className="transition-all duration-300 ease-out w-full h-pull"
-      >
-          <div className="flex flex-col related justify-between w-full h-full">
-            <div>
-              <div
-                className={`artist-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-48 relative ${!themeMode && "dark-bg-color"}`}
-              >
 
-                  <div
-                  className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden"
-                  onClick={handlePlay}
-                >
-                  <img
+  const wordArray = feature ? feature.split(",").map((word) => word.trim()) : [];
+
+  return (
+    // <div className="product-card1 flex w-full">
+    //   <Card
+    //     padding={type === "horizontal" ? "14px" : "9px"}
+    //     borderRadius="2xl"
+    //     border={themeMode ? "" : "1px solid #242526"}
+    //     backgroundColor={themeMode ? "#FFF" : "#242526"}
+    //     height={type === "horizontal" ? "264.537px" : "91.577px"}
+    //     _hover={{
+    //       boxShadow: themeMode
+    //         ? "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)"
+    //         : "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
+    //     }}
+    //     className="transition-all duration-300 ease-out w-full h-pull"
+    //   >
+    //     <div className="flex md:flex-col md:justify-between w-full h-full gap-5">
+    //       <div className={`relative bg-gray-100 cursor-pointer md:h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"
+    //         }`}
+    //         onClick={() => handlePlay(youTube)}
+    //       >
+    //         {/* YouTube Thumbnail */}
+    //         <img
+    //           src={youTube ? `https://img.youtube.com/vi/${getYouTubeID(youTube)}/hqdefault.jpg` : "default-thumbnail.jpg"}
+    //           className="md:w-full w-[90px] h-full  object-cover"
+    //           alt="YouTube Thumbnail"
+    //         />
+
+    //         {/* Play Button */}
+    //         <div className="absolute inset-0 flex items-center justify-center">
+    //             {themeMode ? (
+    //               <svg xmlns="http://www.w3.org/2000/svg" width="58" height="57" viewBox="0 0 58 57" fill="none" className="w-[20px] md:w-[58px]">
+    //                 <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+    //                 <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
+    //               </svg>
+    //             ) : (
+    //               <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55" fill="none" className="w-[20px] md:w-[58px]">
+    //                 <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
+    //                 <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
+    //               </svg>
+    //             )}
+    //           </div>
+    //       </div>
+
+    //       <div>
+    //         {/* Feature Text */}
+    //       <div className="flex justify-start mt-3">
+    //         <div
+    //           className={`px-5 py-1 rounded ${!themeMode && "btn-dark-bg-color"
+    //             }`}
+    //         >
+    //           {feature}
+    //         </div>
+    //       </div>
+
+    //       {/* Title */}
+    //       <div
+    //         className={`mt-2 font-semibold text-lg line-clamp-1 ${!themeMode && "title-dark-color"
+    //           }`}
+    //       >
+    //         {title}
+    //       </div>
+
+    //       {/* Location and Date */}
+    //       <div className="flex justify-start items-center mt-2 text-sm text-gray-600">
+    //         <div className="mr-2">{location}</div>
+    //         <span>•</span>
+    //         <div className="ml-2">{date}</div>
+    //       </div>
+    //       </div>
+    //     </div>
+    //   </Card>
+    // </div>
+
+    <div className="product-card1 flex w-full">
+      <div
+        className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl
+      ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
+      ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
+      `}
+        style={{
+          boxShadow: themeMode
+            ? "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)"
+            : "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
+          backgroundColor: themeMode ? "" : "#242526",
+          border: themeMode ? "1px solid white" : "1px solid #242526",
+          borderRadius: "2xl",
+        }}
+      >
+        <div className="flex md:flex-col  gap-5  related md:justify-between w-full h-full">
+
+          <div
+            className={`hover:opacity-75 object-cover cursor-pointer relative ${!themeMode && "dark-bg-color"}`}
+          >
+
+            {/* YouTube Thumbnail */}
+            <div
+              className={`relative lg:bg-gray-100 cursor-pointer md:h-48 h-[80px] rounded-md overflow-hidden ${!themeMode && "dark-bg-color"}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePlay();
+              }}
+            >
+              <img
                 src={
                   youTube
-                    ? `https://img.youtube.com/vi/${youTube.split("v=")[1]?.split("&")[0]}/hqdefault.jpg`
+                    ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
                     : "default-thumbnail.jpg"
                 }
-                className="w-full h-full object-cover"
+                className="md:w-full w-[90px] h-full  object-cover"
                 alt="YouTube Thumbnail"
               />
-                </div>
-                <div className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2">
-                  {themeMode ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="58"
-                      height="57"
-                      viewBox="0 0 58 57"
-                      fill="none"
-                    >
-                      <circle
-                        cx="29.0083"
-                        cy="28.6963"
-                        r="28.0302"
-                        fill="#5A1073"
-                      />
-                      <path
-                        d="M22.6165 17.2738L41.7791 28.7878L22.2263 39.6261L22.6165 17.2738Z"
-                        fill="white"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="55"
-                      height="55"
-                      viewBox="0 0 55 55"
-                      fill="none"
-                    >
-                      <circle
-                        cx="27.0083"
-                        cy="27.0083"
-                        r="27.0083"
-                        fill="#2FC4B2"
-                      />
-                      <path
-                        d="M20.8495 16.0019L39.3135 27.0962L20.4736 37.5393L20.8495 16.0019Z"
-                        fill="#111217"
-                      />
-                    </svg>
-                  )}
-                </div>
-              </div>
-              <div className="flex justify-start mt-3">
-                <div
-                  className={`artist-feature-text px-5 py-1 ${!themeMode && "btn-dark-bg-color"}`}
-                >
-                  {feature}
-                </div>
-              </div>
-              <div
-                className={`artist-title-text flex mt-2 ${!themeMode && "title-dark-color"}`}
-              >
-                {title}
-              </div>
-            </div>
-            <div className="flex justify-start mt-2">
-              <div className="flex items-center">
-                <div className="mr-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="17"
-                    height="17"
-                    viewBox="0 0 17 17"
-                    fill="none"
-                  >
-                    <path
-                      d="M8.48531 9.89763C9.64224 9.89763 10.5801 8.95975 10.5801 7.80282C10.5801 6.64589 9.64224 5.70801 8.48531 5.70801C7.32838 5.70801 6.3905 6.64589 6.3905 7.80282C6.3905 8.95975 7.32838 9.89763 8.48531 9.89763Z"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                    />
-                    <path
-                      d="M2.85879 6.58013C4.18148 0.76569 12.7957 0.772405 14.1117 6.58685C14.8838 9.99763 12.7621 12.8847 10.9023 14.6707C9.55278 15.9732 7.41769 15.9732 6.06143 14.6707C4.20833 12.8847 2.08666 9.99091 2.85879 6.58013Z"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                    />
+
+              {/* Play Button */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                {themeMode ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="58" height="57" viewBox="0 0 58 57" fill="none" className="w-[20px] md:w-[58px]">
+                    <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+                    <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
                   </svg>
-                </div>
-                <div className="mr-1 location2">{location}</div>
-                <div className="mr-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="7"
-                    height="7"
-                    viewBox="0 0 7 7"
-                    fill="none"
-                  >
-                    <circle
-                      cx="3.65392"
-                      cy="3.2766"
-                      r="3.11351"
-                      fill="#D9D9D9"
-                    />
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55" fill="none" className="w-[20px] md:w-[58px]">
+                    <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
+                    <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
                   </svg>
-                </div>
-                <div className="mr-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="17"
-                    viewBox="0 0 18 17"
-                    fill="none"
-                  >
-                    <path
-                      d="M6.34082 2.22266V4.2369"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                      strokeMiterlimit="10"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M11.7122 2.22266V4.2369"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                      strokeMiterlimit="10"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M3.31946 6.9834H14.7335"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                      strokeMiterlimit="10"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M15.0692 6.58656V12.2936C15.0692 14.3078 14.0621 15.6506 11.7121 15.6506H6.34083C3.99088 15.6506 2.98376 14.3078 2.98376 12.2936V6.58656C2.98376 4.57232 3.99088 3.22949 6.34083 3.22949H11.7121C14.0621 3.22949 15.0692 4.57232 15.0692 6.58656Z"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                      strokeMiterlimit="10"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M11.5071 10.0779H11.5131"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M11.5071 12.0925H11.5131"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M9.02343 10.0779H9.02946"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M9.02343 12.0925H9.02946"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M6.53844 10.0779H6.54447"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M6.53844 12.0925H6.54447"
-                      stroke="#BBBCC0"
-                      strokeWidth="1.00712"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div className="mr-1 location2">{date}</div>
+                )}
               </div>
             </div>
           </div>
+          <div>
+            <div className="flex justify-start">
+              <div className="flex md:flex-wrap gap-2 line-clamp-1">
+                {wordArray.map(
+                  (tag, index) =>
+                    tag && (
+                      <div
+                        key={index}
+                        className={`feature-text ${!themeMode && "btn-dark-bg-color"} px-2 py-1 rounded`}
+                      >
+                        {tag.trim()}
+                      </div>
+                    )
+                )}
+              </div>
+            </div>
+
+            <div
+              className={`mt-2 line-clamp-1 ${!themeMode && "title-dark-color"}`}
+            >
+              {title}
+            </div>
 
 
-      </Card>
+            <div className='flex gap-2 items-center'>
+              {location &&
+                <>
+                  <p className='flex gap-1 items-center' style={{
+                    color: themeMode ? "#9B9CA1" : "#9B9CA1"
+                  }}><IoLocationOutline /> New York</p>
+                  <GoDotFill style={{ color: themeMode ? "#D9D9D9" : "D9D9D9", }} />
+                </>
+              }
+
+              {date && <p className='flex gap-1 items-center' style={{
+                color: themeMode ? "#9B9CA1" : "#9B9CA1"
+              }}>
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M8 2V5" stroke="#9B9CA1" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M16 2V5" stroke="#9B9CA1" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M3.5 9.08984H20.5" stroke="#9B9CA1" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z" stroke="#9B9CA1" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M15.6947 13.6992H15.7037" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M15.6947 16.6992H15.7037" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M11.9955 13.6992H12.0045" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M11.9955 16.6992H12.0045" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M8.29431 13.6992H8.30329" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M8.29431 16.6992H8.30329" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </>
+                {date}
+              </p>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

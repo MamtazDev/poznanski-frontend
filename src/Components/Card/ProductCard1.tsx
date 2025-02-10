@@ -26,6 +26,7 @@ const ProductCard1: React.FC<News> = ({
 }) => {
   const navigate = useNavigate();
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+
   const handleClick = () => {
     navigate(`/news/${_id}`);
   };

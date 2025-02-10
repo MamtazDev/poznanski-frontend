@@ -5,12 +5,11 @@ import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
 import Layout from "../../Components/Layout";
 import PaginationBar from "../../Components/PaginationBar";
-import { apiBaseUrl, fileUrl } from "../../Constant/config";
+import { fileUrl } from "../../Constant/config";
 import ArtistsCarousel from "../Home/Artists/Carousel";
 import "../mainPageStyle.css";
 import { useNavigate } from "react-router-dom";
 import avatar from "../../assets/png/profileImage2.png"
-import { Avatar } from "@chakra-ui/react";
 interface ArtistsData {
   id: string;
   _id?: string;
@@ -45,20 +44,33 @@ interface Products {
   location: string;
 }
 
-interface filterProperties {
-  sort: string;
-  quantity: number;
-  startDate: string;
-  endDate: string;
-  order: string;
-  search: string | undefined;
-}
+// interface InputProducts {
+//   _id: string;
+//   title: string;
+//   img: string;
+//   date: Date;
+//   category: string;
+//   location: string;
+// }
 
 const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const navigate = useNavigate();
   const [cardNum, setCardNum] = useState<number>(4);
   const [state, setState] = useState<boolean>(false);
   const [artists, setArtists] = useState<ArtistsData[]>([]);
+  // const [artist, setArtist] = useState<ArtistsData>({
+  //   id: "",
+  //   name: "",
+  //   img: "",
+  //   description: "",
+  //   products:[{title: "",
+  //     location: "",
+  //     date: "",
+  //     category: "",
+  //     img: "",
+  //   }]
+  // });
+  // const [cardData, setCardData] = useState<Products[]>([]);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedPage, setSelectedPage] = useState<number>(1);
@@ -66,18 +78,20 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [filterText, setFilterText] = useState<string>("");
   const [lineNum, setLineNum] = useState<number>(3);
   const [filterCardNum, setFilterCardNum] = useState<number>(4);
-
-  const [filters, setFilters] = useState<filterProperties>({
+  const [filters, setFilters] = useState({
     sort: "A to Z",
-    quantity: 5,
+    limit: 7,
     startDate: "",
     endDate: "",
-    order: "desc",
-    search: "",
+    order: "desc"
   });
 
+
   useEffect(() => {
+    console.log("hover:", hoveredCard);
   }, [hoveredCard]);
+
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -116,94 +130,52 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const response = await fetch("http://localhost:8000/api/artist");
-  //       const jsonData = await response.json();
-
-  //       const newArtists = jsonData.data.map((item: any) => ({
-  //         id: item.artist._id,
-  //         name: item.artist.name,
-  //         img: fileUrl + item.artist.profileImg,
-  //         description: item.artist.description,
-  //         products: item.products
-  //       }));
-
-  //       setArtists(newArtists);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  const fetchData = async (inputValue?: filterProperties) => {
-    setLoading(true);
-    let url = `${apiBaseUrl}/artist`;
-    let searchQuery = [];
-
-    if (inputValue?.search) {
-      searchQuery.push(`search=${encodeURIComponent(inputValue.search)}`);
-    }
-
-    if (inputValue?.sort) {
-      searchQuery.push(`order=${encodeURIComponent(inputValue.sort)}`);
-    }
-
-    if (inputValue?.quantity) {
-      searchQuery.push(`limit=${inputValue.quantity}`);
-    }
-
-    if (inputValue?.startDate) {
-      searchQuery.push(`startDate=${encodeURIComponent(inputValue.startDate)}`);
-    }
-
-    if (inputValue?.endDate) {
-      searchQuery.push(`endDate=${encodeURIComponent(inputValue.endDate)}`);
-    }
-
-    if (searchQuery.length > 0) {
-      url = `${url}?${searchQuery.join("&")}`;
-    }
-
-    try {
-      const response = await fetch(url);
-      const jsonData = await response.json();
-      const newArtists = jsonData.data.map((item: any) => ({
-        id: item.artist._id,
-        name: item.artist.name,
-        img: fileUrl + item.artist.profileImg,
-        description: item.artist.description,
-        products: item.products,
-      }));
-
-      setArtists(newArtists);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("http://localhost:8000/api/artist");
+        const jsonData = await response.json();
+
+        console.log("Fetched Data:", jsonData);
+
+        const newArtists = jsonData.data.map((item: any) => ({
+          id: item.artist._id,
+          name: item.artist.name,
+          img: fileUrl + item.artist.profileImg,
+          profileImg: item.artist.profileImg,
+          description: item.artist.description,
+          products: item.products
+        }));
+
+        console.log("Formatted Artists Data:", newArtists);
+
+        setArtists(newArtists);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchData();
   }, []);
 
-  const handleSearch = (inputValue: string) => {
-    fetchData(filters);
-  };
-  useEffect(() => {
-    fetchData(filters);
-  }, [filters]);
+
+
+  const filteredArtists = artists.filter(
+    (artist) =>
+      artist.name.toLowerCase().includes(filterText.toLowerCase()) ||
+      artist.description.toLowerCase().includes(filterText.toLowerCase()) ||
+      artist.profileImg
+  );
 
   const handleClick = (id: string) => {
     navigate(`/artist/${id}`);
   };
+
+
+
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -218,40 +190,27 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <ContentTitle titleType="TOP HITS" title="Our Top Artists" />
           </div>
           <div className="md:mt-6 mt-4">
-            <FilterInput
-              type={type}
-              handler={handleSearch}
-              filterText={filterText}
-              setFilterText={setFilterText}
-              setFilters={setFilters}
-              filters={filters}
-            />
+            <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
           </div>
-          {artists && artists.length > 0 ? (
-            artists.map((artist, _idx_) => (
+          {/* id wise data add here */}
+          {
+            filteredArtists.map((artist, _idx_) => (
               <div
-                key={artist.id}
-                id={artist.id}
-                className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3 md:mt-20 mt-6"
-              >
+                id={artist._id}
+
+                className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3 md:mt-20 mt-6">
                 <div
                   className={`p-5 ${hoveredCard === `${_idx_}` && (themeMode ? "artists-body" : "artists-body-dark")}`}
                   style={{
                     borderRadius: "20px",
-                    transition: "1s ease-in-out",
+                    transition: "0.5s ease-in-out",
                   }}
                   onMouseEnter={() => setHoveredCard(`${_idx_}`)}
                   onMouseLeave={() => setHoveredCard(null)}
                 >
                   <div className="flex items-start w-full">
-                    <div
-                      className="md:block hidden"
-                      onClick={() => handleClick(artist.id)}
-                    >
-                      <Avatar
-                        size={window.innerWidth < 768 ? "lg" : "2xl"}
-                        src={artist.img}
-                      />
+                    <div className="" onClick={() => handleClick(artist.id)}>
+                      <img src={artist?.profileImg || avatar} className='md:w-[100px] w-[80px]  md:h-[80px]  h-[50px] rounded-full' alt='img' />
                     </div>
                     <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
                       <div
@@ -259,27 +218,25 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       >
                         {artist.name}
                       </div>
-                      <div className="artist-description">
+                      <div className="artist-description ">
                         {artist.description}
                       </div>
                     </div>
                   </div>
-                  <div
-                    className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "h-72" : "h-0 overflow-hidden"}`}
-                  >
-                    {artist.products.length > 0 && (
-                      <ArtistsCarousel
-                        cardNum={cardNum}
-                        cardData={artist.products}
-                      />
-                    )}
-                  </div>
+                  { artist.products.length > 0 && (
+                      <div className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "md:h-[350px] h-72" : "h-0 overflow-hidden"}`}>
+                        {<ArtistsCarousel cardNum={cardNum} cardData={artist.products} />}
+                      </div>
+                     )}
                 </div>
               </div>
             ))
-          ) : (
-            <p className="text-blue-500 text-5xl py-3 text-center">There is no data</p>
-          )}
+          }
+          <div className="mt-8">
+            <PaginationBar selectedPage={selectedPage} setSelectedPage={setSelectedPage} pages={pages} entriesPerPage={0} setEntriesPerPage={function (value: React.SetStateAction<number>): void {
+              throw new Error("Function not implemented.");
+            }} />
+          </div>
         </div>
       </div>
     </Layout>

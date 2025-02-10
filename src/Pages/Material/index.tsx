@@ -167,7 +167,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           </div>
           <div
             className="md:mt-12 mt-8"
-            style={{ minHeight: "908px", width: "100%" }}
+            // style={{ minHeight: "908px", width: "100%" }}
           >
             {loading ? (
               <div

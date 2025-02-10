@@ -8,14 +8,15 @@ import singer from "../../assets/svg/artists1.svg"
 import { GoDotFill } from 'react-icons/go'
 import { IoLocationOutline } from "react-icons/io5";
 import { BsCalendar2Date } from 'react-icons/bs'
-import CommentSection from './CommentSection'
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-const TopArtist: React.FC<PageBasicProps> = ({ themeMode, type }) => {
+import CommentSection from '../TopArtist/CommentSection'
+
+const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   // Swiper reference
   const swiperRef = useRef<SwiperInstance | null>(null);
@@ -109,8 +110,7 @@ const TopArtist: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         <GoDotFill style={{ color: themeMode ? "#D9D9D9" : "D9D9D9", }} />
                         <p className='flex gap-1 items-center' style={{
                           color: themeMode ? "#9B9CA1" : "#9B9CA1"
-                        }}><BsCalendar2Date />20/4/2023</p>
-                        </div>
+                        }}><BsCalendar2Date />20/4/2023</p></div>
                     </div>
                   </SwiperSlide>
                 ))}
@@ -138,4 +138,4 @@ const TopArtist: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   )
 }
 
-export default TopArtist
+export default TvRadioDetails
