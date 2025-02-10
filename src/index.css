@@ -198,7 +198,16 @@ code {
 .editorContainer {
   h1,h2,h3,h4,h5,h5,p,b{
     color: rgb(2, 1, 1)!important ;
+    width:"870px"
   }
+
+
+  @media (min-width: 425px) {
+    .editorContainer{
+      width:"300px"
+    }
+  }
+
 }
 .editorContainerDark {
   h1,h2,h3,h4,h5,h5,p,b{
