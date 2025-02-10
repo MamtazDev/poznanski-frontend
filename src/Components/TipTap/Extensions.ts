@@ -131,7 +131,6 @@ export const customFileHandler = (setFiles: TipTapProps['setFiles']) =>
 			});
 		},
 		onPaste: (currentEditor, files, htmlContent) => {
-			console.log('html: ', htmlContent);
 			files.forEach(async (file) => {
 				const compressedFile = await FileResizer(file);
 				if (!compressedFile) return;

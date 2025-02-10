@@ -45,7 +45,6 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     fetch(`http://localhost:8000/api/album`).then((res) => res.json());
 
   const { data, error } = useSWR(`http://localhost:8000/api/album`, fetcher);
-  console.log("data", data?.albums);
 
   useEffect(() => {
     if (data) {

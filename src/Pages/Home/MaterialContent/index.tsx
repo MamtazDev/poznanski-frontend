@@ -20,19 +20,18 @@ interface CartInterface {
 
 const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
   const [cardNum, setCardNum] = useState<number>(3);
-  const [cardData, setCardData] = useState<CartInterface | null>(null);  // Set type to CartInterface or null
+  const [cardData, setCardData] = useState<CartInterface | null>(null); // Set type to CartInterface or null
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
-    setCardData(null);  // Reset previous data
+    setCardData(null); // Reset previous data
 
     fetch(`${apiBaseUrl}/materials`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("API Response:", data);
-        setCardData(data); 
+        setCardData(data);
         setLoading(false);
       })
       .catch((error) => {
@@ -75,17 +74,19 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
           </div>
         </div>
         <div className="md:mt-16 mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {cardData.materials.map((item) => (
-            <MaterialCard
-              key={item.id}
-              type="horizontal" // Or "vertical" based on your preference
-              video={item.youTube}
-              data={item}
-              feature={item.tags} // Joining tags if you want to display them as a string
-              title={item.title}
-              date={item.date}
-              link={item.youTube}
-            />
+          {cardData.materials.map((item, index) => (
+            <React.Fragment key={index}>
+              <MaterialCard
+                key={item.id}
+                type="horizontal" // Or "vertical" based on your preference
+                video={item.youTube}
+                data={item}
+                feature={item.tags} // Joining tags if you want to display them as a string
+                title={item.title}
+                date={item.date}
+                link={item.youTube}
+              />
+            </React.Fragment>
           ))}
         </div>
       </div>

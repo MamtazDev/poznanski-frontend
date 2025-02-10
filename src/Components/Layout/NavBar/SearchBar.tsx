@@ -27,8 +27,6 @@ const SearchBar: FC<SearchBarProps> = ({
   //   "Sarah Wilson",
   // ];
 
-  console.log("t", themeMode);
-
   useEffect(() => {
     // Fetch recent searches from localStorage on component mount
     const storedSearches = JSON.parse(

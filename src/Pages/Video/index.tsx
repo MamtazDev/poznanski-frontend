@@ -49,7 +49,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   const fetchData = async (inputValue?: filterProperties) => {
     setLoading(true);
-    console.log("inputValue.search", inputValue);
     let url = `${apiBaseUrl}/radio`; // Default URL
     // Building the query string based on available filter properties
     let searchQuery = [];
@@ -63,7 +62,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
 
     if (inputValue?.quantity) {
-      console.log("inputValue?.limit",inputValue?.quantity)
       searchQuery.push(`limit=${inputValue.quantity}`);
     }
 
@@ -88,7 +86,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       const response = await fetch(url);
       const data = await response.json();
       setCardData(data.records);
-      // console.log(data.records ,"datttatta")
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -129,14 +126,11 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 //search fucntionalities
 
 const handleSearch = (inputValue: string) => {
-  console.log("Searched value: ", inputValue);
-  console.log("Filters value: ", filters);
   fetchData(filters)
 }
 
 
 useEffect(() => {
-console.log("Filtered worked")
 fetchData(filters)
 }, [filters])
 

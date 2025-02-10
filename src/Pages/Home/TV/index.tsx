@@ -62,7 +62,6 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
         }));
 
         setCardData(newData);
-        // console.log("new data on landing page", newData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
