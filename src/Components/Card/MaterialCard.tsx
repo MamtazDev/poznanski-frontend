@@ -35,7 +35,6 @@ const MaterialCard: React.FC<News> = ({
   const handlePlay = () => {
     if (data?.youTube) {
       const videoId = data?.youTube.split("v=")[1]?.split("&")[0];
-      console.log("Extracted Video ID:", videoId);
       if (videoId) {
         dispatch(openPlayer(videoId));
       }
@@ -76,8 +75,11 @@ const MaterialCard: React.FC<News> = ({
         {type === "horizontal" ? (
           <div className="flex flex-col related justify-between w-full h-full">
             <div>
-              <div className={`material-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-48 relative ${!themeMode && "dark-bg-color"}`}>
-                <div className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden" onClick={handlePlay}>
+              <div
+                className={`material-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-48 relative ${!themeMode && "dark-bg-color"}`}>
+                <div
+                  className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden"
+                  onClick={handlePlay}>
                   <img
                     src={`https://img.youtube.com/vi/${data.youTube.split("v=")[1]}/hqdefault.jpg`}
                     className="w-full h-full object-cover"
@@ -282,7 +284,6 @@ const MaterialCard: React.FC<News> = ({
             </div>
           </div>
         )}
-        {/* </CardBody> */}
       </Card>
     </div>
   );

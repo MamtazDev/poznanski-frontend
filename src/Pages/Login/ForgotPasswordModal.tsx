@@ -10,7 +10,6 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClo
   const [email, setEmail] = React.useState('');
 
   const handleSubmit = () => {
-    console.log('Reset password for:', email);
     onClose();
   };
 

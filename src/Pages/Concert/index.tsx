@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 import { ChangeEvent, useState, useEffect, useMemo } from "react";
 import BreadCrumb from "../../Components/BreadCrumb";
 import ContentTitle from "../../Components/ContentTitle";
@@ -16,7 +16,7 @@ import { RootState } from "../../reducers";
 import "../mainPageStyle.css";
 import type { PageBasicProps } from "../../AppMain";
 import { Swiper, SwiperSlide } from "swiper/react";
-
+import playIcon from "../../assets/svg/play-icon.svg";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
@@ -36,6 +36,7 @@ interface Product {
   description: string;
   isFeatured: boolean;
 }
+
 interface inputProducts {
   _id: string;
   name: string;
@@ -90,10 +91,8 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   //   const newProducts: Product[] = []
   //   const totalPages = Math.ceil(response.all / 6)
   //   setPages(totalPages)
-
   //   const featured: Product[] = []
   //   const nonFeatured: Product[] = []
-
   //   response.products.forEach((item: inputProducts) => {
   //     const inputDate1: Date = new Date(item.timeframe.start)
   //     const inputDate2: Date = new Date(item.timeframe.end)
@@ -108,7 +107,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   //       (inputDate2.getUTCMinutes() < 10 ? "0" : "") +
   //       inputDate2.getUTCMinutes()
   //     const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(inputDate1)
-
   //     const temp: Product = {
   //       id: item._id,
   //       name: item.name,
@@ -121,14 +119,12 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   //       location: item.location,
   //       description: item.description,
   //     }
-
   //     if (item.isFeatured) {
   //       featured.push(temp)
   //     } else {
   //       nonFeatured.push(temp)
   //     }
   //   })
-
   //   setFeaturedProducts(featured)
   //   setNonFeaturedProducts(nonFeatured)
   // }
@@ -140,7 +136,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         setLineNum(3);
       } else {
         setLineNum(3);
-
         setCardNum(3);
         if (window.innerWidth < 1024) {
           setLineNum(3);
@@ -153,9 +148,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       }
     };
     handleResize();
-
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -163,16 +156,12 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   // useEffect(() => {
   //   setLoading(true)
-
   //   fetch("http://localhost:8000/api/concert")
   //     .then((res) => res.json())
   //     .then((data) => {
-  //       console.log("API Response:", data)
-
   //       if (data.success) {
   //         handleData(data)
   //       }
-
   //       setLoading(false)
   //     })
   //     .catch((error) => {
@@ -183,8 +172,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   const fetchData = async (inputValue?: filterProperties) => {
     setLoading(true);
-    console.log("inputValue.search", inputValue);
-
     let url = `${apiBaseUrl}/concert`;
     let searchQuery = [];
 
@@ -197,7 +184,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
 
     if (inputValue?.quantity) {
-      console.log("inputValue?.limit", inputValue?.quantity);
       searchQuery.push(`limit=${inputValue.quantity}`);
     }
 
@@ -226,8 +212,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     //   const response = await fetch(url);
     //   const jsonData = await response.json();
 
-    //   console.log("Fetched Data:", jsonData);
-
     //   const newConcert = jsonData.products.map((item: any) => {
     //     const inputDate = new Date(item.timeframe.start);
 
@@ -246,9 +230,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     //       date: `${date}`,
     //     };
     //   });
-
-    //   console.log("Formatted Artists Data:", newConcert);
-
     //   setCardData(newConcert);
     // } catch (error) {
     //   console.error("Error fetching data:", error);
@@ -262,347 +243,279 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   }, []);
 
   const handleSearch = (inputValue: string) => {
-    console.log("Searched value: ", inputValue);
-    console.log("Filters value: ", filters);
     fetchData(filters);
   };
 
   useEffect(() => {
-    console.log("Filtered worked");
     fetchData(filters);
   }, [filters]);
 
   return (
-    <>
-      <Layout themeMode={themeMode} type={type}>
-        <div className="flex justify-center">
-          <div className="container">
-            {type ? (
-              ""
-            ) : (
-              <div className="md:mt-12 mt-8">
-                <BreadCrumb />
-              </div>
-            )}
-            <div className="md:mt-7 mt-10">
-              <ContentTitle
-                titleType="TOP HITS"
-                title="Book Your Spot In Events"
-              />
+    <Layout themeMode={themeMode} type={type}>
+      <div className="flex justify-center">
+        <div className="container">
+          {type ? (
+            ""
+          ) : (
+            <div className="md:mt-12 mt-8">
+              <BreadCrumb />
             </div>
-            <div className="md:mt-6 mt-4">
-              <FilterInput
-                type={type}
-                handler={handleSearch}
-                filterText={filterText}
-                setFilterText={setFilterText}
-                setFilters={setFilters}
-                filters={filters}
-              />
-            </div>
-            <div className="md:mt-16">
-              <Swiper
-                pagination={{
-                  dynamicBullets: true,
-                }}
-                modules={[Pagination]}
-                className="mySwiper"
-              >
-                {cardData?.isFeatured && Array.isArray(cardData.isFeatured) ? (
-                  cardData.isFeatured.map((item, idx) => (
-                    <SwiperSlide
-                      key={`ticket-slide-${idx}`}
-                      className="p-2 md:mb-16 mb-8"
-                    >
-                      <div
-                        className={`grid md:grid-cols-2 grid-cols-1 md:gap-20 gap-6`}
-                      >
-                        <div className={`relative`}>
-                          <Image
-                            src={
-                              "https://i.ibb.co.com/5KchHq8/ticket-Banner.png"
-                            }
-                            className="cursor-pointer object-cover h-full w-full"
-                            alt={item.img}
-                            borderRadius={type ? "18px" : "25px"}
-                          />
-                        </div>
-                        <div className={`flex flex-col`}>
-                          <div
-                            className={`${themeMode ? "ticket-detail-tilte" : "ticket-detail-tilte-dark"}`}
-                            style={{ fontSize: type ? "22px" : "48px" }}
-                          >
-                            {item.name}
-                          </div>
-                          <div
-                            className={`${themeMode ? "ticket-detail" : "ticket-detail-dark"} md:mt-6 mt-3`}
-                          >
-                            {item.description}
-                          </div>
-                          <div className={`flex md:mt-4 mt-3`}>
-                            <div>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <path
-                                  d="M11.9999 13.4295C13.723 13.4295 15.1199 12.0326 15.1199 10.3095C15.1199 8.58633 13.723 7.18945 11.9999 7.18945C10.2768 7.18945 8.87988 8.58633 8.87988 10.3095C8.87988 12.0326 10.2768 13.4295 11.9999 13.4295Z"
-                                  stroke={themeMode ? "#6D6E76" : "#BBBCC0"}
-                                  strokeWidth="1.5"
-                                />
-                                <path
-                                  d="M3.61971 8.49C5.58971 -0.169998 18.4197 -0.159997 20.3797 8.5C21.5297 13.58 18.3697 17.88 15.5997 20.54C13.5897 22.48 10.4097 22.48 8.38971 20.54C5.62971 17.88 2.46971 13.57 3.61971 8.49Z"
-                                  stroke={themeMode ? "#6D6E76" : "#BBBCC0"}
-                                  strokeWidth="1.5"
-                                />
-                              </svg>
-                            </div>
-                            <div
-                              className={`flex ml-2 items-center ${themeMode ? "ticket-detail" : "ticket-detail-dark"}`}
-                            >
-                              {item.location}
-                            </div>
-                          </div>
-                          <div className={`flex mt-4`}>
-                            <div>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <path
-                                  d="M22 12C22 17.52 17.52 22 12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12Z"
-                                  stroke={themeMode ? "#6D6E76" : "#BBBCC0"}
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                                <path
-                                  d="M15.7099 15.1798L12.6099 13.3298C12.0699 13.0098 11.6299 12.2398 11.6299 11.6098V7.50977"
-                                  stroke={themeMode ? "#6D6E76" : "#BBBCC0"}
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                            </div>
-                            <div
-                              className={`flex ml-2 items-center ${themeMode ? "ticket-detail" : "ticket-detail-dark"}`}
-                            >
-                              {item.date}
-                            </div>
-                          </div>
-                          {!type && (
-                            <div className="md:mt-10 mt-8">
-                              <Link to={item.link} target="_blank">
-                                <DetailButton
-                                  text="buy Tickets Of Concert"
-                                  btnType="web"
-                                />
-                              </Link>
-                            </div>
-                          )}
+          )}
+
+          <div className="md:mt-7 mt-10">
+            <ContentTitle
+              titleType="TOP HITS"
+              title="Book Your Spot In Events"
+            />
+          </div>
+
+          <div className="md:mt-6 mt-4">
+            <FilterInput
+              type={type}
+              handler={handleSearch}
+              filterText={filterText}
+              setFilterText={setFilterText}
+              setFilters={setFilters}
+              filters={filters}
+            />
+          </div>
+
+          <div className="md:mt-16">
+            <Swiper
+              pagination={{
+                dynamicBullets: true,
+                clickable: true,
+              }}
+              modules={[Pagination]}
+              className="mySwiper event-carousel">
+              {cardData?.isFeatured && Array.isArray(cardData.isFeatured) ? (
+                cardData.isFeatured.map((item, idx) => (
+                  <SwiperSlide key={idx} className="p-2 md:mb-16 mb-8">
+                    <div
+                      className={`grid md:grid-cols-2 grid-cols-1 md:gap-20 gap-6`}>
+                      <div className={`relative`}>
+                        <Image
+                          src={"https://i.ibb.co.com/5KchHq8/ticket-Banner.png"}
+                          className="object-cover h-full w-full"
+                          alt={item.img}
+                          borderRadius={type ? "18px" : "25px"}
+                        />
+                        <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer">
+                          <img src={playIcon} alt="icon" />
                         </div>
                       </div>
-                    </SwiperSlide>
-                  ))
-                ) : (
-                  <p>No featured items available</p>
-                )}
-              </Swiper>
-              {type && (
-                <div className="md:mt-10 mt-8">
-                  <DetailButton
-                    text="buy Tickets Of Concert"
-                    btnType="mobile"
-                  />
-                </div>
-              )}
-            </div>
-
-            <div
-              className={`md:mt-16 mt-8`}
-              style={{ minHeight: type ? "689px" : "450px", width: "100%" }}
-            >
-              {loading ? (
-                <div
-                  className="w-full flex justify-center items-center"
-                  style={{ minHeight: type ? "689px" : "450px" }}
-                >
-                  <Spinner
-                    thickness="4px"
-                    speed="0.65s"
-                    emptyColor="gray.200"
-                    color="blue.500"
-                    size="lg"
-                  />
-                </div>
+                      <div className={`flex flex-col`}>
+                        <div
+                          className={`${themeMode ? "ticket-detail-tilte" : "ticket-detail-tilte-dark"}`}
+                          style={{ fontSize: type ? "22px" : "48px" }}>
+                          {item.name}
+                        </div>
+                        <div
+                          className={`${themeMode ? "ticket-detail" : "ticket-detail-dark"} md:mt-6 mt-3`}>
+                          {item.description}
+                        </div>
+                        <div className={`flex md:mt-4 mt-3`}>
+                          <div>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none">
+                              <path
+                                d="M11.9999 13.4295C13.723 13.4295 15.1199 12.0326 15.1199 10.3095C15.1199 8.58633 13.723 7.18945 11.9999 7.18945C10.2768 7.18945 8.87988 8.58633 8.87988 10.3095C8.87988 12.0326 10.2768 13.4295 11.9999 13.4295Z"
+                                stroke={themeMode ? "#6D6E76" : "#BBBCC0"}
+                                strokeWidth="1.5"
+                              />
+                              <path
+                                d="M3.61971 8.49C5.58971 -0.169998 18.4197 -0.159997 20.3797 8.5C21.5297 13.58 18.3697 17.88 15.5997 20.54C13.5897 22.48 10.4097 22.48 8.38971 20.54C5.62971 17.88 2.46971 13.57 3.61971 8.49Z"
+                                stroke={themeMode ? "#6D6E76" : "#BBBCC0"}
+                                strokeWidth="1.5"
+                              />
+                            </svg>
+                          </div>
+                          <div
+                            className={`flex ml-2 items-center ${themeMode ? "ticket-detail" : "ticket-detail-dark"}`}>
+                            {item.location}
+                          </div>
+                        </div>
+                        <div className={`flex mt-4`}>
+                          <div>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none">
+                              <path
+                                d="M22 12C22 17.52 17.52 22 12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12Z"
+                                stroke={themeMode ? "#6D6E76" : "#BBBCC0"}
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                              <path
+                                d="M15.7099 15.1798L12.6099 13.3298C12.0699 13.0098 11.6299 12.2398 11.6299 11.6098V7.50977"
+                                stroke={themeMode ? "#6D6E76" : "#BBBCC0"}
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </div>
+                          <div
+                            className={`flex ml-2 items-center ${themeMode ? "ticket-detail" : "ticket-detail-dark"}`}>
+                            {item.date}
+                          </div>
+                        </div>
+                        {!type && (
+                          <div className="md:mt-10 mt-8">
+                            <Link to={item.link} target="_blank">
+                              <DetailButton
+                                text="Buy Tickets Of Concert"
+                                btnType="web"
+                              />
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))
               ) : (
-                <div
-                  className={`${themeMode ? "book-back" : "book-back-dark"}`}
-                >
-                  {cardData?.products.map((item, idx) => (
-                    <Card idx={idx} themeMode={themeMode} item={item} />
-                  ))}
-                </div>
+                <p>No featured items available</p>
               )}
-            </div>
+            </Swiper>
+            {type && (
+              <div className="md:mt-10 mt-8">
+                <DetailButton text="Buy Tickets Of Concert" btnType="mobile" />
+              </div>
+            )}
+          </div>
+
+          <div
+            className={`md:mt-16 mt-8`}
+            style={{ minHeight: type ? "689px" : "450px", width: "100%" }}>
+            {loading ? (
+              <div
+                className="w-full flex justify-center items-center"
+                style={{ minHeight: type ? "689px" : "450px" }}>
+                <Spinner
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="blue.500"
+                  size="lg"
+                />
+              </div>
+            ) : (
+              <div className={`${themeMode ? "book-back" : "book-back-dark"}`}>
+                {cardData?.products.map((item, idx) => (
+                  <React.Fragment key={idx}>
+                    <Card idx={idx} themeMode={themeMode} item={item} />
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
           </div>
         </div>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
 };
 
 export default ConcertMainPage;
 
 const Card = ({ item, themeMode, idx }: any) => {
+
+  console.log(item, "item")
+
   return (
-    <div className="px-3">
-      <div className={`py-4 ${idx !== 0 && "ticket-top-border"}`}>
-        <div
-          className="hidden md:grid grid-cols-4 items-center px-3"
-          style={{ height: 75 }}
-        >
-          <div className="flex items-center">
-            <div
-              className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}
-            >
-              {item.date}
-            </div>
-            <div className={`ticket-month ${!themeMode && "text-dark-color"}`}>
-              <div>{item.month}</div>
-              <div>{item.timeframe.start}</div>
-            </div>
+    <div className={`py-4 ${idx !== 0 && "ticket-top-border"}`}>
+      <div
+        className="hidden md:grid grid-cols-4 items-center px-3"
+        style={{ height: 75 }}>
+        <div className="flex items-center">
+          <div className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}>
+            {item.date}
           </div>
-          <div
-            className={`ticket-type text-center ${!themeMode && "title-dark-color"}`}
-          >
-            {item.name}
-          </div>
-          <div className="flex justify-center items-center">
-            <div
-              className={`ticket-category ${!themeMode && "btn-dark-bg-color"}`}
-            >
-              {item.category}
-            </div>
-          </div>
-          <div>
-            <Button
-              size="md"
-              height="30px"
-              width="105px"
-              border="2px"
-              borderColor={themeMode ? "#5A1073" : "#2FC4B2"}
-              borderWidth="1px"
-              borderRadius="5px"
-              color={themeMode ? "#5A1073" : "#2FC4B2"}
-              fontFamily="Urbanist"
-              fontSize="14px"
-              fontWeight="600"
-              backgroundColor={themeMode ? "#FFF" : "#242526"}
-            >
-              Buy Ticket
-            </Button>
+          <div className={`ticket-month ${!themeMode && "text-dark-color"}`}>
+          <div>{new Date(item.timeframe.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</div>
+          <div>{new Date(item.timeframe.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 md:hidden">
-          <div className="flex justify-between items-center text-sm text-gray-700">
-            <div  className={`${!themeMode && "text-dark-color"}`}>
-               2feb {item.date} {item.month}
-            </div>
-            <div className={`${!themeMode && "text-dark-color"}`}>
-                {item.timeframe.start}
-            </div>
+        <div
+          className={`ticket-type text-center capitalize ${!themeMode && "title-dark-color"}`}>
+          {item.name}
+        </div>
+
+        <div className="flex justify-center items-center">
+          <div
+            className={`ticket-category ${!themeMode && "btn-dark-bg-color"}`}>
+            {item.category}
+          </div>
+        </div>
+
+        <div className="flex justify-end">
+          <Button
+            size="md"
+            height="30px"
+            width="105px"
+            border="2px"
+            borderColor={themeMode ? "#5A1073" : "#2FC4B2"}
+            borderWidth="1px"
+            borderRadius="5px"
+            color={themeMode ? "#5A1073" : "#2FC4B2"}
+            fontFamily="Urbanist"
+            fontSize="14px"
+            fontWeight="600"
+            backgroundColor={themeMode ? "#FFF" : "#242526"}>
+            Buy Ticket
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2 md:hidden">
+        <div className="flex justify-between items-center text-sm text-gray-700">
+          <div className={`${!themeMode && "text-dark-color"}`}>
+            2feb {item.date} {item.month}
           </div>
 
+          <div className={`${!themeMode && "text-dark-color"}`}>
+            {item.timeframe.start}
+          </div>
+        </div>
 
-          <div className="flex justify-between items-center">
-            <div
-              className={`text-base font-medium ${!themeMode && "title-dark-color"}`}
-            >
-              {item.name}
-            </div>
-            <div className="px-2 py-1 text-xs rounded-lg bg-purple-100 text-purple-700">
-              {item.category}
-            </div>
+        <div className="flex justify-between items-center">
+          <div
+            className={`text-base font-medium ${!themeMode && "title-dark-color"}`}>
+            {item.name}
           </div>
 
-          <div className="flex justify-center">
-            <Button
-              size="md"
-              height="35px"
-              width="100%"
-              border="2px"
-              borderColor={themeMode ? "#5A1073" : "#2FC4B2"}
-              borderWidth="1px"
-              borderRadius="8px"
-              color={themeMode ? "#5A1073" : "#2FC4B2"}
-              fontFamily="Urbanist"
-              fontSize="14px"
-              fontWeight="600"
-              backgroundColor="#FFF"
-            >
-              Buy Ticket
-            </Button>
+          <div className="px-2 py-1 text-xs rounded-lg bg-purple-100 text-purple-700">
+            {item.category}
           </div>
+        </div>
+
+        <div className="flex justify-center">
+          <Button
+            size="md"
+            height="35px"
+            width="100%"
+            border="2px"
+            borderColor={themeMode ? "#5A1073" : "#2FC4B2"}
+            borderWidth="1px"
+            borderRadius="8px"
+            color={themeMode ? "#5A1073" : "#2FC4B2"}
+            fontFamily="Urbanist"
+            fontSize="14px"
+            fontWeight="600"
+            backgroundColor="#FFF">
+            Buy Ticket
+          </Button>
         </div>
       </div>
     </div>
   );
 };
-
-// <div
-//                       className={`grid grid-cols-4 ${idx !== 0 && "ticket-top-border"} items-center px-3 shadow-md rounded-2xl`}
-//                       style={{ height: 75 }}
-//                     >
-//                       <div className="flex items-center">
-//                         <div
-//                           className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}
-//                         >
-//                           {item.date}
-//                         </div>
-//                         <div
-//                           className={`ticket-month ${!themeMode && "text-dark-color"}`}
-//                         >
-//                           <div>{item.month}</div>
-//                           <div>{item.timeframe}</div>
-//                         </div>
-//                       </div>
-//                       <div
-//                         className={`ticket-type text-center ${!themeMode && "title-dark-color"}`}
-//                       >
-//                         {item.name}
-//                       </div>
-//                       <div className="flex  justify-center items-center">
-//                         <div
-//                           className={`ticket-category ${!themeMode && "btn-dark-bg-color"}`}
-//                         >
-//                           {item.category}
-//                         </div>
-//                       </div>
-//                       <div>
-//                         <Button
-//                           size="md"
-//                           height="30px"
-//                           width="105px"
-//                           border="2px"
-//                           borderColor={themeMode ? "#5A1073" : "#2FC4B2"}
-//                           borderWidth="1px"
-//                           borderRadius="5px"
-//                           color={themeMode ? "#5A1073" : "#2FC4B2"}
-//                           fontFamily="Urbanist"
-//                           fontSize="14px"
-//                           fontWeight="600"
-//                           backgroundColor={themeMode ? "#FFF" : "#242526"}
-//                         >
-//                           Buy Ticket
-//                         </Button>
-//                       </div>
-//                     </div>

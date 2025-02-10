@@ -77,7 +77,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   });
 
   useEffect(() => {
-    console.log("hover:", hoveredCard);
   }, [hoveredCard]);
 
   useEffect(() => {
@@ -124,8 +123,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   //       const response = await fetch("http://localhost:8000/api/artist");
   //       const jsonData = await response.json();
 
-  //       console.log("Fetched Data:", jsonData);
-
   //       const newArtists = jsonData.data.map((item: any) => ({
   //         id: item.artist._id,
   //         name: item.artist.name,
@@ -133,8 +130,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   //         description: item.artist.description,
   //         products: item.products
   //       }));
-
-  //       console.log("Formatted Artists Data:", newArtists);
 
   //       setArtists(newArtists);
   //     } catch (error) {
@@ -149,8 +144,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   const fetchData = async (inputValue?: filterProperties) => {
     setLoading(true);
-    console.log("inputValue.search", inputValue);
-
     let url = `${apiBaseUrl}/artist`;
     let searchQuery = [];
 
@@ -163,7 +156,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
 
     if (inputValue?.quantity) {
-      console.log("inputValue?.limit", inputValue?.quantity);
       searchQuery.push(`limit=${inputValue.quantity}`);
     }
 
@@ -182,9 +174,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     try {
       const response = await fetch(url);
       const jsonData = await response.json();
-
-      console.log("Fetched Data:", jsonData);
-
       const newArtists = jsonData.data.map((item: any) => ({
         id: item.artist._id,
         name: item.artist.name,
@@ -192,8 +181,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         description: item.artist.description,
         products: item.products,
       }));
-
-      console.log("Formatted Artists Data:", newArtists);
 
       setArtists(newArtists);
     } catch (error) {
@@ -208,12 +195,9 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   }, []);
 
   const handleSearch = (inputValue: string) => {
-    console.log("Searched value: ", inputValue);
-    console.log("Filters value: ", filters);
     fetchData(filters);
   };
   useEffect(() => {
-    console.log("Filtered worked");
     fetchData(filters);
   }, [filters]);
 
@@ -246,7 +230,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           {artists && artists.length > 0 ? (
             artists.map((artist, _idx_) => (
               <div
-                key={artist.id} 
+                key={artist.id}
                 id={artist.id}
                 className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3 md:mt-20 mt-6"
               >

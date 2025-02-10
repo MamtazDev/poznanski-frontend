@@ -16,8 +16,6 @@ interface FilterInputProps {
 const FilterInput: React.FC<FilterInputProps> = ({ type, handler, setFilterText, setFilters,filters }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const [inputValue, setInputValue] = useState(""); // State for input value
-
-    // console.log(themeMode, "theme pai nai ")
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleShowPopup = () => {
@@ -35,7 +33,7 @@ const FilterInput: React.FC<FilterInputProps> = ({ type, handler, setFilterText,
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value); // Update inputValue on change
-   
+
   };
 
   return (

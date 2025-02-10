@@ -52,7 +52,6 @@ const VerticalCarousel: React.FC<TicketProps> = ({
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log("hover:", hoveredCard);
   }, [hoveredCard]);
 
   const handleNext = () => {
@@ -72,8 +71,7 @@ const VerticalCarousel: React.FC<TicketProps> = ({
               minHeight: "504px",
               display: "flex",
               flexDirection: "column",
-            }}
-          >
+            }}>
             {loading ? (
               <div
                 style={{
@@ -81,13 +79,14 @@ const VerticalCarousel: React.FC<TicketProps> = ({
                   justifyContent: "center",
                   alignItems: "center",
                   marginTop: "252px",
-                }}
-              >
+                }}>
                 <Spinner size="lg" color={themeMode ? "#5A1073" : "#3BD6C6"} />
               </div>
             ) : (
               cardData.map((cardElement, _idx_) => (
-                <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
+                <div
+                  key={_idx_}
+                  className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
                   <div
                     className={`p-5 ${hoveredCard === `${_idx_}` && (themeMode ? "artists-body" : "artists-body-dark")}`}
                     style={{
@@ -95,8 +94,7 @@ const VerticalCarousel: React.FC<TicketProps> = ({
                       transition: "1s ease-in-out",
                     }}
                     onMouseEnter={() => setHoveredCard(`${_idx_}`)}
-                    onMouseLeave={() => setHoveredCard(null)}
-                  >
+                    onMouseLeave={() => setHoveredCard(null)}>
                     <div className="flex items-start w-full">
                       <div className="md:block hidden">
                         <Avatar
@@ -109,8 +107,7 @@ const VerticalCarousel: React.FC<TicketProps> = ({
                       </div>
                       <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
                         <div
-                          className={`artist-name md:text-xl text-md ${!themeMode && "title-dark-color"}`}
-                        >
+                          className={`artist-name md:text-xl text-md ${!themeMode && "title-dark-color"}`}>
                           {cardElement.artist.name}
                         </div>
                         <div className="artist-description ">
@@ -119,8 +116,7 @@ const VerticalCarousel: React.FC<TicketProps> = ({
                       </div>
                     </div>
                     <div
-                      className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "h-72" : "h-0 overflow-hidden"}`}
-                    >
+                      className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "h-72" : "h-0 overflow-hidden"}`}>
                       {cardElement?.products.length && (
                         <ArtistsCarousel
                           cardNum={cardNum}
@@ -148,8 +144,7 @@ const VerticalCarousel: React.FC<TicketProps> = ({
                         : themeMode
                           ? "#E8ECFE"
                           : "#51525C",
-                  }}
-                ></div>
+                  }}></div>
               ))}
           </div>
           <div className="relative">
@@ -170,12 +165,10 @@ const VerticalCarousel: React.FC<TicketProps> = ({
                             className={`p-6 ${hoveredCard === `0-${index}` && (themeMode ? "artists-body" : "artists-body-dark")}`}
                             style={{ borderRadius: "16px" }}
                             onMouseEnter={() => setHoveredCard(`0-${index}`)}
-                            onMouseLeave={() => setHoveredCard(null)}
-                          >
+                            onMouseLeave={() => setHoveredCard(null)}>
                             <div
                               key={`artist-home-carousel-${index}-2`}
-                              className="flex items-start w-full"
-                            >
+                              className="flex items-start w-full">
                               <div className="md:block hidden">
                                 <Avatar
                                   size="2xl"
@@ -190,8 +183,7 @@ const VerticalCarousel: React.FC<TicketProps> = ({
                               </div>
                               <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
                                 <div
-                                  className={`artist-name-2 md:text-xl text-md ${!themeMode && "title-dark-color"}`}
-                                >
+                                  className={`artist-name-2 md:text-xl text-md ${!themeMode && "title-dark-color"}`}>
                                   {cardData[index].artist.name}
                                 </div>
                                 <div className="artist-description-2">
@@ -232,12 +224,10 @@ const VerticalCarousel: React.FC<TicketProps> = ({
                                 onMouseEnter={() =>
                                   setHoveredCard(`${idx}-${index}`)
                                 }
-                                onMouseLeave={() => setHoveredCard(null)}
-                              >
+                                onMouseLeave={() => setHoveredCard(null)}>
                                 <div
                                   key={`artist-home-carousel-${index}-2`}
-                                  className="flex items-start w-full"
-                                >
+                                  className="flex items-start w-full">
                                   <div className="md:block hidden">
                                     <Avatar
                                       size="2xl"
@@ -258,8 +248,7 @@ const VerticalCarousel: React.FC<TicketProps> = ({
                                   </div>
                                   <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
                                     <div
-                                      className={`artist-name-2 md:text-xl text-md ${!themeMode && "title-dark-color"}`}
-                                    >
+                                      className={`artist-name-2 md:text-xl text-md ${!themeMode && "title-dark-color"}`}>
                                       {cardData[idx * 3 + index].artist.name}
                                     </div>
                                     <div className="artist-description-2">

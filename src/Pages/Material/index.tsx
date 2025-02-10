@@ -81,42 +81,36 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
     const fetchData = async (inputValue?: filterProperties) => {
       setLoading(true);
-      console.log("inputValue.search", inputValue);
-  
       let url = `${apiBaseUrl}/materials`;
       let searchQuery = [];
-  
+
       if (inputValue?.search) {
         searchQuery.push(`search=${encodeURIComponent(inputValue.search)}`);
       }
-  
+
       if (inputValue?.sort) {
         searchQuery.push(`order=${encodeURIComponent(inputValue.sort)}`);
       }
-  
+
       if (inputValue?.quantity) {
-        console.log("inputValue?.limit", inputValue?.quantity);
         searchQuery.push(`limit=${inputValue.quantity}`);
       }
-  
+
       if (inputValue?.startDate) {
         searchQuery.push(`startDate=${encodeURIComponent(inputValue.startDate)}`);
       }
-  
+
       if (inputValue?.endDate) {
         searchQuery.push(`endDate=${encodeURIComponent(inputValue.endDate)}`);
       }
-  
+
       if (searchQuery.length > 0) {
         url = `${url}?${searchQuery.join("&")}`;
       }
-  
+
       try {
         const response = await fetch(url);
         const jsonData = await response.json();
-  
-        console.log("Fetched Data:", jsonData);
-  
         const newArtists = jsonData.materials.map((item: any) => ({
           id: item._id,
           title: item.title,
@@ -129,9 +123,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             day: "numeric",
           }),
         }));
-  
-        console.log("Formatted Artists Data:", newArtists);
-  
+
         setCardData(newArtists);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -139,18 +131,15 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         setLoading(false);
       }
     };
-  
+
     useEffect(() => {
       fetchData();
     }, []);
-  
+
     const handleSearch = (inputValue: string) => {
-      console.log("Searched value: ", inputValue);
-      console.log("Filters value: ", filters);
       fetchData(filters);
     };
     useEffect(() => {
-      console.log("Filtered worked");
       fetchData(filters);
     }, [filters]);
 

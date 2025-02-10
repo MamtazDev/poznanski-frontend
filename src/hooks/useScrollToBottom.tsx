@@ -30,7 +30,6 @@ const useScrollToBottom = (modalIsOpen?: boolean): UseScrollToBottomResult => {
                     container.clientHeight
                 ) < 1;
             setIsAtBottom(isBottom);
-            console.log(isBottom);
         }
     }, []);
 

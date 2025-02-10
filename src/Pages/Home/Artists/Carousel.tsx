@@ -28,7 +28,6 @@ const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
   });
 
   useEffect(() => {
-    console.log("Instance Ref: ", newInstanceRef.current);
   }, [newInstanceRef, newLoaded]);
 
   return (

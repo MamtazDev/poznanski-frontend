@@ -51,7 +51,6 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 	}, [relatedData, id]);
 
 	useEffect(() => {
-		console.log('Target News Selected:', targetNewsSelected); // Check if the data is correct
 		setPageData(targetNewsSelected);
 	}, [targetNewsSelected]);
 
@@ -76,20 +75,13 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 	// When the data is fetched, set it to the local state
 	useEffect(() => {
 		if (data) {
-			console.log("Fetched data:", data);  // Log the raw data before setting it
 			setNews(data);  // Set the fetched data to local state
-
-			// Access the nested 'news' object
-			console.log("Intro:", data.news?.intro);  // Logs the intro of the news
-			console.log("Title:", data.news?.title);  // Logs the title of the news
-			console.log("Tags:", data.news?.tags);    // Logs the tags of the news
 		}
 	}, [data]);
 	// Handle loading and error states
 	if (error) return <div>Error loading data.</div>;
 	if (!news) return <div>Loading...</div>;
 	const wordArray = tags ? data?.news?.tags.split(",").map((word: string) => word.trim()) : [];
-	// console.log("news", news)
 	return (
 		<Layout themeMode={themeMode} type={type}>
 			<div className='flex justify-between'>
