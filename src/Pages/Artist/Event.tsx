@@ -141,7 +141,7 @@ const Event: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     fetch("http://localhost:8000/api/concert")
       .then((res) => res.json())
       .then((data) => {
-        console.log("API Response:", data)
+        // console.log("API Response:", data)
 
         if (data.success) {
           handleData(data)

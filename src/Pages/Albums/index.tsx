@@ -34,11 +34,11 @@ interface Product {
 //   star: number;
 // }
 const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-  const [selectedPage, setSelectedPage] = useState<number>(1);
-  const albumsPerPage = 5;
+  // const [selectedPage, setSelectedPage] = useState<number>(1);
+  // const albumsPerPage = 5;
   const [album, setAlbum] = useState<Product[]>([]);
   const [loading] = useState<boolean>(false);
-  const [pages, setPages] = useState<number>(0);
+  // const [pages, setPages] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const fetcher = () =>
@@ -117,15 +117,6 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 )}
               </div>
             )}
-          </div>
-          <div className={`flex ${type ? "justify-center" : "justify-end"}`}>
-            <PaginationBar
-              selectedPage={selectedPage}
-              setSelectedPage={setSelectedPage}
-              pages={pages}
-              entriesPerPage={albumsPerPage}
-              setEntriesPerPage={() => {}}
-            />
           </div>
         </div>
       </div>

@@ -46,7 +46,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     order: "desc",
     search: ""
   });
-  
+
   const fetchData = async (inputValue?: filterProperties) => {
     setLoading(true);
     console.log("inputValue.search", inputValue);
@@ -88,6 +88,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       const response = await fetch(url);
       const data = await response.json();
       setCardData(data.records);
+      // console.log(data.records ,"datttatta")
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -193,7 +194,7 @@ fetchData(filters)
                         link={item.link}
                       />
                     </div>
-                  )): <p className="text-red-50">There is no data</p>}
+                  )): <p className="text-blue-500 text-5xl py-3 text-center">There is no data</p>}
                 </div>
               )}
 
