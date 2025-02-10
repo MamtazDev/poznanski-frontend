@@ -10,6 +10,7 @@ import "../mainPageStyle.css";
 import { apiBaseUrl } from "../../Constant/config";
 
 interface Product {
+  artists: any;
   _id: unknown;
   youTube: string;
   id: string;
@@ -178,7 +179,7 @@ fetchData(filters)
                 </div>
               ) : (
                 <div
-                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-5 mb-16`}
+                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-5 mb-16`}
                 >
                   {cardData.length>0? cardData.map((item, index) => (
                     <div key={index} className="w-full">
@@ -189,7 +190,7 @@ fetchData(filters)
                         type={type ? "vertical" : "horizontal"}
                         youTube={item.youTube}
                         feature={item.title}
-                        title={item.artist}
+                        title={item.artists?.[0]?.name || "Unknown Artist"}
                         link={item.link}
                       />
                     </div>

@@ -7,16 +7,17 @@ import { useNavigate } from "react-router-dom";
 
 interface News {
   type: string;
-  video: string;
-  title: string;
-  feature: string;
-  youTube: string;
+  video?: string;
+  title?: string;
+  feature?: string;
+  youTube?: string;
   data: any;
   id?: any;
   link: string;
+  name?: string;
 }
 
-const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, data, id }) => {
+const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, data, id, name }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -46,75 +47,76 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   )
   return (
     <div className="product-card1 flex w-full">
-      <Card
-        className="transition-all duration-300 ease-out w-full h-pull"
+  <div
+    className="transition-all duration-300 ease-out w-full h-pull"
+    onClick={() => handleClick(id)}
+  >
+    <div
+      className={`flex flex-col justify-between w-full h-full p-5 rounded-2xl
+      ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
+      ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
+      `}
+      style={{
+        boxShadow: themeMode
+          ? "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)"
+          : "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
+        backgroundColor: themeMode ? "" : "#242526",
+        border: themeMode ? "1px solid white" : "1px solid #242526",
+        borderRadius: "2xl",
+      }}
+    >
+
+
+      {/* YouTube Thumbnail */}
+      <div
+        className={`relative bg-gray-100 cursor-pointer h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"}`}
+        onClick={(e) => {
+          e.stopPropagation();
+          handlePlay();
+        }}
       >
+        <img
+          src={
+            youTube
+              ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
+              : "default-thumbnail.jpg" // Fallback for undefined youTube
+          }
+          className="w-full h-full object-cover"
+          alt="YouTube Thumbnail"
+        />
 
-          <div  className={`flex flex-col justify-between w-full h-full p-5 rounded-2xl
-    ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
-    ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
-  `}
-          style={{
-            boxShadow: themeMode ? "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)":"0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
-            backgroundColor:themeMode ? "" : "#242526",
-            border:themeMode ? "1px solid white" : "1px solid #242526",
-               borderRadius:"2xl",
-              //  _hover:{
-              //   !themeMode
-              //     ? {
-              //       boxShadow: "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
-              //     }
-              //     : {
-              //       boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
-              //     }
-              // }
-          }}
-          >
-            <div>
-              <div
-                className={`tv-card-image bg-gray-100 hover:opacity-75 object-cover cursor-pointer h-36 relative z-10 ${!themeMode && "dark-bg-color"}`}
-              >
-                {/* <YouTubeEmbed video={video} title={title} /> */}
-                <div
-                  className="relative w-full h-40 cursor-pointer rounded-md overflow-hidden"
-                  onClick={handlePlay}
-                >
-                  <img
-                    src={
-                      youTube
-                        ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
-                        : "default-thumbnail.jpg" // Fallback for undefined youTube
-                    }
-                    className="w-full h-full object-cover"
-                    alt="YouTube Thumbnail"
-                  />
-                </div>
-              </div>
-              <div className="flex justify-start mt-4">
-                <div
-                  className={`tv-feature-text py-1 ${!themeMode && "title-dark-color"}`}
-                >
-                  {feature}
-                </div>
-              </div>
-              <div
-                className={`tv-title-text flex mt-2 ${!themeMode && "title-dark-color"}`}
-              >
-                {title}
-              </div>
-              <button
-                onClick={() => handleClick(id)}
-                className='mt-4 font-bold'
-                style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
+        {/* Play Button */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          {themeMode ? (
+            <svg xmlns="http://www.w3.org/2000/svg" width="58" height="57" viewBox="0 0 58 57" fill="none">
+              <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+              <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55" fill="none">
+              <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
+              <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
+            </svg>
+          )}
+        </div>
+      </div>
+  {/* Feature Text - Moved Above the Video */}
+  <div className="flex justify-start mb-3">
+        <div className={`px-5 py-1 rounded ${!themeMode && "btn-dark-bg-color"}`}>
+          {feature}
+        </div>
+      </div>
+      {/* Title */}
+      <div className={`mt-3 font-semibold text-lg ${!themeMode && "title-dark-color"}`}>
+        {title}
+      </div>
 
-              >
-                view details
-              </button>
-            </div>
-          </div>
-
-      </Card>
+      {/* Artist Name */}
+      <h2 className="text-sm text-gray-400 mt-1">{name}</h2>
     </div>
+  </div>
+</div>
+
   );
 };
 
