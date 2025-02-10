@@ -422,7 +422,6 @@ const hashtagsMockUp = [
 // 			}
 // 			return `${prev}#${value}`;
 // 		});
-// 		console.log(value)
 // 	};
 
 // 	const onClose = () => {

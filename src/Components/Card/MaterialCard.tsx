@@ -16,7 +16,7 @@ interface News {
   date: string;
   location?: string;
   link: string;
-  data: any
+  data: any;
 }
 
 const MaterialCard: React.FC<News> = ({
@@ -27,7 +27,7 @@ const MaterialCard: React.FC<News> = ({
   location,
   date,
   link,
-  data
+  data,
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
@@ -39,7 +39,6 @@ const MaterialCard: React.FC<News> = ({
   const handlePlay = () => {
     if (data?.youTube) {
       const videoId = data?.youTube.split("v=")[1]?.split("&")[0];
-      console.log("Extracted Video ID:", videoId);
       if (videoId) {
         dispatch(openPlayer(videoId));
       }
@@ -54,10 +53,9 @@ const MaterialCard: React.FC<News> = ({
         className="absolute top-0 left-0 w-full h-full"
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      ></iframe>
+        allowFullScreen></iframe>
     </div>
-  )
+  );
 
   const wordArray = feature ? feature.split(",").map((word) => word.trim()) : [];
 

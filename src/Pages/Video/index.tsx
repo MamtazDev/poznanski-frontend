@@ -51,7 +51,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   const fetchData = async (inputValue?: filterProperties) => {
     setLoading(true);
-    console.log("inputValue.search", inputValue);
     let url = `${apiBaseUrl}/radio`; // Default URL
     // Building the query string based on available filter properties
     let searchQuery = [];
@@ -65,7 +64,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
 
     if (inputValue?.quantity) {
-      console.log("inputValue?.limit",inputValue?.quantity)
       searchQuery.push(`limit=${inputValue.quantity}`);
     }
 
@@ -130,14 +128,11 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 //search fucntionalities
 
 const handleSearch = (inputValue: string) => {
-  console.log("Searched value: ", inputValue);
-  console.log("Filters value: ", filters);
   fetchData(filters)
 }
 
 
 useEffect(() => {
-console.log("Filtered worked")
 fetchData(filters)
 }, [filters])
 
@@ -194,7 +189,7 @@ fetchData(filters)
                         link={item.link}
                       />
                     </div>
-                  )): <p className="text-red-50">There is no data</p>}
+                  )): <p className="text-blue-500 text-5xl py-3 text-center">There is no data</p>}
                 </div>
               )}
 

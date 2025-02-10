@@ -2910,12 +2910,12 @@ const TopBackSvg = () => (
         y2="167.118"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0.12" stop-color="white" stop-opacity="0.25" />
-        <stop offset="0.21" stop-color="#FDFBF5" stop-opacity="0.25" />
-        <stop offset="0.35" stop-color="#F9F2DB" stop-opacity="0.3" />
-        <stop offset="0.54" stop-color="#F3E3B1" stop-opacity="0.5" />
-        <stop offset="0.76" stop-color="#EBCF77" stop-opacity="0.6" />
-        <stop offset="0.78" stop-color="#EACD71" stop-opacity="0" />
+        <stop offset="0.12" stopColor="white" stopOpacity="0.25" />
+        <stop offset="0.21" stopColor="#FDFBF5" stopOpacity="0.25" />
+        <stop offset="0.35" stopColor="#F9F2DB" stopOpacity="0.3" />
+        <stop offset="0.54" stopColor="#F3E3B1" stopOpacity="0.5" />
+        <stop offset="0.76" stopColor="#EBCF77" stopOpacity="0.6" />
+        <stop offset="0.78" stopColor="#EACD71" stopOpacity="0" />
       </linearGradient>
       <clipPath id="clip0_2811_10193">
         <rect

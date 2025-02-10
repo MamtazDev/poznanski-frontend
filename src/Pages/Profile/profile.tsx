@@ -102,8 +102,6 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
       return;
     }
     setError(null);
-    console.log("Password reset request sent");
-    // Add API call logic here
     onResetClose();
   };
 

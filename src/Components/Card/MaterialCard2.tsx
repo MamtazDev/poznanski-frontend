@@ -40,7 +40,6 @@ const MaterialCard: React.FC<News> = ({
   const handlePlay = () => {
     if (youTube) {
       const videoId = youTube.split("v=")[1]?.split("&")[0];
-      console.log("Extracted Video ID:", videoId);
       if (videoId) {
         dispatch(openPlayer(videoId));
       }

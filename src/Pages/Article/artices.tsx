@@ -67,9 +67,9 @@ const Articles = ({ themeMode, type }: any) => {
     <div>
       <div
         ref={scrollContainerRef}
+        onScroll={handleScroll}
         className="md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
         style={{ width: "100%" }}
-        onScroll={handleScroll}
       >
         {loading || !data ? (
           <div className="w-full flex justify-center items-center" style={{ minHeight: type ? "776px" : "908px" }}>

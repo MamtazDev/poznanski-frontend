@@ -36,7 +36,6 @@ const NewReleaseCard: React.FC<News> = ({
   const handlePlay = () => {
     if (data.songs[0]?.youTube) {
       const videoId = data.songs[0]?.youTube.split("v=")[1]?.split("&")[0];
-      console.log("Extracted Video ID:", videoId);
       if (videoId) {
         dispatch(openPlayer(videoId));
       }

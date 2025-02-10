@@ -24,7 +24,6 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   const handlePlay = () => {
     if (youTube) {
       const videoId = youTube.split("v=")[1]?.split("&")[0];
-      console.log("Extracted Video ID:", videoId);
       if (videoId) {
         dispatch(openPlayer(videoId));
       }

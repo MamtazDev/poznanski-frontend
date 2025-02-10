@@ -6,9 +6,9 @@ import BreadCrumb from "../../Components/BreadCrumb";
 import NewReleaseCard from "../../Components/Card/NewReleaseCard";
 import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
-import Layout from "../../Components/Layout";
 import PaginationBar from "../../Components/PaginationBar";
 import "../mainPageStyle.css";
+import Layout from './../../Components/Layout/index';
 
 interface Product {
   artists: any;

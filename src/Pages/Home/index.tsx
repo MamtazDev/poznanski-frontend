@@ -22,8 +22,7 @@ const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
       pageBottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-  // mt-[${type ? '300' : '60'}px]
-  console.log(type)
+
   return (
     <Fragment>
       <div className={`${!themeMode && "back-dark"} overflow-hidden`}>
@@ -40,7 +39,7 @@ const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
         </div>
         <Book filter={filterText} />
         <MaterialContent filter={filterText} />
-        <NewReleases filter={filterText} />
+        {/* <NewReleases filter={filterText} /> */}
         <Artists filter={filterText} />
         <Subscription />
         <MarkCarousel />
