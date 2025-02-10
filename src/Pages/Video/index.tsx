@@ -162,12 +162,12 @@ fetchData(filters)
             </div>
             <div
               className={`md:mt-12 mt-8`}
-              style={{ minHeight: type ? "776px" : "908px", width: "100%" }}
+              // style={{ minHeight: type ? "776px" : "908px", width: "100%" }}
             >
               {loading ? (
                 <div
                   className="w-full flex justify-center items-center"
-                  style={{ minHeight: type ? "776px" : "908px" }}
+                  // style={{ minHeight: type ? "776px" : "908px" }}
                 >
                   <Spinner
                     thickness="4px"
