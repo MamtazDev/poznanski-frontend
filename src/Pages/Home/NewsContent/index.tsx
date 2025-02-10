@@ -91,7 +91,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
         </div>
 
         <div className="md:mt-16 mt-6 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {cardData.news.map((item, index) => (
+          {cardData?.news.map((item, index) => (
             <React.Fragment key={index}>
               <ProductCard1
                 key={item.id}
@@ -99,7 +99,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
                 img={item.files && item.files[0]}
                 tags={item.tags}
                 title={item.title}
-                date={item.date.split("T")[0]}
+                date={item.date}
                 _id={item.id}
               />
             </React.Fragment>

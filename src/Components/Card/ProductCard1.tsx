@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import artists1 from "../../assets/svg/artists1.svg";
 import { RootState } from "../../reducers";
+import moment from "moment";
+
 import "./style.css";
 export interface News {
   type: string;
@@ -31,6 +33,7 @@ const ProductCard1: React.FC<News> = ({
   const imageSrc = img ? `${process.env.REACT_APP_FILES_URL}${img}` : artists1;
 
   const wordArray = tags ? tags.split(",").map((word) => word.trim()) : [];
+  const dateFormated = moment(date).format("MM DD, YYYY");
 
   return (
     <div className={`flex w-full h-full`}>
@@ -54,7 +57,7 @@ const ProductCard1: React.FC<News> = ({
           <div
             className={`date-badge absolute top-10 right-10 z-50 ${!themeMode && "btn-dark-bg-color"}`}
           >
-            {date.split("T")[0]}
+            {dateFormated}
           </div>
           <div>
             <div
