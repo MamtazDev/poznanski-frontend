@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import BreadCrumb from "../../Components/BreadCrumb";
 import ContentTitle from "../../Components/ContentTitle";
 import Layout from "../../Components/Layout";
 import CommentForm from "../../Components/Comment";
@@ -24,6 +23,9 @@ import defaultimg from "../../assets/svg/userIcon.svg";
 import singer from "../../assets/png/ticketBanner.png";
 import { IoShareOutline } from "react-icons/io5";
 import { BiCommentDetail } from "react-icons/bi";
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
+import BreadCrumb from './../../Components/BreadCrumb/index';
+import SocialShare from "../../Components/SocialShare/SocialShare";
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 interface CommentForm {
@@ -46,6 +48,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [, ...tagsToRemap] = targetNewsSelected?.tags?.split("#") || [];
   const tags = tagsToRemap;
   const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
+  const [showShareOptions, setShowShareOptions] = useState(false);
 
   const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
     get5RandomNewsByTags(state, pageDataTags || [])
@@ -278,143 +281,15 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       }}>See More..</Link>
                     </div>
                   </div>
-                  <div className="mt-6 flex justify-center">
-                    <div className="flex gap-3">
-                      {/* Share Button */}
-                      <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md  hover:bg-purple-100 transition"
-                        style={{
-                          color: themeMode ? "#5A1073" : "#2FC4B2",
-                          backgroundColor: themeMode ? "white" : "#242526"
-                        }}>
-                        <IoShareOutline className="text-lg" />
-                        <span className="text-sm font-medium">Share</span>
-                      </button>
+                  <SocialShare
 
-                      {/* Comment Button */}
-                      <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md  hover:bg-purple-100 transition"
-                        style={{
-                          color: themeMode ? "#5A1073" : "#2FC4B2",
-                          backgroundColor: themeMode ? "white" : "#242526"
-                        }}>
-                        <BiCommentDetail className="text-lg" />
-                        <span className="text-sm font-medium">Comment</span>
-                      </button>
-                    </div>
-                  </div>
+                    shareUrl="https://yourwebsite.com/article"
+                    title="Check out this amazing article!"
+                  />
+
                 </div>
               </div>
             </div>
-
-            <>
-              {/* {targetNewsSelected && pageData ? (
-            <div className='flex md:flex-row flex-col gap-8'>
-              <div className='md:w-4/6 w-full'>
-                <div className='md:mt-7 mt-10'>
-                  <ContentTitle
-                    titleType='NEWS'
-                    title={pageData?.title || 'News Page Title'}
-                  />
-                </div>
-                <p
-                  className={`py-5 text-left ${!themeMode ? 'text-[#BBBCC0]' : 'text-[#6D6E76]'}`}
-                >
-                  <b>{pageData?.intro}</b>
-                </p>
-                <Image
-                  className={`rounded-2xl mx-auto border-solid border ${!themeMode && 'border-white'}`}
-                  src={`${process.env.REACT_APP_FILES_URL}${pageData?.files[0].url}`}
-                  alt='img'
-                />
-                <DelayedComponent delay={200}>
-                  <TipTap
-                    themeMode={themeMode}
-                    content={pageData?.content}
-                    editable={false}
-                  />
-                  <CommentForm
-                    postModel={PostModels.news}
-                    commentData={pageData?.commentsSection ?? null}
-                  />
-                </DelayedComponent>
-              </div>
-              <div className={`md:w-2/6 w-full`} style={{ marginTop: type ? '0px' : '300px' }}>
-                <div
-                  className={`${
-                    !type ? (themeMode ? 'right-card' : 'right-card-dark') : ''
-                  } mb-6 w-full py-4 px-3`}
-                >
-                  <div
-                    className={`${themeMode ? 'tag-card-title' : 'tag-card-title-dark'} text-left md:mb-3 mb-4`}
-                  >
-                    Tagi
-                  </div>
-                  <div className={`flex flex-wrap gap-3`}>
-                    {tags ? (
-                      tags.map((tag, i) => (
-                        <div
-                          key={`article-key-tag-${tag + i}`}
-                          className={`${themeMode ? 'category-tag' : 'category-tag-dark'}`}
-                        >
-                          {tag}
-                        </div>
-                      ))
-                    ) : (
-                      <div>No tags available</div>
-                    )}
-                  </div>
-                </div>
-                {filteredRelatedData.length > 0 && (
-                  <div className={`${themeMode ? 'right-card' : 'right-card-dark'} px-3 py-4`}>
-                    <div
-                      className={`${themeMode ? 'tag-card-title' : 'tag-card-title-dark'} text-left`}
-                    >
-                      Zobacz również
-                    </div>
-                    <div className={`flex flex-col gap-3 md:mt-3 mt-4`}>
-                      {filteredRelatedData &&
-                        filteredRelatedData.map((item) => (
-                          <Link replace to={`/news/${item._id}`} key={item._id}>
-                            <div className={`flex gap-3`}>
-                              <Image
-                                src={`${process.env.REACT_APP_FILES_URL + item.files[0].url}`}
-                                className='cursor-pointer object-cover'
-                                height={type ? '54px' : '62px'}
-                                width={type ? '54px' : '62px'}
-                                alt={item.files[0].name}
-                                borderRadius={type ? '8px' : '10px'}
-                              />
-                              <div className={`flex flex-col justify-center overflow-hidden`}>
-                                <div
-                                  className={`${themeMode ? 'tag-title' : 'tag-title-dark'} w-full text-left`}
-                                  style={{
-                                    fontSize: type ? '14px' : '12px',
-                                  }}
-                                >
-                                  {item.title}
-                                </div>
-                                <p
-                                  className={`mt-1 ${themeMode ? 'text-stone-500' : 'text-stone-300'} w-full text-left text-xs`}
-                                >
-                                  {item.intro.slice(0, type ? 100 : 75) + '...'}
-                                </p>
-                              </div>
-                            </div>
-                          </Link>
-                        ))}
-                    </div>
-                  </div>
-                )}
-                <SocialShare
-                  themeMode={themeMode}
-                  url={url}
-                  title={`${pageData?.title}`}
-                />
-              </div>
-            </div>
-          ) : (
-            <div>No content available</div>
-          )} */}
-            </>
           </div>
         </div>
       </div>

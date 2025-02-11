@@ -179,8 +179,6 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
     <div>
       <div className="flex justify-center">
         <div className="container">
-
-
           <div className="md:mt-7 mt-10">
             <ContentTitle
               titleType="Concerts"
