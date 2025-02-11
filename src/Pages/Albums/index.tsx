@@ -23,7 +23,6 @@ interface Product {
   artist: string;
   star: number;
 }
-
 const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<number>(1);
   const [album, setAlbum] = useState<Product[]>([]);
@@ -38,38 +37,38 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const { data, error } = useSWR(`http://localhost:8000/api/album`, fetcher);
 
 
-  
-    
+
+
     const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  
+
     const setDisplayUpdatedName = () => {
       setDisplayedItems(album.slice(0, 2));
     };
     const loadMoreItems = () => {
       if (loading || visibleCount >= album.length) return;
       setLoading(true);
-  
+
       setTimeout(() => {
         setVisibleCount((prev) => prev + 3);
         setLoading(false);
       }, 1000);
     };
-  
+
     const handleScroll = () => {
       if (!scrollContainerRef.current) return;
-  
+
       const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
-  
+
       if (scrollTop + clientHeight >= scrollHeight - 5) {
         loadMoreItems();
       }
     };
-  
-  
+
+
     useEffect(() => {
       setDisplayUpdatedName();
     }, [displayedItems, album, visibleCount]);
-  
+
 
   useEffect(() => {
     if (data) {
@@ -83,7 +82,21 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   }, [data]);
 
   if (error) return <div>Error loading data.</div>;
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="flex justify-center items-center h-screen w-full"
+  style={{
+    backgroundColor: themeMode ? "white" : "black"
+  }}>
+  <p className="text-xl font-semibold " style={{
+    color: themeMode ? "black" : "white"
+  }} >Loading...</p>
+  <div className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+    style={{
+      borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+      borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+      borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+    }}>
+  </div>
+</div>;
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -110,7 +123,7 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           </div>
 
           <div
-          className="md:mt-12 mt-8 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"            
+          className="md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
              ref={scrollContainerRef}
               onScroll={handleScroll}
             >

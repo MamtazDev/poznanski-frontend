@@ -27,6 +27,13 @@ body {
   overflow-y: auto;
   height: 100%;
 }
+:root {
+  --primary-color: #5a1073; /* Light mode color */
+}
+
+.themeMode {
+  --primary-color: #3BD6C6; /* Dark mode color */
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
@@ -162,7 +169,7 @@ code {
   width: 18px !important;
   height: 7px !important;
   border-radius: 50px;
-  background: #5a1073 !important;
+  background: var(--primary-color) !important;
 }
 
 .event-carousel .swiper-pagination-bullet-active-next,
@@ -189,12 +196,25 @@ code {
   color: black;
   width: 2px;
 }
+.swiper-button-next:after {
+  color: black;
+  width: 2px;
+}
 
 
 .editorContainer {
   h1,h2,h3,h4,h5,h5,p,b{
     color: rgb(2, 1, 1)!important ;
+    width:"870px"
   }
+
+
+  @media (min-width: 425px) {
+    .editorContainer{
+      width:"300px"
+    }
+  }
+
 }
 .editorContainerDark {
   h1,h2,h3,h4,h5,h5,p,b{

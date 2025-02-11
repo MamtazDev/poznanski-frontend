@@ -39,7 +39,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [visibleCount, setVisibleCount] = useState(4);
   const [displayedItems, setDisplayedItems] = useState<Product[]>([]);
 
@@ -52,7 +52,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     order: "desc",
     search: ""
   });
-
 
   const fetchData = async (inputValue?: filterProperties) => {
     setLoading(true);
@@ -101,7 +100,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   };
 
 
-  
+
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const setDisplayUpdatedName = () => {
@@ -193,24 +192,30 @@ fetchData(filters)
               <FilterInput type={type} handler={handleSearch} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
             </div>
             <div
-              className={`md:mt-12 mt-8 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide`}
+              className={`md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide`}
               ref={scrollContainerRef}
               onScroll={handleScroll}
-              // style={{ minHeight: type ? "776px" : "908px", width: "100%" }}
             >
               {loading ? (
                 <div
-                  className="w-full flex justify-center items-center"
-                  // style={{ minHeight: type ? "776px" : "908px" }}
+                className="flex justify-center items-center  w-full"
+                style={{ backgroundColor: themeMode ? "white" : "#111217" }}
+              >
+                <p
+                  className="text-xl font-semibold"
+                  style={{ color: themeMode ? "black" : "white" }}
                 >
-                  <Spinner
-                    thickness="4px"
-                    speed="0.65s"
-                    emptyColor="gray.200"
-                    color="blue.500"
-                    size="lg"
-                  />
-                </div>
+                  Loading...
+                </p>
+                <div
+                  className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+                  style={{
+                    borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+                    borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+                    borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+                  }}
+                ></div>
+              </div>
               ) : (
                 <div
                   className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-5 mb-16`}

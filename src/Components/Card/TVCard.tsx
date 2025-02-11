@@ -1,4 +1,3 @@
-import { Card } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
@@ -6,7 +5,7 @@ import { openPlayer } from "../../reducers/PlayerReducer";
 import { useNavigate } from "react-router-dom";
 
 interface News {
-  type: string;
+  type?: string;
   video?: string;
   title?: string;
   feature?: string;
@@ -32,18 +31,19 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   const handleClick = (id: string) => {
     navigate(`/radio/${id}`);
   };
-  const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
-    <div className="relative w-full h-full" style={{ paddingBottom: "56.25%" }}>
-      <iframe
-        src={`${video.replace("watch?v=", "embed/")}`}
-        title={title}
-        className="absolute top-0 left-0 w-full h-full"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      ></iframe>
-    </div>
-  )
+
+  // const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
+  //   <div className="relative w-full h-full" style={{ paddingBottom: "56.25%" }}>
+  //     <iframe
+  //       src={`${video.replace("watch?v=", "embed/")}`}
+  //       title={title}
+  //       className="absolute top-0 left-0 w-full h-full"
+  //       frameBorder="0"
+  //       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  //       allowFullScreen
+  //     ></iframe>
+  //   </div>
+  // )
   return (
     <div className="flex w-full">
       <div
@@ -51,14 +51,11 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
         onClick={() => handleClick(id)}
       >
         <div
-          className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl
+          className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md
       ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
-      ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
+      ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)] hover:cursor-zoom-in" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
       `}
           style={{
-            boxShadow: themeMode
-              ? "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)"
-              : "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
             backgroundColor: themeMode ? "" : "#242526",
             border: themeMode ? "1px solid white" : "1px solid #242526",
             borderRadius: "2xl",

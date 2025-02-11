@@ -39,7 +39,7 @@ const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
         </div>
         <Book filter={filterText} />
         <MaterialContent filter={filterText} />
-        {/* <NewReleases filter={filterText} /> */}
+        <NewReleases filter={filterText} />
         <Artists filter={filterText} />
         <Subscription />
         <MarkCarousel />
