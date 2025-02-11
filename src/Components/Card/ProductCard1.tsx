@@ -34,7 +34,7 @@ const ProductCard1: React.FC<News> = ({
   const imageSrc = img ? `${process.env.REACT_APP_FILES_URL}${img}` : artists1;
 
   const wordArray = tags ? tags.split(",").map((word) => word.trim()) : [];
-  const dateFormatted = moment(date).format("MM DD, YYYY");
+  const dateFormatted = moment(date).format("MMMM DD, YYYY");
 
   return (
     <div className="flex w-full h-full">
@@ -54,9 +54,10 @@ const ProductCard1: React.FC<News> = ({
         className="transition-all duration-300 ease-out w-full h-full p-5"
       >
         <div className="flex md:flex-col flex-row md:items-start gap-5">
-          <div className="relative md:w-full w-[60%]">
+          <div className="relative md:w-full ">
             <div
-              className={`rounded-md text-center absolute opacity-50 font-semibold top-2 right-2 z-50 py-2 px-2 text-[8px] md:text-sm w-[70px] md:w-[120px] ${
+              className={`rounded-md text-center absolute opacity-50 font-semibold top-2 md:right-2
+                right-[14px] z-50 py-2 px-2 text-[8px] md:text-sm w-[80px] md:w-[130px] ${
                 !themeMode && "btn-dark-bg-color"
               }`}
               style={{
@@ -67,20 +68,20 @@ const ProductCard1: React.FC<News> = ({
             </div>
             <Image
               src={img ?? imageSrc}
-              className="w-full h-40 md:h-[230px] object-cover rounded-lg"
+              className="md:w-full w-[119px] h-[88px] md:h-[230px] object-cover rounded-lg"
               alt="news image"
             />
           </div>
 
-          <div className="flex flex-col md:w-full w-[40%]">
+          <div className="flex flex-col md:w-full space-y-2">
             {tags && (
-              <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
+              <div className="flex  gap-2 mt-2 md:mt-0">
                 {wordArray.map(
                   (tag, index) =>
                     tag && (
                       <span
                         key={index}
-                        className={`px-2 py-1 rounded-full md:text-sm text-[8px] font-semibold ${
+                        className={`px-2 py-1 rounded-full md:text-sm text-[10px] font-semibold ${
                           !themeMode && "btn-dark-bg-color"
                         }`}
                         style={{
@@ -97,7 +98,7 @@ const ProductCard1: React.FC<News> = ({
 
             {title && (
               <h2
-                className={`mt-2 md:text-lg text-sm font-semibold line-clamp-1 ${
+                className={`md:mt-2 mt-1 md:text-lg text-xs font-semibold line-clamp-1 ${
                   !themeMode && "title-dark-color"
                 }`}
               >
@@ -105,16 +106,16 @@ const ProductCard1: React.FC<News> = ({
               </h2>
             )}
 
-            <div className="flex justify-start mt-4">
-              <Button
-                variant="ghost"
-                className={`card-more-btn text-sm ${
+            <div className="flex justify-start md:mt-4">
+              <button
+                className={` text-sm font-bold ${
                   !themeMode && "text-dark-color"
                 }`}
                 onClick={handleClick}
+                style={{color:themeMode ? "#5A1073":"#2FC4B2"}}
               >
                 Learn More...
-              </Button>
+              </button>
             </div>
           </div>
         </div>

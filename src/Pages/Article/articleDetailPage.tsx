@@ -3,7 +3,7 @@ import BreadCrumb from "../../Components/BreadCrumb";
 import ContentTitle from "../../Components/ContentTitle";
 import Layout from "../../Components/Layout";
 import CommentForm from "../../Components/Comment";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Image } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
@@ -19,14 +19,13 @@ import {
 import useSWR from "swr";
 import TipTap from "../../Components/TipTap/TipTap";
 import DelayedComponent from "../../Components/_utility/DelayedComponent";
-import SocialShare from "../../Components/SocialShare/SocialShare";
 import { PostModels } from "../../Constant/api-requests";
 import defaultimg from "../../assets/svg/userIcon.svg";
 import singer from "../../assets/png/ticketBanner.png";
-import { color } from "framer-motion";
 import { IoShareOutline } from "react-icons/io5";
 import { BiCommentDetail } from "react-icons/bi";
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 interface CommentForm {
   id: string;
   img: string;
@@ -38,7 +37,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const targetNewsSelected = useSelector((state: RootState) =>
     getTargetNews(state, id)
   );
-  const url = useLocation().pathname;
+  // const url = useLocation().pathname;
   const lastVisitedId = useSelector((state: RootState) =>
     getLastVisitedId(state)
   );
@@ -53,6 +52,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   );
   const filteredRelatedData = useMemo(() => {
     return relatedData.filter((news) => data.news._id !== id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [relatedData, id]);
 
   useEffect(() => {
@@ -84,9 +84,28 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       setNews(data);  // Set the fetched data to local state
     }
   }, [data]);
-  // Handle loading and error states
+
   if (error) return <div>Error loading data.</div>;
-  if (!news) return <div>Loading...</div>;
+  if (!news) return (
+    <div className="flex justify-center items-center h-screen w-full"
+      style={{
+        backgroundColor: themeMode ? "white" : "black"
+      }}>
+      <p className="text-xl font-semibold " style={{
+        color: themeMode ? "black" : "white"
+      }} >Loading...</p>
+      <div className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+        style={{
+          borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+          borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+          borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+        }}>
+      </div>
+    </div>
+  );
+
+
+
   const wordArray = tags ? data?.news?.tags.split(",").map((word: string) => word.trim()) : [];
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -135,9 +154,9 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     />
                   </DelayedComponent>
                 </div>
-                <div className="w-[500px] mx-auto">
+                <div className="lg:w-[500px] lg:mx-auto">
                   <div
-                    className={`${!type ? (themeMode ? 'right-card' : 'right-card-dark') : ''
+                    className={`shadow-md rounded-2xl ${!type ? (themeMode ? 'right-card' : 'right-card-dark') : ''
                       } mb-6  py-4 px-3`}
                   >
                     <div
@@ -152,7 +171,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                             tag && (
                               <span
                                 key={index}
-                                className={`px-2 py-1 rounded-full md:text-sm text-[8px] font-semibold ${!themeMode && "btn-dark-bg-color"
+                                className={`px-2 py-1 rounded-full md:text-sm text-[10px] font-semibold ${!themeMode && "btn-dark-bg-color"
                                   }`}
                                 style={{
                                   backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
@@ -225,50 +244,58 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
                   </div>
                   {/* Related Content */}
-                  <div className="max-h-[400px] overflow-y-auto scrollbar-hide shadow-md rounded-2xl">
-                    <div className={`rounded-lg mb-6  py-4 px-3 shadow-md`}>
-                      <h2 className={`font-medium md:mb-3 mb-4 text-lg`} style={{
-                        color: themeMode ? "black" : "white"
-                      }}>
+                  <div className="max-h-[500px] overflow-y-auto scrollbar-hide shadow-md rounded-2xl relative">
+                    <div className="rounded-lg py-4 px-3">
+                      <h2 className="font-semibold md:mb-3 mb-4 text-xl" style={{ color: themeMode ? "black" : "white" }}>
                         Related Content
                       </h2>
 
-                      {data?.relatedNews?.map((newsItem: { _id: React.Key | null | undefined; files: any[]; title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; intro: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => (
-                        <div key={newsItem._id} className="flex gap-2 mb-3">
+                      {data?.relatedNews?.map((newsItem: { _id: React.Key | null | undefined; files: any[]; title: string | number | boolean | React.ReactElement; intro: string | number | boolean | React.ReactElement }) => (
+                        <div key={newsItem._id} className={`flex gap-2 mb-3 p-2 rounded-2xl transition-colors duration-300
+                          ${themeMode ? "hover:bg-[#FFFFFF] hover:shadow-lg" : "hover:bg-[#242526]"}`}
+
+                        >
                           <img src={newsItem?.files?.[0] || singer} alt="news thumbnail" className="h-[62px] w-[62px] object-cover rounded" />
                           <div>
-                            <p className="text-xs font-semibold line-clamp-1" style={{ color: themeMode ? "black" : "white" }}>
+                            <p className="font-semibold line-clamp-1" style={{ color: themeMode ? "black" : "white" }}>
                               {newsItem.title}
                             </p>
-                            <p className="text-xs font-medium" style={{ color: themeMode ? "black" : "white" }}>
+                            <p className="text-sm font-medium line-clamp-1" style={{ color: themeMode ? "black" : "white" }}>
                               {newsItem.intro}
                             </p>
                           </div>
                         </div>
                       ))}
                     </div>
+
+                    {/* Sticky See More Button */}
+                    <div className="sticky bottom-0 py-3 text-center shadow-md"
+                      style={{
+                        backgroundColor: themeMode ? "white" : "#242526"
+                      }}>
+                      <Link to="/news" className="font-semibold" style={{
+                        color: themeMode ? "#5A1073" : "#2FC4B2",
+                      }}>See More..</Link>
+                    </div>
                   </div>
-
-
-
                   <div className="mt-6 flex justify-center">
                     <div className="flex gap-3">
                       {/* Share Button */}
                       <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md  hover:bg-purple-100 transition"
-                      style={{
-                        color: themeMode?"#5A1073":"#2FC4B2",
-                        backgroundColor: themeMode ?"white":"#242526"
-                      }}>
+                        style={{
+                          color: themeMode ? "#5A1073" : "#2FC4B2",
+                          backgroundColor: themeMode ? "white" : "#242526"
+                        }}>
                         <IoShareOutline className="text-lg" />
                         <span className="text-sm font-medium">Share</span>
                       </button>
 
                       {/* Comment Button */}
                       <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md  hover:bg-purple-100 transition"
-                      style={{
-                        color: themeMode?"#5A1073":"#2FC4B2",
-                        backgroundColor: themeMode ?"white":"#242526"
-                      }}>
+                        style={{
+                          color: themeMode ? "#5A1073" : "#2FC4B2",
+                          backgroundColor: themeMode ? "white" : "#242526"
+                        }}>
                         <BiCommentDetail className="text-lg" />
                         <span className="text-sm font-medium">Comment</span>
                       </button>
