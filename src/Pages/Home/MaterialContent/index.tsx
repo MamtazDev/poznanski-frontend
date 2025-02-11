@@ -4,6 +4,8 @@ import DetailButton from "../../../Components/Buttons/DetailButton";
 import ContentTitle from "../../../Components/ContentTitle";
 import { apiBaseUrl } from "../../../Constant/config";
 import MaterialCard from "../../../Components/Card/MaterialCard";
+import { RootState } from "../../../reducers";
+import { useSelector } from "react-redux";
 
 interface MaterialData {
   id: string;
@@ -23,6 +25,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
   const [cardData, setCardData] = useState<CartInterface | null>(null); // Set type to CartInterface or null
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   useEffect(() => {
     setLoading(true);
@@ -92,7 +95,32 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
       </div>
     </div>
   ) : (
-    <div>{loading ? "Loading..." : "No data available"}</div>
+    <div>
+  {loading ? (
+    <div
+      className="flex justify-center items-center h-screen w-full"
+      style={{ backgroundColor: themeMode ? "white" : "black" }}
+    >
+      <p
+        className="text-xl font-semibold"
+        style={{ color: themeMode ? "black" : "white" }}
+      >
+        Loading...
+      </p>
+      <div
+        className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+        style={{
+          borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+          borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+          borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+        }}
+      ></div>
+    </div>
+  ) : (
+    <p>No data available</p>
+  )}
+</div>
+
   );
 };
 

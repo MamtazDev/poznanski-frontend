@@ -124,7 +124,21 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Show loading state while data is being fetched
+    return <div className="flex justify-center items-center h-screen w-full"
+    style={{
+      backgroundColor: themeMode ? "white" : "black"
+    }}>
+    <p className="text-xl font-semibold " style={{
+      color: themeMode ? "black" : "white"
+    }} >Loading...</p>
+    <div className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+      style={{
+        borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+        borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+        borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+      }}>
+    </div>
+  </div>;
   }
 
   return data.length > 0 ? (

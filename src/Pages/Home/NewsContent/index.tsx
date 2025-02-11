@@ -4,6 +4,8 @@ import DetailButton from "../../../Components/Buttons/DetailButton";
 import { apiBaseUrl } from "../../../Constant/config";
 import { useNavigate } from "react-router-dom";
 import ProductCard1 from "../../../Components/Card/ProductCard1";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../reducers";
 
 interface Product {
   id: string;
@@ -28,6 +30,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
   const [cardData, setCardData] = useState<CartInterface | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -108,7 +111,25 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
       </div>
     </div>
   ) : loading ? (
-    <div>Loading...</div>
+    <div
+      className="flex justify-center items-center h-screen w-full"
+      style={{ backgroundColor: themeMode ? "white" : "black" }}
+    >
+      <p
+        className="text-xl font-semibold"
+        style={{ color: themeMode ? "black" : "white" }}
+      >
+        Loading...
+      </p>
+      <div
+        className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+        style={{
+          borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+          borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+          borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+        }}
+      ></div>
+    </div>
   ) : (
     <div>No news available</div>
   );
