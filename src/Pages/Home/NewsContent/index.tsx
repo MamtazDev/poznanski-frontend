@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ContentTitle from "../../../Components/ContentTitle";
 import DetailButton from "../../../Components/Buttons/DetailButton";
 import { apiBaseUrl } from "../../../Constant/config";
@@ -6,6 +6,12 @@ import { useNavigate } from "react-router-dom";
 import ProductCard1 from "../../../Components/Card/ProductCard1";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper as SwiperInstance } from "swiper";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 interface Product {
   id: string;
@@ -30,6 +36,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
   const [cardData, setCardData] = useState<CartInterface | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const swiperRef = useRef<SwiperInstance | null>(null);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   useEffect(() => {
@@ -77,6 +84,21 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
     };
   }, []);
 
+  const handleNext = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slideNext();
+    }
+  };
+
+  const handlePrev = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slidePrev();
+    }
+  };
+  function handlePlay(youTube: any): void {
+    throw new Error("Function not implemented.");
+  }
+
   return cardData && cardData.news.length > 0 ? (
     <div className="flex justify-center">
       <div className="container md:mt-36 mt-20 md:pt-1.5">
@@ -92,21 +114,59 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
             </div>
           </div>
         </div>
+        <div className="w-full mt-10 relative">
+          <Swiper
+            onSwiper={(swiper: any) => (swiperRef.current = swiper)}
+            slidesPerView={3}
+            slidesPerGroup={2}
+            spaceBetween={20}
+            loop={false}
+            navigation={true}
+            breakpoints={{
+              1440: { slidesPerView: 3, slidesPerGroup: 2 },
+              1024: { slidesPerView: 3, slidesPerGroup: 3 },
+              768: { slidesPerView: 2, slidesPerGroup: 2 },
+              425: { slidesPerView: 1, slidesPerGroup: 1 },
+            }}
+          >
+            {cardData?.news.reduce<Product[][]>((rows, item, index) => {
+              const rowIndex = Math.floor(index / 2);
+              if (!rows[rowIndex]) rows[rowIndex] = [];
+              rows[rowIndex].push(item);
+              return rows;
+            }, []).map((row, rowIndex) => (
+              <SwiperSlide key={rowIndex}>
+                <div className="flex flex-col gap-5">
+                  {row.map((item) => (
+                    <div key={item.id} >
+                      <ProductCard1
+                        type="vertical"
+                        img={item.files && item.files[0]}
+                        tags={item.tags}
+                        title={item.title}
+                        date={item.date}
+                        _id={item.id}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </SwiperSlide>
+            ))}
 
-        <div className="md:mt-16 mt-6 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {cardData?.news.map((item, index) => (
-            <React.Fragment key={index}>
-              <ProductCard1
-                key={item.id}
-                type={cardNum === 1 ? "vertical" : "horizontal"}
-                img={item.files && item.files[0]}
-                tags={item.tags}
-                title={item.title}
-                date={item.date}
-                _id={item.id}
-              />
-            </React.Fragment>
-          ))}
+          </Swiper>
+
+          {/* Custom Navigation Buttons */}
+          <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10">
+            <button onClick={handlePrev} className="swiper-button-prev">
+              <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
+            </button>
+          </div>
+
+          <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10">
+            <button onClick={handleNext} className="swiper-button-next">
+              <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
