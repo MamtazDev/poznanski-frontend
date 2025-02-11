@@ -1,4 +1,3 @@
-import { Card } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
@@ -6,7 +5,6 @@ import { openPlayer } from "../../reducers/PlayerReducer";
 import "./style.css";
 import { IoLocationOutline } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
-import { BsCalendar2Date } from "react-icons/bs";
 import moment from "moment";
 
 interface News {
@@ -46,31 +44,28 @@ const MaterialCard: React.FC<News> = ({
     }
   };
 
-  const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
-    <div className="relative w-full h-full" style={{ paddingBottom: "56.25%" }}>
-      <iframe
-        src={`${video.replace("watch?v=", "embed/")}`}
-        title={title}
-        className="absolute top-0 left-0 w-full h-full"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen></iframe>
-    </div>
-  );
+  // const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
+  //   <div className="relative w-full h-full" style={{ paddingBottom: "56.25%" }}>
+  //     <iframe
+  //       src={`${video.replace("watch?v=", "embed/")}`}
+  //       title={title}
+  //       className="absolute top-0 left-0 w-full h-full"
+  //       frameBorder="0"
+  //       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  //       allowFullScreen></iframe>
+  //   </div>
+  // );
 
   const wordArray = feature ? feature.split(",").map((word) => word.trim()) : [];
 
   return (
     <div className="product-card1 flex w-full">
       <div
-        className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl
+        className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md
       ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
       ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
       `}
         style={{
-          boxShadow: themeMode
-            ? "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)"
-            : "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)",
           backgroundColor: themeMode ? "" : "#242526",
           border: themeMode ? "1px solid white" : "1px solid #242526",
           borderRadius: "2xl",
@@ -138,7 +133,7 @@ const MaterialCard: React.FC<News> = ({
             </div>
 
             <div
-              className={`mt-2 line-clamp-1 ${!themeMode && "title-dark-color"}`}
+              className={`mt-2 text-lg font-semibold line-clamp-1 ${!themeMode && "title-dark-color"}`}
             >
               {title}
             </div>

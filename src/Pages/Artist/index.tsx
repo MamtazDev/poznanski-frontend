@@ -27,22 +27,22 @@ interface ArtistsData {
   }];
 }
 
-interface InputArtistsData {
-  _id: string;
-  name: string;
-  profileImg: string;
-  description: string;
-}
+// interface InputArtistsData {
+//   _id: string;
+//   name: string;
+//   profileImg: string;
+//   description: string;
+// }
 
-interface Products {
-  id: string;
-  _id: string;
-  title: string;
-  img: string;
-  date: string;
-  category: string;
-  location: string;
-}
+// interface Products {
+//   id: string;
+//   _id: string;
+//   title: string;
+//   img: string;
+//   date: string;
+//   category: string;
+//   location: string;
+// }
 
 // interface InputProducts {
 //   _id: string;
@@ -198,11 +198,13 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <div
                 id={artist._id}
 
-                className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3 md:mt-20 mt-6">
+                className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3 md:mt-20 mt-6 shadow-md rounded-2xl"
+                style={{
+                  backgroundColor: themeMode? "":"#242526"
+                }}>
                 <div
-                  className={`p-5 ${hoveredCard === `${_idx_}` && (themeMode ? "artists-body" : "artists-body-dark")}`}
+                  className={`p-5 rounded-2xl ${hoveredCard === `${_idx_}` && (themeMode ? "artists-body" : "artists-body-dark")}`}
                   style={{
-                    borderRadius: "20px",
                     transition: "0.5s ease-in-out",
                   }}
                   onMouseEnter={() => setHoveredCard(`${_idx_}`)}
