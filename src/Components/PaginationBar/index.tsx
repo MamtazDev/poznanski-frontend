@@ -58,9 +58,9 @@ const PaginationBar: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex justify-between items-center w-full">
+    <div className="flex justify-between items-center w-full ">
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center space-x-2">
         <span className={`${themeMode ? "text-[#252733]" : "text-white"}`}>
           Show
         </span>
@@ -80,8 +80,8 @@ const PaginationBar: React.FC<PaginationProps> = ({
         </span>
       </div>
 
-      <div className="flex gap-2">
-        <IconButton
+      <div className="flex md:space-x-2 space-x-0.5">
+        {/* <IconButton
           aria-label="First Page"
           variant={themeMode ? "outline" : ""}
           icon={
@@ -97,7 +97,7 @@ const PaginationBar: React.FC<PaginationProps> = ({
           width="40px"
           height="30px"
           onClick={() => setSelectedPage(1)}
-        />
+        /> */}
         <IconButton
           aria-label="Previous Page"
           variant={themeMode ? "outline" : ""}
@@ -145,7 +145,7 @@ const PaginationBar: React.FC<PaginationProps> = ({
           }
           onClick={handleIncrease}
         />
-        <IconButton
+        {/* <IconButton
           aria-label="Last Page"
           variant={themeMode ? "outline" : ""}
           icon={
@@ -161,7 +161,7 @@ const PaginationBar: React.FC<PaginationProps> = ({
           width="40px"
           height="30px"
           onClick={() => setSelectedPage(pages)}
-        />
+        /> */}
       </div>
     </div>
   );

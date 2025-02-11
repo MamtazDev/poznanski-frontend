@@ -5,7 +5,7 @@ import { openPlayer } from "../../reducers/PlayerReducer";
 import { useNavigate } from "react-router-dom";
 
 interface News {
-  type: string;
+  type?: string;
   video?: string;
   title?: string;
   feature?: string;

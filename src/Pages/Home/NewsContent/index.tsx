@@ -95,6 +95,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
       swiperRef.current.slidePrev();
     }
   };
+
   function handlePlay(youTube: any): void {
     throw new Error("Function not implemented.");
   }

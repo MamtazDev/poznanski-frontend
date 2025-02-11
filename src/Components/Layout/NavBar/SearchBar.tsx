@@ -219,7 +219,7 @@ const SearchBar: FC<SearchBarProps> = ({
         </div>
       )}
       {showDropdown && (
-        <ul className="absolute z-10 mt-1 w-full border border-gray-300 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
+        <ul className="absolute z-50 mt-1 w-full border border-gray-300 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
           {options
             .filter((option) =>
               option.toLowerCase().includes(searchText.toLowerCase())
