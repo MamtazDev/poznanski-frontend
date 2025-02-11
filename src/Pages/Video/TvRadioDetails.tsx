@@ -18,7 +18,6 @@ import CommentSection from '../TopArtist/CommentSection'
 
 const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
-  // Swiper reference
   const swiperRef = useRef<SwiperInstance | null>(null);
 
   const handleNext = () => {

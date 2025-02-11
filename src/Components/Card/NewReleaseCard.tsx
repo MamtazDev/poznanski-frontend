@@ -53,7 +53,6 @@ const NewReleaseCard: React.FC<News> = ({
         backgroundColor: themeMode ? "#FFFFFF" : "#242526",
         color: themeMode ? "#FFFFFF" : "#000000",
       }}
-      // className="rounded-lg shadow-lg p-4 transition-all duration-300 flex md:flex-col gap-5"
       className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md
         ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
         ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
@@ -70,7 +69,7 @@ const NewReleaseCard: React.FC<News> = ({
       >
         <img
           src={`https://img.youtube.com/vi/${data.songs[0]?.youTube.split("v=")[1]}/hqdefault.jpg`}
-          className="object-cover md:w-full w-[69px] md:h-[200px] h-full rounded-md"
+          className="object-cover w-[69px] h-[69px] md:w-full md:h-[200px] rounded-md"
           alt="YouTube Thumbnail"
         />
       </div>

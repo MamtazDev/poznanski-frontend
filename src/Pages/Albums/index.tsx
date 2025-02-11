@@ -123,7 +123,7 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           </div>
 
           <div
-          className="md:mt-12 mt-8 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
+          className="md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
              ref={scrollContainerRef}
               onScroll={handleScroll}
             >
