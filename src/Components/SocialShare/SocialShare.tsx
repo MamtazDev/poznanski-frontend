@@ -19,8 +19,7 @@ const SocialShare: React.FC<SocialShareProps> = ({ shareUrl, title }) => {
 		<div className="mt-6 flex justify-center relative">
 			<div className="flex gap-3">
 				{/* Share Button */}
-				<button
-					className="flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md hover:bg-purple-100 transition"
+				<button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md hover:bg-purple-100 transition"
 					style={{
 						color: themeMode ? "#5A1073" : "#2FC4B2",
 						backgroundColor: themeMode ? "white" : "#242526",
@@ -30,20 +29,17 @@ const SocialShare: React.FC<SocialShareProps> = ({ shareUrl, title }) => {
 					<IoShareOutline className="text-lg" />
 					<span className="text-sm font-medium">Share</span>
 				</button>
-
 				{/* Comment Button */}
 				<button
 					className="flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md hover:bg-purple-100 transition"
 					style={{
 						color: themeMode ? "#5A1073" : "#2FC4B2",
 						backgroundColor: themeMode ? "white" : "#242526",
-					}}
-				>
+					}}>
 					<BiCommentDetail className="text-lg" />
 					<span className="text-sm font-medium">Comment</span>
 				</button>
 			</div>
-
 			{/* Social Share Options */}
 			{showShareOptions && (
 				<div className="absolute top-12 flex gap-2  shadow-md p-2 rounded-lg"
@@ -57,7 +53,6 @@ const SocialShare: React.FC<SocialShareProps> = ({ shareUrl, title }) => {
 					<TwitterShareButton url={shareUrl} title={title}>
 						<button className="px-2 py-1 text-blue-500 rounded">
 							<IoLogoTwitter className="text-2xl" />
-
 						</button>
 					</TwitterShareButton>
 					<WhatsappShareButton url={shareUrl} title={title}>

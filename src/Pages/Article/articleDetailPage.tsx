@@ -270,7 +270,6 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         </div>
                       ))}
                     </div>
-
                     {/* Sticky See More Button */}
                     <div className="sticky bottom-0 py-3 text-center shadow-md"
                       style={{
@@ -282,11 +281,8 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     </div>
                   </div>
                   <SocialShare
-
                     shareUrl="https://yourwebsite.com/article"
-                    title="Check out this amazing article!"
-                  />
-
+                    title="Check out this amazing article!" />
                 </div>
               </div>
             </div>
