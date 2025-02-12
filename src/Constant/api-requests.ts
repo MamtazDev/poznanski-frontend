@@ -44,6 +44,10 @@ export const registerRequest = async (
   await apiPostReq("auth/register", { nickname, email, password }, false);
 };
 
+export const forgetPasswordReq = async (email: string) => {
+  await apiPostReq("auth/forgot-password", { email }, false);
+};
+
 export const profileUpdateRequest = async (
   _id: string,
   nickname: string,
