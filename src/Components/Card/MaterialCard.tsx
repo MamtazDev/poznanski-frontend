@@ -6,9 +6,12 @@ import "./style.css";
 import { IoLocationOutline } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 interface News {
   type: string;
+  id?: any;
+  _id?: any;
   video: string;
   title: string;
   feature: string;
@@ -26,15 +29,15 @@ const MaterialCard: React.FC<News> = ({
   location,
   date,
   link,
+  id,
+  _id,
   data,
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const dateFormated = moment(date).format("MM/ DD/ YYYY");
-  // const handlePlay = () => {
-  //   dispatch(openPlayer(link))
-  // }
   const handlePlay = () => {
     if (data?.youTube) {
       const videoId = data?.youTube.split("v=")[1]?.split("&")[0];
@@ -58,6 +61,11 @@ const MaterialCard: React.FC<News> = ({
 
   const wordArray = feature ? feature.split(",").map((word) => word.trim()) : [];
 
+
+  const handleClick = (id: any) => {
+    navigate(`/materials/${id}`);
+    console.log(id, "materials")
+  };
   return (
     <div className="product-card1 flex w-full">
       <div
@@ -70,6 +78,7 @@ const MaterialCard: React.FC<News> = ({
           border: themeMode ? "1px solid white" : "1px solid #242526",
           borderRadius: "2xl",
         }}
+        onClick={() => handleClick(id)}
       >
         <div className="flex md:flex-col  gap-5  related md:justify-between w-full h-full">
 
@@ -154,16 +163,16 @@ const MaterialCard: React.FC<News> = ({
               }}>
                 <>
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M8 2V5" stroke="#9B9CA1" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M16 2V5" stroke="#9B9CA1" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M3.5 9.08984H20.5" stroke="#9B9CA1" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z" stroke="#9B9CA1" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M15.6947 13.6992H15.7037" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M15.6947 16.6992H15.7037" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M11.9955 13.6992H12.0045" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M11.9955 16.6992H12.0045" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M8.29431 13.6992H8.30329" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M8.29431 16.6992H8.30329" stroke="#9B9CA1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M8 2V5" stroke="#9B9CA1" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M16 2V5" stroke="#9B9CA1" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M3.5 9.08984H20.5" stroke="#9B9CA1" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z" stroke="#9B9CA1" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M15.6947 13.6992H15.7037" stroke="#9B9CA1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M15.6947 16.6992H15.7037" stroke="#9B9CA1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M11.9955 13.6992H12.0045" stroke="#9B9CA1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M11.9955 16.6992H12.0045" stroke="#9B9CA1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M8.29431 13.6992H8.30329" stroke="#9B9CA1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M8.29431 16.6992H8.30329" stroke="#9B9CA1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </>
                 {dateFormated}
