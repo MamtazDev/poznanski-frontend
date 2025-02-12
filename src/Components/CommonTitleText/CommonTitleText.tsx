@@ -124,7 +124,7 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
             >
 
               <div className='p-5 rounded-3xl mt-6'
-                onClick={() => handleClick(item._id)}
+                onClick={() => handleClick(item.id)}
                 style={{
                   backgroundColor: themeMode ? "#FFF" : "#242526",
                   color: themeMode ? "black" : "#fff",
@@ -211,7 +211,7 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
                   </>}
                   {item && <>
                     <button
-                          onClick={() => handleClick(item._id)}
+                          onClick={() => handleClick(item.id)}
                       className='flex gap-1 items-center' style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}>view details</button>
                   </>}
                 </div>
