@@ -164,7 +164,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             {albums?.length>0&&(
               <CommonTitleText
               data={albums.map(album => ({
-                id: album.id || "",
+                id: album._id || "",
                 title: album.title,
                 location: album.location,
                 tags: album.tags,

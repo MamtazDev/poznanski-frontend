@@ -74,13 +74,10 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   // set data to a useState
   let urlEndoint = "http://localhost:8000/api/news";
   const fetcher = () =>
-    fetch(`http://localhost:8000/api/news/${id}`).then((res) => res.json());
-
+  fetch(`http://localhost:8000/api/news/${id}`).then((res) => res.json());
   const { data, error } = useSWR(`${urlEndoint}/${id}`, fetcher);
-
   // Local state to store the response
   const [news, setNews] = useState(null);
-
   // When the data is fetched, set it to the local state
   useEffect(() => {
     if (data) {

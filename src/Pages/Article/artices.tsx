@@ -11,12 +11,12 @@ const Articles = ({ themeMode, type }: any) => {
     getLastPageNumber(state)
   );
   const [selectedPage, setSelectedPage] = useState<number>(currentPage);
-  const pageSize = 18;
+  const pageSize = 100;
 
   const [isloading, setLoading] = useState(false);
   const [visibleCount, setVisibleCount] = useState(4);
   const [displayedItems, setDisplayedItems] = useState<NewsItem[]>([]);
-  
+
   const { data, loading, forceRevalidateAll, totalPages } = usePaginatedNews(
     pageSize,
     selectedPage

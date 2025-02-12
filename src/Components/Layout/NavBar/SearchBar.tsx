@@ -90,7 +90,7 @@ const SearchBar: FC<SearchBarProps> = ({
 
   return (
     <div
-      className={`relative transition-all duration-300 ease-in-out ${isExpanded ? "w-full" : isSmallDevice ? "w-10" : "w-[482px]"
+      className={`relative transition-all duration-300 ease-in-out ${isExpanded ? "w-full" : isSmallDevice ? "w-10" : "lg:w-[482px] md:w-[300px]"
         }`}
       ref={searchBarRef}
     >

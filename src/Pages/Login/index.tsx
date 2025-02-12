@@ -38,7 +38,6 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [creatingAccount, setCreatingAccount] = React.useState<boolean>(false);
-
   const {
     register,
     handleSubmit,
@@ -88,7 +87,9 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       loading: { title: "Logging in", description: "Please wait" },
     },
   });
+
   const { showPromiseToast } = usePromiseToast({});
+
   const verifyEmailWithNotification = (token: string) => {
     showPromiseToast(async () => await verifyEmailRequest(token), {
       success: {
@@ -112,14 +113,6 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
   }, []);
 
-  //  forget password
-  // const handleForgotPasswordClick = () => {
-  //   setForgotPasswordModalOpen(true);
-  // };
-
-  //   const handleCloseModal = () => {
-  //     setForgotPasswordModalOpen(false);
-  //   };
   const [forgotPasswordModalOpen, setForgotPasswordModalOpen] = React.useState(false);
 
   return (

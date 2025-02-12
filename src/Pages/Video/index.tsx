@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Spinner } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import { PageBasicProps } from "../../AppMain";
@@ -98,9 +99,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       setLoading(false);
     }
   };
-
-
-
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const setDisplayUpdatedName = () => {
@@ -128,8 +126,8 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
 
   useEffect(() => {
-    setDisplayUpdatedName();
-  }, [displayedItems, cardData, visibleCount]);
+    setDisplayedItems(cardData.slice(0, visibleCount));
+  }, [cardData, visibleCount]);
 
 
   useEffect(() => {

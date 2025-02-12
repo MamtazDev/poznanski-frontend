@@ -15,6 +15,7 @@ import { deleteCookie, getCookie, parseJwt } from "../utils/auth";
 import TopArtist from "../Pages/TopArtist";
 import ArtistDetailsPage from "../Pages/Artist/ArtistDetailsPage";
 import TvRadioDetails from "../Pages/Video/TvRadioDetails";
+import MaterialsDetails from "../Pages/Material/MaterialsDetails";
 
 const Home = lazy(() => import("../Pages/Home"));
 const SubmitPage = lazy(() => import("../Pages/Submit"));
@@ -121,10 +122,6 @@ const AppMain: React.FC = () => {
             path="/"
             element={<Home themeMode={themeMode} type={type} />}
           />
-          {/* <Route
-            path="/test-artist"
-            element={<TestArtist />}
-          /> */}
           <Route path="/profile" element={<ProfilePage themeMode={themeMode} />} />
 
           <Route path={common.NEWS_PATH}>
@@ -142,10 +139,25 @@ const AppMain: React.FC = () => {
             path={common.TOP_ARTIST_PATH}
             element={<TopArtist themeMode={themeMode} type={type} />}
           />
-          <Route
+
+          {/* <Route
             path={common.MATERIAL_PATH}
             element={<MaterialMainPage themeMode={themeMode} type={type} />}
+          /> */}
+
+
+          <Route path={common.MATERIAL_PATH}>
+          <Route
+            path=""
+            element={<MaterialMainPage themeMode={themeMode} type={type} />}
           />
+          <Route
+              path=":id"
+              element={<MaterialsDetails themeMode={themeMode} type={type} />}
+            />
+          </Route>
+
+
           <Route
             path={common.CONCERT_PATH}
             element={<ConcertMainPage themeMode={themeMode} type={type} />}

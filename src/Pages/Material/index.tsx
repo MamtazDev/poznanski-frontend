@@ -6,13 +6,11 @@ import MaterialCard from "../../Components/Card/MaterialCard";
 import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
 import Layout from "../../Components/Layout";
-import PaginationBar from "../../Components/PaginationBar";
-import { apiGetReq } from "../../Constant/api-functions";
 import "../mainPageStyle.css";
-import { data } from "autoprefixer";
 import { apiBaseUrl } from "../../Constant/config";
 
 interface Product {
+  _id: unknown;
   id: string;
   title: string;
   description: string;
@@ -31,12 +29,8 @@ interface filterProperties {
 }
 
 const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-  const [selectedPage, setSelectedPage] = useState<number>(1);
-  const [pages, setPages] = useState<number>(1);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<Product[]>([]);
-  // const [filteredData, setFilteredData] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [filters, setFilters] = useState<filterProperties>({
@@ -190,6 +184,8 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       type={type ? "vertical" : "horizontal"}
                       video={item.youTube}
                       data={item}
+                      // id={item.id}
+                      id={item.id}
                       feature={item.tags}
                       title={item.title}
                       date={item.date}

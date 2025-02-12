@@ -176,7 +176,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
               >
                 <div className="flex items-start w-full">
                   <div className="" onClick={() => handleClick(artist.id)}>
-                    <img src={artist?.profileImg || avatar} className='md:w-[100px] w-[80px]  md:h-[80px]  h-[50px] rounded-full' alt='img' />
+                    <Avatar src={artist?.profileImg || avatar} className='md:w-[100px] w-[80px]  md:h-[80px]  h-[50px] rounded-full' width={50} height={50}/>
                   </div>
                   <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
                     <div
