@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Layout from '../../Components/Layout';
 import { PageBasicProps } from '../../AppMain';
 import BreadCrumb from '../../Components/BreadCrumb';
@@ -20,6 +20,13 @@ import { useParams } from 'react-router-dom';
 // Import the Swiper instance type
 import { Swiper as SwiperInstance } from 'swiper';
 import { Avatar } from '@chakra-ui/react';
+import CommentForm from '../../Components/Comment';
+import { PostModels } from '../../Constant/api-requests';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../reducers';
+import { addLastVisited, get5RandomNewsByTags, getLastVisitedId, getTargetNews } from '../../reducers/NewsReducer';
+import { useDispatch } from 'react-redux';
+import { ArticleToDisplay } from '../Home/NewsContent/Carousel';
 
 interface Artist {
   _id: string;
@@ -63,6 +70,39 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   // Type the swiperRef to be of Swiper instance type
   const swiperRef = useRef<SwiperInstance | null>(null);
   const { id } = useParams<{ id: string }>();
+  const targetNewsSelected = useSelector((state: RootState) =>
+    getTargetNews(state, id)
+  );
+  // const url = useLocation().pathname;
+  const lastVisitedId = useSelector((state: RootState) =>
+    getLastVisitedId(state)
+  );
+  const dispatch = useDispatch();
+  const [pageData, setPageData] = useState<ArticleToDisplay>();
+  const [, ...tagsToRemap] = targetNewsSelected?.tags?.split("#") || [];
+  const tags = tagsToRemap;
+  const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
+  const [showShareOptions, setShowShareOptions] = useState(false);
+
+  const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
+    get5RandomNewsByTags(state, pageDataTags || [])
+  );
+  const filteredRelatedData = useMemo(() => {
+    return relatedData.filter((news) => data.news._id !== id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [relatedData, id]);
+
+  useEffect(() => {
+    setPageData(targetNewsSelected);
+  }, [targetNewsSelected]);
+
+  useEffect(() => {
+    if (!lastVisitedId || lastVisitedId !== id) {
+      dispatch(addLastVisited(`${id}`));
+    }
+  }, [lastVisitedId, id, dispatch]);
+
+
 
   const handleNext = () => {
     if (swiperRef.current) {
@@ -288,7 +328,10 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </div>
             </div>
           </div>
-          <CommentSection themeMode={themeMode} type={type} />
+          <CommentForm
+            postModel={PostModels.news}
+            commentData={pageData?.commentsSection ?? null}
+          />
         </div>
       </div>
     </Layout>
