@@ -66,6 +66,7 @@ const MaterialCard: React.FC<News> = ({
     navigate(`/materials/${id}`);
     // console.log(id, "materials")
   };
+
   return (
     <div className="product-card1 flex w-full">
       <div

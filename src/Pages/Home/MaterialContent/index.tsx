@@ -119,6 +119,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
                     <div key={item.id} >
                      <MaterialCard
                 key={item.id}
+                id={item.id}
                 type="horizontal" // Or "vertical" based on your preference
                 video={item.youTube}
                 data={item}

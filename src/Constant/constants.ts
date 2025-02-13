@@ -14,7 +14,6 @@ export const CREATE_NEWS = "/news/create";
 export const MATERIAL_PATH = "/materials";
 export const NEWRELEASE_PATH = "/album";
 export const LOGIN_PATH = "/login";
-export const VERIFY_PATH = "/verify"; 
+export const VERIFY_PATH = "/verify";
 export const VERIFY_EMAIL = "/verify-email/:token";
 export const RESET_PASS = "/reset-password/:token";
-
