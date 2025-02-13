@@ -40,7 +40,7 @@ const FilterInput: React.FC<FilterInputProps> = ({ type, handler, setFilterText,
     <>
       <div className="w-full">
         <div
-          className={`${!themeMode ? "filter-box-dark-2" : "filter-box-2 "} ${type ? "filter-box-mobile-2" : "filter-box-web-2"} flex place-items-center`}
+          className={`${!themeMode ? "filter-box-dark-2" : "filter-box-2 mb-5 "} ${type ? "filter-box-mobile-2" : "filter-box-web-2"} flex place-items-center`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -27,7 +27,7 @@ interface CartInterface {
 
 const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
   const [cardNum, setCardNum] = useState<number>(3);
-  const [cardData, setCardData] = useState<CartInterface | null>(null); // Set type to CartInterface or null
+  const [cardData, setCardData] = useState<CartInterface | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
@@ -105,34 +105,34 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
               1024: { slidesPerView: 3, slidesPerGroup: 3 },
               768: { slidesPerView: 2, slidesPerGroup: 2 },
               425: { slidesPerView: 1, slidesPerGroup: 1 },
-            }}
-          >
-            {cardData.materials.reduce<any[][]>((rows, item, index) => {
-              const rowIndex = Math.floor(index / 2);
-              if (!rows[rowIndex]) rows[rowIndex] = [];
-              rows[rowIndex].push(item);
-              return rows;
-            }, []).map((row, rowIndex) => (
-              <SwiperSlide key={rowIndex}>
-                <div className="grid grid-cols-1 gap-5">
-                  {row.map((item) => (
-                    <div key={item.id} >
-                     <MaterialCard
-                key={item.id}
-                type="horizontal" // Or "vertical" based on your preference
-                video={item.youTube}
-                data={item}
-                feature={item.tags} // Joining tags if you want to display them as a string
-                title={item.title}
-                date={item.date}
-                link={item.youTube}
-              />
-                    </div>
-                  ))}
-                </div>
-              </SwiperSlide>
-            ))}
-
+            }}>
+            {cardData.materials
+              .reduce<any[][]>((rows, item, index) => {
+                const rowIndex = Math.floor(index / 2);
+                if (!rows[rowIndex]) rows[rowIndex] = [];
+                rows[rowIndex].push(item);
+                return rows;
+              }, [])
+              .map((row, rowIndex) => (
+                <SwiperSlide key={rowIndex}>
+                  <div className="grid grid-cols-1 gap-5">
+                    {row.map((item, index) => (
+                      <div key={index}>
+                        <MaterialCard
+                          key={item.id}
+                          type="horizontal" // Or "vertical" based on your preference
+                          video={item.youTube}
+                          data={item}
+                          feature={item.tags} // Joining tags if you want to display them as a string
+                          title={item.title}
+                          date={item.date}
+                          link={item.youTube}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </SwiperSlide>
+              ))}
           </Swiper>
 
           {/* Custom Navigation Buttons */}
@@ -152,31 +152,27 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
     </div>
   ) : (
     <div>
-  {loading ? (
-    <div
-      className="flex justify-center items-center h-screen w-full"
-      style={{ backgroundColor: themeMode ? "white" : "black" }}
-    >
-      <p
-        className="text-xl font-semibold"
-        style={{ color: themeMode ? "black" : "white" }}
-      >
-        Loading...
-      </p>
-      <div
-        className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
-        style={{
-          borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
-          borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
-          borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
-        }}
-      ></div>
+      {loading ? (
+        <div
+          className="flex justify-center items-center h-screen w-full"
+          style={{ backgroundColor: themeMode ? "white" : "black" }}>
+          <p
+            className="text-xl font-semibold"
+            style={{ color: themeMode ? "black" : "white" }}>
+            Loading...
+          </p>
+          <div
+            className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+            style={{
+              borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+              borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+              borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+            }}></div>
+        </div>
+      ) : (
+        <p>No data available</p>
+      )}
     </div>
-  ) : (
-    <p>No data available</p>
-  )}
-</div>
-
   );
 };
 

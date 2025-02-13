@@ -103,7 +103,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
   return cardData && cardData.news.length > 0 ? (
     <div className="flex justify-center">
       <div className="container md:mt-36 mt-20 md:pt-1.5">
-        <div className="flex justify-between">
+        <div className="flex justify-between mb-10">
           <ContentTitle titleType="NEWS" title="Top News Of The Day" />
           <div className="flex items-end">
             <div className="md:block hidden">
@@ -115,7 +115,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
             </div>
           </div>
         </div>
-        <div className="w-full mt-10 relative">
+        <div className="w-full relative">
           <Swiper
             onSwiper={(swiper: any) => (swiperRef.current = swiper)}
             slidesPerView={3}
@@ -127,8 +127,9 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
               1440: { slidesPerView: 3, slidesPerGroup: 2 },
               1024: { slidesPerView: 3, slidesPerGroup: 3 },
               768: { slidesPerView: 2, slidesPerGroup: 2 },
-              425: { slidesPerView: 1, slidesPerGroup: 1 },
+              330: { slidesPerView: 1, slidesPerGroup: 1 },
             }}
+           className="news-slider"
           >
             {cardData?.news.reduce<Product[][]>((rows, item, index) => {
               const rowIndex = Math.floor(index / 2);
@@ -138,8 +139,8 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
             }, []).map((row, rowIndex) => (
               <SwiperSlide key={rowIndex}>
                 <div className="grid grid-cols-1 gap-5">
-                  {row.map((item) => (
-                    <div key={item.id} >
+                  {row.map((item, index) => (
+                    <div key={index} >
                       <ProductCard1
                         type="vertical"
                         img={item.files && item.files[0]}

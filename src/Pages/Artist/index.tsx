@@ -9,7 +9,7 @@ import { fileUrl } from "../../Constant/config";
 import ArtistsCarousel from "../Home/Artists/Carousel";
 import "../mainPageStyle.css";
 import { useNavigate } from "react-router-dom";
-import avatar from "../../assets/png/profileImage2.png"
+import avatar from "../../assets/png/profileImage2.png";
 import { Avatar, Image } from "@chakra-ui/react";
 interface ArtistsData {
   id: string;
@@ -18,14 +18,16 @@ interface ArtistsData {
   img: string;
   profileImg: any;
   description: string;
-  products: [{
-    title: string,
-    location: string;
-    date: string;
-    category: string;
-    img: string;
-    profileImg: string;
-  }];
+  products: [
+    {
+      title: string;
+      location: string;
+      date: string;
+      category: string;
+      img: string;
+      profileImg: string;
+    },
+  ];
 }
 
 // interface InputArtistsData {
@@ -84,15 +86,12 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     limit: 7,
     startDate: "",
     endDate: "",
-    order: "desc"
+    order: "desc",
   });
-
 
   useEffect(() => {
     console.log("hover:", hoveredCard);
   }, [hoveredCard]);
-
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -146,7 +145,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           img: fileUrl + item.artist.profileImg,
           profileImg: item.artist.profileImg,
           description: item.artist.description,
-          products: item.products
+          products: item.products,
         }));
 
         console.log("Formatted Artists Data:", newArtists);
@@ -162,8 +161,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     fetchData();
   }, []);
 
-
-
   const filteredArtists = artists.filter(
     (artist) =>
       artist.name.toLowerCase().includes(filterText.toLowerCase()) ||
@@ -174,9 +171,6 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const handleClick = (id: string) => {
     navigate(`/artist/${id}`);
   };
-
-
-
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -191,59 +185,73 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <ContentTitle titleType="TOP HITS" title="Our Top Artists" />
           </div>
           <div className="md:mt-6 mt-4">
-            <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
+            <FilterInput
+              type={type}
+              filterText={filterText}
+              setFilterText={setFilterText}
+              setFilters={setFilters}
+              filters={filters}
+            />
           </div>
           {/* id wise data add here */}
-          {
-            filteredArtists.map((artist, _idx_) => (
+          {filteredArtists.map((artist, _idx_) => (
+            <div
+              key={_idx_}
+              id={artist._id}
+              className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3 md:mt-20 mt-6 shadow-md rounded-2xl"
+              style={{
+                backgroundColor: themeMode ? "" : "#242526",
+              }}>
               <div
-                id={artist._id}
-
-                className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3 md:mt-20 mt-6 shadow-md rounded-2xl"
+                className={`p-5 rounded-2xl ${hoveredCard === `${_idx_}` && (themeMode ? "artists-body" : "artists-body-dark")}`}
                 style={{
-                  backgroundColor: themeMode ? "" : "#242526"
-                }}>
-                <div
-                  className={`p-5 rounded-2xl ${hoveredCard === `${_idx_}` && (themeMode ? "artists-body" : "artists-body-dark")}`}
-                  style={{
-                    transition: "0.5s ease-in-out",
-                  }}
-                  onMouseEnter={() => setHoveredCard(`${_idx_}`)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                >
-                  <div className="flex items-start w-full">
-                    <div onClick={() => handleClick(artist.id)}>
-                      <Avatar
-                        src={artist?.profileImg || avatar}
-                        className="rounded-full object-cover w-16"
-
-                      />
-
+                  transition: "0.5s ease-in-out",
+                }}
+                onMouseEnter={() => setHoveredCard(`${_idx_}`)}
+                onMouseLeave={() => setHoveredCard(null)}>
+                <div className="flex items-start w-full">
+                  <div onClick={() => handleClick(artist.id)}>
+                    <Avatar
+                      src={artist?.profileImg || avatar}
+                      className="rounded-full object-cover w-16"
+                    />
+                  </div>
+                  <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
+                    <div
+                      className={`artist-name md:text-xl text-md ${!themeMode && "title-dark-color"}`}>
+                      {artist.name}
                     </div>
-                    <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
-                      <div
-                        className={`artist-name md:text-xl text-md ${!themeMode && "title-dark-color"}`}
-                      >
-                        {artist.name}
-                      </div>
-                      <div className="artist-description line-clamp-3">
-                        {artist.description}
-                      </div>
+                    <div className="artist-description line-clamp-3">
+                      {artist.description}
                     </div>
                   </div>
-                  {artist.products.length > 0 && (
-                    <div className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "md:h-[350px] h-72" : "h-0 overflow-hidden"}`}>
-                      {<ArtistsCarousel cardNum={cardNum} cardData={artist.products} />}
-                    </div>
-                  )}
                 </div>
+                {artist.products.length > 0 && (
+                  <div
+                    className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "md:h-[350px] h-72" : "h-0 overflow-hidden"}`}>
+                    {
+                      <ArtistsCarousel
+                        cardNum={cardNum}
+                        cardData={artist.products}
+                      />
+                    }
+                  </div>
+                )}
               </div>
-            ))
-          }
+            </div>
+          ))}
           <div className="mt-8">
-            <PaginationBar selectedPage={selectedPage} setSelectedPage={setSelectedPage} pages={pages} entriesPerPage={0} setEntriesPerPage={function (value: React.SetStateAction<number>): void {
-              throw new Error("Function not implemented.");
-            }} />
+            <PaginationBar
+              selectedPage={selectedPage}
+              setSelectedPage={setSelectedPage}
+              pages={pages}
+              entriesPerPage={0}
+              setEntriesPerPage={function (
+                value: React.SetStateAction<number>
+              ): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
           </div>
         </div>
       </div>

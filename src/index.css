@@ -172,7 +172,10 @@ code {
   background: var(--primary-color) !important;
 }
 
+
+.event-carousel .swiper-pagination-bullet-active-next-next,
 .event-carousel .swiper-pagination-bullet-active-next,
+.event-carousel .swiper-pagination-bullet-active-prev-prev,
 .event-carousel .swiper-pagination-bullet-active-prev {
   width: 18px !important;
   height: 7px !important;

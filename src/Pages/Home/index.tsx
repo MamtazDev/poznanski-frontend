@@ -14,7 +14,7 @@ import "./style.css";
 import Footer from "../../Components/Layout/Footer";
 import { PageBasicProps } from "../../AppMain";
 
-const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
+const Home: React.FC<PageBasicProps> = ({ type, themeMode }) => {
   const pageBottomRef = useRef<HTMLDivElement>(null);
   const [filterText, setFilterText] = useState<string>("");
   const scrollToBottom = () => {
@@ -27,7 +27,11 @@ const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
     <Fragment>
       <div className={`${!themeMode && "back-dark"} overflow-hidden`}>
         <div>
-          <MainBack type={type} themeMode={themeMode} scrollToBottom={scrollToBottom} />
+          <MainBack
+            type={type}
+            themeMode={themeMode}
+            scrollToBottom={scrollToBottom}
+          />
         </div>
         <div ref={pageBottomRef} />
         <NewsContent filterText={filterText} />
