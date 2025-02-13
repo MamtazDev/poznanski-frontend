@@ -16,6 +16,8 @@ import TopArtist from "../Pages/TopArtist";
 import ArtistDetailsPage from "../Pages/Artist/ArtistDetailsPage";
 import TvRadioDetails from "../Pages/Video/TvRadioDetails";
 import MaterialsDetails from "../Pages/Material/MaterialsDetails";
+import VerifyEmail from "../Pages/Login/VerifyEmail";
+import ResetPassword from "../Pages/Login/ResetPass";
 
 const Home = lazy(() => import("../Pages/Home"));
 const SubmitPage = lazy(() => import("../Pages/Submit"));
@@ -25,7 +27,7 @@ const ArticleMainPage = lazy(() => import("../Pages/Article"));
 const ArtistMainPage = lazy(() => import("../Pages/Artist"));
 const MaterialMainPage = lazy(() => import("../Pages/Material"));
 const AlbumsMainPage = lazy(() => import("../Pages/Albums/index"));
-const SearchMainPage = lazy(() => import('../Pages/Search'));
+const SearchMainPage = lazy(() => import("../Pages/Search"));
 
 const ArticleDetailPage = lazy(
   () => import("../Pages/Article/articleDetailPage")
@@ -122,7 +124,10 @@ const AppMain: React.FC = () => {
             path="/"
             element={<Home themeMode={themeMode} type={type} />}
           />
-          <Route path="/profile" element={<ProfilePage themeMode={themeMode} />} />
+          <Route
+            path="/profile"
+            element={<ProfilePage themeMode={themeMode} />}
+          />
 
           <Route path={common.NEWS_PATH}>
             <Route
@@ -145,18 +150,16 @@ const AppMain: React.FC = () => {
             element={<MaterialMainPage themeMode={themeMode} type={type} />}
           /> */}
 
-
           <Route path={common.MATERIAL_PATH}>
-          <Route
-            path=""
-            element={<MaterialMainPage themeMode={themeMode} type={type} />}
-          />
-          <Route
+            <Route
+              path=""
+              element={<MaterialMainPage themeMode={themeMode} type={type} />}
+            />
+            <Route
               path=":id"
               element={<MaterialsDetails themeMode={themeMode} type={type} />}
             />
           </Route>
-
 
           <Route
             path={common.CONCERT_PATH}
@@ -165,7 +168,7 @@ const AppMain: React.FC = () => {
 
           <Route path={common.NEWRELEASE_PATH}>
             <Route
-              path=''
+              path=""
               element={<AlbumsMainPage themeMode={themeMode} type={type} />}
             />
             <Route
@@ -177,7 +180,7 @@ const AppMain: React.FC = () => {
           {/* radios  */}
           <Route path={common.TV_RADIO_PATH}>
             <Route
-              path=''
+              path=""
               element={<VideoMainPage themeMode={themeMode} type={type} />}
             />
             <Route
@@ -186,9 +189,7 @@ const AppMain: React.FC = () => {
             />
           </Route>
 
-
-          <Route
-            path={common.ARTISTS_PATH}>
+          <Route path={common.ARTISTS_PATH}>
             <Route
               path=""
               element={<ArtistMainPage themeMode={themeMode} type={type} />}
@@ -197,9 +198,7 @@ const AppMain: React.FC = () => {
               path=":id"
               element={<ArtistDetailsPage themeMode={themeMode} type={type} />}
             />
-
           </Route>
-
 
           <Route
             path={common.CREATE_NEWS}
@@ -207,10 +206,9 @@ const AppMain: React.FC = () => {
           />
           <Route
             path={common.SEARCH_PATH}
-            element={
-              <SearchMainPage themeMode={themeMode} type={type} />
-            }
+            element={<SearchMainPage themeMode={themeMode} type={type} />}
           />
+
           <Route
             path={common.LOGIN_PATH}
             element={<LoginPage themeMode={themeMode} type={type} />}
@@ -219,11 +217,12 @@ const AppMain: React.FC = () => {
               path=""
               element={<LoginPage themeMode={themeMode} type={type} />}
             />
-            <Route
-              path="verify-email/:token"
-              element={<LoginPage themeMode={themeMode} type={type} />}
-            />
           </Route>
+
+          <Route path={common.VERIFY_EMAIL} element={<VerifyEmail />} />
+
+          <Route path={common.RESET_PASS} element={<ResetPassword />} />
+
           <Route path={common.VERIFY_PATH} element={<SubmitConfirmation />} />
         </Routes>
       </Suspense>
