@@ -45,7 +45,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   //   </div>
   // )
   return (
-    <div className="flex w-full">
+    <>
       <div
         className="transition-all duration-300 ease-out w-full h-pull"
         onClick={() => handleClick(id)}
@@ -148,7 +148,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
 
         </div>
       </div>
-    </div>
+    </>
 
   );
 };

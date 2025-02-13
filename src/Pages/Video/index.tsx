@@ -191,6 +191,8 @@ fetchData(filters)
             </div>
             <div
               className={`md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide`}
+              style={{ width: "100%",
+               }}
               ref={scrollContainerRef}
               onScroll={handleScroll}
             >
@@ -216,7 +218,7 @@ fetchData(filters)
               </div>
               ) : (
                 <div
-                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-5 mb-16`}
+                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5 mb-16`}
                 >
                   {cardData.length>0? cardData.map((item, index) => (
                     <div key={index} className="w-full">

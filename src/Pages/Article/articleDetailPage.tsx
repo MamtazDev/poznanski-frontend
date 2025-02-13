@@ -21,9 +21,6 @@ import DelayedComponent from "../../Components/_utility/DelayedComponent";
 import { PostModels } from "../../Constant/api-requests";
 import defaultimg from "../../assets/svg/userIcon.svg";
 import singer from "../../assets/png/ticketBanner.png";
-import { IoShareOutline } from "react-icons/io5";
-import { BiCommentDetail } from "react-icons/bi";
-import { FacebookShareButton, TwitterShareButton, WhatsappShareButton } from "react-share";
 import BreadCrumb from './../../Components/BreadCrumb/index';
 import SocialShare from "../../Components/SocialShare/SocialShare";
 
@@ -48,7 +45,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [, ...tagsToRemap] = targetNewsSelected?.tags?.split("#") || [];
   const tags = tagsToRemap;
   const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
-  const [showShareOptions, setShowShareOptions] = useState(false);
+  // const [showShareOptions, setShowShareOptions] = useState(false);
 
   const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
     get5RandomNewsByTags(state, pageDataTags || [])
