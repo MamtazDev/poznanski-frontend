@@ -50,7 +50,7 @@ const MaterialCard: React.FC<News> = ({
   const wordArray = feature ? feature.split(",").map((word) => word.trim()) : [];
 
   return (
-    <div className="product-card1 flex w-full">
+    <>
       <div
         className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md
       ${themeMode ? " " : "border border-[#242526] bg-[#242526]"}
@@ -171,7 +171,7 @@ const MaterialCard: React.FC<News> = ({
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

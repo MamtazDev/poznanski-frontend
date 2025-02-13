@@ -241,7 +241,7 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
               return rows;
             }, []).map((row:any, rowIndex:any) => (
               <SwiperSlide key={rowIndex}>
-                <div className="flex flex-col gap-5">
+                <div className="grid grid-cols-1 gap-5">
                   {row.map((item:any) => (
                     <div key={item.id}>
                       <TVCard

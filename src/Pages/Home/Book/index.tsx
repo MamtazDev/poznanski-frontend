@@ -176,7 +176,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
     fetchData(filters);
   }, [filters]);
   return (
-    <div>
+    <>
       <div className="flex justify-center">
         <div className="container">
           <div className="md:mt-7 mt-10">
@@ -400,7 +400,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

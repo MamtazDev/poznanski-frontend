@@ -292,7 +292,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 cardData.isFeatured.map((item, idx) => (
                   <SwiperSlide key={idx} className="p-2 md:mb-16 mb-8">
                     <div
-                      className={`grid md:grid-cols-2 grid-cols-1 md:gap-20 gap-6`}>
+                      className={`grid md:grid-cols-2 grid-cols-1  md:gap-20 gap-6`}>
                       <div className={`relative`}>
                         <Image
                           src={"https://i.ibb.co.com/5KchHq8/ticket-Banner.png"}
