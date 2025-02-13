@@ -179,6 +179,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
                   <Avatar
                     src={artist?.profileImg || avatar}
                     className="md:w-[118px] w-[80px]  md:h-[80px]  h-[50px] rounded-full"
+                    size={{ base: "xl", md: "2xl", lg: "3xl" }}
                     width={118}
                     height={118}
                   />

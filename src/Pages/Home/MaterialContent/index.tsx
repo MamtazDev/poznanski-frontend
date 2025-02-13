@@ -104,7 +104,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
               1440: { slidesPerView: 3, slidesPerGroup: 2 },
               1024: { slidesPerView: 3, slidesPerGroup: 3 },
               768: { slidesPerView: 2, slidesPerGroup: 2 },
-              425: { slidesPerView: 1, slidesPerGroup: 1 },
+              330: { slidesPerView: 1, slidesPerGroup: 1 },
             }}>
             {cardData.materials
               .reduce<any[][]>((rows, item, index) => {

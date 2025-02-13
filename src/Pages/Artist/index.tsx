@@ -213,7 +213,10 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   <div onClick={() => handleClick(artist.id)}>
                     <Avatar
                       src={artist?.profileImg || avatar}
-                      className="rounded-full object-cover w-16"
+                      className="rounded-full object-cover w-28"
+                      size={{ base: "xl", md: "2xl", lg: "3xl" }}
+                      width={118}
+                      height={118}
                     />
                   </div>
                   <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
