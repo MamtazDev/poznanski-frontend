@@ -65,9 +65,10 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       }
     } else if (nickname && password) {
       try {
-        await loginRequest(password, nickname);
+        const userres = await loginRequest(password, nickname);
         const user = await checkIfLoggedIn();
-        dispatch(setUserLoggedIn(user));
+        console.log("user", user)
+        // dispatch(setUserLoggedIn(user));
       } finally {
         location.state ? navigate(location.state) : navigate("/");
         reset();
