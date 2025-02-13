@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { openPlayer } from "../../reducers/PlayerReducer";
 import { useNavigate } from "react-router-dom";
+import novideo from "../../assets/png/novideo.png";
 
 interface News {
   type?: string;
@@ -20,14 +21,16 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handlePlay = () => {
     if (youTube) {
-      const videoId = youTube.split("v=")[1]?.split("&")[0];
+      const videoId = youTube.split("v=")[1]?.split("&")[0] || '';
       if (videoId) {
         dispatch(openPlayer(videoId));
       }
     }
   };
+
   const handleClick = (id: string) => {
     navigate(`/radio/${id}`);
   };
@@ -75,7 +78,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
               src={
                 youTube
                   ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
-                  : "default-thumbnail.jpg"
+                  : novideo
               }
               className="md:w-full w-[69px] h-full  object-cover"
               alt="YouTube Thumbnail"
@@ -96,6 +99,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
               )}
             </div>
           </div>
+
           <div>
 
             {/* paly btn btn  */}

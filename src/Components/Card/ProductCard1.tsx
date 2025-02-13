@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import artists1 from "../../assets/svg/artists1.svg";
 import { RootState } from "../../reducers";
 import moment from "moment";
-
 import "./style.css";
+import novideo from "../../assets/png/novideo.png"
 export interface News {
   type: string;
   img: string | undefined;
@@ -31,13 +31,13 @@ const ProductCard1: React.FC<News> = ({
     navigate(`/news/${_id}`);
   };
 
-  const imageSrc = img ? `${process.env.REACT_APP_FILES_URL}${img}` : artists1;
+  const imageSrc = img ? `${process.env.REACT_APP_FILES_URL}${img}` : novideo;
 
   const wordArray = tags ? tags.split(",").map((word) => word.trim()) : [];
   const dateFormatted = moment(date).format("MMMM DD, YYYY");
 
   return (
-    <div className="flex w-full h-full">
+    <>
       <Card
         borderRadius="2xl"
         border={themeMode ? "1px solid white" : "1px solid #242526"}
@@ -64,11 +64,20 @@ const ProductCard1: React.FC<News> = ({
               }}>
               {dateFormatted}
             </div>
-            <Image
-              src={img ?? imageSrc}
+            {img ?   (
+              <Image
+              src={img}
               className="md:w-full w-[119px] h-[88px] md:h-[230px] object-cover rounded-lg"
               alt="news image"
             />
+            ):
+            <Image
+            src={novideo}
+            className="md:w-full w-[119px] h-[88px] md:h-[230px] object-cover rounded-lg"
+            alt="news image"
+          />
+          }
+
           </div>
 
           <div className="flex flex-col md:w-full space-y-2">
@@ -115,7 +124,7 @@ const ProductCard1: React.FC<News> = ({
           </div>
         </div>
       </Card>
-    </div>
+    </>
   );
 };
 

@@ -22,6 +22,8 @@ interface Product {
   location: string;
   artist: string;
   star: number;
+  songs: { youTube?: string }[]; // Ensure this exists
+
 }
 const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<number>(1);
@@ -141,17 +143,16 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 />
               </div>
             ) : (
-              <div className={`grid md:grid-cols-4 grid-cols-1 gap-5 mt-10 mb-10`}>
+              <div className={`grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-5 mt-10 mb-10`}>
                 {album.length > 0 ? (
                   album.map((categoryItem) => (
                     <NewReleaseCard
                       id={categoryItem._id}
                       key={categoryItem._id}
-                      data={categoryItem}
+                      data={{ songs: [] }} // Default value to prevent errors
                       youTube="https://www.youtube.com/embed/6JYIGclVQdw"
                       title={categoryItem.title}
                       nickname={categoryItem.artists[0]?.name}
-
                       date={categoryItem.date}
                       link={categoryItem.link}
                       btn="See Details"

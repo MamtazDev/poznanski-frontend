@@ -14,7 +14,8 @@ export const fetchCSRF = async () => {
 };
 
 export const checkIfLoggedIn = async (): Promise<any> => {
-  return await apiGetReq("auth/verify", {});
+  const resData = await apiGetReq("auth/verify", {})
+  return resData;
 };
 
 export const refreshTokenRequest = async () => {

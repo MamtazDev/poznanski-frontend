@@ -13,6 +13,7 @@ import { BsCalendar2Date } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { openPlayer } from "../../reducers/PlayerReducer";
 import { useNavigate } from "react-router-dom";
+import novideo from "../../assets/png/novideo.png";
 
 type Song = {
   youTube?: string;
@@ -119,54 +120,44 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
                   borderRadius: "25px",
                   border: `2px solid ${themeMode ? "#f8f8ff" : "#242526"}`
                 }}>
-
                 <div
-                  className={`relative bg-gray-100 cursor-pointer h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"
-                    }`}
+                  className={`relative bg-gray-100 cursor-pointer h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"}`}
                   onClick={(e) => {
                     e.stopPropagation();
                     handlePlay(item.songs?.[0]?.youTube);
                   }}
                 >
-                  {/* YouTube Thumbnail */}
-                  <img
-                    src={`https://img.youtube.com/vi/${getYouTubeID(item.songs[0]?.youTube)}/hqdefault.jpg`}
-                    className="w-full h-full object-cover"
-                    alt="YouTube Thumbnail"
-                  />
+                  {/* YouTube Thumbnail or Fallback Image */}
+                  {item.songs?.[0]?.youTube ? (
+                    <img
+                      src={`https://img.youtube.com/vi/${getYouTubeID(item.songs[0]?.youTube)}/hqdefault.jpg`}
+                      className="w-full h-full object-cover"
+                      alt="YouTube Thumbnail"
+                    />
+                  ) : (
+                    <img
+                      src={novideo}
+                      className="md:w-full w-[119px] h-[88px] md:h-[230px] object-cover rounded-lg"
+                      alt="No Video Available"
+                    />
+                  )}
 
                   {/* Play Button */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {themeMode ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="58"
-                        height="57"
-                        viewBox="0 0 58 57"
-                        fill="none"
-                      >
-                        <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
-                        <path
-                          d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z"
-                          fill="white"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="55"
-                        height="55"
-                        viewBox="0 0 55 55"
-                        fill="none"
-                      >
-                        <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
-                        <path
-                          d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z"
-                          fill="#111217"
-                        />
-                      </svg>
-                    )}
-                  </div>
+                  {item.songs?.[0]?.youTube && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      {themeMode ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="58" height="57" viewBox="0 0 58 57" fill="none">
+                          <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+                          <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55" fill="none">
+                          <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
+                          <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
+                        </svg>
+                      )}
+                    </div>
+                  )}
                 </div>
                 {
                   item.tags && <>
@@ -199,7 +190,7 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
                   </>}
                   {item && <>
                     <button
-                          onClick={() => handleClick(item.id)}
+                      onClick={() => handleClick(item.id)}
                       className='flex gap-1 items-center' style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}>view details</button>
                   </>}
                 </div>
