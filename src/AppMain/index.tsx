@@ -116,8 +116,7 @@ const AppMain: React.FC = () => {
               size="lg"
             />
           </div>
-        }
-      >
+        }>
         <ScrollToTopOnPageChange />
         <Routes>
           <Route
@@ -211,8 +210,7 @@ const AppMain: React.FC = () => {
 
           <Route
             path={common.LOGIN_PATH}
-            element={<LoginPage themeMode={themeMode} type={type} />}
-          >
+            element={<LoginPage themeMode={themeMode} type={type} />}>
             <Route
               path=""
               element={<LoginPage themeMode={themeMode} type={type} />}

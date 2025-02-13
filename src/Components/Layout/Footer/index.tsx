@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Logo2 from "../../../assets/png/logo-white.png";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers";
