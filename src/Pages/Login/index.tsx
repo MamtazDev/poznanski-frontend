@@ -59,7 +59,9 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       alert("Hasła nie są takie same");
     } else if (creatingAccount && password === passwordRepeat) {
       try {
-        await registerRequest(`${password}`, `${email}`, `${nickname}`);
+        const regRes = await registerRequest(`${password}`, `${email}`, `${nickname}`);
+        console.log("Registered", regRes.verificationToken);
+        verifyEmailWithNotification(regRes.verificationToken)
       } finally {
         navigate("/login", { replace: true });
       }
@@ -68,7 +70,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         const userres = await loginRequest(password, nickname);
         const user = await checkIfLoggedIn();
         console.log("user", user)
-        // dispatch(setUserLoggedIn(user));
+        dispatch(setUserLoggedIn(user));
       } finally {
         location.state ? navigate(location.state) : navigate("/");
         reset();
@@ -92,6 +94,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const { showPromiseToast } = usePromiseToast({});
 
   const verifyEmailWithNotification = (token: string) => {
+    console.log("Token", token)
     showPromiseToast(async () => await verifyEmailRequest(token), {
       success: {
         title: "Email verified",

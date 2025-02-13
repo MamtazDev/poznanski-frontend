@@ -42,7 +42,8 @@ export const registerRequest = async (
   email: string,
   nickname: string
 ) => {
-  await apiPostReq("auth/register", { nickname, email, password }, false);
+  const data = await apiPostReq("auth/register", { nickname, email, password }, false);
+  return data
 };
 
 export const forgetPasswordReq = async (email: string) => {

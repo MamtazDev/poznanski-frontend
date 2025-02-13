@@ -18,4 +18,3 @@ export const VERIFY_PATH = "/verify";
 export const VERIFY_EMAIL = "/verify-email/:token";
 export const RESET_PASS = "/reset-password/:token";
 
-    
