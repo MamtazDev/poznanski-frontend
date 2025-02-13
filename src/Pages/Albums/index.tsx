@@ -9,6 +9,7 @@ import FilterInput from "../../Components/FilterInput";
 import PaginationBar from "../../Components/PaginationBar";
 import "../mainPageStyle.css";
 import Layout from './../../Components/Layout/index';
+import { apiBaseUrl } from "../../Constant/config";
 
 interface Product {
   artists: any;
@@ -34,9 +35,9 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     const [displayedItems, setDisplayedItems] = useState<Product[]>([]);
 
   const fetcher = () =>
-    fetch(`http://localhost:8000/api/album`).then((res) => res.json());
+    fetch(`${apiBaseUrl}/album`).then((res) => res.json());
 
-  const { data, error } = useSWR(`http://localhost:8000/api/album`, fetcher);
+  const { data, error } = useSWR(`${apiBaseUrl}/album`, fetcher);
 
 
 
@@ -68,8 +69,10 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
 
     useEffect(() => {
+      if(album && album.length>0 ){
       setDisplayUpdatedName();
-    }, [displayedItems, album, visibleCount]);
+      }
+    }, [ album]);
 
 
   useEffect(() => {

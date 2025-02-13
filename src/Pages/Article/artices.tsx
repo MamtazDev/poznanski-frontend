@@ -24,9 +24,7 @@ const Articles = ({ themeMode, type }: any) => {
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const setDisplayUpdatedName = () => {
-    setDisplayedItems(data.slice(0, visibleCount));
-  };
+
 
   const loadMoreItems = () => {
     if (loading || visibleCount >= data.length) return;
@@ -54,9 +52,18 @@ const Articles = ({ themeMode, type }: any) => {
     }
   };
 
+
+  const setDisplayUpdatedName = () => {
+    setDisplayedItems(data.slice(0, visibleCount));
+  };
+
   useEffect(() => {
-    setDisplayUpdatedName();
-  }, [displayedItems, data, visibleCount]);
+    if (data && data.length>0 ){
+      setDisplayUpdatedName();
+    }    
+  }, [data]);
+
+  
 
   useEffect(() => {
     window.addEventListener("scroll", handleWindowScroll);
