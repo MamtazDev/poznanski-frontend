@@ -106,7 +106,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
         const response = await fetch("http://localhost:8000/api/artist");
         const jsonData = await response.json();
 
-        console.log("Fetched Data:", jsonData);
+        // console.log("Fetched Data:", jsonData);
 
         const newArtists = jsonData.data.map((item: any) => ({
           id: item.artist._id,
@@ -117,7 +117,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
           products: item.products
         }));
 
-        console.log("Formatted Artists Data:", newArtists);
+        // console.log("Formatted Artists Data:", newArtists);
 
         setArtists(newArtists);
       } catch (error) {

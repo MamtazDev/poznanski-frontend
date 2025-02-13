@@ -428,7 +428,7 @@ export default ConcertMainPage;
 
 const Card = ({ item, themeMode, idx }: any) => {
 
-  console.log(item, "item")
+  // console.log(item, "item")
 
   return (
     <div className={`py-4 ${idx !== 0 && "ticket-top-border"}`}>

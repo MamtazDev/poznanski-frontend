@@ -120,7 +120,7 @@ const TopArtist: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   useEffect(() => {
     if (data) {
       setRadio(data);
-      console.log(data, "album")
+      // console.log(data, "album")
     }
   }, [data]);
 

@@ -93,7 +93,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   useEffect(() => {
     if (data) {
-      console.log("Fetched data:", data);
+      // console.log("Fetched data:", data);
       setArtist(data.artist || null);
       setRadios(Array.isArray(data.radios) ? data.radios : []);
       setAlbums(Array.isArray(data.album) ? data.album : []);

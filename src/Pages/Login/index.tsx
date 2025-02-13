@@ -60,7 +60,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     } else if (creatingAccount && password === passwordRepeat) {
       try {
         const regRes = await registerRequest(`${password}`, `${email}`, `${nickname}`);
-        console.log("Registered", regRes.verificationToken);
+        // console.log("Registered", regRes.verificationToken);
         verifyEmailWithNotification(regRes.verificationToken)
       } finally {
         navigate("/login", { replace: true });
@@ -69,7 +69,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       try {
         const userres = await loginRequest(password, nickname);
         const user = await checkIfLoggedIn();
-        console.log("user", user)
+        // console.log("user", user)
         dispatch(setUserLoggedIn(user));
       } finally {
         location.state ? navigate(location.state) : navigate("/");
@@ -94,7 +94,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const { showPromiseToast } = usePromiseToast({});
 
   const verifyEmailWithNotification = (token: string) => {
-    console.log("Token", token)
+    // console.log("Token", token)
     showPromiseToast(async () => await verifyEmailRequest(token), {
       success: {
         title: "Email verified",

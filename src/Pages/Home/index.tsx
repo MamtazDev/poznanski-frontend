@@ -75,7 +75,7 @@ function Material() {
 						},
 					}
 				);
-        console.log(channelResponse)
+      //   console.log(channelResponse)
 				const channelId = channelResponse.data.items[0]?.id;
 
 				if (!channelId) {
@@ -129,10 +129,9 @@ function Material() {
 		};
 
 		fetchAllChannelVideos();
-    console.log("fetchAllChannelVideos", videos)
+   //  console.log("fetchAllChannelVideos", videos)
 	}, []);
   return (
     <div>material</div>
   )
 }
-

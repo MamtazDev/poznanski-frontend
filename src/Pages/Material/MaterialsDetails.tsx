@@ -120,7 +120,7 @@ const MaterialsDetails : React.FC<PageBasicProps> = ({ themeMode, type }) => {
  useEffect(() => {
    if (data) {
       setMaterials(data);
-     console.log(data, "materials")
+    //  console.log(data, "materials")
    }
  }, [data]);
 
