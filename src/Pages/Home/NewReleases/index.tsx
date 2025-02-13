@@ -150,7 +150,7 @@ const NewReleases: React.FC<{ filter: string }> = ({ filter }) => {
                     <NewReleaseCard
                       id={categoryItem._id}
                       key={categoryItem._id}
-                      data={categoryItem}
+                      data={{ songs: [] }}
                       youTube="https://www.youtube.com/embed/6JYIGclVQdw"
                       title={categoryItem.title}
                       nickname={categoryItem.artists[0]?.name}
