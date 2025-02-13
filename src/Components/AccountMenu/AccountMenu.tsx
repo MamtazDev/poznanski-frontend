@@ -45,7 +45,7 @@ export const AccountMenu: React.FC<{
 
 	const handleLogout = () => {
 		optimisticLogout();
-		logoutRequest();
+		// logoutRequest();
 		handleClose();
 	};
 
