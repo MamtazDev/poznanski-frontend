@@ -69,7 +69,8 @@ const Articles = ({ themeMode, type }: any) => {
         ref={scrollContainerRef}
         onScroll={handleScroll}
         className="md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
-        style={{ width: "100%" }}
+        style={{ width: "100%",
+         }}
       >
         {loading || !data ? (
           <div className="w-full flex justify-center items-center" style={{ minHeight: type ? "776px" : "908px" }}>
@@ -77,7 +78,7 @@ const Articles = ({ themeMode, type }: any) => {
           </div>
         ) : (
           <>
-            <div className="grid lg:grid-cols-3 gap-4 py-5">
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 xl:grid-cols-4 gap-4 py-5">
               {displayedItems?.map((item) => (
                 <div id={item._id} key={`main-news-card-${item._id}`} className="w-full">
                   <ProductCard1

@@ -114,7 +114,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
               return rows;
             }, []).map((row, rowIndex) => (
               <SwiperSlide key={rowIndex}>
-                <div className="flex flex-col gap-5">
+                <div className="grid grid-cols-1 gap-5">
                   {row.map((item) => (
                     <div key={item.id} >
                      <MaterialCard

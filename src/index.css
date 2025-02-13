@@ -221,3 +221,7 @@ code {
     color: rgb(201, 201, 201)!important ;
   }
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
