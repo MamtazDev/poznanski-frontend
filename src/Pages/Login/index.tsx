@@ -31,6 +31,51 @@ interface SubmitUserForm {
   nickname: string;
 }
 
+interface LoginResponse {
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    // Add more user fields if necessary
+  };
+  message: string;
+  accessToken: string;
+}
+
+interface LoginError {
+  message: string;
+}
+
+async function loginUser(
+  email: string,
+  password: string
+): Promise<LoginResponse> {
+  const apiUrl = "http://localhost:8000/api/auth/login";
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    // Check if the response is not ok
+    if (!response.ok) {
+      const errorData: LoginError = await response.json();
+      throw new Error(errorData.message || "Failed to log in");
+    }
+
+    // Parse and return the response as `LoginResponse`
+    const data: LoginResponse = await response.json();
+    console.log("Login successful:", data);
+    return data;
+  } catch (error) {
+    console.error("Error logging in:", error);
+    throw error;
+  }
+}
 export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const user = useSelector((state: RootState) => state.user.isLoggedIn);
   const { token } = useParams<{ token: string }>();
@@ -59,18 +104,25 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       alert("Hasła nie są takie same");
     } else if (creatingAccount && password === passwordRepeat) {
       try {
-        const regRes = await registerRequest(`${password}`, `${email}`, `${nickname}`);
+        const regRes = await registerRequest(
+          `${password}`,
+          `${email}`,
+          `${nickname}`
+        );
         console.log("Registered", regRes.verificationToken);
-        verifyEmailWithNotification(regRes.verificationToken)
+        verifyEmailWithNotification(regRes.verificationToken);
       } finally {
         navigate("/login", { replace: true });
       }
     } else if (nickname && password) {
       try {
-        const userres = await loginRequest(password, nickname);
-        const user = await checkIfLoggedIn();
-        console.log("user", user)
-        dispatch(setUserLoggedIn(user));
+        await loginUser(nickname, password)
+          .then((data) => {
+            dispatch(setUserLoggedIn(data.user));
+          })
+          .catch((error) => {
+            console.error("Login failed:", error.message);
+          });
       } finally {
         location.state ? navigate(location.state) : navigate("/");
         reset();
@@ -94,7 +146,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const { showPromiseToast } = usePromiseToast({});
 
   const verifyEmailWithNotification = (token: string) => {
-    console.log("Token", token)
+    console.log("Token", token);
     showPromiseToast(async () => await verifyEmailRequest(token), {
       success: {
         title: "Email verified",
@@ -117,7 +169,8 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
   }, []);
 
-  const [forgotPasswordModalOpen, setForgotPasswordModalOpen] = React.useState(false);
+  const [forgotPasswordModalOpen, setForgotPasswordModalOpen] =
+    React.useState(false);
 
   return (
     <Layout type={type} themeMode={themeMode}>
@@ -157,7 +210,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   error={errors.passwordRepeat?.message}
                 />
 
-                <ActionButton type="submit" >Załóż konto</ActionButton>
+                <ActionButton type="submit">Załóż konto</ActionButton>
                 <p
                   className={`mt-3 text-center ${themeMode ? "text-black" : "text-white"}`}
                 >
@@ -192,25 +245,26 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   <div>
                     {/* Forgot Password Link */}
                     <Button
-                      variant='link'
-                      colorScheme={themeMode ? 'blackAlpha' : 'whiteAlpha'}
-                      className='mt-3 text-sm text-center'
+                      variant="link"
+                      colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
+                      className="mt-3 text-sm text-center"
                       onClick={() => setForgotPasswordModalOpen(true)}
                     >
                       Zapomniałeś hasła?
                     </Button>
                     <ForgotPasswordModal
-                        isOpen={forgotPasswordModalOpen}
-                        onClose={() => setForgotPasswordModalOpen(false)}
-                        themeMode={themeMode}
+                      isOpen={forgotPasswordModalOpen}
+                      onClose={() => setForgotPasswordModalOpen(false)}
+                      themeMode={themeMode}
                     />
                   </div>
                   <ActionButton type="submit">Zaloguj się</ActionButton>
                 </div>
                 <div className="flex flex-col">
                   <p
-                    className={` mt-3 mb-3 text-center ${themeMode ? "text-black" : "text-white"
-                      }`}
+                    className={` mt-3 mb-3 text-center ${
+                      themeMode ? "text-black" : "text-white"
+                    }`}
                   >
                     lub
                   </p>
