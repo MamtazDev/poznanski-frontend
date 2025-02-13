@@ -431,17 +431,30 @@ const Card = ({ item, themeMode, idx }: any) => {
   // console.log(item, "item")
 
   return (
-    <div className={`py-4 ${idx !== 0 && "ticket-top-border"}`}>
+    <div className={`p-4 ${idx !== 0 && "ticket-top-border"}`}>
       <div
         className="hidden md:grid grid-cols-4 items-center px-3"
-        style={{ height: 75 }}>
+        style={{ height: 48 }}>
         <div className="flex items-center">
-          <div className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}>
+          <div
+            className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}>
             {item.date}
           </div>
           <div className={`ticket-month ${!themeMode && "text-dark-color"}`}>
-          <div>{new Date(item.timeframe.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</div>
-          <div>{new Date(item.timeframe.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</div>
+            <div>
+              {new Date(item.timeframe.start).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })}
+            </div>
+            <div>
+              {new Date(item.timeframe.end).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })}
+            </div>
           </div>
         </div>
 
@@ -453,7 +466,7 @@ const Card = ({ item, themeMode, idx }: any) => {
         <div className="flex justify-center items-center">
           <div
             className={`ticket-category ${!themeMode && "btn-dark-bg-color"}`}>
-            {item.category}
+            {item.location}
           </div>
         </div>
 
@@ -479,11 +492,24 @@ const Card = ({ item, themeMode, idx }: any) => {
       <div className="flex flex-col gap-2 md:hidden">
         <div className="flex justify-between items-center text-sm text-gray-700">
           <div className={`${!themeMode && "text-dark-color"}`}>
-            2feb {item.date} {item.month}
+            {item.date} {item.month}
           </div>
 
           <div className={`${!themeMode && "text-dark-color"}`}>
-            {item.timeframe.start}
+            <div>
+              {new Date(item.timeframe.start).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })}
+            </div>
+            <div>
+              {new Date(item.timeframe.end).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })}
+            </div>
           </div>
         </div>
 
@@ -494,7 +520,7 @@ const Card = ({ item, themeMode, idx }: any) => {
           </div>
 
           <div className="px-2 py-1 text-xs rounded-lg bg-purple-100 text-purple-700">
-            {item.category}
+            {item.location}
           </div>
         </div>
 

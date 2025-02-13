@@ -222,7 +222,7 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
         <div className="w-full mt-10 relative">
           <Swiper
             onSwiper={(swiper: any) => (swiperRef.current = swiper)}
-            slidesPerView={3}
+            slidesPerView={4}
             slidesPerGroup={2}
             spaceBetween={20}
             loop={false}
@@ -231,8 +231,9 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
               1440: { slidesPerView: 3, slidesPerGroup: 2 },
               1024: { slidesPerView: 3, slidesPerGroup: 3 },
               768: { slidesPerView: 2, slidesPerGroup: 2 },
-              425: { slidesPerView: 1, slidesPerGroup: 1 },
+              330: { slidesPerView: 1, slidesPerGroup: 1 },
             }}
+            className="tv-radio-slider"
           >
             {cardData?.reduce<TVData[][]>((rows: TVData[][], item: TVData, index: number) => {
               const rowIndex = Math.floor(index / 2);
@@ -242,8 +243,8 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
             }, []).map((row:any, rowIndex:any) => (
               <SwiperSlide key={rowIndex}>
                 <div className="grid grid-cols-1 gap-5">
-                  {row.map((item:any) => (
-                    <div key={item.id}>
+                  {row.map((item:any, index:number) => (
+                    <div key={index}>
                       <TVCard
                         data={item}
                         id={item._id}

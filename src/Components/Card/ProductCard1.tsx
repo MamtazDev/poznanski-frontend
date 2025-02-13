@@ -51,19 +51,17 @@ const ProductCard1: React.FC<News> = ({
                 boxShadow: "0px 0px 11.457px 0px rgba(138, 138, 138, 0.24)",
               }
         }
-        className="transition-all duration-300 ease-out w-full h-full p-5"
-      >
+        className="transition-all duration-300 ease-out w-full h-full p-5 cursor-pointer">
         <div className="flex md:flex-col flex-row md:items-start gap-5">
           <div className="relative md:w-full ">
             <div
               className={`rounded-md text-center absolute opacity-50 font-semibold top-2 md:right-2
                 right-[14px] z-50 py-2 px-2 text-[8px] md:text-sm w-[80px] md:w-[130px] ${
-                !themeMode && "btn-dark-bg-color"
-              }`}
+                  !themeMode && "btn-dark-bg-color"
+                }`}
               style={{
-                backgroundColor: themeMode? "#E8ECFE":"#58ADAC"
-              }}
-            >
+                backgroundColor: themeMode ? "#E8ECFE" : "#58ADAC",
+              }}>
               {dateFormatted}
             </div>
             {img ?   (
@@ -94,10 +92,9 @@ const ProductCard1: React.FC<News> = ({
                           !themeMode && "btn-dark-bg-color"
                         }`}
                         style={{
-                          backgroundColor: themeMode? "#E8ECFE":"#2FC4B2",
-                          color: themeMode? "#5A1073":"#5A1073"
-                        }}
-                      >
+                          backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
+                          color: themeMode ? "#5A1073" : "#5A1073",
+                        }}>
                         {tag}
                       </span>
                     )
@@ -109,8 +106,7 @@ const ProductCard1: React.FC<News> = ({
               <h2
                 className={`md:mt-2 mt-1 md:text-lg text-xs font-semibold line-clamp-1 ${
                   !themeMode && "title-dark-color"
-                }`}
-              >
+                } uppercase`}>
                 {title}
               </h2>
             )}
@@ -121,8 +117,7 @@ const ProductCard1: React.FC<News> = ({
                   !themeMode && "text-dark-color"
                 }`}
                 onClick={handleClick}
-                style={{color:themeMode ? "#5A1073":"#2FC4B2"}}
-              >
+                style={{ color: themeMode ? "#5A1073" : "#2FC4B2" }}>
                 Learn More...
               </button>
             </div>

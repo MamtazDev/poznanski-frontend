@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
-import ProductCard1 from "../Card/ProductCard1";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -11,7 +10,6 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { IoLocationOutline } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { BsCalendar2Date } from "react-icons/bs";
-import singer from "../../assets/svg/artists1.svg"
 import { useDispatch } from "react-redux";
 import { openPlayer } from "../../reducers/PlayerReducer";
 import { useNavigate } from "react-router-dom";
@@ -26,16 +24,6 @@ type IProps = {
   data: { id: string; title?: string; location?: string; tags?: string; date?: string; songs?: Song[] }[];
 
 };
-
-type Product = {
-  id: string;
-  title?: string;
-  location?: string;
-  tags?: string;
-  date?: string;
-  songs?: Song[];
-};
-
 
 const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);

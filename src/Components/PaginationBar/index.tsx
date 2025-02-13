@@ -1,8 +1,6 @@
 import { IconButton, Input } from "@chakra-ui/react";
 import React, { ChangeEvent } from "react";
 import {
-  BsChevronDoubleLeft,
-  BsChevronDoubleRight,
   BsChevronLeft,
   BsChevronRight,
 } from "react-icons/bs";
