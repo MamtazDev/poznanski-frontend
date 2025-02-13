@@ -83,7 +83,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     // if (inputValue?.order) {
     //   searchQuery.push(`order=${encodeURIComponent(inputValue.order)}`);
     // }
-
     // If there are query parameters, append them to the URL
     if (searchQuery.length > 0) {
       url = `${url}?${searchQuery.join('&')}`;
