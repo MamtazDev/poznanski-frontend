@@ -144,7 +144,7 @@ const NewReleases: React.FC<{ filter: string }> = ({ filter }) => {
           </div>
         </div>
         {/* <ReleaseCarousel cardNum={cardNum} cardData={cardData} /> */}
-        <div className={`grid md:grid-cols-4 grid-cols-1 gap-5 mt-10 mb-10`}>
+        <div className={`grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-cols-1 gap-5 mt-10 mb-10`}>
                 {album.length > 0 ? (
                   album.map((categoryItem) => (
                     <NewReleaseCard

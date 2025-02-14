@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import { ActionButton } from "../../Components/Button";
+import { ToastComponent } from "@chakra-ui/react/dist/types/toast/toast.component";
 
 interface SubmitUserForm {
   email: string;
@@ -72,10 +73,11 @@ async function loginUser(
     console.log("Login successful:", data);
     return data;
   } catch (error) {
-    console.error("Error logging in:", error);
+    console.error("Error logging in:", { error });
     throw error;
   }
 }
+
 export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const user = useSelector((state: RootState) => state.user.isLoggedIn);
   const { token } = useParams<{ token: string }>();
@@ -111,6 +113,9 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         );
         console.log("Registered", regRes.verificationToken);
         verifyEmailWithNotification(regRes.verificationToken);
+      } catch (error) {
+        console.error("Registration failed:", error);
+        throw error;
       } finally {
         navigate("/login", { replace: true });
       }
@@ -121,8 +126,11 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             dispatch(setUserLoggedIn(data.user));
           })
           .catch((error) => {
-            console.error("Login failed:", error.message);
+            throw new Error(error.message);
           });
+      } catch (error) {
+        console.error("Login failed:", error);
+        throw error;
       } finally {
         location.state ? navigate(location.state) : navigate("/");
         reset();
@@ -136,8 +144,8 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     toastMessages: {
       success: { title: "Login successful", description: "Welcome back!" },
       error: {
-        title: "Zalogowanie nie powiodło się",
-        description: "Nieprawidłowe dane logowania!",
+        title: "Login failed",
+        description: "Invalid credentials or other error occurred",
       },
       loading: { title: "Logging in", description: "Please wait" },
     },
@@ -262,9 +270,8 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 </div>
                 <div className="flex flex-col">
                   <p
-                    className={` mt-3 mb-3 text-center ${
-                      themeMode ? "text-black" : "text-white"
-                    }`}
+                    className={` mt-3 mb-3 text-center ${themeMode ? "text-black" : "text-white"
+                      }`}
                   >
                     lub
                   </p>
