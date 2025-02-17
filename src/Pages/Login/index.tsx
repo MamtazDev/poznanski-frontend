@@ -23,7 +23,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import { ActionButton } from "../../Components/Button";
-import { ToastComponent } from "@chakra-ui/react/dist/types/toast/toast.component";
+import { apiBaseUrl } from "../../Constant/config";
 
 interface SubmitUserForm {
   email: string;
@@ -37,7 +37,6 @@ interface LoginResponse {
     id: string;
     email: string;
     name: string;
-    // Add more user fields if necessary
   };
   message: string;
   accessToken: string;
@@ -51,7 +50,7 @@ async function loginUser(
   email: string,
   password: string
 ): Promise<LoginResponse> {
-  const apiUrl = "http://localhost:8000/api/auth/login";
+  const apiUrl = `${apiBaseUrl}/auth/login`;
 
   try {
     const response = await fetch(apiUrl, {
@@ -60,6 +59,8 @@ async function loginUser(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
+      credentials: "include", // Ensure cookies are included
+
     });
 
     // Check if the response is not ok
@@ -70,7 +71,8 @@ async function loginUser(
 
     // Parse and return the response as `LoginResponse`
     const data: LoginResponse = await response.json();
-    console.log("Login successful:", data);
+    console.log("Login successful:", data.user);
+    localStorage.setItem('creds', JSON.stringify(data.user))
     return data;
   } catch (error) {
     console.error("Error logging in:", { error });

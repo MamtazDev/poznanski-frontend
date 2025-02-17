@@ -1,4 +1,3 @@
-import useSWR from "swr";
 import {
   Avatar,
   Box,
@@ -17,39 +16,33 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import Layout from "../../Components/Layout";
 import { profilePicRequest, profileUpdateRequest } from "../../Constant/api-requests";
-
-const fetcher = (url:any) => fetch(url).then((res) => res.json());
 
 const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
   const defaultImage = "profileImage";
   const [profileImage, setProfileImage] = useState(defaultImage);
   const [nickname, setNickname] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const fileInputRef = useRef(null);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const userStore = useSelector((state) => state.user);
+  // Get user info from Redux state
+  const userStore = useSelector((state: any) => state.user);
   const userInfo = userStore?.user;
-  const userId = userInfo?._id;
+  console.log("userStore", userStore)
 
-  const { data: userData, mutate } = useSWR(
-    userId ? `http://localhost:8000/api/auth/users/${userId}` : null,
-    fetcher
-  );
+  // Use the nickname directly from the userInfo
+  const userNickname = userInfo?.nickname || "User";
 
   // Handle profile image upload
-  const handleImageUpload = async (e:any) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       try {
         const uploadedImageUrl = await profilePicRequest(file);
-        setProfileImage(uploadedImageUrl);
+        setProfileImage(uploadedImageUrl); // Set the uploaded image URL here
       } catch (error) {
         console.error("Image upload failed", error);
       }
@@ -57,26 +50,39 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
   };
 
   // Handle nickname update
-  const handleNicknameUpdate = async () => {
-    if (!nickname) return;
+  const handleSubmit = async () => {
     try {
-      await profileUpdateRequest(userId, nickname);
-      mutate(); // Revalidate SWR cache
+      // Call the profileUpdateRequest with user ID, nickname, and profile image
+      await profileUpdateRequest(userInfo._id, nickname, profileImage);
+      console.log("Profile updated successfully");
       onClose();
     } catch (error) {
-      console.error("Failed to update nickname", error);
+      console.error("Failed to update profile", error);
     }
   };
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem('creds') || '{}');
+    console.log("Extracted data from localstorage", userInfo?.nickname)
+
+    setProfileImage(userInfo?.profilePicture);
+    setNickname(userInfo?.nickname);
+  }, [userInfo]);
 
   return (
     <Layout themeMode={themeMode}>
       <Box className="container mx-auto mt-10">
         <div className="flex gap-8 justify-center items-center">
           {/* Sidebar */}
-          <Box className={`p-6 w-[300px] rounded-lg border ${themeMode ? "bg-gray-100 text-white" : "bg-gray-800 text-black"}`}>
+          <Box
+            className={`p-6 w-[300px] rounded-lg border ${themeMode ? "bg-gray-100 text-white" : "bg-gray-800 text-black"}`}
+          >
             <div className="flex flex-col items-center space-y-6">
               <Avatar size="2xl" src={profileImage} mb={4} />
-              <h2 className="text-xl font-semibold">{userData?.nickname || "User"}</h2>
+              {/* Display nickname directly */}
+              <h2 className="text-xl font-medium" style={{ color: themeMode ? "black" : "white" }}>
+                {nickname || "User"}
+              </h2>
               <Button onClick={onOpen} colorScheme="blue" size="sm" width="full">
                 Edit Profile
               </Button>
@@ -99,17 +105,27 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
                     <Button onClick={() => fileInputRef.current?.click()} colorScheme="blue">
                       Upload Image
                     </Button>
-                    <Input type="file" accept="image/*" ref={fileInputRef} display="none" onChange={handleImageUpload} />
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      display="none"
+                      onChange={handleImageUpload}
+                    />
                   </HStack>
                 </FormControl>
                 <FormControl>
                   <FormLabel>Nickname</FormLabel>
-                  <Input value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="Enter new nickname" />
+                  <Input
+                    value={nickname}
+                    onChange={(e) => setNickname(e.target.value)}
+                    placeholder="Enter new nickname"
+                  />
                 </FormControl>
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" onClick={handleNicknameUpdate}>
+              <Button colorScheme="blue" onClick={handleSubmit}>
                 Save Changes
               </Button>
               <Button variant="ghost" onClick={onClose}>
