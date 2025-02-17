@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import NavBar from "../../Components/Layout/NavBar";
 import MainBack from "../../Components/MainBack";
 import NewsContent from "./NewsContent";
@@ -13,8 +13,9 @@ import Logo_2 from "../../assets/png/wujo-2.png";
 import "./style.css";
 import Footer from "../../Components/Layout/Footer";
 import { PageBasicProps } from "../../AppMain";
+import axios from "axios";
 
-const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
+const Home: React.FC<PageBasicProps> = ({ type, themeMode }) => {
   const pageBottomRef = useRef<HTMLDivElement>(null);
   const [filterText, setFilterText] = useState<string>("");
   const scrollToBottom = () => {
@@ -27,7 +28,11 @@ const Home: React.FC<PageBasicProps> = ({type, themeMode}) => {
     <Fragment>
       <div className={`${!themeMode && "back-dark"} overflow-hidden`}>
         <div>
-          <MainBack type={type} themeMode={themeMode} scrollToBottom={scrollToBottom} />
+          <MainBack
+            type={type}
+            themeMode={themeMode}
+            scrollToBottom={scrollToBottom}
+          />
         </div>
         <div ref={pageBottomRef} />
         <NewsContent filterText={filterText} />

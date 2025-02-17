@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import { ActionButton } from "../../Components/Button";
+import { apiBaseUrl } from "../../Constant/config";
 
 interface SubmitUserForm {
   email: string;
@@ -31,6 +32,52 @@ interface SubmitUserForm {
   nickname: string;
 }
 
+interface LoginResponse {
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+  message: string;
+  accessToken: string;
+}
+
+interface LoginError {
+  message: string;
+}
+
+async function loginUser(
+  email: string,
+  password: string
+): Promise<LoginResponse> {
+  const apiUrl = `${apiBaseUrl}/auth/login`;
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+      credentials: "include", // Ensure cookies are included
+
+    });
+
+    // Check if the response is not ok
+    if (!response.ok) {
+      const errorData: LoginError = await response.json();
+      throw new Error(errorData.message || "Failed to log in");
+    }
+
+    // Parse and return the response as `LoginResponse`
+    const data: LoginResponse = await response.json();
+    console.log("Login successful:", data);
+    return data;
+  } catch (error) {
+    console.error("Error logging in:", error);
+    throw error;
+  }
+}
 export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const user = useSelector((state: RootState) => state.user.isLoggedIn);
   const { token } = useParams<{ token: string }>();
@@ -59,15 +106,25 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       alert("Hasła nie są takie same");
     } else if (creatingAccount && password === passwordRepeat) {
       try {
-        await registerRequest(`${password}`, `${email}`, `${nickname}`);
+        const regRes = await registerRequest(
+          `${password}`,
+          `${email}`,
+          `${nickname}`
+        );
+        console.log("Registered", regRes.verificationToken);
+        verifyEmailWithNotification(regRes.verificationToken);
       } finally {
         navigate("/login", { replace: true });
       }
     } else if (nickname && password) {
       try {
-        await loginRequest(password, nickname);
-        const user = await checkIfLoggedIn();
-        dispatch(setUserLoggedIn(user));
+        await loginUser(nickname, password)
+          .then((data) => {
+            dispatch(setUserLoggedIn(data.user));
+          })
+          .catch((error) => {
+            console.error("Login failed:", error.message);
+          });
       } finally {
         location.state ? navigate(location.state) : navigate("/");
         reset();
@@ -91,6 +148,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const { showPromiseToast } = usePromiseToast({});
 
   const verifyEmailWithNotification = (token: string) => {
+    console.log("Token", token);
     showPromiseToast(async () => await verifyEmailRequest(token), {
       success: {
         title: "Email verified",
@@ -189,7 +247,8 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       variant="link"
                       colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
                       className="mt-3 text-sm text-center"
-                      onClick={() => setForgotPasswordModalOpen(true)}>
+                      onClick={() => setForgotPasswordModalOpen(true)}
+                    >
                       Zapomniałeś hasła?
                     </Button>
                     <ForgotPasswordModal
@@ -204,7 +263,8 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   <p
                     className={` mt-3 mb-3 text-center ${
                       themeMode ? "text-black" : "text-white"
-                    }`}>
+                    }`}
+                  >
                     lub
                   </p>
                   <Button

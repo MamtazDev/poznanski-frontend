@@ -4,18 +4,13 @@ import { useParams } from 'react-router-dom';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import useSWR from 'swr'
-import { Avatar } from '@chakra-ui/react'
-import CommentSection from '../TopArtist/CommentSection';
 import Layout from '../../Components/Layout';
 import BreadCrumb from '../../Components/BreadCrumb';
 import { GoDotFill } from 'react-icons/go';
-import singer from "../../assets/svg/artists1.svg"
-import { IoLocationOutline } from 'react-icons/io5';
-import { BsCalendar2Date } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../reducers';
 import { addLastVisited, get5RandomNewsByTags, getLastVisitedId, getTargetNews } from '../../reducers/NewsReducer';
@@ -23,7 +18,6 @@ import { useDispatch } from 'react-redux';
 import { ArticleToDisplay } from '../Home/NewsContent/Carousel';
 import CommentForm from '../../Components/Comment';
 import { PostModels } from '../../Constant/api-requests';
-
 interface Artist {
    _id: string;
    name: string;
@@ -74,18 +68,16 @@ const MaterialsDetails : React.FC<PageBasicProps> = ({ themeMode, type }) => {
    );
    const dispatch = useDispatch();
    const [pageData, setPageData] = useState<ArticleToDisplay>();
-   const [, ...tagsToRemap] = targetNewsSelected?.tags?.split("#") || [];
-   const tags = tagsToRemap;
-   const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
-   const [showShareOptions, setShowShareOptions] = useState(false);
-
-   const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
-     get5RandomNewsByTags(state, pageDataTags || [])
-   );
-   const filteredRelatedData = useMemo(() => {
-     return relatedData.filter((news) => data.news._id !== id);
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [relatedData, id]);
+  //  const [, ...tagsToRemap] = targetNewsSelected?.tags?.split("#") || [];
+  //  const tags = tagsToRemap;
+  //  const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
+  //  const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
+  //    get5RandomNewsByTags(state, pageDataTags || [])
+  //  );
+  //  const filteredRelatedData = useMemo(() => {
+  //    return relatedData.filter((news) => data.news._id !== id);
+  //    // eslint-disable-next-line react-hooks/exhaustive-deps
+  //  }, [relatedData, id]);
 
    useEffect(() => {
      setPageData(targetNewsSelected);

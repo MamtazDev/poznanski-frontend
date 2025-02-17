@@ -9,6 +9,7 @@ import FilterInput from "../../Components/FilterInput";
 import PaginationBar from "../../Components/PaginationBar";
 import "../mainPageStyle.css";
 import Layout from './../../Components/Layout/index';
+import { apiBaseUrl } from "../../Constant/config";
 
 interface Product {
   artists: any;
@@ -22,6 +23,8 @@ interface Product {
   location: string;
   artist: string;
   star: number;
+  songs: { youTube?: string }[]; // Ensure this exists
+
 }
 const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<number>(1);
@@ -32,9 +35,9 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     const [displayedItems, setDisplayedItems] = useState<Product[]>([]);
 
   const fetcher = () =>
-    fetch(`http://localhost:8000/api/album`).then((res) => res.json());
+    fetch(`${apiBaseUrl}/album`).then((res) => res.json());
 
-  const { data, error } = useSWR(`http://localhost:8000/api/album`, fetcher);
+  const { data, error } = useSWR(`${apiBaseUrl}/album`, fetcher);
 
 
 
@@ -66,8 +69,10 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
 
     useEffect(() => {
+      if(album && album.length>0 ){
       setDisplayUpdatedName();
-    }, [displayedItems, album, visibleCount]);
+      }
+    }, [ album]);
 
 
   useEffect(() => {
@@ -141,17 +146,16 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 />
               </div>
             ) : (
-              <div className={`grid md:grid-cols-4 grid-cols-1 gap-5 mt-10 mb-10`}>
+              <div className={`grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-5 mt-10 mb-10`}>
                 {album.length > 0 ? (
                   album.map((categoryItem) => (
                     <NewReleaseCard
                       id={categoryItem._id}
                       key={categoryItem._id}
-                      data={categoryItem}
+                      data={{ songs: [] }} // Default value to prevent errors
                       youTube="https://www.youtube.com/embed/6JYIGclVQdw"
                       title={categoryItem.title}
                       nickname={categoryItem.artists[0]?.name}
-
                       date={categoryItem.date}
                       link={categoryItem.link}
                       btn="See Details"
