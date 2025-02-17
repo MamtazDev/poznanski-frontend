@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import searchIcon from "../../../assets/svg/search-icon.svg";
+import closeIcon from "../../../assets/svg/close-icon.svg";
 
 interface SearchBarProps {
   onSearchStateChange: (isExpanded: boolean) => void;
@@ -17,23 +19,7 @@ const SearchBar: FC<SearchBarProps> = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const searchBarRef = useRef<HTMLDivElement | null>(null);
   const [options, setOptions] = useState<string[]>([]);
-
   const navigate = useNavigate();
-  // const options: string[] = [
-  //   "Natasha Djalrio",
-  //   "John Doe",
-  //   "Jane Smith",
-  //   "Michael Brown",
-  //   "Sarah Wilson",
-  // ];
-
-  useEffect(() => {
-    // Fetch recent searches from localStorage on component mount
-    const storedSearches = JSON.parse(
-      localStorage.getItem("searchQuery") || "[]"
-    );
-    setOptions(storedSearches);
-  }, []);
 
   const handleSearchClick = () => {
     const newExpandedState = !isExpanded;
@@ -70,6 +56,13 @@ const SearchBar: FC<SearchBarProps> = ({
   };
 
   useEffect(() => {
+    const storedSearches = JSON.parse(
+      localStorage.getItem("searchQuery") || "[]"
+    );
+    setOptions(storedSearches);
+  }, []);
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         searchBarRef.current &&
@@ -90,93 +83,25 @@ const SearchBar: FC<SearchBarProps> = ({
 
   return (
     <div
-      className={`relative transition-all duration-300 ease-in-out ${isExpanded ? "w-full" : isSmallDevice ? "w-10" : "lg:w-[482px] md:w-[300px]"
-        }`}
-      ref={searchBarRef}
-    >
+      className={`relative transition-all duration-300 ease-in-out ${
+        isExpanded
+          ? "w-full"
+          : isSmallDevice
+            ? "w-10"
+            : "lg:w-[482px] md:w-[300px]"
+      }`}
+      ref={searchBarRef}>
       {isSmallDevice && !isExpanded ? (
         <div
           className="cursor-pointer flex items-center justify-center w-10 h-10"
-          onClick={handleSearchClick}
-        >
-           <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="22"
-              height="22"
-              viewBox="0 0 22 22"
-              fill="none"
-            >
-              <path
-                d="M12.8333 4.58398H18.3333"
-                stroke="#51525C"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M12.8333 7.33398H15.5833"
-                stroke="#51525C"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M19.2499 10.5423C19.2499 15.3548 15.3541 19.2507 10.5416 19.2507C5.72909 19.2507 1.83325 15.3548 1.83325 10.5423C1.83325 5.72982 5.72909 1.83398 10.5416 1.83398"
-                stroke="#51525C"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M20.1666 20.1673L18.3333 18.334"
-                stroke="#51525C"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+          onClick={handleSearchClick}>
+          <img src={searchIcon} alt="icon" />
         </div>
       ) : (
         <div
-          className={`border py-3 pl-4 pr-3 rounded-md ${themeMode ? "bg-white border-[#BBBCC0]" : "bg-[#14151C] border-[#51525C]"}`}
-        >
+          className={`border py-3 pl-4 pr-3 rounded-md ${themeMode ? "bg-white border-[#BBBCC0]" : "bg-[#14151C] border-[#51525C]"}`}>
           <div className="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="22"
-              height="22"
-              viewBox="0 0 22 22"
-              fill="none"
-            >
-              <path
-                d="M12.8333 4.58398H18.3333"
-                stroke="#51525C"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M12.8333 7.33398H15.5833"
-                stroke="#51525C"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M19.2499 10.5423C19.2499 15.3548 15.3541 19.2507 10.5416 19.2507C5.72909 19.2507 1.83325 15.3548 1.83325 10.5423C1.83325 5.72982 5.72909 1.83398 10.5416 1.83398"
-                stroke="#51525C"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M20.1666 20.1673L18.3333 18.334"
-                stroke="#51525C"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <img src={searchIcon} alt="icon" />
             <input
               className={`ml-2.5 w-full h-full bg-transparent font-sans font-normal outline-none ${themeMode ? "text-gray-700" : "text-white"}`}
               placeholder="Search Anything"
@@ -196,28 +121,14 @@ const SearchBar: FC<SearchBarProps> = ({
                   setShowDropdown(false);
                   setSearchText("");
                   onSearchStateChange(false);
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="27"
-                  height="26"
-                  viewBox="0 0 27 26"
-                  fill="none"
-                >
-                  <path
-                    d="M6.61914 19.5L19.859 6.5M6.61914 6.5L19.859 19.5"
-                    stroke="#6D6E76"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                }}>
+                <img src={closeIcon} alt="icon" />
               </button>
             )}
           </div>
         </div>
       )}
+
       {showDropdown && (
         <ul className="absolute z-50 mt-1 w-full border border-gray-300 bg-white rounded-md shadow-lg max-h-60 overflow-y-auto">
           {options
@@ -233,8 +144,7 @@ const SearchBar: FC<SearchBarProps> = ({
                   setShowDropdown(false);
                   setIsExpanded(false);
                   onSearchStateChange(false);
-                }}
-              >
+                }}>
                 {option}
                 <Link to={`/search?query=${option}`}>
                   <svg
@@ -242,8 +152,7 @@ const SearchBar: FC<SearchBarProps> = ({
                     width="26"
                     height="26"
                     viewBox="0 0 26 26"
-                    fill="none"
-                  >
+                    fill="none">
                     <path
                       d="M5.41602 3.7915L20.5827 18.9582"
                       stroke="#6D6E76"

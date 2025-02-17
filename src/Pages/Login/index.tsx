@@ -187,8 +187,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       <form onSubmit={wrappedSubmit}>
         <div className="flex w-full justify-center mt-20">
           <div
-            className={`${themeMode ? "border border-solid" : "bg-[#242526]"} w-[500px] shadow-lg rounded-2xl px-6 py-4`}
-          >
+            className={`${themeMode ? "border border-solid" : "bg-[#242526]"} w-[500px] shadow-lg rounded-2xl px-6 py-4`}>
             {creatingAccount ? (
               <div className="flex flex-col justify-between h-full gap-3">
                 <Input
@@ -222,15 +221,13 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
                 <ActionButton type="submit">Załóż konto</ActionButton>
                 <p
-                  className={`mt-3 text-center ${themeMode ? "text-black" : "text-white"}`}
-                >
+                  className={`mt-3 text-center ${themeMode ? "text-black" : "text-white"}`}>
                   Masz konto?
                 </p>
                 <Button
                   onClick={() => setCreatingAccount(false)}
                   variant="ghost"
-                  colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
-                >
+                  colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}>
                   Zaloguj się
                 </Button>
               </div>
@@ -280,8 +277,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   <Button
                     onClick={() => setCreatingAccount(true)}
                     variant="ghost"
-                    colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
-                  >
+                    colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}>
                     Załóż konto
                   </Button>
                 </div>
