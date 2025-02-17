@@ -19,6 +19,7 @@ import MaterialsDetails from "../Pages/Material/MaterialsDetails";
 import VerifyEmail from "../Pages/Login/VerifyEmail";
 import ResetPassword from "../Pages/Login/ResetPass";
 import { Link } from "react-router-dom";
+import Notification from "../Pages/Notification";
 
 const Home = lazy(() => import("../Pages/Home"));
 const SubmitPage = lazy(() => import("../Pages/Submit"));
@@ -190,6 +191,10 @@ const AppMain: React.FC = () => {
           <Route
             path={common.CONCERT_PATH}
             element={<ConcertMainPage themeMode={themeMode} type={type} />}
+          />
+          <Route
+            path={common.Notification_PATH}
+            element={<Notification themeMode={themeMode} type={type} />}
           />
 
           <Route path={common.NEWRELEASE_PATH}>

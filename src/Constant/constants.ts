@@ -1,5 +1,6 @@
 export const ADMIN_PATH = "/admin";
 export const PROFILE_PATH = "/profile";
+export const Notification_PATH = "/notification";
 export const HOME_PATH = "/";
 export const TV_RADIO_PATH = "/radio";
 // export const TV_RADIO_DETAILS_PATH = "/video/:id";
