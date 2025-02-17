@@ -19,7 +19,10 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Layout from "../../Components/Layout";
-import { profilePicRequest, profileUpdateRequest } from "../../Constant/api-requests";
+import { logoutRequest, profilePicRequest, profileUpdateRequest } from "../../Constant/api-requests";
+import { deleteCookie } from "../../utils/auth";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../reducers/user";
 
 const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
   const defaultImage = "profileImage";
@@ -27,14 +30,22 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
   const [nickname, setNickname] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Get user info from Redux state
   const userStore = useSelector((state: any) => state.user);
   const userInfo = userStore?.user;
-  console.log("userStore", userStore)
 
-  // Use the nickname directly from the userInfo
-  const userNickname = userInfo?.nickname || "User";
+  // Function to update localStorage
+  const updateLocalStorage = (nickname: string, profileImage: string) => {
+    const updatedUserInfo = {
+      ...userInfo,
+      nickname,
+      profilePicture: profileImage
+    };
+    localStorage.setItem("creds", JSON.stringify(updatedUserInfo));
+  };
 
   // Handle profile image upload
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +66,11 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
       // Call the profileUpdateRequest with user ID, nickname, and profile image
       await profileUpdateRequest(userInfo._id, nickname, profileImage);
       console.log("Profile updated successfully");
+
+      // Update localStorage with new nickname and image
+      updateLocalStorage(nickname, profileImage);
+
+      // Close the modal after saving the changes
       onClose();
     } catch (error) {
       console.error("Failed to update profile", error);
@@ -63,11 +79,17 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem('creds') || '{}');
-    console.log("Extracted data from localstorage", userInfo?.nickname)
+    setProfileImage(userInfo?.profilePicture || defaultImage);
+    setNickname(userInfo?.nickname || "");
+  }, []);
 
-    setProfileImage(userInfo?.profilePicture);
-    setNickname(userInfo?.nickname);
-  }, [userInfo]);
+    const handleLogout = () => {
+      deleteCookie("accessToken");
+      deleteCookie("refreshToken");
+      dispatch(logout());
+      logoutRequest();
+      navigate("/login");
+    };
 
   return (
     <Layout themeMode={themeMode}>
@@ -86,6 +108,13 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
               <Button onClick={onOpen} colorScheme="blue" size="sm" width="full">
                 Edit Profile
               </Button>
+              <Button
+                             onClick={handleLogout}
+                             colorScheme="red"
+                             size="sm"
+                             width="full">
+                             Log Out
+                           </Button>
             </div>
           </Box>
         </div>

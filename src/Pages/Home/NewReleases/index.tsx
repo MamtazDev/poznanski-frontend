@@ -138,7 +138,7 @@ const NewReleases: React.FC<{ filter: string }> = ({ filter }) => {
               <DetailButton
                 text="See All Release"
                 btnType="web"
-                onClick={() => navigate("/releases")}
+                onClick={() => navigate("/album")}
               />
             </div>
           </div>
