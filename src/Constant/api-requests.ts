@@ -53,7 +53,7 @@ export const forgetPasswordReq = async (email: string) => {
 export const profileUpdateRequest = async (
   _id: string,
   nickname: string,
-  profilePicture: string | null
+  profilePicture?: string | null
 ) => {
   const reqData = {
     nickname: nickname,

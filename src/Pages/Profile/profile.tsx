@@ -1,3 +1,4 @@
+import useSWR from "swr";
 import {
   Avatar,
   Box,
@@ -13,55 +14,37 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Textarea,
-  useDisclosure,
   VStack,
+  useDisclosure,
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Layout from "../../Components/Layout";
-import {
-  logoutRequest,
-  profilePicRequest,
-  profileUpdateRequest,
-} from "../../Constant/api-requests";
-import { logout } from "../../reducers/user";
-import { deleteCookie } from "../../utils/auth";
+import { profilePicRequest, profileUpdateRequest } from "../../Constant/api-requests";
 
-interface RootState {
-  user: any;
-}
+const fetcher = (url:any) => fetch(url).then((res) => res.json());
 
 const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
-  const defaultImage = "profileImage"; // Default image placeholder
-  const [profileImage, setProfileImage] = useState<string>(defaultImage);
-  const [name, setName] = useState<string>("Your Name");
-  const [bio, setBio] = useState<string>("Your bio goes here...");
+  const defaultImage = "profileImage";
+  const [profileImage, setProfileImage] = useState(defaultImage);
+  const [nickname, setNickname] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRef = useRef(null);
   const dispatch = useDispatch();
-  const userStore = useSelector((state: RootState) => state.user);
-  const userInfo = userStore?.user;
   const navigate = useNavigate();
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const {
-    isOpen: isResetOpen,
-    onOpen: onResetOpen,
-    onClose: onResetClose,
-  } = useDisclosure();
-  // Load initial data from userInfo
-  useEffect(() => {
-    if (userInfo) {
-      setName(userInfo.nickname || "Your Name");
-      setProfileImage(userInfo.profilePicture || defaultImage);
-    }
-  }, [userInfo]);
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const userStore = useSelector((state) => state.user);
+  const userInfo = userStore?.user;
+  const userId = userInfo?._id;
+
+  const { data: userData, mutate } = useSWR(
+    userId ? `http://localhost:8000/api/auth/users/${userId}` : null,
+    fetcher
+  );
+
+  // Handle profile image upload
+  const handleImageUpload = async (e:any) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       try {
@@ -73,112 +56,31 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
     }
   };
 
-  const handleProfileUpdate = async () => {
+  // Handle nickname update
+  const handleNicknameUpdate = async () => {
+    if (!nickname) return;
     try {
-      await profileUpdateRequest(userInfo.id, name, profileImage);
+      await profileUpdateRequest(userId, nickname);
+      mutate(); // Revalidate SWR cache
       onClose();
-      handleLogout();
-      navigate("/login");
     } catch (error) {
-      console.error("Failed to update profile", error);
+      console.error("Failed to update nickname", error);
     }
-  };
-
-  const handleLogout = () => {
-    deleteCookie("accessToken");
-    deleteCookie("refreshToken");
-    dispatch(logout());
-    logoutRequest();
-    navigate("/login");
-  };
-
-  const handleResetPassword = () => {
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-    if (!currentPassword || !newPassword) {
-      setError("All fields are required");
-      return;
-    }
-    setError(null);
-    onResetClose();
   };
 
   return (
     <Layout themeMode={themeMode}>
-      <Box className="container  mx-auto mt-10">
+      <Box className="container mx-auto mt-10">
         <div className="flex gap-8 justify-center items-center">
           {/* Sidebar */}
-          <Box
-            className={`p-6 w-[300px] rounded-lg border ${themeMode ? "bg-gray-100 text-white" : "bg-gray-800 text-black"
-              }`}>
+          <Box className={`p-6 w-[300px] rounded-lg border ${themeMode ? "bg-gray-100 text-white" : "bg-gray-800 text-black"}`}>
             <div className="flex flex-col items-center space-y-6">
               <Avatar size="2xl" src={profileImage} mb={4} />
-              <button
-                style={{
-                  width: 250,
-                }
-                }
-                onClick={onOpen}
-                className={`submit-btn ${themeMode ? "submit-btn" : "submit-btn-dark"
-                  } flex place-items-center w-full cursor-pointer`}>
+              <h2 className="text-xl font-semibold">{userData?.nickname || "User"}</h2>
+              <Button onClick={onOpen} colorScheme="blue" size="sm" width="full">
                 Edit Profile
-              </button>
-              <button
-                className={`reset-btn ${themeMode ? "reset-btn" : "reset-btn-dark"
-                  } flex place-items-center w-full cursor-pointer`}
-                onClick={onResetOpen}
-              >
-                Reset Password
-              </button>
-              <Button
-                onClick={handleLogout}
-                colorScheme="red"
-                size="sm"
-                width="full">
-                Log Out
               </Button>
             </div>
-          </Box>
-
-          {/* Main Content */}
-          <Box flex={1} p={8}>
-            <h2
-              className={`text-2xl mb-6 font-semibold ${themeMode ? "text-black" : "text-white"
-                }`}>
-              Public Profile
-            </h2>
-            <VStack spacing={6} align="stretch">
-              <FormControl>
-                <FormLabel
-                  className={`mb-6 font-semibold text-2xl ${themeMode ? "text-black" : "text-white"
-                    }`}>
-                  Name
-                </FormLabel>
-                <Input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your name"
-                  className={`text-black focus:outline-none ${themeMode ? "text-black" : "text-white"
-                    }`}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel
-                  className={`text-2xl mb-6 font-semibold ${themeMode ? "text-black" : "text-white"
-                    }`}>
-                  Bio
-                </FormLabel>
-                <Textarea
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                  placeholder="Write something about yourself..."
-                  minH="32"
-                  className={`${themeMode ? "text-black" : "text-white"}`}
-                />
-              </FormControl>
-            </VStack>
           </Box>
         </div>
 
@@ -194,41 +96,20 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
                   <FormLabel>Profile Picture</FormLabel>
                   <HStack>
                     <Avatar size="md" src={profileImage} />
-                    <Button
-                      onClick={() => fileInputRef.current?.click()}
-                      colorScheme="blue">
+                    <Button onClick={() => fileInputRef.current?.click()} colorScheme="blue">
                       Upload Image
                     </Button>
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      ref={fileInputRef}
-                      display="none"
-                    />
+                    <Input type="file" accept="image/*" ref={fileInputRef} display="none" onChange={handleImageUpload} />
                   </HStack>
                 </FormControl>
                 <FormControl>
-                  <FormLabel>Name</FormLabel>
-                  <Input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your name"
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Bio</FormLabel>
-                  <Textarea
-                    value={bio}
-                    onChange={(e) => setBio(e.target.value)}
-                    placeholder="Write something about yourself..."
-                    minH="32"
-                  />
+                  <FormLabel>Nickname</FormLabel>
+                  <Input value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="Enter new nickname" />
                 </FormControl>
               </VStack>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={handleProfileUpdate}>
+              <Button colorScheme="blue" onClick={handleNicknameUpdate}>
                 Save Changes
               </Button>
               <Button variant="ghost" onClick={onClose}>
@@ -237,56 +118,6 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
             </ModalFooter>
           </ModalContent>
         </Modal>
-        {/* reset modal  */}
-        <div className="flex justify-center pt-28">
-          <Modal isOpen={isResetOpen} onClose={onResetClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Reset Password</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <VStack spacing={4}>
-                  <FormControl>
-                    <FormLabel>Current Password</FormLabel>
-                    <Input
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      placeholder="Enter current password"
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>New Password</FormLabel>
-                    <Input
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Enter new password"
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>Confirm New Password</FormLabel>
-                    <Input
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="Confirm new password"
-                    />
-                  </FormControl>
-                  {error && <p className="text-red-500">{error}</p>}
-                </VStack>
-              </ModalBody>
-              <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={handleResetPassword}>
-                  Reset Password
-                </Button>
-                <Button variant="ghost" onClick={onResetClose}>
-                  Cancel
-                </Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
-        </div>
       </Box>
     </Layout>
   );
