@@ -16,9 +16,9 @@ import { ReactComponent as InstagramIcon } from "../../../assets/svg/instagramIc
 import { DelayedLink } from "../../_utility/DelayedLink";
 import { ActionButton } from "../../Button";
 import SearchBar from "./SearchBar";
-import { FaBell } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers";
+import { FiBell } from "react-icons/fi";
 
 interface NavBarProps {
   filterText?: string;
@@ -187,7 +187,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                     />
 
                   </div>
-						<Link to='/notification'><FaBell className="text-xl" style={{color: themeMode? "#5A1073":"#21E3CE"}}/></Link>
+						<Link to='/notification'><FiBell className="text-2xl" style={{color: themeMode? "#5A1073":"#21E3CE"}}/></Link>
 
                   <AccountMenu themeMode={props.themeMode} />
                   {/* <Link to={common.CREATE_NEWS}>
