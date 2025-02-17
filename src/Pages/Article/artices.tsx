@@ -14,7 +14,7 @@ const Articles = ({ themeMode, type }: any) => {
   const pageSize = 100;
 
   const [isloading, setLoading] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [visibleCount, setVisibleCount] = useState(10);
   const [displayedItems, setDisplayedItems] = useState<NewsItem[]>([]);
 
   const { data, loading, forceRevalidateAll, totalPages } = usePaginatedNews(
