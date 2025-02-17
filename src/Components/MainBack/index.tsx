@@ -27,7 +27,7 @@ const MainBack: React.FC<MainBackProps> = ({
           <div className="my-3 md:my-7">
             <h1
               className={`text-xl md:text-5xl ${!themeMode && "text-dark-color"} font-semibold main-board-text md:mb-4 mb-1 text-center`}>
-              poznanskirap.com:
+              poznanskirap.com
             </h1>
             <h1 className="text-xl md:text-5xl font-normal main-board-text text-white">
               Największy regionalny portal rapowy

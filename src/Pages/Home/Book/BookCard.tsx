@@ -1,7 +1,8 @@
 import { Button } from "@chakra-ui/react";
 
 const BookCard = ({ item, themeMode, idx }: any) => {
-  console.log(item, "item");
+
+  // console.log(item, "item")
 
   return (
     <div className={`py-4 ${idx !== 0 && "ticket-top-border"}`}>

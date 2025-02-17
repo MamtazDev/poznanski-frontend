@@ -90,7 +90,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   });
 
   useEffect(() => {
-    console.log("hover:", hoveredCard);
+    // console.log("hover:", hoveredCard);
   }, [hoveredCard]);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         const response = await fetch("http://localhost:8000/api/artist");
         const jsonData = await response.json();
 
-        console.log("Fetched Data:", jsonData);
+        // console.log("Fetched Data:", jsonData);
 
         const newArtists = jsonData.data.map((item: any) => ({
           id: item.artist._id,
@@ -148,7 +148,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           products: item.products,
         }));
 
-        console.log("Formatted Artists Data:", newArtists);
+        // console.log("Formatted Artists Data:", newArtists);
 
         setArtists(newArtists);
       } catch (error) {

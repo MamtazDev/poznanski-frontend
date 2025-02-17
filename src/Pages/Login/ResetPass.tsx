@@ -71,7 +71,7 @@ const ResetPassword = () => {
         return;
       }
 
-      console.log("Password reset successful");
+      // console.log("Password reset successful");
       setIsSuccess(true);
     } catch (err) {
       console.error("Error resetting password:", err);
