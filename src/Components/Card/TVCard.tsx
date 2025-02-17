@@ -13,14 +13,17 @@ interface News {
   youTube?: string;
   data: any;
   id?: any;
+  _id?: any;
   link: string;
   name?: string;
 }
 
-const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, data, id, name }) => {
+const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, data, id,_id,name }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  console.log("data", data)
 
   const handlePlay = () => {
     if (youTube) {
@@ -32,7 +35,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   };
 
   const handleClick = (id: string) => {
-    navigate(`/radio/${id}`);
+    navigate(`/radio/${data?._id}`);
   };
 
   // const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
@@ -51,7 +54,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
     <>
       <div
         className="transition-all duration-300 ease-out w-full h-pull"
-        onClick={() => handleClick(id)}
+        onClick={() => handleClick(_id)}
       >
         <div
           className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md

@@ -142,7 +142,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       editable={false}
                     />
                     <div
-                      className={`${themeMode ? "editorContainer" : "editorContainerDark"} min-h-screen ${themeMode === true ? "bg-gray-100" : "bg-gray-800"} p-4 mt-4 border border-gray-300 rounded-md min-h-[200px]`}
+                      className={`${themeMode ? "editorContainer" : "editorContainerDark"} min-h-screen ${themeMode === true ? "bg-gray-100" : "bg-transparent"} p-4 mt-4  rounded-md `}
                       dangerouslySetInnerHTML={{ __html: data?.news?.content || "" }}
                     />
                     <CommentForm
