@@ -55,7 +55,7 @@ const Notification: React.FC<PageBasicProps> = ({ themeMode }) => {
     <Layout themeMode={themeMode}>
       <div className={`flex justify-center `}>
         <div className="container md:mt-12 mt-8 p-6 w-full">
-          <h2 className={`text-xl font-bold ${themeMode ? "text-gray-900" : "text-white"}`}>
+          <h2 className={`text-2xl font-bold ${themeMode ? "text-gray-900" : "text-white"}`}>
             Notifications
           </h2>
           <div className="mt-4 space-y-4">
