@@ -113,15 +113,15 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
   }, []);
 
-  const [forgotPasswordModalOpen, setForgotPasswordModalOpen] = React.useState(false);
+  const [forgotPasswordModalOpen, setForgotPasswordModalOpen] =
+    React.useState(false);
 
   return (
     <Layout type={type} themeMode={themeMode}>
       <form onSubmit={wrappedSubmit}>
         <div className="flex w-full justify-center mt-20">
           <div
-            className={`${themeMode ? "border border-solid" : "bg-[#242526]"} w-[500px] shadow-lg rounded-2xl px-6 py-4`}
-          >
+            className={`${themeMode ? "border border-solid" : "bg-[#242526]"} w-[500px] shadow-lg rounded-2xl px-6 py-4`}>
             {creatingAccount ? (
               <div className="flex flex-col justify-between h-full gap-3">
                 <Input
@@ -153,17 +153,15 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   error={errors.passwordRepeat?.message}
                 />
 
-                <ActionButton type="submit" >Załóż konto</ActionButton>
+                <ActionButton type="submit">Załóż konto</ActionButton>
                 <p
-                  className={`mt-3 text-center ${themeMode ? "text-black" : "text-white"}`}
-                >
+                  className={`mt-3 text-center ${themeMode ? "text-black" : "text-white"}`}>
                   Masz konto?
                 </p>
                 <Button
                   onClick={() => setCreatingAccount(false)}
                   variant="ghost"
-                  colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
-                >
+                  colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}>
                   Zaloguj się
                 </Button>
               </div>
@@ -188,33 +186,31 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   <div>
                     {/* Forgot Password Link */}
                     <Button
-                      variant='link'
-                      colorScheme={themeMode ? 'blackAlpha' : 'whiteAlpha'}
-                      className='mt-3 text-sm text-center'
-                      onClick={() => setForgotPasswordModalOpen(true)}
-                    >
+                      variant="link"
+                      colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
+                      className="mt-3 text-sm text-center"
+                      onClick={() => setForgotPasswordModalOpen(true)}>
                       Zapomniałeś hasła?
                     </Button>
                     <ForgotPasswordModal
-                        isOpen={forgotPasswordModalOpen}
-                        onClose={() => setForgotPasswordModalOpen(false)}
-                        themeMode={themeMode}
+                      isOpen={forgotPasswordModalOpen}
+                      onClose={() => setForgotPasswordModalOpen(false)}
+                      themeMode={themeMode}
                     />
                   </div>
                   <ActionButton type="submit">Zaloguj się</ActionButton>
                 </div>
                 <div className="flex flex-col">
                   <p
-                    className={` mt-3 mb-3 text-center ${themeMode ? "text-black" : "text-white"
-                      }`}
-                  >
+                    className={` mt-3 mb-3 text-center ${
+                      themeMode ? "text-black" : "text-white"
+                    }`}>
                     lub
                   </p>
                   <Button
                     onClick={() => setCreatingAccount(true)}
                     variant="ghost"
-                    colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
-                  >
+                    colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}>
                     Załóż konto
                   </Button>
                 </div>
