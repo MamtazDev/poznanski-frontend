@@ -199,7 +199,6 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   >
                     {radios?.map((radio) => (
                       <SwiperSlide key={radio.id}>
-
                         <div className='p-5 rounded-3xl'
                           style={{
                             backgroundColor: themeMode ? "#FFF" : "#242526",
