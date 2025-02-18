@@ -98,6 +98,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       setLoading(false);
     }
   };
+
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const setDisplayUpdatedName = () => {
@@ -112,7 +113,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       setLoading(false);
     }, 1000);
   };
-
   const handleScroll = () => {
     if (!scrollContainerRef.current) return;
 
@@ -122,8 +122,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       loadMoreItems();
     }
   };
-
-
   useEffect(() => {
     setDisplayedItems(cardData.slice(0, visibleCount));
   }, [cardData, visibleCount]);
@@ -157,14 +155,10 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     };
   }, []);
 
-
 //search fucntionalities
-
 const handleSearch = (inputValue: string) => {
   fetchData(filters)
 }
-
-
 useEffect(() => {
 fetchData(filters)
 }, [filters])

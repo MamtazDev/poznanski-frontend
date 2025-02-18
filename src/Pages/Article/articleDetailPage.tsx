@@ -141,7 +141,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   <Image
                     src={data?.news?.files?.[0] || defaultimg}
                     alt="Uploaded file"
-                    className="rounded-2xl w-full h-[494px] "
+                    className="rounded-2xl w-full h-[494px] object-cover "
                   />
                   <DelayedComponent delay={200}>
                     <TipTap

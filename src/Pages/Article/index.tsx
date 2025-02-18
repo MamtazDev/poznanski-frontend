@@ -58,7 +58,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     search: ""
   });
 
-  
+
   const lastVisitedId = useSelector((state: RootState) =>
     getLastVisitedId(state)
   );
