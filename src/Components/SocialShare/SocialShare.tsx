@@ -23,8 +23,8 @@ const SocialShare: React.FC<SocialShareProps> = ({ shareUrl, title }) => {
 	const themeMode = useSelector((state: RootState) => state.themeMode?.mode);
 
 	return (
-		<div className="mt-6 flex justify-center relative">
-			<div className="flex gap-3">
+		<div className="flex justify-center relative">
+
 				{/* Share Button */}
 				<button
 					className="flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md hover:bg-purple-100 transition"
@@ -37,20 +37,6 @@ const SocialShare: React.FC<SocialShareProps> = ({ shareUrl, title }) => {
 					<IoShareOutline className="text-lg" />
 					<span className="text-sm font-medium">Share</span>
 				</button>
-
-				{/* Comment Button */}
-				<button
-					className="flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md hover:bg-purple-100 transition"
-					style={{
-						color: themeMode ? "#5A1073" : "#2FC4B2",
-						backgroundColor: themeMode ? "white" : "#242526",
-					}}
-				>
-					<BiCommentDetail className="text-lg" />
-					<span className="text-sm font-medium">Comment</span>
-				</button>
-			</div>
-
 			{/* Social Share Options */}
 			{showShareOptions && (
 				<div

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import ContentTitle from "../../Components/ContentTitle";
 import Layout from "../../Components/Layout";
 import CommentForm from "../../Components/Comment";
@@ -23,6 +23,7 @@ import defaultimg from "../../assets/svg/userIcon.svg";
 import singer from "../../assets/png/ticketBanner.png";
 import BreadCrumb from './../../Components/BreadCrumb/index';
 import SocialShare from "../../Components/SocialShare/SocialShare";
+import { BiCommentDetail } from "react-icons/bi";
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 interface CommentForm {
@@ -46,6 +47,13 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const tags = tagsToRemap;
   const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
   // const [showShareOptions, setShowShareOptions] = useState(false);
+  // const commentFormRef = useRef<HTMLDivElement | null>(null);
+
+  // const handleScrollToCommentForm = () => {
+  //   if (commentFormRef.current) {
+  //     commentFormRef.current.scrollIntoView({ behavior: "smooth", block: "start" }); // ✅ No error
+  //   }
+  // };
 
   const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
     get5RandomNewsByTags(state, pageDataTags || [])
@@ -71,7 +79,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   // set data to a useState
   let urlEndoint = "http://localhost:8000/api/news";
   const fetcher = () =>
-  fetch(`http://localhost:8000/api/news/${id}`).then((res) => res.json());
+    fetch(`http://localhost:8000/api/news/${id}`).then((res) => res.json());
   const { data, error } = useSWR(`${urlEndoint}/${id}`, fetcher);
   // Local state to store the response
   const [news, setNews] = useState(null);
@@ -144,8 +152,12 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     <div
                       className={`${themeMode ? "editorContainer" : "editorContainerDark"} h-full p-4 mt-4  rounded-md `}
                       dangerouslySetInnerHTML={{ __html: data?.news?.content || "" }}
+                      style={{
+                        color: themeMode ? "black" : "white"
+                      }}
                     />
                     <CommentForm
+                      // ref={commentFormRef}
                       postModel={PostModels.news}
                       commentData={pageData?.commentsSection ?? null}
                     />
@@ -163,7 +175,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     </div>
                     {tags ? (
                       <div className="flex flex-wrap gap-2 mt-2 md:mt-0 ">
-                        {wordArray.map(
+                        {wordArray?.map(
                           (tag: string, index: React.Key | null | undefined) =>
                             tag && (
                               <span
@@ -186,7 +198,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       }}>no tags here</p>
                     )}
 
-                    {filteredRelatedData.length > 0 && (
+                    {filteredRelatedData?.length > 0 && (
                       <div
                         className={`${themeMode ? "right-card" : "right-card-dark"} px-3 py-4`}
                       >
@@ -197,7 +209,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         </div>
                         <div className={`flex flex-col gap-3 md:mt-3 mt-4`}>
                           {filteredRelatedData &&
-                            filteredRelatedData.map((item) => (
+                            filteredRelatedData?.map((item) => (
                               <Link replace to={`/news/${item._id}`} key={item._id}>
                                 <div className={`flex gap-3`}>
                                   <Image
@@ -241,42 +253,61 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
                   </div>
                   {/* Related Content */}
-                  <div className="max-h-[500px] overflow-y-auto scrollbar-hide shadow-md rounded-2xl relative">
-                    <div className="rounded-lg py-4 px-3">
-                      <h2 className="font-semibold md:mb-3 mb-4 text-xl" style={{ color: themeMode ? "black" : "white" }}>
-                        Related Content
-                      </h2>
+                  {data?.relatedNews && (
+                    <div className="max-h-[500px] overflow-y-auto scrollbar-hide shadow-md rounded-2xl relative">
+                      <div className="rounded-lg py-4 px-3">
+                        <h2 className="font-semibold md:mb-3 mb-4 text-xl" style={{ color: themeMode ? "black" : "white" }}>
+                          Related Content
+                        </h2>
 
-                      {data?.relatedNews?.map((newsItem: { _id: React.Key | null | undefined; files: any[]; title: string | number | boolean | React.ReactElement; intro: string | number | boolean | React.ReactElement }) => (
-                        <div key={newsItem._id} className={`flex gap-2 mb-3 p-2 rounded-2xl transition-colors duration-300
-                          ${themeMode ? "hover:bg-[#FFFFFF] hover:shadow-lg" : "hover:bg-[#242526]"}`}
+                        {data?.relatedNews?.map((newsItem: { _id: React.Key | null | undefined; files: any[]; title: string | number | boolean | React.ReactElement; intro: string | number | boolean | React.ReactElement }) => (
+                          <div key={newsItem._id} className={`flex gap-2 mb-3 p-2 rounded-2xl transition-colors duration-300
+          ${themeMode ? "hover:bg-[#FFFFFF] hover:shadow-lg" : "hover:bg-[#242526]"}`}
 
-                        >
-                          <img src={newsItem?.files?.[0] || singer} alt="news thumbnail" className="h-[62px] w-[62px] object-cover rounded" />
-                          <div>
-                            <p className="font-semibold line-clamp-1" style={{ color: themeMode ? "black" : "white" }}>
-                              {newsItem.title}
-                            </p>
-                            <p className="text-sm font-medium line-clamp-1" style={{ color: themeMode ? "black" : "white" }}>
-                              {newsItem.intro}
-                            </p>
+                          >
+                            <img src={newsItem?.files?.[0] || singer} alt="news thumbnail" className="h-[62px] w-[62px] object-cover rounded" />
+                            <div>
+                              <p className="font-semibold line-clamp-1" style={{ color: themeMode ? "black" : "white" }}>
+                                {newsItem.title}
+                              </p>
+                              <p className="text-sm font-medium line-clamp-1" style={{ color: themeMode ? "black" : "white" }}>
+                                {newsItem.intro}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
+                      {/* Sticky See More Button */}
+                      <div className="sticky bottom-0 py-3 text-center shadow-md"
+                        style={{
+                          backgroundColor: themeMode ? "white" : "#242526"
+                        }}>
+                        <Link to="/news" className="font-semibold" style={{
+                          color: themeMode ? "#5A1073" : "#2FC4B2",
+                        }}>See More..</Link>
+                      </div>
                     </div>
-                    {/* Sticky See More Button */}
-                    <div className="sticky bottom-0 py-3 text-center shadow-md"
+                  )}
+
+                  <div className="flex gap-3 items-center mt-2">
+                    <SocialShare
+                      shareUrl="https://yourwebsite.com/article"
+                      title="Check out this amazing article!"
+                    />
+
+                    <button
+                      className="flex items-center  gap-2 px-4 py-2 rounded-full bg-white shadow-md hover:bg-purple-100 transition text-sm font-medium w-[120px] h-[40px]"
                       style={{
-                        backgroundColor: themeMode ? "white" : "#242526"
-                      }}>
-                      <Link to="/news" className="font-semibold" style={{
                         color: themeMode ? "#5A1073" : "#2FC4B2",
-                      }}>See More..</Link>
-                    </div>
+                        backgroundColor: themeMode ? "white" : "#242526",
+                      }}
+                      // onClick={handleScrollToCommentForm}
+                    >
+                      <BiCommentDetail className="text-lg" />
+                      <span>Comment</span>
+                    </button>
                   </div>
-                  <SocialShare
-                    shareUrl="https://yourwebsite.com/article"
-                    title="Check out this amazing article!" />
+
                 </div>
               </div>
             </div>

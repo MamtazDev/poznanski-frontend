@@ -476,7 +476,7 @@ const CommentForm: React.FC<CommentSectionProps> = ({
     toastMessages: {
       success: { title: "Sukces", description: "Komentarz dodany!" },
       error: {
-        title: "Błąd",
+        title: "musisz się najpierw zalogować",
         description: "Nie udało się dodać komentarza!",
       },
       loading: { title: "Wysyłanie", description: "Poczekaj chwilę..." },
@@ -518,8 +518,8 @@ const CommentForm: React.FC<CommentSectionProps> = ({
 
   return (
     <>
-      <div className={`w-full h-auto mt-10`}>
-        <div className="flex justify-between items-center mb-8">
+      <div className={`w-full h-auto mt-10`} >
+        <div className="flex justify-between items-center mb-8 mt-6">
           <h2
             className="text-2xl font-bold"
             style={{ color: themeMode ? "black" : "#fff" }}>
