@@ -47,6 +47,15 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   //     ></iframe>
   //   </div>
   // )
+  const getYouTubeID = (url: string) => {
+    let videoId = "";
+    if (url.includes("youtube.com/watch")) {
+      videoId = url.split("v=")[1]?.split("&")[0];
+    } else if (url.includes("youtu.be/")) {
+      videoId = url.split("youtu.be/")[1]?.split("?")[0];
+    }
+    return videoId;
+  };
   return (
     <>
       <div
@@ -75,11 +84,12 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
             }}
           >
             <img
-              src={
-                youTube
-                  ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
-                  : novideo
-              }
+              // src={
+              //   youTube
+              //     ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}`
+              //     : novideo
+              // }
+              src={youTube ? `https://img.youtube.com/vi/${getYouTubeID(youTube)}/hqdefault.jpg` : "default-thumbnail.jpg"}
               className="md:w-full w-[69px] h-full  object-cover"
               alt="YouTube Thumbnail"
             />

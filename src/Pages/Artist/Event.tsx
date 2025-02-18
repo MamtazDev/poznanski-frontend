@@ -171,7 +171,7 @@ const Event: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             pagination={{ dynamicBullets: true }}
             modules={[Pagination]}
             className="mySwiper">
-            {featuredProducts.map((item, idx) => (
+            {featuredProducts?.map((item, idx) => (
               <SwiperSlide className="p-2 md:mb-16 mb-8">
                 <div
                   key={`ticket-detail-${idx}`}
