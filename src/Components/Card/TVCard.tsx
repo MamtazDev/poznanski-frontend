@@ -50,11 +50,11 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   return (
     <>
       <div
-        className="transition-all duration-300 ease-out w-full h-pull"
+        className="transition-all duration-300 ease-out w-full h-full cursor-pointer"
         onClick={() => handleClick(id)}
       >
         <div
-          className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md
+          className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md cursor-pointer
       ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
       ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)] hover:cursor-zoom-in" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
       `}
@@ -142,10 +142,10 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
                 )}
               </button>
             </div>
-            <div className={`md:text-xl font-semibold mt-2 md:mt-3 line-clamp-1 ${!themeMode && "title-dark-color"}`}>
+            <div className={`md:text-xl font-semibold mt-2 md:mt-3 line-clamp-1 cursor-pointer ${!themeMode && "title-dark-color"}`}>
               {feature}
             </div>
-            <div className={`md:mt-2 mt-1 font-medium text-xs md:text-sm`} style={{ color: themeMode ? "#BBBCC0" : "#BBBCC0" }} >
+            <div className={`md:mt-2 mt-1 font-medium text-xs md:text-sm cursor-pointer`} style={{ color: themeMode ? "#BBBCC0" : "#BBBCC0" }} >
               {title}
             </div>
           </div>

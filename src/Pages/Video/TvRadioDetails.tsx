@@ -183,7 +183,7 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           <div className="mt-7 flex gap-3 items-center">
             <Avatar
               src={radio.artists[0]?.profileImg}
-
+              className='cursor-pointer'
             />
             <div>
               <h2
@@ -238,7 +238,9 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
           </div>
 
-          <div className="mt-12">
+         {radio?.songs &&
+          (
+            <div className="mt-12">
             <h1
               className="text-xl font-semibold"
               style={{
@@ -261,7 +263,7 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   425: { slidesPerView: 1 },
                 }}
               >
-                {radio.songs.map((songId: string, index: number) => (
+                {radio?.songs?.map((songId: string, index: number) => (
                   <SwiperSlide key={index}>
                     <div
                       className="p-5 rounded-3xl mt-6"
@@ -328,6 +330,8 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </div>
             </div>
           </div>
+          )
+         }
           <CommentForm
             postModel={PostModels.news}
             commentData={pageData?.commentsSection ?? null}
