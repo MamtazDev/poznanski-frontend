@@ -70,7 +70,7 @@ const MaterialCard: React.FC<News> = ({
   return (
     <div className="product-card1 flex w-full">
       <div
-        className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md
+        className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md cursor-pointer
       ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
       ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
       `}

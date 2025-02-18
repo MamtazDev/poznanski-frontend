@@ -62,11 +62,12 @@ const Notification: React.FC<PageBasicProps> = ({ themeMode }) => {
             {notifications.map((notification) => (
               <div
                 key={notification.id}
-                className={`flex items-center p-4 rounded-lg shadow-md ${
-                  themeMode ? " text-gray-800 bg-[#FFFFFF] " : "text-white bg-[#252733]"
-                }`}
+                className={`flex items-center p-4 rounded-lg shadow-md
+                   ${themeMode ? " text-gray-800 bg-[#FFFFFF] " : "text-white bg-[#252733]" }
+                    ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
+                   `}
               >
-                <div className="mr-4">
+                <div className="mr-4 cursor-pointer">
                   {notification.type === "verify" && <FaUserCheck className="text-green-500 text-2xl" />}
                   {notification.type === "wait_verify" && <FaUserClock className="text-yellow-500 text-2xl" />}
                   {notification.type === "album" && <FaCompactDisc className="text-blue-500 text-2xl" />}
@@ -74,7 +75,7 @@ const Notification: React.FC<PageBasicProps> = ({ themeMode }) => {
                   {notification.type === "general" && <FaBell className="text-gray-500 text-2xl" />}
                 </div>
                 <div>
-                  <p className={`lg:text-xl text-lg ${notification.isRead ? "font-medium" : "font-bold"}`}>
+                  <p className={`lg:text-xl text-lg cursor-pointer ${notification.isRead ? "font-medium" : "font-bold"}`}>
                     {notification.message}
                   </p>
                   <span className="lg:text-sm text-xs text-gray-500">{notification.timestamp}</span>

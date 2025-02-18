@@ -62,7 +62,6 @@ interface Radio {
   songs: string[];
 }
 const TopArtist: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-
   const swiperRef = useRef<SwiperInstance | null>(null);
   const { id } = useParams<{ id: string }>();
   const targetNewsSelected = useSelector((state: RootState) =>
@@ -114,7 +113,7 @@ const TopArtist: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   // Fetch data
   const fetcher = () =>
     fetch(`http://localhost:8000/api/album/${id}`).then((res) => res.json());
-  const { data, error } = useSWR(`/api/radio/${id}`, fetcher);
+  const { data, error } = useSWR(`/api/album/${id}`, fetcher);
   const [radio, setRadio] = useState<Radio | null>(null);
 
   useEffect(() => {

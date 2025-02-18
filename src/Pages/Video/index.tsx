@@ -91,7 +91,8 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     try {
       const response = await fetch(url);
       const data = await response.json();
-      setCardData(data.records);
+      setCardData(data?.records);
+      console.log(data?.records, "data?.records")
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -217,7 +218,8 @@ fetchData(filters)
                     <div key={index} className="w-full">
                       <TVCard
                         data={item}
-                        id={item._id}
+                        // id={item._id}
+                        id={item.id}
                         video=""
                         type={type ? "vertical" : "horizontal"}
                         youTube={item.youTube}
