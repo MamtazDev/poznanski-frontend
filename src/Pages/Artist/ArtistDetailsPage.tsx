@@ -176,7 +176,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         ) }
 
             {/* Radios Section */}
-            {radios.length > 0 && (
+            {radios?.length > 0 && (
               <div className="lg:mt-12 mt-6 relative">
                 <h2 className="text-xl font-semibold" style={{ color: themeMode ? "#252733" : "#FFF" }}>
                   Tv/Radio
@@ -197,9 +197,8 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       375: { slidesPerView: 1 },
                     }}
                   >
-                    {radios.map((radio) => (
+                    {radios?.map((radio) => (
                       <SwiperSlide key={radio.id}>
-
                         <div className='p-5 rounded-3xl'
                           style={{
                             backgroundColor: themeMode ? "#FFF" : "#242526",

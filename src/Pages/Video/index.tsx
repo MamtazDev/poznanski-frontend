@@ -99,6 +99,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       setLoading(false);
     }
   };
+
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const setDisplayUpdatedName = () => {
@@ -113,7 +114,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       setLoading(false);
     }, 1000);
   };
-
   const handleScroll = () => {
     if (!scrollContainerRef.current) return;
 
@@ -123,8 +123,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       loadMoreItems();
     }
   };
-
-
   useEffect(() => {
     setDisplayedItems(cardData.slice(0, visibleCount));
   }, [cardData, visibleCount]);
@@ -158,14 +156,10 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     };
   }, []);
 
-
 //search fucntionalities
-
 const handleSearch = (inputValue: string) => {
   fetchData(filters)
 }
-
-
 useEffect(() => {
 fetchData(filters)
 }, [filters])
@@ -220,7 +214,7 @@ fetchData(filters)
                 <div
                   className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5 mb-16`}
                 >
-                  {cardData.length>0? cardData?.map((item, index) => (
+                  {cardData?.length>0? cardData.map((item, index) => (
                     <div key={index} className="w-full">
                       <TVCard
                         data={item}

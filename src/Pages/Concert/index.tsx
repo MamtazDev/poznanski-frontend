@@ -21,6 +21,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { Link } from "react-router-dom";
+import useSWR from "swr";
 // import ticketImg from "../../assets/png/ticketBanner.png"
 
 interface Product {
@@ -250,6 +251,13 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     fetchData(filters);
   }, [filters]);
 
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
+  const { data, error } = useSWR('http://localhost:8000/api/concert', fetcher);
+
+  if (error) return <p>Error loading concerts.</p>;
+  if (!data) return <p>Loading...</p>;
+
+  console.log('Concert Data:', data); // Logs data to console
   return (
     <Layout themeMode={themeMode} type={type}>
       <div className="flex justify-center">
@@ -289,13 +297,13 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               modules={[Pagination]}
               className="mySwiper event-carousel">
               {cardData?.isFeatured && Array.isArray(cardData.isFeatured) ? (
-                cardData.isFeatured.map((item, idx) => (
+                cardData?.isFeatured.map((item, idx) => (
                   <SwiperSlide key={idx} className="p-2 md:mb-16 mb-8">
                     <div
                       className={`grid md:grid-cols-2 grid-cols-1  md:gap-20 gap-6`}>
                       <div className={`relative`}>
                         <Image
-                          src={"https://i.ibb.co.com/5KchHq8/ticket-Banner.png"}
+                          src={item.img}
                           className="object-cover h-full w-full"
                           alt={item.img}
                           borderRadius={type ? "18px" : "25px"}

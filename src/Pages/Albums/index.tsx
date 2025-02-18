@@ -147,8 +147,8 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </div>
             ) : (
               <div className={`grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-5 mt-10 mb-10`}>
-                {album.length > 0 ? (
-                  album.map((categoryItem) => (
+                {album?.length > 0 ? (
+                  album?.map((categoryItem) => (
                     <NewReleaseCard
                       id={categoryItem._id}
                       key={categoryItem._id}

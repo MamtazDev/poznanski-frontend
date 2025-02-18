@@ -174,16 +174,18 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           >
             {radio.title}
           </h2>
+          {radio.thumbnail && (
+            <img
+              src={radio.thumbnail}
+              className="w-full h-[596px] mt-12 rounded-xl"
+              alt="Thumbnail"
+            />
+          )}
 
-          <img
-            src={radio.thumbnail}
-            className="w-full h-[596px] mt-12 rounded-xl"
-            alt="Thumbnail"
-          />
           <div className="mt-7 flex gap-3 items-center">
             <Avatar
               src={radio.artists[0]?.profileImg}
-
+              className='cursor-pointer'
             />
             <div>
               <h2
