@@ -261,7 +261,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                             }}>{radio.tags}</button>
                           {
                             radio.title && <>
-                              <p className='mt-2 text-lg font-semibold' >{radio.title}</p>
+                              <p className='mt-2 text-lg font-semibold line-clamp-1' >{radio.title}</p>
                             </>
                           }
 

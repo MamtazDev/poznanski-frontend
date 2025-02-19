@@ -83,7 +83,7 @@ const ProductCard1: React.FC<News> = ({
           <div className="flex flex-col md:w-full space-y-2">
             {tags && (
               <div className="flex  gap-2 mt-2 md:mt-0">
-                {wordArray.map(
+                {wordArray.slice(0, 3).map(
                   (tag, index) =>
                     tag && (
                       <span
@@ -95,7 +95,7 @@ const ProductCard1: React.FC<News> = ({
                           backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
                           color: themeMode ? "#5A1073" : "#5A1073",
                         }}>
-                        {tag}
+                        {tag.length > 10 ? `${tag.substring(0, 7)}...` : tag}
                       </span>
                     )
                 )}

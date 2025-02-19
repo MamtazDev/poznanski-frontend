@@ -88,7 +88,6 @@ const NewReleaseCard: React.FC<News> = ({
       <div>
       {title && <h3 className="mt-2 text-md font-semibold line-clamp-1" style={{ color: themeMode ? "#000000" : "#FFFFFF", }}>{title}</h3>}
       {nickname && <h3 className="mt-2  " style={{ color: themeMode ? "#BBBCC0" : "#9B9CA1", }}>{nickname}</h3>}
-
       {description && (
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 "
           style={{
