@@ -35,7 +35,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   const [filters, setFilters] = useState<filterProperties>({
     sort: "A to Z",
-    quantity: 5,
+    quantity: 50,
     startDate: "",
     endDate: "",
     order: "desc",
@@ -130,8 +130,14 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       fetchData();
     }, []);
 
+    // const handleSearch = (inputValue: string) => {
+    //   fetchData(filters);
+    // };
     const handleSearch = (inputValue: string) => {
-      fetchData(filters);
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        search: inputValue,
+      }));
     };
     useEffect(() => {
       fetchData(filters);

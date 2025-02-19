@@ -7,7 +7,7 @@ const Card = ({ item, themeMode, idx }: any) => {
       <div className="hidden md:grid grid-cols-4 items-center px-3" style={{ height: 48 }}>
         <div className="flex items-center gap-3">
           {/* Date */}
-          <div className={` text-4xl font-semibold text-[#5A1073] ${!themeMode && "text-[#2FC4B2]"}`}>
+          <div className={` text-4xl font-semibold `} style={{ color: themeMode ? "#5A1073" : "#2FC4B2" }}>
             {moment(item.timeframe.start).format("DD")}
           </div>
 

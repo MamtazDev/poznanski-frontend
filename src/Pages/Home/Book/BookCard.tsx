@@ -1,4 +1,5 @@
 import { Button } from "@chakra-ui/react";
+import moment from "moment";
 
 const BookCard = ({ item, themeMode, idx }: any) => {
 
@@ -9,26 +10,18 @@ const BookCard = ({ item, themeMode, idx }: any) => {
       <div
         className="hidden md:flex   items-center justify-between mx-auto px-10"
         style={{ height: 75 }}>
-        <div className="flex items-center">
-          <div
-            className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}>
-            {item.date}
+        <div className="flex items-center gap-3">
+          {/* Date */}
+          <div className={` text-4xl font-semibold `} style={{ color: themeMode ? "#5A1073" : "#2FC4B2" }}>
+            {moment(item.timeframe.start).format("DD")}
           </div>
-          <div className={`ticket-month ${!themeMode && "text-dark-color"}`}>
-            <div>
-              {new Date(item.timeframe.start).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })}
-            </div>
-            <div>
-              {new Date(item.timeframe.end).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })}
-            </div>
+
+          {/* Month & Time in Column Layout */}
+          <div className={`flex flex-col text-xs `} style={{ color: themeMode ? "#6D6E76" : "#2FC4B2" }}>
+            <span>{moment(item.timeframe.start).format("MMMM")}</span>
+            <span>
+              {moment(item.timeframe.start).format("h:mm A")} - {moment(item.timeframe.end).format("h:mm A")}
+            </span>
           </div>
         </div>
         {item.name && (
@@ -68,12 +61,11 @@ const BookCard = ({ item, themeMode, idx }: any) => {
 
       <div className="flex flex-col gap-2 md:hidden px-3">
         <div className="flex justify-between items-center text-sm text-gray-700">
-          <div className={`${!themeMode && "text-dark-color"}`}>
-            {item.date} {item.month}
+          <div className={`font-medium "}`} style={{ color: themeMode ? "#6D6E76" : "#2FC4B2" }}>
+            {moment(item.timeframe.start).format("D MMMM")}
           </div>
-
-          <div className={`${!themeMode && "text-dark-color"}`}>
-            {item.timeframe.start}
+          <div style={{ color: themeMode ? "#6D6E76" : "#2FC4B2" }}>
+            {moment(item.timeframe.start).format(" h:mm A")} - {moment(item.timeframe.end).format("h:mm A")}
           </div>
         </div>
 

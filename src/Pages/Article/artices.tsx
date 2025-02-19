@@ -12,7 +12,7 @@ const Articles = ({ themeMode, type }: any) => {
   const pageSize = 100;
 
   const [isLoading, setLoading] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(10);
+  const [visibleCount, setVisibleCount] = useState(50);
   const [displayedItems, setDisplayedItems] = useState<NewsItem[]>([]);
   const [lastScrollTime, setLastScrollTime] = useState(0);
 
