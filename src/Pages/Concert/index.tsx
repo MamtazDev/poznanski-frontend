@@ -166,9 +166,23 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const { data, error } = useSWR('http://localhost:8000/api/concert', fetcher);
 
   if (error) return <p>Error loading concerts.</p>;
-  if (!data) return <p>Loading...</p>;
+  if (loading) return <div className="flex justify-center items-center h-screen w-full"
+  style={{
+    backgroundColor: themeMode ? "white" : "black"
+  }}>
+  <p className="text-xl font-semibold " style={{
+    color: themeMode ? "black" : "white"
+  }} >Loading...</p>
+  <div className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+    style={{
+      borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+      borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+      borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+    }}>
+  </div>
+</div>;
 
-  console.log('Concert Data:', data); // Logs data to console
+  // console.log('Concert Data:', data);
   return (
     <Layout themeMode={themeMode} type={type}>
       <div className="flex justify-center">
