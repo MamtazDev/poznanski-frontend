@@ -137,7 +137,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 <b>{data.news?.intro}</b>
               </p>
               <div className='flex lg:flex-row flex-col justify-between mx-auto gap-5'>
-                <div className="w-full ">
+                <div className="w-[900px]">
                   <Image
                     src={data?.news?.files?.[0] || defaultimg}
                     alt="Uploaded file"
@@ -163,7 +163,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     />
                   </DelayedComponent>
                 </div>
-                <div className="lg:w-[500px] lg:mx-auto">
+                <div className=" lg:w-[400px] lg:mx-auto">
                   <div
                     className={`shadow-md rounded-2xl ${!type ? (themeMode ? 'right-card' : 'right-card-dark') : ''
                       } mb-6  py-4 px-3`}

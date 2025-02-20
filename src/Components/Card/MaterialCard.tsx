@@ -135,7 +135,7 @@ const MaterialCard: React.FC<News> = ({
                           color: themeMode? "#5A1073":"#5A1073"
                         }}
                       >
-                        {tag.trim()}
+                        {tag.length > 9 ? `${tag.substring(0, 5)}...` : tag}
                       </div>
                     )
                 )}

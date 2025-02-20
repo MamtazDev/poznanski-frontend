@@ -22,8 +22,8 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
+import Card from "./Card";
 // import ticketImg from "../../assets/png/ticketBanner.png"
-
 interface Product {
   id: string;
   name: string;
@@ -37,22 +37,20 @@ interface Product {
   description: string;
   isFeatured: boolean;
 }
-
-interface inputProducts {
-  _id: string;
-  name: string;
-  img: string;
-  category: string;
-  timeframe: {
-    start: string | Date;
-    end: string | Date;
-  };
-  link: string;
-  location: string;
-  description: string;
-  isFeatured: boolean;
-}
-
+// interface inputProducts {
+//   _id: string;
+//   name: string;
+//   img: string;
+//   category: string;
+//   timeframe: {
+//     start: string | Date;
+//     end: string | Date;
+//   };
+//   link: string;
+//   location: string;
+//   description: string;
+//   isFeatured: boolean;
+// }
 interface filterProperties {
   sort: string;
   quantity: number;
@@ -61,24 +59,23 @@ interface filterProperties {
   order: string;
   search: string | undefined;
 }
-
 interface CartInterface {
   isFeatured: Product[];
   products: Product[];
 }
 
 const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-  const [selectedPage, setSelectedPage] = useState<number>(1);
-  const [pages, setPages] = useState<number>(0);
+  // const [selectedPage, setSelectedPage] = useState<number>(1);
+  // const [pages, setPages] = useState<number>(0);
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<CartInterface>();
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  const [nonFeaturedProducts, setNonFeaturedProducts] = useState<Product[]>([]);
-  const [entriesPerPage, setEntriesPerPage] = useState<number>(5);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  // const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  // const [nonFeaturedProducts, setNonFeaturedProducts] = useState<Product[]>([]);
+  // const [entriesPerPage, setEntriesPerPage] = useState<number>(5);
+  // const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [filters, setFilters] = useState<filterProperties>({
     sort: "A to Z",
     quantity: 5,
@@ -87,49 +84,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     order: "desc",
     search: "",
   });
-
-  // const handleData = (response: any) => {
-  //   const newProducts: Product[] = []
-  //   const totalPages = Math.ceil(response.all / 6)
-  //   setPages(totalPages)
-  //   const featured: Product[] = []
-  //   const nonFeatured: Product[] = []
-  //   response.products.forEach((item: inputProducts) => {
-  //     const inputDate1: Date = new Date(item.timeframe.start)
-  //     const inputDate2: Date = new Date(item.timeframe.end)
-  //     const formattedTimeframe =
-  //       inputDate1.getUTCHours() +
-  //       ":" +
-  //       (inputDate1.getUTCMinutes() < 10 ? "0" : "") +
-  //       inputDate1.getUTCMinutes() +
-  //       "-" +
-  //       inputDate2.getUTCHours() +
-  //       ":" +
-  //       (inputDate2.getUTCMinutes() < 10 ? "0" : "") +
-  //       inputDate2.getUTCMinutes()
-  //     const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(inputDate1)
-  //     const temp: Product = {
-  //       id: item._id,
-  //       name: item.name,
-  //       img: fileUrl + item.img,
-  //       category: item.category,
-  //       month: `${month}`,
-  //       date: `${inputDate1.getDate()}`,
-  //       timeframe: formattedTimeframe,
-  //       link: item.link,
-  //       location: item.location,
-  //       description: item.description,
-  //     }
-  //     if (item.isFeatured) {
-  //       featured.push(temp)
-  //     } else {
-  //       nonFeatured.push(temp)
-  //     }
-  //   })
-  //   setFeaturedProducts(featured)
-  //   setNonFeaturedProducts(nonFeatured)
-  // }
-
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 1280) {
@@ -154,22 +108,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  // useEffect(() => {
-  //   setLoading(true)
-  //   fetch("http://localhost:8000/api/concert")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         handleData(data)
-  //       }
-  //       setLoading(false)
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching concerts:", error)
-  //       setLoading(false)
-  //     })
-  // }, [])
 
   const fetchData = async (inputValue?: filterProperties) => {
     setLoading(true);
@@ -209,34 +147,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     } finally {
       setLoading(false);
     }
-    // try {
-    //   const response = await fetch(url);
-    //   const jsonData = await response.json();
 
-    //   const newConcert = jsonData.products.map((item: any) => {
-    //     const inputDate = new Date(item.timeframe.start);
-
-    //     const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(inputDate);
-    //     const date = inputDate.getDate();
-
-    //     return {
-    //       id: item._id,
-    //       name: item.name,
-    //       img: fileUrl + item.img,
-    //       category: item.category,
-    //       link: item.link,
-    //       location: item.location,
-    //       description: item.description,
-    //       month: `${month}`,
-    //       date: `${date}`,
-    //     };
-    //   });
-    //   setCardData(newConcert);
-    // } catch (error) {
-    //   console.error("Error fetching data:", error);
-    // } finally {
-    //   setLoading(false);
-    // }
   };
 
   useEffect(() => {
@@ -255,9 +166,23 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const { data, error } = useSWR('http://localhost:8000/api/concert', fetcher);
 
   if (error) return <p>Error loading concerts.</p>;
-  if (!data) return <p>Loading...</p>;
+  if (loading) return <div className="flex justify-center items-center h-screen w-full"
+  style={{
+    backgroundColor: themeMode ? "white" : "black"
+  }}>
+  <p className="text-xl font-semibold " style={{
+    color: themeMode ? "black" : "white"
+  }} >Loading...</p>
+  <div className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+    style={{
+      borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+      borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+      borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+    }}>
+  </div>
+</div>;
 
-  console.log('Concert Data:', data); // Logs data to console
+  // console.log('Concert Data:', data);
   return (
     <Layout themeMode={themeMode} type={type}>
       <div className="flex justify-center">
@@ -269,7 +194,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <BreadCrumb />
             </div>
           )}
-
           <div className="md:mt-7 mt-10">
             <ContentTitle
               titleType="TOP HITS"
@@ -400,7 +324,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </div>
             )}
           </div>
-
           <div
             className={`md:mt-16 mt-8`}
             style={{ minHeight: type ? "250px" : "150px", width: "100%" }}>
@@ -433,123 +356,3 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 };
 
 export default ConcertMainPage;
-
-const Card = ({ item, themeMode, idx }: any) => {
-
-  // console.log(item, "item")
-
-  return (
-    <div className={`p-4 ${idx !== 0 && "ticket-top-border"}`}>
-      <div
-        className="hidden md:grid grid-cols-4 items-center px-3"
-        style={{ height: 48 }}>
-        <div className="flex items-center">
-          <div
-            className={`ticket-date pr-2 ${!themeMode && "text-dark-color"}`}>
-            {item.date}
-          </div>
-          <div className={`ticket-month ${!themeMode && "text-dark-color"}`}>
-            <div>
-              {new Date(item.timeframe.start).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })}
-            </div>
-            <div>
-              {new Date(item.timeframe.end).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div
-          className={`ticket-type text-center capitalize ${!themeMode && "title-dark-color"}`}>
-          {item.name}
-        </div>
-
-        <div className="flex justify-center items-center">
-          <div
-            className={`ticket-category ${!themeMode && "btn-dark-bg-color"}`}>
-            {item.location}
-          </div>
-        </div>
-
-        <div className="flex justify-end">
-          <Button
-            size="md"
-            height="30px"
-            width="105px"
-            border="2px"
-            borderColor={themeMode ? "#5A1073" : "#2FC4B2"}
-            borderWidth="1px"
-            borderRadius="5px"
-            color={themeMode ? "#5A1073" : "#2FC4B2"}
-            fontFamily="Urbanist"
-            fontSize="14px"
-            fontWeight="600"
-            backgroundColor={themeMode ? "#FFF" : "#242526"}>
-            Buy Ticket
-          </Button>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2 md:hidden">
-        <div className="flex justify-between items-center text-sm text-gray-700">
-          <div className={`${!themeMode && "text-dark-color"}`}>
-            {item.date} {item.month}
-          </div>
-
-          <div className={`${!themeMode && "text-dark-color"}`}>
-            <div>
-              {new Date(item.timeframe.start).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })}
-            </div>
-            <div>
-              {new Date(item.timeframe.end).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-between items-center">
-          <div
-            className={`text-base font-medium ${!themeMode && "title-dark-color"}`}>
-            {item.name}
-          </div>
-
-          <div className="px-2 py-1 text-xs rounded-lg bg-purple-100 text-purple-700">
-            {item.location}
-          </div>
-        </div>
-
-        <div className="flex justify-center">
-          <Button
-            size="md"
-            height="35px"
-            width="100%"
-            border="2px"
-            borderColor={themeMode ? "#5A1073" : "#2FC4B2"}
-            borderWidth="1px"
-            borderRadius="8px"
-            color={themeMode ? "#5A1073" : "#2FC4B2"}
-            fontFamily="Urbanist"
-            fontSize="14px"
-            fontWeight="600"
-            backgroundColor="#FFF">
-            Buy Ticket
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
