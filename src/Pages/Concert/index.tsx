@@ -22,7 +22,7 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
-import Card from "./Card";
+import CardComp from "./CardComp";
 // import ticketImg from "../../assets/png/ticketBanner.png"
 interface Product {
   id: string;
@@ -343,7 +343,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <div className={`${themeMode ? "book-back" : "book-back-dark"}`}>
                 {cardData?.products.map((item, idx) => (
                   <React.Fragment key={idx}>
-                    <Card idx={idx} themeMode={themeMode} item={item} />
+                    <CardComp idx={idx} themeMode={themeMode} item={item} />
                   </React.Fragment>
                 ))}
               </div>

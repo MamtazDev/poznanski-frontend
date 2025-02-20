@@ -101,8 +101,10 @@ const ProductCard1: React.FC<News> = ({
                 )}
               </div>
             ):
-            <p  style={{
-              color: themeMode ? "#5A1073" :  "#2FC4B2",
+            <p  className={`px-2 py-1 rounded-full text-center md:text-sm text-[10px] font-semibold`}
+            style={{
+              backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
+              color: themeMode ? "#5A1073" : "#5A1073",
             }}>
                 no tags added
             </p>

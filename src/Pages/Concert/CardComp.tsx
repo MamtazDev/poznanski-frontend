@@ -1,7 +1,7 @@
 import moment from "moment";
 import { Button } from "@chakra-ui/react";
 
-const Card = ({ item, themeMode, idx }: any) => {
+const CardComp = ({ item, themeMode, idx }: any) => {
   return (
     <div className={`p-4 ${idx !== 0 && "ticket-top-border"}`}>
       <div className="hidden md:grid grid-cols-4 items-center px-3" style={{ height: 48 }}>
@@ -91,4 +91,4 @@ const Card = ({ item, themeMode, idx }: any) => {
   );
 };
 
-export default Card;
+export default CardComp;
