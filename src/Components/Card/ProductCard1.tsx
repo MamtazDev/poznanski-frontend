@@ -55,7 +55,7 @@ const ProductCard1: React.FC<News> = ({
         <div className="flex md:flex-col flex-row md:items-start gap-5">
           <div className="relative md:w-full ">
             <div
-              className={`rounded-md text-center absolute opacity-50 font-semibold top-2 md:right-2
+              className={`rounded-md text-center absolute opacity-50 font-semibold top-2 md:right-5
                 right-[14px] z-50 py-2 px-2 text-[8px] md:text-sm w-[80px] md:w-[130px] ${
                   !themeMode && "btn-dark-bg-color"
                 }`}
@@ -67,10 +67,10 @@ const ProductCard1: React.FC<News> = ({
             {img ?   (
               <Image
               src={img}
-              className="md:w-full w-[119px] h-[88px] md:h-[230px] object-cover rounded-lg"
+              className="md:w-[342px] w-[119px] h-[88px] md:h-[235px] object-cover rounded-lg"
               alt="news image"
             />
-            ):
+            ) :
             <Image
             src={novideo}
             className="md:w-full w-[119px] h-[88px] md:h-[230px] object-cover rounded-lg"
@@ -81,7 +81,7 @@ const ProductCard1: React.FC<News> = ({
           </div>
 
           <div className="flex flex-col md:w-full space-y-2">
-            {tags && (
+            {tags ? (
               <div className="flex  gap-2 mt-2 md:mt-0">
                 {wordArray.slice(0, 3).map(
                   (tag, index) =>
@@ -100,7 +100,13 @@ const ProductCard1: React.FC<News> = ({
                     )
                 )}
               </div>
-            )}
+            ):
+            <p  style={{
+              color: themeMode ? "#5A1073" :  "#2FC4B2",
+            }}>
+                no tags added
+            </p>
+            }
 
             {title && (
               <h2

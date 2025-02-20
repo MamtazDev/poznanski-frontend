@@ -69,7 +69,7 @@ const Articles = ({ themeMode, type }: any) => {
           </div>
         ) : (
           <>
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 xl:grid-cols-4 gap-4 py-5">
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 py-5">
               {displayedItems.map((item) => (
                 <div id={item._id} key={`main-news-card-${item._id}`} className="w-full">
                   <ProductCard1
