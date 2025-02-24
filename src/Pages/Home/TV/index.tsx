@@ -228,7 +228,7 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
             loop={false}
             navigation={true}
             breakpoints={{
-              1440: { slidesPerView: 3, slidesPerGroup: 2 },
+              1440: { slidesPerView: 4, slidesPerGroup: 2 },
               1024: { slidesPerView: 3, slidesPerGroup: 3 },
               768: { slidesPerView: 2, slidesPerGroup: 2 },
               330: { slidesPerView: 1, slidesPerGroup: 1 },

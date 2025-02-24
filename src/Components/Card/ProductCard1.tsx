@@ -53,10 +53,10 @@ const ProductCard1: React.FC<News> = ({
         }
         className="transition-all duration-300 ease-out w-full h-full p-5 cursor-pointer">
         <div className="flex md:flex-col flex-row md:items-start gap-5">
-          <div className="relative md:w-full ">
+          <div className="relative md:w-full w-[130px] h-[81px] md:h-[235px] flex-shrink-0 overflow-hidden ">
             <div
               className={`rounded-md text-center absolute opacity-50 font-semibold top-2 md:right-5
-                right-[14px] z-50 py-2 px-2 text-[8px] md:text-sm w-[80px] md:w-[130px] ${
+                right-[12px] z-50 py-2 px-2 text-[8px] md:text-sm w-[90px] md:w-[130px] ${
                   !themeMode && "btn-dark-bg-color"
                 }`}
               style={{
@@ -65,19 +65,13 @@ const ProductCard1: React.FC<News> = ({
               {dateFormatted}
             </div>
             {img ?   (
-              <Image
-              src={img}
-              className="md:w-[342px] w-[119px] h-[88px] md:h-[235px] object-cover rounded-lg"
-              alt="news image"
-            />
+              <img alt="img" src={img} className=" object-cover rounded-lg size-full" >
+              </img>
             ) :
-            <Image
+            <img alt="no img"
             src={novideo}
-            className="md:w-full w-[119px] h-[88px] md:h-[230px] object-cover rounded-lg"
-            alt="news image"
-          />
+            className="md:w-[342px] w-[230px] h-[88px] md:h-[235px] object-cover rounded-lg"></img>
           }
-
           </div>
 
           <div className="flex flex-col md:w-full space-y-2">
