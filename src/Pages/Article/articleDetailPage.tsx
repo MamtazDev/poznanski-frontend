@@ -137,11 +137,11 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 <b>{data.news?.intro}</b>
               </p>
               <div className='flex lg:flex-row flex-col justify-between mx-auto gap-5'>
-                <div className="w-[900px]">
+                <div className="md:w-[900px]">
                   <Image
                     src={data?.news?.files?.[0] || defaultimg}
                     alt="Uploaded file"
-                    className="rounded-2xl w-full h-[494px] object-cover "
+                    className="rounded-2xl w-full  md:h-[494px] object-cover flex justify-center"
                   />
                   <DelayedComponent delay={200}>
                     <TipTap

@@ -307,15 +307,15 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
             </div>
             {/* btn */}
             <div>
-              <div className="flex flex-wrap md:mt-8 mt-3 md:gap-4 gap-2">
+              <div className="flex  md:mt-8 mt-3 md:gap-4 gap-1">
                 <Select
                   variant="outlined"
                   rounded="full"
-                  height={!mobileState ? "46px" : "28px"}
-                  width={!mobileState ? "180px" : "150px"}
+                  height={!mobileState ? "46px" : "27px"}
+                  width={!mobileState ? "180px" : "100px"}
                   background={themeMode ? "#E8ECFE" : "#242526"}
                   color={themeMode ? "black" : "white"}
-                  fontSize={!mobileState ? "16px" : "12px"}
+                  fontSize={!mobileState ? "16px" : "10px"}
                   placeholder="Weekdays">
                   <option value="1"
                     style={{

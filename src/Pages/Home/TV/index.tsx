@@ -12,6 +12,9 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
+import { Navigation, Pagination } from "swiper/modules";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../reducers";
 interface TVData {
   youTube: string | undefined;
   artists: any;
@@ -55,11 +58,12 @@ interface CardData {
 
 
 const TV: React.FC<{ filter: string }> = ({ filter }) => {
-  const [cardNum, setCardNum] = useState<number>(4);
+  // const [cardNum, setCardNum] = useState<number>(4);
   const [cardData, setCardData] = useState<TVData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const swiperRef = useRef<SwiperInstance | null>(null);
+  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -174,17 +178,47 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
   }, []);
 
 
+  const [showPagination, setShowPagination] = useState(window.innerWidth < 768);
+  const [showNavigation, setShowNavigation] = useState(window.innerWidth >= 768);
+  const [itemsPerRow, setItemsPerRow] = useState(3);
+  const [cardNum, setCardNum] = useState(window.innerWidth < 768 ? 1 : 4);
+
+  useEffect(() => {
+    const updateUI = () => {
+      const width = window.innerWidth;
+
+      if (width >= 1480) {
+        setItemsPerRow(2);
+        setShowNavigation(true);
+        setShowPagination(false);
+      } else if (width >= 768) {
+        setItemsPerRow(2);
+        setShowNavigation(true);
+        setShowPagination(false);
+      } else {
+        setItemsPerRow(5);
+        setShowNavigation(false);
+        setShowPagination(true);
+      }
+
+      console.log("Width:", width, "ShowPagination:", showPagination);
+    };
+
+    updateUI();
+    window.addEventListener("resize", updateUI);
+    return () => window.removeEventListener("resize", updateUI);
+  }, [showPagination]);
+
+
   const handleNext = () => {
-    if (swiperRef.current) {
-      swiperRef.current.slideNext();
-    }
+    if (swiperRef.current) swiperRef.current.slideNext();
   };
 
   const handlePrev = () => {
-    if (swiperRef.current) {
-      swiperRef.current.slidePrev();
-    }
+    if (swiperRef.current) swiperRef.current.slidePrev();
   };
+
+
   return (
     <div className="flex justify-center">
       <div className="container md:mt-36 md:pt-1.5 mt-20">
@@ -201,76 +235,74 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
           </div>
         </div>
 
-        {/* <div
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-5 mb-16`}
-        >
-          {cardData.length > 0 ? cardData.map((item, index) => (
-            <div key={index} className="w-full">
-              <TVCard
-                data={item}
-                id={item._id}
-                video=""
-                youTube={item.youTube}
-                feature={item.title}
-                title={item.artists?.[0]?.name || "Unknown Artist"}
-                link={item.link}
-              />
-            </div>
-          )) : <p className="text-blue-500 text-5xl py-3 text-center">There is no data</p>}
-        </div> */}
-
-        <div className="w-full mt-10 relative">
+        <div className="w-full relative">
           <Swiper
             onSwiper={(swiper: any) => (swiperRef.current = swiper)}
+            pagination={showPagination ? { clickable: true } : false} // ✅
             slidesPerView={4}
             slidesPerGroup={2}
             spaceBetween={20}
             loop={false}
-            navigation={true}
+            navigation={showNavigation}
+            modules={[Navigation, Pagination]}
             breakpoints={{
               1440: { slidesPerView: 4, slidesPerGroup: 2 },
               1024: { slidesPerView: 3, slidesPerGroup: 3 },
               768: { slidesPerView: 2, slidesPerGroup: 2 },
-              330: { slidesPerView: 1, slidesPerGroup: 1 },
+              425: { slidesPerView: 1, slidesPerGroup: 1 },
             }}
-            className="tv-radio-slider"
+            className="news-carousel"
           >
             {cardData?.reduce<TVData[][]>((rows: TVData[][], item: TVData, index: number) => {
-              const rowIndex = Math.floor(index / 2);
+              const rowIndex = Math.floor(index / itemsPerRow);
               if (!rows[rowIndex]) rows[rowIndex] = [];
               rows[rowIndex].push(item);
               return rows;
-            }, []).map((row:any, rowIndex:any) => (
-              <SwiperSlide key={rowIndex}>
-                <div className="grid grid-cols-1 gap-5">
-                  {row.map((item:any, index:number) => (
-                    <div key={index}>
-                      <TVCard
-                        data={item}
-                        id={item._id}
-                        video=""
-                        youTube={item.youTube}
-                        feature={item.title}
-                        title={item.artists?.[0]?.name || "Unknown Artist"}
-                        link={item.link}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </SwiperSlide>
-            ))}
+            }, [])
+              .map((row, rowIndex) => (
+                <SwiperSlide key={rowIndex} className="md:mb-16 mb-8">
+                  <div className="grid grid-cols-1 gap-5">
+                    {row.map((item: any, index: number) => (
+                      <div key={index}>
+                        <TVCard
+                          data={item}
+                          id={item._id}
+                          video=""
+                          youTube={item.youTube}
+                          feature={item.title}
+                          title={item.artists?.[0]?.name || "Unknown Artist"}
+                          link={item.link}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </SwiperSlide>
+              ))}
           </Swiper>
-          {/* Custom Navigation Buttons */}
-          <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10">
-            <button onClick={handlePrev} className="swiper-button-prev">
-              <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
-            </button>
-          </div>
-          <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10">
-            <button onClick={handleNext} className="swiper-button-next">
-              <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
-            </button>
-          </div>
+
+          {/* Pagination Dots - Only visible on mobile */}
+          {showPagination && (
+            <div className={` flex justify-center mt-4 !relative !bottom-0
+              ${themeMode ? "swiper-pagination" : "dark-swiper-pagination"}`}
+            ></div>
+          )}
+
+          {/* Custom Navigation Buttons - Hidden on Mobile */}
+          {showNavigation && (
+            <>
+              <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10 hidden md:block">
+                <button onClick={handlePrev} className="swiper-button-prev">
+                  <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
+                </button>
+              </div>
+
+              <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10 hidden md:block">
+                <button onClick={handleNext} className="swiper-button-next">
+                  <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

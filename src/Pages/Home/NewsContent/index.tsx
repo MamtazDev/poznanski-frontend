@@ -70,7 +70,6 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
     fetchNews();
   }, []);
 
-
   const [showPagination, setShowPagination] = useState(window.innerWidth < 768);
   const [showNavigation, setShowNavigation] = useState(window.innerWidth >= 768);
   const [itemsPerRow, setItemsPerRow] = useState(3);
