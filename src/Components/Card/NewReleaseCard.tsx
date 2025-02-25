@@ -82,7 +82,6 @@ const NewReleaseCard: React.FC<News> = ({
         ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
         `}
       onClick={() => handleClick(id)}
-
     >
       {data?.songs[0]?.youTube ? (
         <div onClick={(e) => e.stopPropagation()}>
