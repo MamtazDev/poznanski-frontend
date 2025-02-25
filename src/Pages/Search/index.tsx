@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import useSWR from "swr";
 import { Link } from "react-router-dom";
-
+import noImg from "../../assets/png/noimage.png"
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const SearchMainPage = ({ themeMode, type }: any) => {
@@ -62,7 +62,8 @@ const SearchMainPage = ({ themeMode, type }: any) => {
                 {/* News Section */}
                 {newsData.length > 0 ? (
                   <div>
-                    <h2 className="text-xl font-semibold mb-4">News</h2>
+                    <h2 className="text-xl font-semibold mb-4"
+                    style={{ color: themeMode? "black":"white" }} >News</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-5">
                       {newsData.map((item: any) => (
                         <ProductCard1
@@ -79,102 +80,121 @@ const SearchMainPage = ({ themeMode, type }: any) => {
                   </div>
                 ) : (
                   <div className="mb-5">
-                    <h2 className="text-xl font-semibold mb-4">News</h2>
-                    <p>No data found</p>
+                    <h2 className="text-xl font-semibold mb-4"
+                     style={{ color: themeMode? "black":"white" }} >News</h2>
+                    <p  style={{ color: themeMode? "black":"white" }} >No data found</p>
                   </div>
                 )}
 
                 {/* Artists Section */}
                 {artists.length > 0 ? (
                   <div>
-                    <h2 className="text-xl font-semibold mb-4">Artists</h2>
+                    <h2 className="text-xl font-semibold mb-4"  style={{ color: themeMode? "black":"white" }} >Artists</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-5">
-                      {artists.map((artist: any) => (
+                      {artists?.map((artist: any) => (
                         <Link
                           to={`/artist/${artist._id}`}
                           key={artist._id}
                           target="_blank"
-                          className="bg-white p-4 rounded shadow block">
-                          <img
-                            src={artist.profileImg}
-                            alt={artist.name}
-                            className="w-full h-40 object-cover rounded"
-                          />
-                          <h3 className="mt-2 text-lg font-semibold">
+                          className=" p-4 rounded shadow block"  style={{ backgroundColor: themeMode? "white":"#262527" }}>
+                            {artist?.profileImg ? (
+                                 <img
+                                 src={artist.profileImg}
+                                 alt={artist.name}
+                                 className="w-full h-40 object-cover rounded"
+                               />
+                            ): (
+                              <img
+                              src={noImg}
+                              alt={artist.name}
+                              className="w-full h-40 object-cover rounded"
+                            />
+                            )}
+
+                          <h3 className="mt-2 text-lg font-semibold line-clamp-1"  style={{ color: themeMode? "black":"white" }} >
                             {artist.name}
                           </h3>
-                          <p>{artist.description}</p>
+                          <p  style={{ color: themeMode? "black":"white" }} className="line-clamp-1">{artist.description}</p>
                         </Link>
                       ))}
                     </div>
                   </div>
                 ) : (
                   <div className="mb-5">
-                    <h2 className="text-xl font-semibold mb-4">Artists</h2>
-                    <p>No data found</p>
+                    <h2 className="text-xl font-semibold mb-4"  style={{ color: themeMode? "black":"white" }} >Artists</h2>
+                    <p  style={{ color: themeMode? "black":"white" }} >No data found</p>
                   </div>
                 )}
 
                 {/* Products Section */}
                 {products.length > 0 ? (
                   <div>
-                    <h2 className="text-xl font-semibold mb-4">Products</h2>
+                    <h2 className="text-xl font-semibold mb-4"  style={{ color: themeMode? "black":"white" }} >Products</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-5">
                       {products.map((product: any) => (
                         <div
                           key={product._id}
-                          className="bg-white p-4 rounded shadow">
+                          className=" p-4 rounded shadow"  style={{ backgroundColor: themeMode? "white":"#262527" }}>
                           <img
                             src={product.image}
                             alt={product.name}
                             className="w-full h-40 object-cover rounded"
                           />
-                          <h3 className="mt-2 text-lg font-semibold">
+                          <h3 className="mt-2 text-lg font-semibold"  style={{ color: themeMode? "black":"white" }} >
                             {product.name}
                           </h3>
-                          <p className="text-gray-500">{product.description}</p>
+                          <p className="text-gray-500"  style={{ color: themeMode? "black":"white" }} >{product.description}</p>
                         </div>
                       ))}
                     </div>
                   </div>
                 ) : (
                   <div className="mb-5">
-                    <h2 className="text-xl font-semibold mb-4">Products</h2>
-                    <p>No data found</p>
+                    <h2 className="text-xl font-semibold mb-4"  style={{ color: themeMode? "black":"white" }} >Products</h2>
+                    <p  style={{ color: themeMode? "black":"white" }} >No data found</p>
                   </div>
                 )}
 
                 {/* Concerts Section */}
                 {Concert.length > 0 ? (
                   <div>
-                    <h2 className="text-xl font-semibold">Concerts</h2>
+                    <h2 className="text-xl font-semibold"  style={{ color: themeMode? "black":"white" }} >Concerts</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 py-5">
                       {Concert.map((concert: any) => (
                         <div
                           key={concert._id}
-                          className="bg-white p-4 rounded shadow">
-                          <img
-                            src={concert.img}
-                            alt={concert.name}
-                            className="w-full h-40 object-cover rounded"
-                          />
+                          className="p-4 rounded shadow"  style={{ backgroundColor: themeMode? "white":"#262527" }} >
+                            {concert.img ? (
+
+                              <img
+                                src={concert.img}
+                                alt={concert.name}
+                                className="w-full h-40 object-cover rounded"
+                              />
+                            ):(
+                              <img
+                              src={noImg}
+                              alt={concert.name}
+                              className="w-full h-40 object-cover rounded"
+                            />
+                            )}
                           <Link
                             to={`/concert/${concert._id}`}
-                            className="mt-2 text-lg font-semibold">
+                            className="mt-2 text-lg font-semibold line-clamp-1"  style={{ color: themeMode? "black":"white" }}>
                             {concert.name}
                           </Link>
-                          <h3 className="mt-2 text-lg font-semibold">
+                          <h3 className="mt-2 text-lg font-semibold line-clamp-1"  style={{ color: themeMode? "black":"white" }} >
                             {concert.description}
                           </h3>
-                          <p className="text-gray-500">{concert.location}</p>
+                          <p className="text-gray-500"  style={{ color: themeMode? "black":"white" }} >{concert.location}</p>
                         </div>
                       ))}
                     </div>
                   </div>
                 ) : (
                   <div className="mb-5">
-                    <h2 className="text-xl font-semibold mb-4">Concerts</h2>
-                    <p>No data found</p>
+                    <h2 className="text-xl font-semibold mb-4"  style={{ color: themeMode? "black":"white" }} >Concerts</h2>
+                    <p  style={{ color: themeMode? "black":"white" }} >No data found</p>
                   </div>
                 )}
               </>

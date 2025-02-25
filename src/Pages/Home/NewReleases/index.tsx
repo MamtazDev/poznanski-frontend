@@ -155,7 +155,6 @@ const NewReleases: React.FC<{ filter: string }> = ({ filter }) => {
                       // youTube="https://www.youtube.com/embed/6JYIGclVQdw"
                       title={categoryItem.title}
                       nickname={categoryItem.artists[0]?.name}
-
                       date={categoryItem.date}
                       link={categoryItem.link}
                       btn="See Details"

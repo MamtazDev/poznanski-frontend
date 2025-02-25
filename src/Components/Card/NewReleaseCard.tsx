@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import { openPlayer } from "../../reducers/PlayerReducer";
@@ -37,7 +37,7 @@ const NewReleaseCard: React.FC<News> = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const dateFormated = moment(date).format(" DD/ MM/ YYYY");
-
+  const [isHovered, setIsHovered] = useState(false);
   const handlePlay = () => {
     const youTubeLink = data?.songs?.[0]?.youTube;
     if (youTubeLink) {
@@ -66,15 +66,23 @@ const NewReleaseCard: React.FC<News> = ({
 
   return (
     <div
+    onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         backgroundColor: themeMode ? "#FFFFFF" : "#242526",
         color: themeMode ? "#FFFFFF" : "#000000",
+        transition: "transform 0.3s ease-in-out",
+        transform: isHovered ? "scale(1.05)" : "scale(1)",
+        boxShadow: isHovered
+          ? "0px 0px 11.4px 4px rgba(59, 214, 198, 0.10)"
+          : "none",
       }}
       className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md flex-shrink-0 overflow-hidden
         ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
         ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
         `}
       onClick={() => handleClick(id)}
+
     >
       {data?.songs[0]?.youTube ? (
         <div onClick={(e) => e.stopPropagation()}>
