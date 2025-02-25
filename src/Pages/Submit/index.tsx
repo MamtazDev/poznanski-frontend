@@ -302,7 +302,7 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 									<div
 										className={`overflow-hidden ${themeMode ? 'image-upload-field-light' : 'image-upload-field-dark'}  w-full h-full`}
 										style={{
-											height: type ? '151px' : '458px',
+											height: type ? '151px' : '420px',
 										}}
 									>
 										{!imgData ? (
@@ -387,7 +387,7 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 										)}
 									</div>
 
-									<div className={`h-full flex flex-${!type ? 'col' : 'col-reverse'} justify-between mt-4`}>
+									<div className={`h-full flex flex-col space-y-3 mt-5`}>
 										{AddTags}
 										{/* <Select
 											label='Dodaj tagi'
@@ -396,7 +396,7 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 										/> */}
 
 										<div
-											className={`flex flex-col ${!type ? 'mt-6' : 'mb-4 ml-5 min-w-36'}`}
+											className={`flex flex-col ${!type ? 'mt-6' : 'mb-4  w-full'}`}
 										>
 											{isLoggedIn || <><Input
 												label='Twój email'

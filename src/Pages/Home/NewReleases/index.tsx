@@ -29,6 +29,7 @@ interface inputData {
   link: string;
 }
 interface Product {
+  songs: { youTube?: string | undefined; }[];
   artists: any;
   _id: any;
   id: string;
@@ -105,7 +106,7 @@ const NewReleases: React.FC<{ filter: string }> = ({ filter }) => {
       // Sort albums by date (latest first) and select the latest 3
       const sortedAlbums = data.albums
         .sort((a: Product, b: Product) => new Date(b.date).getTime() - new Date(a.date).getTime())
-        .slice(0, 4);
+        .slice(0, 8);
       setAlbum(sortedAlbums);
       setLoading(false);
     }
@@ -145,13 +146,13 @@ const NewReleases: React.FC<{ filter: string }> = ({ filter }) => {
         </div>
         {/* <ReleaseCarousel cardNum={cardNum} cardData={cardData} /> */}
         <div className={`grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-cols-1 gap-5 mt-10 mb-10`}>
-                {album.length > 0 ? (
-                  album.map((categoryItem) => (
+                {album?.length > 0 ? (
+                  album?.map((categoryItem) => (
                     <NewReleaseCard
                       id={categoryItem._id}
                       key={categoryItem._id}
-                      data={{ songs: [] }}
-                      youTube="https://www.youtube.com/embed/6JYIGclVQdw"
+                      data={{ songs: categoryItem.songs }}
+                      // youTube="https://www.youtube.com/embed/6JYIGclVQdw"
                       title={categoryItem.title}
                       nickname={categoryItem.artists[0]?.name}
 

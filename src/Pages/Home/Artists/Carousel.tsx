@@ -51,7 +51,7 @@ const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                               cardData[idx * cardNum + index].youTube ?? ""
                             }
                             feature={cardData[idx * cardNum + index].category}
-                            title={cardData[idx * cardNum + index].title}
+                            title={cardData[idx * cardNum + index].title.slice(0, 100)}
                             date={
                               `${cardData[idx * cardNum + index].date}`.split(
                                 "T"
