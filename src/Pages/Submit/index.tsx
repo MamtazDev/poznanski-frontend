@@ -354,10 +354,10 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 														)
 													}
 													alt=''
+													className='h-full w-full object-cover'
 												/>
 												<div
-													className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 `}
-												>
+													className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}>
 													<input
 														type='file'
 														accept='image/JPEG, image/PNG, image/GIF'
