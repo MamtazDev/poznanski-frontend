@@ -1,155 +1,142 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { PageBasicProps } from '../../AppMain';
 import { useParams } from 'react-router-dom';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Swiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import useSWR from 'swr'
-import Layout from '../../Components/Layout';
-import BreadCrumb from '../../Components/BreadCrumb';
 import { GoDotFill } from 'react-icons/go';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../reducers';
-import { addLastVisited, get5RandomNewsByTags, getLastVisitedId, getTargetNews } from '../../reducers/NewsReducer';
+import { addLastVisited, getTargetNews } from '../../reducers/NewsReducer';
 import { useDispatch } from 'react-redux';
-import { ArticleToDisplay } from '../Home/NewsContent/Carousel';
+import Layout from '../../Components/Layout';
+import BreadCrumb from '../../Components/BreadCrumb';
 import CommentForm from '../../Components/Comment';
 import { PostModels } from '../../Constant/api-requests';
+import useSWR from 'swr';
+import { IoLocationOutline } from 'react-icons/io5';
+
 interface Artist {
-   _id: string;
-   name: string;
-   profileImg: string;
-   description: string;
-   star: number;
-   __v: number;
- }
+  _id: string;
+  name: string;
+  profileImg: string;
+  description: string;
+  star: number;
+  __v: number;
+}
 
- interface User {
-   _id: string;
-   nickname: string;
-   email: string;
-   password: string;
-   role: string;
-   isVerified: boolean;
-   __v: number;
-   refreshToken: string | null;
-   profilePicture: string;
- }
- interface Radio {
-   _id: string;
-   title: string;
-   description: string;
-   youTube: string;
-   artists: Artist[];
-   userId: User;
-   tags: string;
-   thumbnail: string;
-   date: string;
-   confirmed: boolean;
-   createdAt: string;
-   updatedAt: string;
-   __v: number;
-   songs: string[];
- }
+interface User {
+  _id: string;
+  nickname: string;
+  email: string;
+  password: string;
+  role: string;
+  isVerified: boolean;
+  __v: number;
+  refreshToken: string | null;
+  profilePicture: string;
+}
 
-const MaterialsDetails : React.FC<PageBasicProps> = ({ themeMode, type }) => {
+interface Radio {
+  _id: string;
+  title: string;
+  description: string;
+  youTube: string;
+  artists: Artist[];
+  userId: User;
+  tags: string;
+  thumbnail: string;
+  date: string;
+  confirmed: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  songs: string[];
+}
 
-   const swiperRef = useRef<SwiperInstance | null>(null);
-   const { id } = useParams<{ id: string }>();
-   const targetNewsSelected = useSelector((state: RootState) =>
-     getTargetNews(state, id)
-   );
-   // const url = useLocation().pathname;
-   const lastVisitedId = useSelector((state: RootState) =>
-     getLastVisitedId(state)
-   );
-   const dispatch = useDispatch();
-   const [pageData, setPageData] = useState<ArticleToDisplay>();
-  //  const [, ...tagsToRemap] = targetNewsSelected?.tags?.split("#") || [];
-  //  const tags = tagsToRemap;
-  //  const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
-  //  const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
-  //    get5RandomNewsByTags(state, pageDataTags || [])
-  //  );
-  //  const filteredRelatedData = useMemo(() => {
-  //    return relatedData.filter((news) => data.news._id !== id);
-  //    // eslint-disable-next-line react-hooks/exhaustive-deps
-  //  }, [relatedData, id]);
-
-   useEffect(() => {
-     setPageData(targetNewsSelected);
-   }, [targetNewsSelected]);
-
-   useEffect(() => {
-     if (!lastVisitedId || lastVisitedId !== id) {
-       dispatch(addLastVisited(`${id}`));
-     }
-   }, [lastVisitedId, id, dispatch]);
-
-
-
-   const handleNext = () => {
-     if (swiperRef.current) {
-       swiperRef.current.slideNext();
-     }
-   };
-
-   const handlePrev = () => {
-     if (swiperRef.current) {
-       swiperRef.current.slidePrev();
-     }
-   };
+const MaterialsDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
+  const swiperRef = useRef<SwiperInstance | null>(null);
+  const { id } = useParams<{ id: string }>();
+  const targetNewsSelected = useSelector((state: RootState) =>
+    getTargetNews(state, id)
+  );
+  const dispatch = useDispatch();
+  const [pageData, setPageData] = useState<any>(null);
 
   // Fetch data
   const fetcher = () =>
-   fetch(`http://localhost:8000/api/materials/${id}`).then((res) => res.json());
- const { data, error } = useSWR(`/api/materials/${id}`, fetcher);
- const [materials, setMaterials] = useState<Radio | null>(null);
+    fetch(`http://localhost:8000/api/materials/${id}`).then((res) => res.json());
+  const { data, error } = useSWR(`/api/materials/${id}`, fetcher);
+  const [materials, setMaterials] = useState<Radio | null>(null);
 
- useEffect(() => {
-   if (data) {
+  useEffect(() => {
+    if (data) {
       setMaterials(data);
-     console.log(data, "materials")
-   }
- }, [data]);
+      setPageData(data);
+      console.log(data, "materials");
+    }
+  }, [data]);
 
- if (error) return <div>Error loading data.</div>;
- if (!materials)
-   return (
-     <div
-       className="flex justify-center items-center h-screen w-full"
-       style={{
-         backgroundColor: themeMode ? 'white' : 'black',
-       }}
-     >
-       <p
-         className="text-xl font-semibold"
-         style={{
-           color: themeMode ? 'black' : 'white',
-         }}
-       >
-         Loading...
-       </p>
-       <div
-         className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
-         style={{
-           borderRightColor: themeMode ? '#5A1073' : '#2FC4B2',
-           borderBottomColor: themeMode ? '#5A1073' : '#2FC4B2',
-           borderLeftColor: themeMode ? '#5A1073' : '#2FC4B2',
-         }}
-       ></div>
-     </div>
-   );
-   return (
-      <Layout themeMode={themeMode} type={type}>
+  useEffect(() => {
+    setPageData(targetNewsSelected);
+  }, [targetNewsSelected]);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(addLastVisited(id));
+    }
+  }, [id, dispatch]);
+
+  const handleNext = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slideNext();
+    }
+  };
+
+  const handlePrev = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slidePrev();
+    }
+  };
+
+  if (error) return <div>Error loading data.</div>;
+  if (!materials)
+    return (
+      <div
+        className="flex justify-center items-center h-screen w-full"
+        style={{
+          backgroundColor: themeMode ? 'white' : 'black',
+        }}
+      >
+        <p
+          className="text-xl font-semibold"
+          style={{
+            color: themeMode ? 'black' : 'white',
+          }}
+        >
+          Loading...
+        </p>
+        <div
+          className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+          style={{
+            borderRightColor: themeMode ? '#5A1073' : '#2FC4B2',
+            borderBottomColor: themeMode ? '#5A1073' : '#2FC4B2',
+            borderLeftColor: themeMode ? '#5A1073' : '#2FC4B2',
+          }}
+        ></div>
+      </div>
+    );
+
+  return (
+    <Layout themeMode={themeMode} type={type}>
       <div className="flex justify-center">
         <div className="container">
           {!type && (
             <div className="md:mt-12 mt-8">
-              <BreadCrumb/>
+              <BreadCrumb />
             </div>
           )}
           <h2
@@ -167,27 +154,32 @@ const MaterialsDetails : React.FC<PageBasicProps> = ({ themeMode, type }) => {
             alt="Thumbnail"
           />
           <div className="mt-7 flex gap-3 items-center">
-          {/* <Avatar
-              src={radio.artists[0]?.profileImg}
-
-            /> */}
-            <div>
-              <h2
-                className="text-2xl font-semibold"
-                style={{
-                  color: themeMode ? '#252733' : '#FFF',
-                }}
-              >
-                {/* {radio.artists[0]?.name} */}
-              </h2>
-              <p
-                style={{
-                  color: themeMode ? '#6D6E76' : '#fff',
-                }}
-              >
-                {/* {radio.artists[0]?.description} */}
-              </p>
-            </div>
+            {materials.artists?.map((artist: Artist) => (
+              <div key={artist._id}>
+                <img
+                  src={artist.profileImg}
+                  alt={artist.name}
+                  className="w-12 h-12 rounded-full"
+                />
+                <div>
+                  <h2
+                    className="text-2xl font-semibold"
+                    style={{
+                      color: themeMode ? '#252733' : '#FFF',
+                    }}
+                  >
+                    {artist.name}
+                  </h2>
+                  <p
+                    style={{
+                      color: themeMode ? '#6D6E76' : '#fff',
+                    }}
+                  >
+                    {artist.description}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
           <div
             className="p-6 rounded-2xl shadow-lg mt-6"
@@ -206,7 +198,7 @@ const MaterialsDetails : React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     color: themeMode ? '#D9D9D9' : 'D9D9D9',
                   }}
                 />{' '}
-                4 Hours Ago
+                {new Date(materials.date).toLocaleDateString()}
               </span>
             </p>
             <p
@@ -249,7 +241,7 @@ const MaterialsDetails : React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   425: { slidesPerView: 1 },
                 }}
               >
-                {/* {radio.songs.map((songId: string, index: number) => (
+                {materials.songs?.map((songId: string, index: number) => (
                   <SwiperSlide key={index}>
                     <div
                       className="p-5 rounded-3xl mt-6"
@@ -260,7 +252,7 @@ const MaterialsDetails : React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         border: `2px solid ${themeMode ? '#f8f8ff' : '#242526'}`,
                       }}
                     >
-                      <img src={singer} alt="img" className="w-full" />
+                      <img src={materials.thumbnail} alt="img" className="w-full" />
                       <button
                         className="py-1 px-5 text-center rounded-full font-semibold mt-4"
                         style={{
@@ -268,11 +260,10 @@ const MaterialsDetails : React.FC<PageBasicProps> = ({ themeMode, type }) => {
                           color: themeMode ? '#5A1073' : '#5A1073',
                         }}
                       >
-                        {radio.tags}
+                        {materials.tags}
                       </button>
                       <p className="mt-2 text-lg font-semibold">
-                        Drake Ignites the Stage with Spectacular New Concert
-                        Experience!
+                        {materials.title}
                       </p>
                       <div className="flex gap-2 items-center">
                         <p
@@ -294,12 +285,12 @@ const MaterialsDetails : React.FC<PageBasicProps> = ({ themeMode, type }) => {
                             color: themeMode ? '#9B9CA1' : '#9B9CA1',
                           }}
                         >
-                          <BsCalendar2Date /> 20/4/2023
+                          {new Date(materials.date).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
                   </SwiperSlide>
-                ))} */}
+                ))}
               </Swiper>
 
               {/* Custom Navigation Buttons */}
@@ -323,7 +314,7 @@ const MaterialsDetails : React.FC<PageBasicProps> = ({ themeMode, type }) => {
         </div>
       </div>
     </Layout>
-   )
-}
+  );
+};
 
-export default MaterialsDetails
+export default MaterialsDetails;

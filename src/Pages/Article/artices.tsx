@@ -60,10 +60,10 @@ const Articles = ({ themeMode, type }: any) => {
   useEffect(() => {
     if (data && data.length>0 ){
       setDisplayUpdatedName();
-    }    
+    }
   }, [data]);
 
-  
+
 
   useEffect(() => {
     window.addEventListener("scroll", handleWindowScroll);

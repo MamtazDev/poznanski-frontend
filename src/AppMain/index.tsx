@@ -123,6 +123,7 @@ const AppMain: React.FC = () => {
             path="/"
             element={<Home themeMode={themeMode} type={type} />}
           />
+
           <Route
             path="/profile"
             element={<ProfilePage themeMode={themeMode} />}
@@ -133,6 +134,7 @@ const AppMain: React.FC = () => {
               path=""
               element={<ArticleMainPage themeMode={themeMode} type={type} />}
             />
+
             <Route
               path=":id"
               element={<ArticleDetailPage themeMode={themeMode} type={type} />}
@@ -154,6 +156,7 @@ const AppMain: React.FC = () => {
               path=""
               element={<MaterialMainPage themeMode={themeMode} type={type} />}
             />
+
             <Route
               path=":id"
               element={<MaterialsDetails themeMode={themeMode} type={type} />}
@@ -170,6 +173,7 @@ const AppMain: React.FC = () => {
               path=""
               element={<AlbumsMainPage themeMode={themeMode} type={type} />}
             />
+
             <Route
               path=":id"
               element={<TopArtist themeMode={themeMode} type={type} />}
@@ -182,6 +186,7 @@ const AppMain: React.FC = () => {
               path=""
               element={<VideoMainPage themeMode={themeMode} type={type} />}
             />
+
             <Route
               path=":id"
               element={<TvRadioDetails themeMode={themeMode} type={type} />}
@@ -193,6 +198,7 @@ const AppMain: React.FC = () => {
               path=""
               element={<ArtistMainPage themeMode={themeMode} type={type} />}
             />
+
             <Route
               path=":id"
               element={<ArtistDetailsPage themeMode={themeMode} type={type} />}
@@ -203,6 +209,7 @@ const AppMain: React.FC = () => {
             path={common.CREATE_NEWS}
             element={<SubmitPage themeMode={themeMode} type={type} />}
           />
+
           <Route
             path={common.SEARCH_PATH}
             element={<SearchMainPage themeMode={themeMode} type={type} />}
