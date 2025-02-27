@@ -50,6 +50,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   //     ></iframe>
   //   </div>
   // )
+
   const getYouTubeID = (url: string) => {
     let videoId = "";
     if (url.includes("youtube.com/watch")) {
@@ -59,6 +60,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
     }
     return videoId;
   };
+
   return (
     <>
       <div

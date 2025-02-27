@@ -61,6 +61,7 @@ const YoutubePlayer: React.FC<PlayerProps> = ({ isOpen, type }) => {
           <img
             className={`w-[120px] rounded-full shadow-2xl transition-transform duration-500 ease-in-out ${isOpen ? 'rotate-360' : 'rotate-0'}`}
             src={YoutubeSilverButton}
+            alt=''
           />
         </button>
       )}
