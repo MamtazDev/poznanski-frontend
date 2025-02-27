@@ -190,7 +190,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
                     {artist.name}
                   </div>
                   <div className="artist-description ">
-                    {artist.description}
+                  {artist.description?.slice(0, 80) + "..."}
                   </div>
                 </div>
               </div>

@@ -33,6 +33,7 @@ interface Product {
   date: string;
   timeframe: string;
   link: string;
+  ticket: string;
   location: string;
   description: string;
   isFeatured: boolean;
@@ -238,12 +239,12 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       </div>
                       <div className={`flex flex-col`}>
                         <div
-                          className={`${themeMode ? "ticket-detail-tilte" : "ticket-detail-tilte-dark"}`}
+                          className={`line-clamp-1 ${themeMode ? "ticket-detail-tilte" : "ticket-detail-tilte-dark"}`}
                           style={{ fontSize: type ? "22px" : "48px" }}>
                           {item.name}
                         </div>
                         <div
-                          className={`${themeMode ? "ticket-detail" : "ticket-detail-dark"} md:mt-6 mt-3`}>
+                          className={` line-clamp-2 ${themeMode ? "ticket-detail" : "ticket-detail-dark"} md:mt-6 mt-3`}>
                           {item.description}
                         </div>
                         <div className={`flex md:mt-4 mt-3`}>
@@ -302,7 +303,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         </div>
                         {!type && (
                           <div className="md:mt-10 mt-8">
-                            <Link to={item.link} target="_blank">
+                            <Link to={item.ticket} target="_blank">
                               <DetailButton
                                 text="Buy Tickets Of Concert"
                                 btnType="web"

@@ -50,6 +50,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   //     ></iframe>
   //   </div>
   // )
+
   const getYouTubeID = (url: string) => {
     let videoId = "";
     if (url.includes("youtube.com/watch")) {
@@ -59,6 +60,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
     }
     return videoId;
   };
+
   return (
     <>
       <div
@@ -70,28 +72,21 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
       ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
       ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)] hover:cursor-zoom-in" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
       `}
-          style={{
-            backgroundColor: themeMode ? "" : "#242526",
-            border: themeMode ? "1px solid white" : "1px solid #242526",
-            borderRadius: "2xl",
+         style={{
+          backgroundColor: themeMode ? "" : "#242526",
+          border: themeMode ? "1px solid white" : "1px solid #242526",
+          borderRadius: "2xl",
           }}
         >
-
-
           {/* YouTube Thumbnail */}
           <div
-            className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"}`}
+            className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
             onClick={(e) => {
               e.stopPropagation();
               handlePlay();
             }}
           >
             <img
-              // src={
-              //   youTube
-              //     ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}`
-              //     : novideo
-              // }
               src={youTube ? `https://img.youtube.com/vi/${getYouTubeID(youTube)}/hqdefault.jpg` : "default-thumbnail.jpg"}
               className="md:w-full w-[69px] h-full  object-cover"
               alt="YouTube Thumbnail"
