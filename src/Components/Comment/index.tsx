@@ -671,9 +671,9 @@ const CommentForm: React.FC<CommentSectionProps> = ({
                   </h3>
                   {/* Input Fields */}
                   <div className="space-y-4">
-                    <div className="lg:flex gap-6">
-                      <div className="w-full space-y-3">
-                        <label
+                    <div className="lg:flex flex-col gap-3 space-y-2 md:space-y-0">
+                      <div className="w-full">
+                        {/* <label
                           htmlFor="name"
                           className="block text-sm font-medium"
                           style={{ color: themeMode ? "black" : "#fff" }}>
@@ -687,10 +687,10 @@ const CommentForm: React.FC<CommentSectionProps> = ({
                             backgroundColor: themeMode ? "#F5F5F5" : "#242526",
                             color: themeMode ? "#333" : "#FFF",
                           }}
-                        />
+                        /> */}
                         <label
                           htmlFor="website"
-                          className="block text-sm font-medium"
+                          className="block text-sm mb-2 font-semibold"
                           style={{ color: themeMode ? "black" : "#fff" }}>
                           Website
                         </label>
@@ -703,7 +703,7 @@ const CommentForm: React.FC<CommentSectionProps> = ({
                             color: themeMode ? "#333" : "#FFF",
                           }}
                         />
-                        <label
+                        {/* <label
                           htmlFor="Email"
                           className="block text-sm font-medium"
                           style={{ color: themeMode ? "black" : "#fff" }}>
@@ -717,7 +717,7 @@ const CommentForm: React.FC<CommentSectionProps> = ({
                             backgroundColor: themeMode ? "#F5F5F5" : "#242526",
                             color: themeMode ? "#333" : "#FFF",
                           }}
-                        />
+                        /> */}
                       </div>
                       <div className="w-full">
                         <Input

@@ -72,12 +72,13 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   useEffect(() => {
     if (data) {
       // Sort albums by date (latest first) and select the latest 3
+      console.log(data)
       const sortedAlbums = data.albums
         .sort(
           (a: Product, b: Product) =>
             new Date(b.date).getTime() - new Date(a.date).getTime()
         )
-        .slice(0, 4);
+        // .slice(0, 4);
       setAlbum(sortedAlbums);
       setLoading(false);
     }
@@ -151,12 +152,12 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             ) : (
               <div
                 className={`grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-5 mt-10 mb-10`}>
-                {album.length > 0 ? (
-                  album.map((categoryItem) => (
+                {album?.length > 0 ? (
+                  album?.map((categoryItem) => (
                     <NewReleaseCard
                       id={categoryItem._id}
                       key={categoryItem._id}
-                      data={{ songs: [] }} // Default value to prevent errors
+                      data={{ songs: categoryItem.songs }}
                       youTube="https://www.youtube.com/embed/6JYIGclVQdw"
                       title={categoryItem.title}
                       nickname={categoryItem.artists[0]?.name}

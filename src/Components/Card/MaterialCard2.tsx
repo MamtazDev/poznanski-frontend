@@ -121,12 +121,12 @@ const MaterialCard: React.FC<News> = ({
             <div
               className={`mt-2 line-clamp-1 ${!themeMode && "title-dark-color"}`}
             >
-              {title}
+              {title.slice(0, 10)}
             </div>
 
             {/* Feature Text */}
             {feature &&
-              <div className="flex justify-start mt-3">
+              <div className="flex justify-start mt-3 line-clamp-1">
                 <div
                   className={`px-5 py-1 rounded ${!themeMode && "btn-dark-bg-color"
                     }`}

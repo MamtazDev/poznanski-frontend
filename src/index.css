@@ -240,3 +240,10 @@ code {
 .news-carousel .swiper-pagination-bullet {
   transform: initial !important;
 }
+
+.news-carousel .swiper-pagination-bullet-active-prev-prev, .event-carousel .swiper-pagination-bullet-active-prev {
+  width: 18px !important;
+  height: 7px !important;
+  border-radius: 50px;
+  background: #E8ECFE !important;
+  transform: none !important;}
