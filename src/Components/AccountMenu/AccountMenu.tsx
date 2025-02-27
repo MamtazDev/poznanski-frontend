@@ -163,10 +163,9 @@ export const AccountMenu: React.FC<{
 					<MenuItem onClick={handleClose}>
 					<Link to='/profile' className='flex gap-2 items-center'><UserAvatar /> Profile</Link>
 					</MenuItem>
-					<Divider />
-					<MenuItem onClick={handleClose}>
+					{/* <MenuItem onClick={handleClose}>
 						<Link to='/notification'>powiadomienie</Link>
-					</MenuItem>
+					</MenuItem> */}
 					<MenuItem onClick={handleClose}>
 						Ustawienia
 					</MenuItem>

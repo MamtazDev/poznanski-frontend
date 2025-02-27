@@ -1,6 +1,7 @@
-rafa:
-  News details page design with  side bar recent card
-  onLandingPage: responsive , edit event and artist, album  ,
-  News page responsiveness
-
-  Panel:
+REACT_APP_URL=http://localhost:8000/
+REACT_APP_API_BASE_URL=http://localhost:8000/api
+REACT_APP_FILES_URL=http://localhost:8000/img/
+REACT_APP_ANALYTICS=G-BHK8HYJZ7H
+REACT_APP_G_CLIENT_ID=1067922583525-n1ssmal3eph1aqfa96i707feb58u3uuc.apps.googleusercontent.com
+REACT_APP_G_API_KEY=AIzaSyBmYFEkoJIVhA4vD7hqWU3M7bf7djo-9rA
+REACT_APP_FB_APP_ID=442147645420984

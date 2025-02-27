@@ -13,14 +13,17 @@ interface News {
   youTube?: string;
   data: any;
   id?: any;
+  _id?: any;
   link: string;
   name?: string;
 }
 
-const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, data, id, name }) => {
+const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, data, id,_id,name }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  console.log("data", data)
 
   const handlePlay = () => {
     if (youTube) {
@@ -32,7 +35,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   };
 
   const handleClick = (id: string) => {
-    navigate(`/radio/${id}`);
+    navigate(`/radio/${data?._id}`);
   };
 
   // const YouTubeEmbed = ({ video, title }: { video: string; title: string }) => (
@@ -47,14 +50,23 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   //     ></iframe>
   //   </div>
   // )
+  const getYouTubeID = (url: string) => {
+    let videoId = "";
+    if (url.includes("youtube.com/watch")) {
+      videoId = url.split("v=")[1]?.split("&")[0];
+    } else if (url.includes("youtu.be/")) {
+      videoId = url.split("youtu.be/")[1]?.split("?")[0];
+    }
+    return videoId;
+  };
   return (
     <>
       <div
-        className="transition-all duration-300 ease-out w-full h-pull"
+        className="transition-all duration-300 ease-out w-full h-full cursor-pointer"
         onClick={() => handleClick(id)}
       >
         <div
-          className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md
+          className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md cursor-pointer
       ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
       ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)] hover:cursor-zoom-in" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
       `}
@@ -75,11 +87,12 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
             }}
           >
             <img
-              src={
-                youTube
-                  ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
-                  : novideo
-              }
+              // src={
+              //   youTube
+              //     ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}`
+              //     : novideo
+              // }
+              src={youTube ? `https://img.youtube.com/vi/${getYouTubeID(youTube)}/hqdefault.jpg` : "default-thumbnail.jpg"}
               className="md:w-full w-[69px] h-full  object-cover"
               alt="YouTube Thumbnail"
             />
@@ -142,10 +155,10 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
                 )}
               </button>
             </div>
-            <div className={`md:text-xl font-semibold mt-2 md:mt-3 line-clamp-1 ${!themeMode && "title-dark-color"}`}>
+            <div className={`md:text-xl font-semibold mt-2 md:mt-3 line-clamp-1 cursor-pointer ${!themeMode && "title-dark-color"}`}>
               {feature}
             </div>
-            <div className={`md:mt-2 mt-1 font-medium text-xs md:text-sm`} style={{ color: themeMode ? "#BBBCC0" : "#BBBCC0" }} >
+            <div className={`md:mt-2 mt-1 font-medium text-xs md:text-sm cursor-pointer`} style={{ color: themeMode ? "#BBBCC0" : "#BBBCC0" }} >
               {title}
             </div>
           </div>

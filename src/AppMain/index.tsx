@@ -1,7 +1,7 @@
 import { Spinner } from "@chakra-ui/react";
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import NavBar from "../Components/Layout/NavBar";
 import ScrollToTopOnPageChange from "../Components/ScrollToTop";
 import YoutubePlayer from "../Components/YoutubePlayer";
@@ -18,6 +18,8 @@ import TvRadioDetails from "../Pages/Video/TvRadioDetails";
 import MaterialsDetails from "../Pages/Material/MaterialsDetails";
 import VerifyEmail from "../Pages/Login/VerifyEmail";
 import ResetPassword from "../Pages/Login/ResetPass";
+import { Link } from "react-router-dom";
+import Notification from "../Pages/Notification";
 
 const Home = lazy(() => import("../Pages/Home"));
 const SubmitPage = lazy(() => import("../Pages/Submit"));
@@ -54,12 +56,25 @@ const AppMain: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
   const [isOpen, setIsOpen] = useState<boolean>(playerOpen);
   const [type, setPropsType] = useState<boolean>(false);
+
+
+  const userStore = useSelector((state: RootState) => state.user);
+  const loggedIn = userStore.isLoggedIn;
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  useEffect(() => {
+    if (loggedIn) {
+      setAnchorEl(null);
+    }
+  }, [userStore]);
   const handleLogout = () => {
     deleteCookie("accessToken");
     deleteCookie("refreshToken");
     dispatch(logout());
   };
+
 
   const checkIfAuth = async () => {
     try {
@@ -102,6 +117,7 @@ const AppMain: React.FC = () => {
     };
   }, []);
 
+
   return (
     <div className={` ${!themeMode && "back-dark"}`}>
       <NavBar themeMode={themeMode} type={type} />
@@ -126,9 +142,21 @@ const AppMain: React.FC = () => {
 
           <Route
             path="/profile"
-            element={<ProfilePage themeMode={themeMode} />}
+            element={
+              loggedIn ? (
+                <ProfilePage themeMode={themeMode} />
+              ) : (
+                <>
+                  <div className="flex justify-center gap-2 items-center text-xl font-medium h-screen w-full" style={{
+                    color:themeMode ?"black" :'white'
+                  }}>Please log in first. <Link to='/login' className="font-semibold" style={{
+                    color: themeMode? "#3BD6C6 ":"#5A1073"
+                   }}>Login</Link></div>
+                  {/* Redirect or show login link */}
+                </>
+              )
+            }
           />
-
           <Route path={common.NEWS_PATH}>
             <Route
               path=""
@@ -166,6 +194,10 @@ const AppMain: React.FC = () => {
           <Route
             path={common.CONCERT_PATH}
             element={<ConcertMainPage themeMode={themeMode} type={type} />}
+          />
+          <Route
+            path={common.Notification_PATH}
+            element={<Notification themeMode={themeMode} type={type} />}
           />
 
           <Route path={common.NEWRELEASE_PATH}>

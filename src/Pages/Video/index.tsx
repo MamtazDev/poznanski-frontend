@@ -25,18 +25,19 @@ interface Product {
   star: number;
 }
 
-export interface filterProperties{
+export interface filterProperties {
   sort: string,
   quantity: number,
-    startDate: string,
-    endDate: string,
-    order: string,
-    search: string | undefined
-  }
+  startDate: string,
+  endDate: string,
+  order: string,
+  search: string | undefined
+}
 
 const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<Product[]>([]);
+  console.log(cardData)
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
@@ -47,7 +48,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   const [filters, setFilters] = useState<filterProperties>({
     sort: "asc",
-    quantity: 5,
+    quantity: 100,
     startDate: "",
     endDate: "",
     order: "desc",
@@ -91,13 +92,15 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     try {
       const response = await fetch(url);
       const data = await response.json();
-      setCardData(data.records);
+      setCardData(data?.records);
+      console.log(data?.records, "data?.records")
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
   };
+
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const setDisplayUpdatedName = () => {
@@ -112,7 +115,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       setLoading(false);
     }, 1000);
   };
-
   const handleScroll = () => {
     if (!scrollContainerRef.current) return;
 
@@ -122,8 +124,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       loadMoreItems();
     }
   };
-
-
   useEffect(() => {
     setDisplayedItems(cardData.slice(0, visibleCount));
   }, [cardData, visibleCount]);
@@ -157,17 +157,26 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     };
   }, []);
 
+  //search fucntionalities
+  // const handleSearch = (inputValue: string) => {
+  //   fetchData(filters)
+  // }
 
-//search fucntionalities
+  const handleSearch = (inputValue: string) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      search: inputValue,
+    }));
+  };
 
-const handleSearch = (inputValue: string) => {
-  fetchData(filters)
-}
+  useEffect(() => {
+    fetchData(filters);
+  }, [filters]); // Fetch data when filters change, including search
 
 
-useEffect(() => {
-fetchData(filters)
-}, [filters])
+  useEffect(() => {
+    fetchData(filters)
+  }, [filters])
 
 
   return (
@@ -190,40 +199,42 @@ fetchData(filters)
             </div>
             <div
               className={`md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide`}
-              style={{ width: "100%",
-               }}
+              style={{
+                width: "100%",
+              }}
               ref={scrollContainerRef}
               onScroll={handleScroll}
             >
               {loading ? (
                 <div
-                className="flex justify-center items-center  w-full"
-                style={{ backgroundColor: themeMode ? "white" : "#111217" }}
-              >
-                <p
-                  className="text-xl font-semibold"
-                  style={{ color: themeMode ? "black" : "white" }}
+                  className="flex justify-center items-center  w-full"
+                  style={{ backgroundColor: themeMode ? "white" : "#111217" }}
                 >
-                  Loading...
-                </p>
-                <div
-                  className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
-                  style={{
-                    borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
-                    borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
-                    borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
-                  }}
-                ></div>
-              </div>
+                  <p
+                    className="text-xl font-semibold"
+                    style={{ color: themeMode ? "black" : "white" }}
+                  >
+                    Loading...
+                  </p>
+                  <div
+                    className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+                    style={{
+                      borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+                      borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+                      borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+                    }}
+                  ></div>
+                </div>
               ) : (
                 <div
                   className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5 mb-16`}
                 >
-                  {cardData.length>0? cardData.map((item, index) => (
+                  {cardData?.length > 0 ? cardData.map((item, index) => (
                     <div key={index} className="w-full">
                       <TVCard
                         data={item}
-                        id={item._id}
+                        // id={item._id}
+                        id={item.id}
                         video=""
                         type={type ? "vertical" : "horizontal"}
                         youTube={item.youTube}
@@ -232,7 +243,7 @@ fetchData(filters)
                         link={item.link}
                       />
                     </div>
-                  )): <p className="text-blue-500 text-5xl py-3 text-center">There is no data</p>}
+                  )) : <p className="text-blue-500 text-5xl py-3 text-center">There is no data</p>}
                 </div>
               )}
 

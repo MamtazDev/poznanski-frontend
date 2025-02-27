@@ -93,7 +93,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   useEffect(() => {
     if (data) {
-      console.log("Fetched data:", data);
+      // console.log("Fetched data:", data);
       setArtist(data.artist || null);
       setRadios(Array.isArray(data.radios) ? data.radios : []);
       setAlbums(Array.isArray(data.album) ? data.album : []);
@@ -129,22 +129,22 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         <div className="flex justify-center">
           <div className="container">
             {!type && <BreadCrumb />}
-            <div className='flex gap-4 items-center mt-5'>
+            <div className='flex gap-4 items-center md:mt-5 mt-3'>
               <img src={artist?.profileImg || avatar} className='w-[100px] h-[100px] rounded-full' alt='img' />
               <div>
-                <h2 className="text-5xl font-bold" style={{ color: themeMode ? "#252733" : "#FFF" }}>
+                <h2 className="lg:text-5xl text-3xl font-bold" style={{ color: themeMode ? "#252733" : "#FFF" }}>
                   {artist?.name || "Unknown Artist"}
                 </h2>
                 <p className='flex gap-1 items-center font-medium' style={{ color: themeMode ? "#252733" : "#BBBCC0" }}>
                   Singer
-                  <span className='flex gap-2 items-center'>
+                  {/* <span className='flex gap-2 items-center'>
                     <GoDotFill style={{ color: themeMode ? "#D9D9D9" : "D9D9D9" }} /> 125 Songs
-                  </span>
+                  </span> */}
                 </p>
               </div>
             </div>
             {/* Details */}
-            <div className='mt-12'>
+            <div className='lg:mt-12 mt-6'>
               <h2 className='text-xl font-semibold' style={{ color: themeMode ? "#252733" : "#FFF" }}>Details</h2>
               <div className='p-6 rounded-2xl shadow-lg mt-6' style={{ backgroundColor: themeMode ? "#FFF" : "#242526" }}>
                 <p style={{ color: themeMode ? "#6D6E76" : "#BBBCC0" }}>
@@ -176,14 +176,14 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         ) }
 
             {/* Radios Section */}
-            {radios.length > 0 && (
-              <div className="mt-12 relative">
+            {radios?.length > 0 && (
+              <div className="lg:mt-12 mt-6 relative">
                 <h2 className="text-xl font-semibold" style={{ color: themeMode ? "#252733" : "#FFF" }}>
                   Tv/Radio
                 </h2>
 
                 {/* Swiper Carousel */}
-                <div className="w-full mt-10 relative">
+                <div className="w-full lg:mt-10 mt-5 relative">
                   <Swiper
                     onSwiper={(swiper: any) => (swiperRef.current = swiper)}
                     slidesPerView={4}
@@ -197,10 +197,9 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       375: { slidesPerView: 1 },
                     }}
                   >
-                    {radios.map((radio) => (
+                    {radios?.map((radio) => (
                       <SwiperSlide key={radio.id}>
-
-                        <div className='p-5 rounded-3xl mt-6'
+                        <div className='p-5 rounded-3xl'
                           style={{
                             backgroundColor: themeMode ? "#FFF" : "#242526",
                             color: themeMode ? "black" : "#fff",
@@ -262,7 +261,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                             }}>{radio.tags}</button>
                           {
                             radio.title && <>
-                              <p className='mt-2 text-lg font-semibold' >{radio.title}</p>
+                              <p className='mt-2 text-lg font-semibold line-clamp-1' >{radio.title}</p>
                             </>
                           }
 

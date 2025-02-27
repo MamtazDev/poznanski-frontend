@@ -174,16 +174,18 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           >
             {radio.title}
           </h2>
+          {radio.thumbnail && (
+            <img
+              src={radio.thumbnail}
+              className="w-full h-[596px] mt-12 rounded-xl"
+              alt="Thumbnail"
+            />
+          )}
 
-          <img
-            src={radio.thumbnail}
-            className="w-full mt-12 rounded-xl"
-            alt="Thumbnail"
-          />
           <div className="mt-7 flex gap-3 items-center">
             <Avatar
               src={radio.artists[0]?.profileImg}
-
+              className='cursor-pointer'
             />
             <div>
               <h2
@@ -224,110 +226,112 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </span>
             </p>
             <p style={{ color: themeMode ? "#6D6E76" : "#BBBCC0" }}>
-                  {showFullDescription ? radio.description :radio.description?.split(' ').slice(0, 50).join(' ') + '...'}
-                </p>
-                {radio.description?.split(' ').length > 50 && (
-                  <button
-                    className='mt-4 font-bold'
-                    style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
-                    onClick={toggleDescription}
-                  >
-                    {showFullDescription ? 'View Less' : 'View More'}
-                  </button>
-                )}
+              {showFullDescription ? radio.description : radio.description?.split(' ').slice(0, 50).join(' ') + '...'}
+            </p>
+            {radio.description?.split(' ').length > 50 && (
+              <button
+                className='mt-4 font-bold'
+                style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
+                onClick={toggleDescription}
+              >
+                {showFullDescription ? 'View Less' : 'View More'}
+              </button>
+            )}
 
           </div>
-
-          <div className="mt-12">
-            <h1
-              className="text-xl font-semibold"
-              style={{
-                color: themeMode ? 'black' : '#fff',
-              }}
-            >
-              Related Videos
-            </h1>
-            {/* Swiper for related videos */}
-            <div className="w-full mt-10 relative">
-              <Swiper
-                onSwiper={(swiper: any) => (swiperRef.current = swiper)}
-                slidesPerView={4}
-                spaceBetween={30}
-                loop={true}
-                breakpoints={{
-                  1200: { slidesPerView: 4 },
-                  1024: { slidesPerView: 2 },
-                  768: { slidesPerView: 2 },
-                  425: { slidesPerView: 1 },
+          {radio?.songs && (
+            <div className="mt-12">
+              <h1
+                className="text-xl font-semibold"
+                style={{
+                  color: themeMode ? 'black' : '#fff',
                 }}
               >
-                {radio.songs.map((songId: string, index: number) => (
-                  <SwiperSlide key={index}>
-                    <div
-                      className="p-5 rounded-3xl mt-6"
-                      style={{
-                        backgroundColor: themeMode ? '#FFF' : '#242526',
-                        color: themeMode ? 'black' : '#fff',
-                        borderRadius: '25px',
-                        border: `2px solid ${themeMode ? '#f8f8ff' : '#242526'}`,
-                      }}
-                    >
-                      <img src={singer} alt="img" className="w-full" />
-                      <button
-                        className="py-1 px-5 text-center rounded-full font-semibold mt-4"
+                Related Videos
+              </h1>
+              {/* Swiper for related videos */}
+              <div className="w-full mt-10 relative">
+                <Swiper
+                  onSwiper={(swiper: any) => (swiperRef.current = swiper)}
+                  slidesPerView={4}
+                  spaceBetween={30}
+                  loop={true}
+                  breakpoints={{
+                    1200: { slidesPerView: 4 },
+                    1024: { slidesPerView: 2 },
+                    768: { slidesPerView: 2 },
+                    425: { slidesPerView: 1 },
+                  }}
+                >
+                  {radio?.songs?.map((songId: string, index: number) => (
+                    <SwiperSlide key={index}>
+                      <div
+                        className="p-5 rounded-3xl mt-6"
                         style={{
-                          backgroundColor: themeMode ? '#E8ECFE' : '#3BD6C6',
-                          color: themeMode ? '#5A1073' : '#5A1073',
+                          backgroundColor: themeMode ? '#FFF' : '#242526',
+                          color: themeMode ? 'black' : '#fff',
+                          borderRadius: '25px',
+                          border: `2px solid ${themeMode ? '#f8f8ff' : '#242526'}`,
                         }}
                       >
-                        {radio.tags}
-                      </button>
-                      <p className="mt-2 text-lg font-semibold">
-                        Drake Ignites the Stage with Spectacular New Concert
-                        Experience!
-                      </p>
-                      <div className="flex gap-2 items-center">
-                        <p
-                          className="flex gap-1 items-center"
+                        <img src={singer} alt="img" className="w-full" />
+                        <button
+                          className="py-1 px-5 text-center rounded-full font-semibold mt-4"
                           style={{
-                            color: themeMode ? '#9B9CA1' : '#9B9CA1',
+                            backgroundColor: themeMode ? '#E8ECFE' : '#3BD6C6',
+                            color: themeMode ? '#5A1073' : '#5A1073',
                           }}
                         >
-                          <IoLocationOutline /> New York
+                          {radio.tags}
+                        </button>
+                        <p className="mt-2 text-lg font-semibold">
+                          Drake Ignites the Stage with Spectacular New Concert
+                          Experience!
                         </p>
-                        <GoDotFill
-                          style={{
-                            color: themeMode ? '#D9D9D9' : 'D9D9D9',
-                          }}
-                        />
-                        <p
-                          className="flex gap-1 items-center"
-                          style={{
-                            color: themeMode ? '#9B9CA1' : '#9B9CA1',
-                          }}
-                        >
-                          <BsCalendar2Date /> 20/4/2023
-                        </p>
+                        <div className="flex gap-2 items-center">
+                          <p
+                            className="flex gap-1 items-center"
+                            style={{
+                              color: themeMode ? '#9B9CA1' : '#9B9CA1',
+                            }}
+                          >
+                            <IoLocationOutline /> New York
+                          </p>
+                          <GoDotFill
+                            style={{
+                              color: themeMode ? '#D9D9D9' : 'D9D9D9',
+                            }}
+                          />
+                          <p
+                            className="flex gap-1 items-center"
+                            style={{
+                              color: themeMode ? '#9B9CA1' : '#9B9CA1',
+                            }}
+                          >
+                            <BsCalendar2Date /> 20/4/2023
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
 
-              {/* Custom Navigation Buttons */}
-              <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10">
-                <button onClick={handlePrev} className="swiper-button-prev">
-                  <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
-                </button>
-              </div>
+                {/* Custom Navigation Buttons */}
+                <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10">
+                  <button onClick={handlePrev} className="swiper-button-prev">
+                    <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
+                  </button>
+                </div>
 
-              <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10">
-                <button onClick={handleNext} className="swiper-button-next">
-                  <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
-                </button>
+                <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10">
+                  <button onClick={handleNext} className="swiper-button-next">
+                    <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
           <CommentForm
             postModel={PostModels.news}
             commentData={pageData?.commentsSection ?? null}

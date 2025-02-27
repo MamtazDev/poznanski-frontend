@@ -90,7 +90,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   });
 
   useEffect(() => {
-    console.log("hover:", hoveredCard);
+    // console.log("hover:", hoveredCard);
   }, [hoveredCard]);
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         const response = await fetch("http://localhost:8000/api/artist");
         const jsonData = await response.json();
 
-        console.log("Fetched Data:", jsonData);
+        // console.log("Fetched Data:", jsonData);
 
         const newArtists = jsonData.data.map((item: any) => ({
           id: item.artist._id,
@@ -148,7 +148,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           products: item.products,
         }));
 
-        console.log("Formatted Artists Data:", newArtists);
+        // console.log("Formatted Artists Data:", newArtists);
 
         setArtists(newArtists);
       } catch (error) {
@@ -194,7 +194,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             />
           </div>
           {/* id wise data add here */}
-          {filteredArtists.map((artist, _idx_) => (
+          {filteredArtists?.map((artist, _idx_) => (
             <div
               key={_idx_}
               id={artist._id}
@@ -229,7 +229,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     </div>
                   </div>
                 </div>
-                {artist.products.length > 0 && (
+                {artist?.products?.length > 0 && (
                   <div
                     className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "md:h-[350px] h-72" : "h-0 overflow-hidden"}`}>
                     {

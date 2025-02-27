@@ -12,6 +12,8 @@ import "swiper/css/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { Navigation, Pagination } from "swiper/modules";
+import { AiOutlineArrowRight } from "react-icons/ai";
 interface MaterialData {
   id: string;
   title: string;
@@ -26,7 +28,7 @@ interface CartInterface {
 }
 
 const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
-  const [cardNum, setCardNum] = useState<number>(3);
+  // const [cardNum, setCardNum] = useState<number>(3);
   const [cardData, setCardData] = useState<CartInterface | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -66,17 +68,48 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
     };
   }, []);
 
+
+
+  const [showPagination, setShowPagination] = useState(window.innerWidth < 768);
+  const [showNavigation, setShowNavigation] = useState(window.innerWidth >= 768);
+  const [itemsPerRow, setItemsPerRow] = useState(3);
+  const [cardNum, setCardNum] = useState(window.innerWidth < 768 ? 1 : 3);
+
+  useEffect(() => {
+    const updateUI = () => {
+      const width = window.innerWidth;
+
+      if (width >= 1480) {
+        setItemsPerRow(2);
+        setShowNavigation(true);
+        setShowPagination(false);
+      } else if (width >= 768) {
+        setItemsPerRow(2);
+        setShowNavigation(true);
+        setShowPagination(false);
+      } else {
+        setItemsPerRow(5);
+        setShowNavigation(false);
+        setShowPagination(true);
+      }
+
+      console.log("Width:", width, "ShowPagination:", showPagination);
+    };
+
+    updateUI();
+    window.addEventListener("resize", updateUI);
+    return () => window.removeEventListener("resize", updateUI);
+  }, [showPagination]); // **Dependency হিসাবে Add করুন**
+
+
   const handleNext = () => {
-    if (swiperRef.current) {
-      swiperRef.current.slideNext();
-    }
+    if (swiperRef.current) swiperRef.current.slideNext();
   };
 
   const handlePrev = () => {
-    if (swiperRef.current) {
-      swiperRef.current.slidePrev();
-    }
+    if (swiperRef.current) swiperRef.current.slidePrev();
   };
+
   return cardData && cardData.materials.length ? (
     <div className="flex justify-center">
       <div className="container md:mt-36 md:pt-1.5 mt-20">
@@ -92,30 +125,35 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
             </div>
           </div>
         </div>
-        <div className="w-full mt-10 relative">
+
+        <div className="w-full relative mt-10">
           <Swiper
             onSwiper={(swiper: any) => (swiperRef.current = swiper)}
+            pagination={showPagination ? { clickable: true } : false} // ✅
             slidesPerView={3}
             slidesPerGroup={2}
             spaceBetween={20}
             loop={false}
-            navigation={true}
+            navigation={showNavigation}
+            modules={[Navigation, Pagination]}
             breakpoints={{
               1440: { slidesPerView: 3, slidesPerGroup: 2 },
               1024: { slidesPerView: 3, slidesPerGroup: 3 },
               768: { slidesPerView: 2, slidesPerGroup: 2 },
-              330: { slidesPerView: 1, slidesPerGroup: 1 },
-            }}>
-            {cardData.materials
-              .reduce<any[][]>((rows, item, index) => {
-                const rowIndex = Math.floor(index / 2);
+              425: { slidesPerView: 1, slidesPerGroup: 1 },
+            }}
+            className="news-carousel"
+          >
+            {cardData?.materials
+              .reduce<any[][]>((rows:any, item:any, index:any) => {
+                const rowIndex = Math.floor(index / itemsPerRow);
                 if (!rows[rowIndex]) rows[rowIndex] = [];
                 rows[rowIndex].push(item);
                 return rows;
               }, [])
               .map((row, rowIndex) => (
-                <SwiperSlide key={rowIndex}>
-                  <div className="grid grid-cols-1 gap-5">
+                <SwiperSlide key={rowIndex} className="md:mb-16 mb-8">
+                   <div className="grid grid-cols-1 gap-5">
                     {row.map((item, index) => (
                       <div key={index}>
                         <MaterialCard
@@ -135,19 +173,39 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
               ))}
           </Swiper>
 
-          {/* Custom Navigation Buttons */}
-          <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10">
-            <button onClick={handlePrev} className="swiper-button-prev">
-              <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
-            </button>
-          </div>
+          {/* Pagination Dots - Only visible on mobile */}
+          {showPagination && (
+            <div className={` flex justify-center mt-4 !relative !bottom-0
+              ${themeMode ? "swiper-pagination" : "dark-swiper-pagination"}`}
+            ></div>
+          )}
 
-          <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10">
-            <button onClick={handleNext} className="swiper-button-next">
-              <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
-            </button>
-          </div>
+          {/* Custom Navigation Buttons - Hidden on Mobile */}
+          {showNavigation && (
+            <>
+              <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10 hidden md:block">
+                <button onClick={handlePrev} className="swiper-button-prev">
+                  <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
+                </button>
+              </div>
+
+              <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10 hidden md:block">
+                <button onClick={handleNext} className="swiper-button-next">
+                  <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
+         <div className="md:hidden block">
+                  <button
+                    className={`text-sm p-4 font-semibold text-[#5A1073] flex gap-2 items-center w-full text-center justify-center rounded-lg ${themeMode ? "bg-[#EFE7F1]" : "bg-[#2FC4B2]"}`}
+                    onClick={() => navigate("/materials")}
+                  >
+                    See All Videos
+                    <AiOutlineArrowRight size={24} />
+                  </button>
+                </div>
       </div>
     </div>
   ) : (

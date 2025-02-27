@@ -37,11 +37,11 @@ const MaterialCard: React.FC<News> = ({
 
   const dispatch = useDispatch();
   const dateFormated = moment(date).format("MM/ DD/ YYYY");
-  const handlePlay = () => {
-    if (video) {
-      dispatch(openPlayer(video));
-    }
-  };
+const handlePlay = () => {
+  if (video) {
+    dispatch(openPlayer(video));
+  }
+};
 
   const wordArray = feature
     ? feature.split(",").map((word) => word.trim())
@@ -49,6 +49,7 @@ const MaterialCard: React.FC<News> = ({
 
   const handleClick = (id: any) => {
     navigate(`/materials/${id}`);
+    console.log(id, "materials");
   };
   return (
     <div className="product-card1 flex w-full">

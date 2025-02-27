@@ -16,6 +16,9 @@ import { ReactComponent as InstagramIcon } from "../../../assets/svg/instagramIc
 import { DelayedLink } from "../../_utility/DelayedLink";
 import { ActionButton } from "../../Button";
 import SearchBar from "./SearchBar";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../reducers";
+import { FiBell } from "react-icons/fi";
 
 interface NavBarProps {
   filterText?: string;
@@ -44,6 +47,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
   const [isSmallDevice, setIsSmallDevice] = useState(false); // Added state for small device
   const navigate = useNavigate();
   const location = useLocation();
+  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   useEffect(() => {
     const checkDeviceSize = () => {
@@ -178,7 +182,10 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                       className="cursor-pointer"
                       stroke={getIconsColor(props.themeMode)}
                     />
+
                   </div>
+						<Link to='/notification'><FiBell className="text-2xl" style={{color: themeMode? "#5A1073":"#21E3CE"}}/></Link>
+
                   <AccountMenu themeMode={props.themeMode} />
                   {/* <Link to={common.CREATE_NEWS}>
                     <div

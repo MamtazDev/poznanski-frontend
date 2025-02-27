@@ -1,3 +1,4 @@
+import axios from "axios";
 import { FileFromEditor } from "../Components/TipTap/TipTap";
 import { Article } from "../hooks/usePaginatedNews";
 import { apiGetReq, apiPostReq, apiPutReq } from "./api-functions";
@@ -51,18 +52,32 @@ export const forgetPasswordReq = async (email: string) => {
 };
 
 export const profileUpdateRequest = async (
-  _id: string,
+  rafa: string,
   nickname: string,
-  profilePicture: string | null
+  profilePicture?: string | null
 ) => {
   const reqData = {
-    nickname: nickname,
-    profilePicture: profilePicture,
+    nickname,
+    profilePicture,
   };
+  const path = `/auth/users/${rafa}`;
+  console.log("request Data", reqData, path)
 
-  const path = `/auth/users/${_id}`;
   await apiPutReq(path, reqData);
 };
+
+// export const profileUpdateRequest = async (userId: string, nickname: string, profileImage: string) => {
+//   const payload = { nickname, profilePicture: profileImage };
+
+//   try {
+//     const response = await axios.put(`http://localhost:8000/api/auth/users/${userId}`, payload);
+//     return response.data;
+//   }
+//   catch (error) {
+//     throw new Error("Error updating profile: " + error);
+//   }
+// };
+
 
 export const profilePicRequest = async (file: File): Promise<string> => {
   const formData = new FormData();

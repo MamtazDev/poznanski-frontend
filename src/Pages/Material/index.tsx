@@ -44,7 +44,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   const [filters, setFilters] = useState<filterProperties>({
     sort: "A to Z",
-    quantity: 5,
+    quantity: 50,
     startDate: "",
     endDate: "",
     order: "desc",
