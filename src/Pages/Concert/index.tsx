@@ -219,7 +219,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 clickable: true,
               }}
               modules={[Pagination]}
-              className="mySwiper event-carousel">
+              className=" event-carousel">
               {cardData?.isFeatured && Array.isArray(cardData.isFeatured) ? (
                 cardData?.isFeatured.map((item, idx) => (
                   <SwiperSlide key={idx} className="p-2 md:mb-16 mb-8">
