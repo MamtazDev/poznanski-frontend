@@ -49,12 +49,14 @@ const CardComp = ({ item, themeMode, idx }: any) => {
           >
             Buy Ticket
           </Button> */}
-           <a
-    href={item.ticket}
-    className={`inline-flex items-center justify-center text-[14px] font-semibold font-[Urbanist] border ${themeMode ? 'border-[#5A1073] text-[#5A1073] bg-white' : 'border-[#2FC4B2] text-[#2FC4B2] bg-[#242526]'} h-[30px] w-[105px] rounded-[5px]`}
-  >
-    Buy Ticket
-  </a>
+          <a
+            href={item.ticket}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center justify-center text-[14px] font-semibold font-[Urbanist] border ${themeMode ? 'border-[#5A1073] text-[#5A1073] bg-white' : 'border-[#2FC4B2] text-[#2FC4B2] bg-[#242526]'} h-[30px] w-[105px] rounded-[5px]`}
+          >
+            Buy Ticket
+          </a>
         </div>
       </div>
 
@@ -74,7 +76,7 @@ const CardComp = ({ item, themeMode, idx }: any) => {
           </div>
 
           <div className="px-2 py-1 text-xs font-semibold rounded-full  text-[#5A1073]" style={{
-            backgroundColor : themeMode?"#E8ECFE":"#2FC4B2"
+            backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2"
           }}>
             {item.location}
           </div>
