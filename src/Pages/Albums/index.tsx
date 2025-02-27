@@ -8,7 +8,7 @@ import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
 import PaginationBar from "../../Components/PaginationBar";
 import "../mainPageStyle.css";
-import Layout from './../../Components/Layout/index';
+import Layout from "./../../Components/Layout/index";
 import { apiBaseUrl } from "../../Constant/config";
 
 interface Product {
@@ -24,63 +24,60 @@ interface Product {
   artist: string;
   star: number;
   songs: { youTube?: string }[]; // Ensure this exists
-
 }
 const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<number>(1);
   const [album, setAlbum] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>("");
-    const [visibleCount, setVisibleCount] = useState(4);
-    const [displayedItems, setDisplayedItems] = useState<Product[]>([]);
+  const [visibleCount, setVisibleCount] = useState(4);
+  const [displayedItems, setDisplayedItems] = useState<Product[]>([]);
 
-  const fetcher = () =>
-    fetch(`${apiBaseUrl}/album`).then((res) => res.json());
+  const fetcher = () => fetch(`${apiBaseUrl}/album`).then((res) => res.json());
 
   const { data, error } = useSWR(`${apiBaseUrl}/album`, fetcher);
 
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
+  const setDisplayUpdatedName = () => {
+    setDisplayedItems(album.slice(0, 2));
+  };
+  const loadMoreItems = () => {
+    if (loading || visibleCount >= album.length) return;
+    setLoading(true);
 
+    setTimeout(() => {
+      setVisibleCount((prev) => prev + 3);
+      setLoading(false);
+    }, 1000);
+  };
 
-    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
 
-    const setDisplayUpdatedName = () => {
-      setDisplayedItems(album);
-    };
-    const loadMoreItems = () => {
-      if (loading || visibleCount >= album.length) return;
-      setLoading(true);
+    const { scrollTop, scrollHeight, clientHeight } =
+      scrollContainerRef.current;
 
-      setTimeout(() => {
-        setVisibleCount((prev) => prev + 3);
-        setLoading(false);
-      }, 1000);
-    };
+    if (scrollTop + clientHeight >= scrollHeight - 5) {
+      loadMoreItems();
+    }
+  };
 
-    const handleScroll = () => {
-      if (!scrollContainerRef.current) return;
-
-      const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
-
-      if (scrollTop + clientHeight >= scrollHeight - 5) {
-        loadMoreItems();
-      }
-    };
-
-
-    useEffect(() => {
-      if(album && album.length>0 ){
+  useEffect(() => {
+    if (album && album.length > 0) {
       setDisplayUpdatedName();
-      }
-    }, [ album]);
-
+    }
+  }, [album]);
 
   useEffect(() => {
     if (data) {
       // Sort albums by date (latest first) and select the latest 3
       console.log(data)
       const sortedAlbums = data.albums
-        .sort((a: Product, b: Product) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .sort(
+          (a: Product, b: Product) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime()
+        )
         // .slice(0, 4);
       setAlbum(sortedAlbums);
       setLoading(false);
@@ -88,21 +85,29 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   }, [data]);
 
   if (error) return <div>Error loading data.</div>;
-  if (loading) return <div className="flex justify-center items-center h-screen w-full"
-  style={{
-    backgroundColor: themeMode ? "white" : "black"
-  }}>
-  <p className="text-xl font-semibold " style={{
-    color: themeMode ? "black" : "white"
-  }} >Loading...</p>
-  <div className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
-    style={{
-      borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
-      borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
-      borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
-    }}>
-  </div>
-</div>;
+  if (loading)
+    return (
+      <div
+        className="flex justify-center items-center h-screen w-full"
+        style={{
+          backgroundColor: themeMode ? "white" : "black",
+        }}>
+        <p
+          className="text-xl font-semibold "
+          style={{
+            color: themeMode ? "black" : "white",
+          }}>
+          Loading...
+        </p>
+        <div
+          className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+          style={{
+            borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+            borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+            borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+          }}></div>
+      </div>
+    );
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -129,15 +134,13 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           </div>
 
           <div
-          className="md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
-             ref={scrollContainerRef}
-              onScroll={handleScroll}
-            >
+            className="md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
+            ref={scrollContainerRef}
+            onScroll={handleScroll}>
             {loading ? (
               <div
                 className="w-full flex justify-center items-center"
-                style={{ minHeight: type ? "816px" : "1147px" }}
-              >
+                style={{ minHeight: type ? "816px" : "1147px" }}>
                 <Spinner
                   thickness="4px"
                   speed="0.65s"
@@ -147,7 +150,8 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 />
               </div>
             ) : (
-              <div className={`grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-5 mt-10 mb-10`}>
+              <div
+                className={`grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-5 mt-10 mb-10`}>
                 {album?.length > 0 ? (
                   album?.map((categoryItem) => (
                     <NewReleaseCard
@@ -163,7 +167,9 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     />
                   ))
                 ) : (
-                  <div className="text-center text-gray-500">No results found</div>
+                  <div className="text-center text-gray-500">
+                    No results found
+                  </div>
                 )}
               </div>
             )}

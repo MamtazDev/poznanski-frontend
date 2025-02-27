@@ -8,15 +8,21 @@ import FilterInput from "../../Components/FilterInput";
 import Layout from "../../Components/Layout";
 import "../mainPageStyle.css";
 import { apiBaseUrl } from "../../Constant/config";
+import { useToast } from "@chakra-ui/react";
 
 interface Product {
   _id: unknown;
   id: string;
   title: string;
   description: string;
+  thumbnail: string;
   youTube: string;
   tags: string;
   date: string;
+  videoId: string;
+  channelId: string;
+  channelTitle: string;
+  playlistId: string;
 }
 
 interface filterProperties {
@@ -32,6 +38,9 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const toast = useToast();
 
   const [filters, setFilters] = useState<filterProperties>({
     sort: "A to Z",
@@ -42,106 +51,55 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     search: "",
   });
 
-  // const handleData = (response: any) => {
-  //   const materials = response.materials || [];
-  //   const formattedProducts: Product[] = materials.map((item: any) => ({
-  //     id: item._id,
-  //     title: item.title,
-  //     description: item.description,
-  //     youTube: item.youTube,
-  //     tags: item.tags,
-  //     date: new Date(item.date).toLocaleDateString("en-US", {
-  //       year: "numeric",
-  //       month: "long",
-  //       day: "numeric",
-  //     }),
-  //   }));
-
-  //   setCardData(formattedProducts);
-  // };
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   // apiGetReq(`http://localhost:8000/api/materials?order=${order}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`, {})
-  //   apiGetReq(`http://localhost:8000/api/materials?sortBy=title&order=${filters.order}&limit=${filters.limit}&startDate=${filters.startDate}&page=1`, {})
-  //     .then((res) => {
-  //       handleData(res);
-  //       setLoading(false);
-  //     })
-  //     .catch(() => {
-  //       setLoading(false);
-  //     });
-  // }, []);
-
-    const fetchData = async (inputValue?: filterProperties) => {
-      setLoading(true);
-      let url = `${apiBaseUrl}/materials`;
-      let searchQuery = [];
-
-      if (inputValue?.search) {
-        searchQuery.push(`search=${encodeURIComponent(inputValue.search)}`);
-      }
-
-      if (inputValue?.sort) {
-        searchQuery.push(`order=${encodeURIComponent(inputValue.sort)}`);
-      }
-
-      if (inputValue?.quantity) {
-        searchQuery.push(`limit=${inputValue.quantity}`);
-      }
-
-      if (inputValue?.startDate) {
-        searchQuery.push(`startDate=${encodeURIComponent(inputValue.startDate)}`);
-      }
-
-      if (inputValue?.endDate) {
-        searchQuery.push(`endDate=${encodeURIComponent(inputValue.endDate)}`);
-      }
-
-      if (searchQuery.length > 0) {
-        url = `${url}?${searchQuery.join("&")}`;
-      }
-
-      try {
-        const response = await fetch(url);
-        const jsonData = await response.json();
-        const newArtists = jsonData.materials.map((item: any) => ({
-          id: item._id,
-          title: item.title,
-          description: item.description,
-          youTube: item.youTube,
-          tags: item.tags,
-          date: new Date(item.date).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }),
-        }));
-
-        setCardData(newArtists);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    useEffect(() => {
-      fetchData();
-    }, []);
-
-    // const handleSearch = (inputValue: string) => {
-    //   fetchData(filters);
-    // };
-    const handleSearch = (inputValue: string) => {
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        search: inputValue,
+  const fetchPlaylists = async (page: number) => {
+    setLoading(true);
+    try {
+      const result = await fetch(`${apiBaseUrl}/playlist?page=${page}&limit=10`);
+      const data = await result.json();
+      const mappedData = data.data.map((item: any) => ({
+        id: item._id,
+        title: item.title,
+        description: item.description,
+        thumbnail: item.thumbnail,
+        videoId: item.videoId,
+        channelId: item.channelId,
+        youTube: item.youTube,
+        channelTitle: item.channelTitle,
+        playlistId: item.playlistId,
+        tags: item.tags || "",
+        date: new Date(item.publishedAt).toISOString().split("T")[0],
       }));
-    };
-    useEffect(() => {
-      fetchData(filters);
-    }, [filters]);
+      setCardData(mappedData);
+      setTotalPages(data.totalPages);
+      setCurrentPage(page);
+    } catch (error: any) {
+      toast({
+        title: "Error fetching playlists",
+        description: error.message || "Something went wrong.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlaylists(currentPage);
+  }, [currentPage]);
+
+  const handleSearch = (inputValue: string) => {
+    if (!inputValue) return fetchPlaylists(1);
+    const filtered = cardData.filter((item) =>
+      item.title.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    setCardData(filtered);
+  };
+
+  useEffect(() => {
+    fetchPlaylists(currentPage);
+  }, [filters]);
 
   return (
     <Layout themeMode={themeMode}>
@@ -165,10 +123,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               filters={filters}
             />
           </div>
-          <div
-            className="md:mt-12 mt-8"
-            // style={{ minHeight: "908px", width: "100%" }}
-          >
+          <div className="md:mt-12 mt-8">
             {loading ? (
               <div
                 className="w-full flex justify-center items-center"
@@ -184,23 +139,50 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5">
-                {cardData.length > 0 ?cardData?.map((item, index) => (
-                  <div key={`main-video-card-${index}`} className="w-full">
-                    <MaterialCard
-                      type={type ? "vertical" : "horizontal"}
-                      video={item.youTube}
-                      data={item}
-                      // id={item.id}
-                      id={item.id}
-                      feature={item.tags}
-                      title={item.title}
-                      date={item.date}
-                      link={item.youTube}
-                    />
-                  </div>
-                )):<p className="text-blue-500 text-5xl py-3 text-center">There is no data</p>}
+                {cardData.length > 0 ? (
+                  cardData.map((item, index) => (
+                    <div key={`main-video-card-${index}`} className="w-full">
+                      <MaterialCard
+                        type={type ? "vertical" : "horizontal"}
+                        video={item.videoId}
+                        data={item}
+                        id={item.id}
+                        thumbnail={item.thumbnail}
+                        feature={item.tags}
+                        title={item.title}
+                        date={item.date}
+                        link={item.youTube}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-blue-500 text-5xl py-3 text-center">
+                    There is no data
+                  </p>
+                )}
               </div>
             )}
+          </div>
+          <div className="flex justify-center mt-5">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+            >
+              Previous
+            </button>
+            <span className="mx-4">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>
