@@ -57,7 +57,6 @@ const AppMain: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(playerOpen);
   const [type, setPropsType] = useState<boolean>(false);
 
-
   const userStore = useSelector((state: RootState) => state.user);
   const loggedIn = userStore.isLoggedIn;
   const navigate = useNavigate();
@@ -74,7 +73,6 @@ const AppMain: React.FC = () => {
     deleteCookie("refreshToken");
     dispatch(logout());
   };
-
 
   const checkIfAuth = async () => {
     try {
@@ -117,7 +115,6 @@ const AppMain: React.FC = () => {
     };
   }, []);
 
-
   return (
     <div className={` ${!themeMode && "back-dark"}`}>
       <NavBar themeMode={themeMode} type={type} />
@@ -147,11 +144,21 @@ const AppMain: React.FC = () => {
                 <ProfilePage themeMode={themeMode} />
               ) : (
                 <>
-                  <div className="flex justify-center gap-2 items-center text-xl font-medium h-screen w-full" style={{
-                    color:themeMode ?"black" :'white'
-                  }}>Please log in first. <Link to='/login' className="font-semibold" style={{
-                    color: themeMode? "#3BD6C6 ":"#5A1073"
-                   }}>Login</Link></div>
+                  <div
+                    className="flex justify-center gap-2 items-center text-xl font-medium h-screen w-full"
+                    style={{
+                      color: themeMode ? "black" : "white",
+                    }}>
+                    Please log in first.{" "}
+                    <Link
+                      to="/login"
+                      className="font-semibold"
+                      style={{
+                        color: themeMode ? "#3BD6C6 " : "#5A1073",
+                      }}>
+                      Login
+                    </Link>
+                  </div>
                   {/* Redirect or show login link */}
                 </>
               )
