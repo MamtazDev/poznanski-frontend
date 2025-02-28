@@ -14,6 +14,7 @@ import { Swiper as SwiperInstance } from "swiper";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { Navigation, Pagination } from "swiper/modules";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import { useToast } from "@chakra-ui/react";
 interface MaterialData {
   id: string;
   title: string;
@@ -26,29 +27,58 @@ interface MaterialData {
 interface CartInterface {
   materials: MaterialData[];
 }
+interface Product {
+  _id: unknown;
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  youTube: string;
+  tags: string;
+  date: string;
+  videoId: string;
+  channelId: string;
+  channelTitle: string;
+  playlistId: string;
+}
 
 const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
   // const [cardNum, setCardNum] = useState<number>(3);
-  const [cardData, setCardData] = useState<CartInterface | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [cardData, setCardData] = useState<CartInterface | null>(null);
+  // const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const swiperRef = useRef<SwiperInstance | null>(null);
-  useEffect(() => {
-    setLoading(true);
-    setCardData(null); // Reset previous data
+  const [type, setPropsType] = useState<boolean>(false);
 
-    fetch(`${apiBaseUrl}/materials`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCardData(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching materials:", error);
-        setLoading(false);
-      });
-  }, []);
+  const [showPagination, setShowPagination] = useState(window.innerWidth < 768);
+  const [showNavigation, setShowNavigation] = useState(window.innerWidth >= 768);
+  const [itemsPerRow, setItemsPerRow] = useState(3);
+  const [cardNum, setCardNum] = useState(window.innerWidth < 768 ? 1 : 3);
+
+  const [filterText, setFilterText] = useState<string>("");
+  const [cardData, setCardData] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const toast = useToast();
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   setCardData(null); // Reset previous data
+
+  //   fetch(`${apiBaseUrl}/playlist`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data, "playlost")
+  //       setCardData(data);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching materials:", error);
+  //       setLoading(false);
+  //     });
+  // }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,10 +100,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
 
 
 
-  const [showPagination, setShowPagination] = useState(window.innerWidth < 768);
-  const [showNavigation, setShowNavigation] = useState(window.innerWidth >= 768);
-  const [itemsPerRow, setItemsPerRow] = useState(3);
-  const [cardNum, setCardNum] = useState(window.innerWidth < 768 ? 1 : 3);
+
 
   useEffect(() => {
     const updateUI = () => {
@@ -99,7 +126,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
     updateUI();
     window.addEventListener("resize", updateUI);
     return () => window.removeEventListener("resize", updateUI);
-  }, [showPagination]); // **Dependency হিসাবে Add করুন**
+  }, [showPagination]);
 
 
   const handleNext = () => {
@@ -110,7 +137,48 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
     if (swiperRef.current) swiperRef.current.slidePrev();
   };
 
-  return cardData && cardData.materials.length ? (
+
+
+  const fetchPlaylists = async (page: number) => {
+    setLoading(true);
+    try {
+      const result = await fetch(`${apiBaseUrl}/playlist?page=${page}&limit=10`);
+      const data = await result.json();
+      const mappedData = data.data.map((item: any) => ({
+        id: item._id,
+        title: item.title,
+        description: item.description,
+        thumbnail: item.thumbnail,
+        videoId: item.videoId,
+        channelId: item.channelId,
+        youTube: item.youTube,
+        channelTitle: item.channelTitle,
+        playlistId: item.playlistId,
+        tags: item.tags || "",
+        date: new Date(item.publishedAt).toISOString().split("T")[0],
+      }));
+      setCardData(mappedData);
+      setTotalPages(data.totalPages);
+      setCurrentPage(page);
+    } catch (error: any) {
+      toast({
+        title: "Error fetching playlists",
+        description: error.message || "Something went wrong.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlaylists(currentPage);
+  }, [currentPage]);
+
+
+  return (
     <div className="flex justify-center">
       <div className="container md:mt-36 md:pt-1.5 mt-20">
         <div className="flex justify-between">
@@ -120,7 +188,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
               <DetailButton
                 text="See All Videos"
                 btnType="web"
-                onClick={() => navigate("/material")}
+                onClick={() => navigate("/materials")}
               />
             </div>
           </div>
@@ -144,7 +212,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
             }}
             className="news-carousel"
           >
-            {cardData?.materials
+            {/* {cardData?.materials
               .reduce<any[][]>((rows:any, item:any, index:any) => {
                 const rowIndex = Math.floor(index / itemsPerRow);
                 if (!rows[rowIndex]) rows[rowIndex] = [];
@@ -170,7 +238,37 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
                     ))}
                   </div>
                 </SwiperSlide>
-              ))}
+              ))} */}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5">
+              {cardData?.reduce<any[][]>((rows, item, index) => {
+                  const rowIndex = Math.floor(index / itemsPerRow);
+                  if (!rows[rowIndex]) rows[rowIndex] = [];
+                  rows[rowIndex].push(item);
+                  return rows;
+                }, [])
+                .map((row, rowIndex) => (
+                  <SwiperSlide key={rowIndex} className="md:mb-16 mb-8">
+                    <div className="grid grid-cols-1 gap-5">
+                      {row.map((item, index) => (
+                        <MaterialCard
+                        type={type ? "vertical" : "horizontal"}
+                        video={item.videoId}
+                        data={item}
+                        id={item.id}
+                        thumbnail={item.thumbnail}
+                        feature={item.tags}
+                        title={item.title}
+                        date={item.date}
+                        link={item.youTube}
+                      />
+                      ))}
+                    </div>
+                  </SwiperSlide>
+                ))}
+
+            </div>
+
           </Swiper>
 
           {/* Pagination Dots - Only visible on mobile */}
@@ -197,41 +295,19 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
             </>
           )}
         </div>
-         <div className="md:hidden block">
-                  <button
-                    className={`text-sm p-4 font-semibold text-[#5A1073] flex gap-2 items-center w-full text-center justify-center rounded-lg ${themeMode ? "bg-[#EFE7F1]" : "bg-[#2FC4B2]"}`}
-                    onClick={() => navigate("/materials")}
-                  >
-                    See All Videos
-                    <AiOutlineArrowRight size={24} />
-                  </button>
-                </div>
+        <div className="md:hidden block">
+          <button
+            className={`text-sm p-4 font-semibold text-[#5A1073] flex gap-2 items-center w-full text-center justify-center rounded-lg ${themeMode ? "bg-[#EFE7F1]" : "bg-[#2FC4B2]"}`}
+            onClick={() => navigate("/playlist")}
+          >
+            See All Videos
+            <AiOutlineArrowRight size={24} />
+          </button>
+        </div>
       </div>
     </div>
-  ) : (
-    <div>
-      {loading ? (
-        <div
-          className="flex justify-center items-center h-screen w-full"
-          style={{ backgroundColor: themeMode ? "white" : "black" }}>
-          <p
-            className="text-xl font-semibold"
-            style={{ color: themeMode ? "black" : "white" }}>
-            Loading...
-          </p>
-          <div
-            className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
-            style={{
-              borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
-              borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
-              borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
-            }}></div>
-        </div>
-      ) : (
-        <p>No data available</p>
-      )}
-    </div>
-  );
+  )
+
 };
 
 export default MaterialContent;
