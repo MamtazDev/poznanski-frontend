@@ -16,6 +16,7 @@ import {
 } from "../../reducers/NewsReducer";
 import "../mainPageStyle.css";
 import Articles from "./artices";
+import { apiGetReq } from "../../Constant/api-functions";
 
 interface filterProperties {
   sort: string;
@@ -50,6 +51,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     order: "desc",
     search: "",
   });
+
   const lastVisitedId = useSelector((state: RootState) =>
     getLastVisitedId(state)
   );
@@ -61,30 +63,29 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   }
 
   return (
-    <>
-      <Layout type={type} themeMode={themeMode}>
-        <div className="flex justify-center">
-          <div className="container">
-            <div className="hidden sm:block md:mt-12 mt-8 ">
-              <BreadCrumb />
-            </div>
-            <div className="md:mt-7 mt-10">
-              <ContentTitle titleType="NEWS" title="See Our Latest News" />
-            </div>
-            <div className="md:mt-6 mt-4">
-              <FilterInput
-                type={type}
-                filterText={filterText}
-                setFilterText={setFilterText}
-                setFilters={setFilters}
-                filters={filters}
-              />
-            </div>
-            <Articles />
+    <Layout type={type} themeMode={themeMode}>
+      <div className="flex justify-center">
+        <div className="container">
+          <div className="hidden sm:block md:mt-12 mt-8">
+            <BreadCrumb />
           </div>
+          <div className="md:mt-7 mt-10">
+            <ContentTitle titleType="NEWS" title="See Our Latest News" />
+          </div>
+          {/* <div className="md:mt-6 mt-4">
+            <FilterInput
+              type={type}
+              filterText={filterText}
+              setFilterText={setFilterText}
+              setFilters={setFilters}
+              filters={filters}
+            />
+          </div> */}
+          {/* Pass filters to Articles */}
+          <Articles filters={filters} themeMode={themeMode} type={type} />
         </div>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
 };
 

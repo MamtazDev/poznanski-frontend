@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import PopUp from "./PopUp";
 import "./style.css";
-import SearchIcon from "../../assets/svg/search-icon.svg"
+import SearchIcon from "../../assets/svg/search-icon.svg";
 
 interface FilterInputProps {
   type: boolean;
@@ -34,7 +34,13 @@ const FilterInput: React.FC<FilterInputProps> = ({
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    setFilterText(newValue);
+
+    if (handler) {
+      handler(newValue);
+    }
   };
 
   return (
@@ -50,7 +56,6 @@ const FilterInput: React.FC<FilterInputProps> = ({
             onChange={handleInputChange}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                // If the handler function is provided, call it with the current input value
                 if (handler) {
                   setFilters({ ...filters, search: inputValue });
                   handler(inputValue);

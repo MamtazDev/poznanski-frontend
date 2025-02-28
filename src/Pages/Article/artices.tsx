@@ -5,6 +5,7 @@ import ProductCard1 from "../../Components/Card/ProductCard1";
 import { NewsItem, usePaginatedNews } from "../../hooks/useSWRNews";
 import { RootState } from "../../reducers";
 import { getLastPageNumber } from "../../reducers/NewsReducer";
+import FilterInput from "../../Components/FilterInput";
 
 const Articles = ({ themeMode, type }: any) => {
   const currentPage = useSelector((state: RootState) =>
@@ -12,21 +13,23 @@ const Articles = ({ themeMode, type }: any) => {
   );
   const [selectedPage, setSelectedPage] = useState<number>(currentPage);
   const pageSize = 100;
-
   const [isLoading, setLoading] = useState(false);
   const [visibleCount, setVisibleCount] = useState(50);
   const [displayedItems, setDisplayedItems] = useState<NewsItem[]>([]);
   const [lastScrollTime, setLastScrollTime] = useState(0);
-
+  const [filterText, setFilterText] = useState("");
+  const [filters, setFilters] = useState<{ search?: string }>({});
   const { data, loading } = usePaginatedNews(pageSize, selectedPage);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // Update displayed items when data or visibleCount changes
   useEffect(() => {
     if (data?.length > 0) {
-      setDisplayedItems(data.slice(0, visibleCount));
+      const filteredData = data.filter((item) =>
+        item.title.toLowerCase().includes(filterText.toLowerCase())
+      );
+      setDisplayedItems(filteredData.slice(0, visibleCount));
     }
-  }, [data, visibleCount]);
+  }, [data, filterText, visibleCount]);
 
   // Infinite Scroll Handler with Delay
   const handleScroll = () => {
@@ -35,20 +38,18 @@ const Articles = ({ themeMode, type }: any) => {
         scrollContainerRef.current;
       const now = Date.now();
 
-      // Check if user scrolled to the bottom and apply delay
       if (
         scrollTop + clientHeight >= scrollHeight - 100 &&
         !isLoading &&
         visibleCount < data.length
       ) {
         if (now - lastScrollTime > 1000) {
-          // 1-second delay before loading
           setLoading(true);
           setTimeout(() => {
-            setVisibleCount((prev) => Math.min(prev + 6, data.length)); // Increase number of items displayed
+            setVisibleCount((prev) => Math.min(prev + 6, data.length));
             setLoading(false);
             setLastScrollTime(Date.now());
-          }, 4000); // Adds a visible delay effect
+          }, 4000);
         }
       }
     }
@@ -66,9 +67,21 @@ const Articles = ({ themeMode, type }: any) => {
 
   return (
     <div>
+      {/* Filter Input */}
+      <div className="md:mt-6 mt-4">
+        <FilterInput
+          type={type}
+          filterText={filterText}
+          setFilterText={setFilterText}
+          setFilters={setFilters}
+          filters={filters}
+          handler={(inputValue) => setFilterText(inputValue)}
+        />
+      </div>
+
       <div
         ref={scrollContainerRef}
-        className="md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
+        className="md:mt-6 mt-4 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
         style={{ width: "100%" }}>
         {loading || !data ? (
           <div
