@@ -12,9 +12,8 @@ import Layout from "./../../Components/Layout/index";
 import { apiBaseUrl } from "../../Constant/config";
 
 interface Product {
-  artists: any;
-  _id: any;
-  id: string;
+  artists: { name: string }[];
+  _id: string;
   title: string;
   img: string;
   category: string;
@@ -25,6 +24,7 @@ interface Product {
   star: number;
   songs: { youTube?: string }[]; // Ensure this exists
 }
+
 const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [selectedPage, setSelectedPage] = useState<number>(1);
   const [album, setAlbum] = useState<Product[]>([]);
@@ -42,6 +42,7 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const setDisplayUpdatedName = () => {
     setDisplayedItems(album.slice(0, 2));
   };
+
   const loadMoreItems = () => {
     if (loading || visibleCount >= album.length) return;
     setLoading(true);
@@ -71,18 +72,22 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   useEffect(() => {
     if (data) {
-      // Sort albums by date (latest first) and select the latest 3
-      console.log(data)
-      const sortedAlbums = data.albums
-        .sort(
-          (a: Product, b: Product) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-        )
-        // .slice(0, 4);
+      // Sort albums by date (latest first)
+      const sortedAlbums = data.albums.sort(
+        (a: Product, b: Product) =>
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
       setAlbum(sortedAlbums);
       setLoading(false);
     }
   }, [data]);
+
+  const filteredAlbums = album.filter((categoryItem) =>
+    categoryItem.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    categoryItem.artists.some((artist: any) =>
+      artist.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
 
   if (error) return <div>Error loading data.</div>;
   if (loading)
@@ -152,8 +157,8 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             ) : (
               <div
                 className={`grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-5 mt-10 mb-10`}>
-                {album?.length > 0 ? (
-                  album?.map((categoryItem) => (
+                {filteredAlbums.length > 0 ? (
+                  filteredAlbums.map((categoryItem) => (
                     <NewReleaseCard
                       id={categoryItem._id}
                       key={categoryItem._id}
@@ -178,7 +183,7 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <PaginationBar
               selectedPage={selectedPage}
               setSelectedPage={setSelectedPage}
-              pages={1} // Pagination not required for 3 items
+              pages={1}
               entriesPerPage={3}
               setEntriesPerPage={() => {}}
             />
