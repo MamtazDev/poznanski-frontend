@@ -38,6 +38,7 @@ const NewReleaseCard: React.FC<News> = ({
   const navigate = useNavigate();
   const dateFormated = moment(date).format(" DD/ MM/ YYYY");
   const [isHovered, setIsHovered] = useState(false);
+
   const handlePlay = () => {
     const youTubeLink = data?.songs?.[0]?.youTube;
     if (youTubeLink) {

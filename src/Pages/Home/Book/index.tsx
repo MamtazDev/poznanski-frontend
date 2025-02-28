@@ -11,8 +11,12 @@ import playIcon from "../../../assets/svg/play-icon.svg";
 import { Link } from 'react-router-dom';
 import DetailButton from '../../../Components/Buttons/DetailButton';
 import BookCard from './BookCard';
+import { useDispatch } from 'react-redux';
+import { openPlayer } from '../../../reducers/PlayerReducer';
+import novideo from "../../../assets/png/novideo.png";
 
 interface Product {
+  ticket: any;
   id: string;
   name: string;
   img: string;
@@ -61,6 +65,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
   const [mobileState, setMobileState] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const [filters, setFilters] = useState<filterProperties>({
     sort: "A to Z",
@@ -164,6 +169,15 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
     // }
   };
 
+  const handlePlay = (youTubeLink?: string) => {
+    if (youTubeLink) {
+        const videoId = extractYouTubeId(youTubeLink);
+        if (videoId) {
+            dispatch(openPlayer(videoId));
+        }
+    }
+};
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -175,6 +189,13 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
   useEffect(() => {
     fetchData(filters);
   }, [filters]);
+
+  const extractYouTubeId = (url: string) => {
+    const match = url.match(/(?:youtube\.com\/(?:.*v=|embed\/|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    return match ? match[1] : null;
+};
+
+
   return (
     <>
       <div className="flex justify-center">
@@ -197,13 +218,12 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                 cardData.isFeatured.map((item, idx) => (
                   <SwiperSlide key={idx} className="p-2 md:mb-16 mb-8">
                     <div
-                      className={`grid md:grid-cols-2 grid-cols-1 md:gap-20 gap-6`}>
-                      <div className={`relative`}>
+                      className={`grid md:grid-cols-2 grid-cols-1  md:gap-20 gap-6`}>
+                      <div className={`relative`} onClick={() => handlePlay(item.link)}>
                         <Image
-                          src={"https://i.ibb.co.com/5KchHq8/ticket-Banner.png"}
-                          className="object-cover h-full w-full"
+                          src={item.img}
+                          className="md:rounded-3xl rounded-2xl object-cover h-full w-full"
                           alt={item.img}
-                        // borderRadius={type ? "18px" : "25px"}
                         />
                         <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer">
                           <img src={playIcon} alt="icon" />
@@ -211,13 +231,13 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                       </div>
                       <div className={`flex flex-col`}>
                         <div
-                          className={`${themeMode ? "ticket-detail-tilte" : "ticket-detail-tilte-dark"}`}
-                        // style={{ fontSize: type ? "22px" : "48px" }}
-                        >
+                          className={`line-clamp-2 text-[22px] md:text-[48px] ${themeMode ? "ticket-detail-tilte" : "ticket-detail-tilte-dark"}`}
+                          // style={{ fontSize: type ? "22px" : "48px" }}
+                          >
                           {item.name}
                         </div>
                         <div
-                          className={`${themeMode ? "ticket-detail" : "ticket-detail-dark"} md:mt-6 mt-3`}>
+                          className={` line-clamp-3 ${themeMode ? "ticket-detail" : "ticket-detail-dark"} md:mt-6 mt-3`}>
                           {item.description}
                         </div>
                         <div className={`flex md:mt-4 mt-3`}>
@@ -245,7 +265,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                             {item.location}
                           </div>
                         </div>
-                        <div className={`flex mt-4`}>
+                        {/* <div className={`flex mt-4`}>
                           <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -273,17 +293,15 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                             className={`flex ml-2 items-center ${themeMode ? "ticket-detail" : "ticket-detail-dark"}`}>
                             {item.date}
                           </div>
-                        </div>
-                        {/* {!type && ( */}
+                        </div> */}
                         <div className="md:mt-10 mt-8">
-                          <Link to={item.link} target="_blank">
-                            <DetailButton
-                              text="Buy Tickets Of Concert"
-                              btnType="web"
-                            />
-                          </Link>
-                        </div>
-                        {/* )} */}
+                            <Link to={item.ticket} target="_blank">
+                              <DetailButton
+                                text="Buy Tickets Of Concert"
+                                btnType="web"
+                              />
+                            </Link>
+                          </div>
                       </div>
                     </div>
                   </SwiperSlide>

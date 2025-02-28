@@ -23,6 +23,9 @@ import { Pagination } from "swiper/modules";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
 import CardComp from "./CardComp";
+import { openPlayer } from "../../reducers/PlayerReducer";
+import { useDispatch } from "react-redux";
+import moment from "moment";
 // import ticketImg from "../../assets/png/ticketBanner.png"
 interface Product {
   id: string;
@@ -32,6 +35,7 @@ interface Product {
   month: string;
   date: string;
   timeframe: string;
+  start: string;
   link: string;
   ticket: string;
   location: string;
@@ -73,6 +77,8 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
   // const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   // const [nonFeaturedProducts, setNonFeaturedProducts] = useState<Product[]>([]);
   // const [entriesPerPage, setEntriesPerPage] = useState<number>(5);
@@ -183,6 +189,18 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   </div>
 </div>;
 
+const extractYouTubeId = (url: string) => {
+  const match = url.match(/(?:youtube\.com\/(?:.*v=|embed\/|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
+};
+  const handlePlay = (youTubeLink?: string) => {
+    if (youTubeLink) {
+        const videoId = extractYouTubeId(youTubeLink);
+        if (videoId) {
+            dispatch(openPlayer(videoId));
+        }
+    }
+};
   // console.log('Concert Data:', data);
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -226,7 +244,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   <SwiperSlide key={idx} className="p-2 md:mb-16 mb-8">
                     <div
                       className={`grid md:grid-cols-2 grid-cols-1  md:gap-20 gap-6`}>
-                      <div className={`relative`}>
+                      <div className={`relative`} onClick={() => handlePlay(item.link)}>
                         <Image
                           src={item.img}
                           className="object-cover h-full w-full"
@@ -272,7 +290,7 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                             {item.location}
                           </div>
                         </div>
-                        <div className={`flex mt-4`}>
+                        {/* <div className={`flex mt-4`}>
                           <div>
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -297,10 +315,11 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                             </svg>
                           </div>
                           <div
-                            className={`flex ml-2 items-center ${themeMode ? "ticket-detail" : "ticket-detail-dark"}`}>
-                            {item.date}
+                            className={`flex ml-2 items-center `}  style={{ color: themeMode ? "#5A1073" : "#2FC4B2" }}>
+                              console.log(timeframe)
+                            {moment(item.timeframe).format("DD")}
                           </div>
-                        </div>
+                        </div> */}
                         {!type && (
                           <div className="md:mt-10 mt-8">
                             <Link to={item.ticket} target="_blank">
