@@ -24,7 +24,7 @@ interface PromiseBasedToastProps {
 
 export const CustomToast = () => {
     const toast = useToast();
-    // types are: "success", "info", "warning", "error"
+   //  types are: "success", "info", "warning", "error"
 
     const addToast = () => {
         toast({

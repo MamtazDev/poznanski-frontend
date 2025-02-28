@@ -29,7 +29,7 @@
     border-radius: 16px;
     box-shadow: 0.1px 0.1px 0.1px 1px rgba(138, 138, 138, 0.24);
 }
- 
+
 .book-back-dark {
 background: #242526;
 border-radius: 16px;
@@ -87,7 +87,6 @@ border-radius: 16px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    width: 90px;
     text-align: center;
 }
 .ticket-category-2{
@@ -166,11 +165,11 @@ border-radius: 16px;
 }
 
 .artists-body{
-    border-radius: 25px;
+    /* border-radius: 25px; */
     background: #E8ECFE;
   }
-  
-  
+
+
   .artists-body-dark{
     background: #14151C;
     box-shadow: 0px 0px 54px 4px rgba(59, 214, 198, 0.10);
@@ -184,7 +183,7 @@ border-radius: 16px;
     line-height: 24px;
     text-align: left;
   }
-  
+
   .artist-description-2{
     color: var(--Base-base-300, #6D6E76);
     /* font-feature-settings: 'clig' off, 'liga' off; */
@@ -203,7 +202,7 @@ border-radius: 16px;
     letter-spacing: 0.24px;
     text-align: left;
   }
-  
+
   .artist-name-2{
     color: var(--Base-base-500, #252733);
     font-family: Urbanist;

@@ -1,83 +1,71 @@
-import React, {useEffect, useState} from 'react';
-import {
-	FacebookShareButton,
-	WhatsappShareButton,
-	FacebookIcon,
-	WhatsappIcon,
-	FacebookMessengerShareButton,
-	FacebookMessengerIcon, // Add this line to import the FacebookMessengerIcon component
-} from 'react-share';
-import {trackShare} from '../../utils/analytics';
-import Modal from '../Modals';
-import {ReactComponent as ShareIcon} from '../../assets/svg/shareButton.svg';
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../reducers";
+import { IoLogoTwitter, IoLogoWhatsapp, IoShareOutline } from "react-icons/io5";
+import { BiCommentDetail } from "react-icons/bi";
+import { FaFacebook } from "react-icons/fa6";
 
+// Import everything from react-share to avoid import issues
+import * as ReactShare from "react-share";
 
-const SocialShare: React.FC<{
-	url: string;
+// Extract Share Buttons
+const FacebookShareButton = ReactShare.FacebookShareButton;
+const TwitterShareButton = ReactShare.TwitterShareButton;
+const WhatsappShareButton = ReactShare.WhatsappShareButton;
+
+interface SocialShareProps {
+	shareUrl: string;
 	title: string;
-	themeMode: boolean;
-	// isOpen: boolean;
-	// setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({url, title, themeMode}) => {
-	const [isOpen, setIsOpen] = useState(false);
-	const [isVisible, setIsVisible] = useState(false);
+}
 
-	useEffect(() => {
-		if (isOpen) {
-			setTimeout(() => setIsVisible(true), 50); // slight delay to trigger CSS transition
-		} else {
-			setIsVisible(false);
-		}
-	}, [isOpen]);
-
-	const handleShare = (platform: string) => {
-		trackShare(platform);
-		setIsVisible(false);
-        setIsOpen(false)
-	};
+const SocialShare: React.FC<SocialShareProps> = ({ shareUrl, title }) => {
+	const [showShareOptions, setShowShareOptions] = useState(false);
+	const themeMode = useSelector((state: RootState) => state.themeMode?.mode);
 
 	return (
-		<>
-			<Modal isOpen={isOpen} onClose={() => {
-                setIsOpen(false)
-            }}>
-				<div
-					  className={`absolute top-1/2 left-1/2 flex gap-4 duration-500 transform ${
-                        isVisible ? '-translate-x-full opacity-100' : ' translate-x-96 opacity-0'
-                      }`}
+		<div className="flex justify-center relative">
+
+				{/* Share Button */}
+				<button
+					className="flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md hover:bg-purple-100 transition"
+					style={{
+						color: themeMode ? "#5A1073" : "#2FC4B2",
+						backgroundColor: themeMode ? "white" : "#242526",
+					}}
+					onClick={() => setShowShareOptions(!showShareOptions)}
 				>
-					<FacebookShareButton
-						url={url}
-						onClick={() => handleShare('Facebook')}
-					>
-						<FacebookIcon size={32} round />
+					<IoShareOutline className="text-lg" />
+					<span className="text-sm font-medium">Share</span>
+				</button>
+			{/* Social Share Options */}
+			{showShareOptions && (
+				<div
+					className="absolute top-12 flex gap-2 shadow-md p-2 rounded-lg"
+					style={{
+						color: themeMode ? "#5A1073" : "#2FC4B2",
+						backgroundColor: themeMode ? "white" : "#242526",
+					}}
+				>
+					<FacebookShareButton url={shareUrl} hashtag="#exampleHashtag">
+						<button className="px-2 py-1 text-blue-600 rounded">
+							<FaFacebook className="text-2xl" />
+						</button>
 					</FacebookShareButton>
-					<WhatsappShareButton
-						url={url}
-						title={title}
-						onClick={() => handleShare('Whatsapp')}
-					>
-						<WhatsappIcon size={32} round />
+
+					<TwitterShareButton url={shareUrl} title={title}>
+						<button className="px-2 py-1 text-blue-500 rounded">
+							<IoLogoTwitter className="text-2xl" />
+						</button>
+					</TwitterShareButton>
+
+					<WhatsappShareButton url={shareUrl} title={title}>
+						<button className="px-2 py-1 text-green-500 rounded">
+							<IoLogoWhatsapp className="text-2xl" />
+						</button>
 					</WhatsappShareButton>
-					<FacebookMessengerShareButton
-						url={process.env.REACT_APP_URL + url}
-						title={title}
-						onClick={() => handleShare('Messenger')}
-						appId={`${process.env.REACT_APP_FB_APP_ID}`}
-					>
-						<FacebookMessengerIcon size={32} round />
-					</FacebookMessengerShareButton>
 				</div>
-			</Modal>
-
-			<button
-
-				className={`float-right w-full mt-6 justify-center py-2 flex ${themeMode ? 'right-card' : 'right-card-dark'} gap-6 ${themeMode ? `tag-card-title` : `tag-card-title-dark hover: tag-card-title`}`}
-				onClick={() => setIsOpen(true)}
-			>
-				<ShareIcon fill={themeMode ? '#5A1073' : ''} /> Udostępnij
-			</button>
-		</>
+			)}
+		</div>
 	);
 };
 

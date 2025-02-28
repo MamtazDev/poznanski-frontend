@@ -117,8 +117,8 @@ const Input: React.FC<InputProps> = ({
 	return (
 		<div className='w-full gap-4'>
 			<label
-				className={`block mb-2 label-text text-left ${themeMode ? 'text-gray-900' : 'text-white'} `}
-				style={{fontSize: type ? '14px' : '18px'}}
+				className={`block mb-2 text-sm label-text text-left ${themeMode ? 'text-gray-900' : 'text-white'} `}
+				// style={{fontSize: type ? '14px' : '18px'}}
 			>
 				{label}
 			</label>

@@ -11,63 +11,69 @@ const Articles = ({ themeMode, type }: any) => {
     getLastPageNumber(state)
   );
   const [selectedPage, setSelectedPage] = useState<number>(currentPage);
-  const pageSize = 18;
+  const pageSize = 100;
 
-  const [isloading, setLoading] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [isLoading, setLoading] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(50);
   const [displayedItems, setDisplayedItems] = useState<NewsItem[]>([]);
-  const { data, loading, forceRevalidateAll, totalPages } = usePaginatedNews(
-    pageSize,
-    selectedPage
-  );
+  const [lastScrollTime, setLastScrollTime] = useState(0);
+
+  const { data, loading } = usePaginatedNews(pageSize, selectedPage);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const setDisplayUpdatedName = () => {
-    console.log("visibleCount", visibleCount);
-    setDisplayedItems(data.slice(0, visibleCount));
-  };
+  // Update displayed items when data or visibleCount changes
+  useEffect(() => {
+    if (data?.length > 0) {
+      setDisplayedItems(data.slice(0, visibleCount));
+    }
+  }, [data, visibleCount]);
 
-  const loadMoreItems = () => {
-    if (loading || visibleCount >= data.length) return;
-    setLoading(true);
-
-    setTimeout(() => {
-      setVisibleCount((prev) => prev + 3);
-      setLoading(false);
-    }, 1000);
-  };
-
+  // Infinite Scroll Handler with Delay
   const handleScroll = () => {
-    if (!scrollContainerRef.current) return;
-    const { scrollTop, scrollHeight, clientHeight } =
-      scrollContainerRef.current;
+    if (scrollContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } =
+        scrollContainerRef.current;
+      const now = Date.now();
 
-    if (scrollTop + clientHeight >= scrollHeight - 5) {
-      loadMoreItems();
+      // Check if user scrolled to the bottom and apply delay
+      if (
+        scrollTop + clientHeight >= scrollHeight - 100 &&
+        !isLoading &&
+        visibleCount < data.length
+      ) {
+        if (now - lastScrollTime > 1000) {
+          // 1-second delay before loading
+          setLoading(true);
+          setTimeout(() => {
+            setVisibleCount((prev) => Math.min(prev + 6, data.length)); // Increase number of items displayed
+            setLoading(false);
+            setLastScrollTime(Date.now());
+          }, 4000); // Adds a visible delay effect
+        }
+      }
     }
   };
 
   useEffect(() => {
-    setDisplayUpdatedName();
-  }, [displayedItems, data, visibleCount]);
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (container) container.removeEventListener("scroll", handleScroll);
+    };
+  }, [visibleCount, isLoading]);
 
   return (
     <div>
       <div
-        ref={scrollContainerRef} //scrollbar-hide
-        className={`md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide`}
-        style={{
-          width: "100%",
-        }}
-        onScroll={handleScroll}
-      >
+        ref={scrollContainerRef}
+        className="md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
+        style={{ width: "100%" }}>
         {loading || !data ? (
           <div
             className="w-full flex justify-center items-center"
-            style={{
-              minHeight: type ? "776px" : "908px",
-            }}
-          >
+            style={{ minHeight: type ? "776px" : "908px" }}>
             <Spinner
               thickness="4px"
               speed="0.65s"
@@ -78,13 +84,12 @@ const Articles = ({ themeMode, type }: any) => {
           </div>
         ) : (
           <>
-            <div className={`grid lg:grid-cols-3 gap-4 py-5`}>
-              {displayedItems?.map((item) => (
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 py-5">
+              {displayedItems.map((item) => (
                 <div
                   id={item._id}
                   key={`main-news-card-${item._id}`}
-                  className="w-full"
-                >
+                  className="w-full">
                   <ProductCard1
                     type={type ? "vertical" : "horizontal"}
                     img={item?.files && item.files[0]}
@@ -96,7 +101,9 @@ const Articles = ({ themeMode, type }: any) => {
                 </div>
               ))}
             </div>
-            {isloading && (
+
+            {/* Infinite Scroll Loading Spinner */}
+            {isLoading && (
               <div className="flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 to-gray-700 text-white">
                 <p className="text-lg text-gray-300 font-medium animate-pulse bg-gray-800 px-6 py-2 rounded-lg shadow-lg">
                   Loading more...

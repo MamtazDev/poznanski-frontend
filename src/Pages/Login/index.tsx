@@ -23,12 +23,61 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import { ActionButton } from "../../Components/Button";
+import { apiBaseUrl } from "../../Constant/config";
 
 interface SubmitUserForm {
   email: string;
   password: string;
   passwordRepeat: string;
   nickname: string;
+}
+
+interface LoginResponse {
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+  message: string;
+  accessToken: string;
+}
+
+interface LoginError {
+  message: string;
+}
+
+async function loginUser(
+  email: string,
+  password: string
+): Promise<LoginResponse> {
+  const apiUrl = `${apiBaseUrl}/auth/login`;
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+      credentials: "include", // Ensure cookies are included
+
+    });
+
+    // Check if the response is not ok
+    if (!response.ok) {
+      const errorData: LoginError = await response.json();
+      throw new Error(errorData.message || "Failed to log in");
+    }
+
+    // Parse and return the response as `LoginResponse`
+    const data: LoginResponse = await response.json();
+    console.log("Login successful:", data.user);
+    localStorage.setItem('creds', JSON.stringify(data.user))
+    return data;
+  } catch (error) {
+    console.error("Error logging in:", { error });
+    throw error;
+  }
 }
 
 export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
@@ -38,7 +87,6 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [creatingAccount, setCreatingAccount] = React.useState<boolean>(false);
-
   const {
     register,
     handleSubmit,
@@ -60,15 +108,31 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       alert("Hasła nie są takie same");
     } else if (creatingAccount && password === passwordRepeat) {
       try {
-        await registerRequest(`${password}`, `${email}`, `${nickname}`);
+        const regRes = await registerRequest(
+          `${password}`,
+          `${email}`,
+          `${nickname}`
+        );
+        console.log("Registered", regRes.verificationToken);
+        verifyEmailWithNotification(regRes.verificationToken);
+      } catch (error) {
+        console.error("Registration failed:", error);
+        throw error;
       } finally {
         navigate("/login", { replace: true });
       }
     } else if (nickname && password) {
       try {
-        await loginRequest(password, nickname);
-        const user = await checkIfLoggedIn();
-        dispatch(setUserLoggedIn(user));
+        await loginUser(nickname, password)
+          .then((data) => {
+            dispatch(setUserLoggedIn(data.user));
+          })
+          .catch((error) => {
+            throw new Error(error.message);
+          });
+      } catch (error) {
+        console.error("Login failed:", error);
+        throw error;
       } finally {
         location.state ? navigate(location.state) : navigate("/");
         reset();
@@ -82,14 +146,17 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     toastMessages: {
       success: { title: "Login successful", description: "Welcome back!" },
       error: {
-        title: "Zalogowanie nie powiodło się",
-        description: "Nieprawidłowe dane logowania!",
+        title: "Login failed",
+        description: "Invalid credentials or other error occurred",
       },
       loading: { title: "Logging in", description: "Please wait" },
     },
   });
+
   const { showPromiseToast } = usePromiseToast({});
+
   const verifyEmailWithNotification = (token: string) => {
+    console.log("Token", token);
     showPromiseToast(async () => await verifyEmailRequest(token), {
       success: {
         title: "Email verified",
@@ -112,23 +179,15 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
   }, []);
 
-  //  forget password
-  // const handleForgotPasswordClick = () => {
-  //   setForgotPasswordModalOpen(true);
-  // };
-
-  //   const handleCloseModal = () => {
-  //     setForgotPasswordModalOpen(false);
-  //   };
-  const [forgotPasswordModalOpen, setForgotPasswordModalOpen] = React.useState(false);
+  const [forgotPasswordModalOpen, setForgotPasswordModalOpen] =
+    React.useState(false);
 
   return (
     <Layout type={type} themeMode={themeMode}>
       <form onSubmit={wrappedSubmit}>
         <div className="flex w-full justify-center mt-20">
           <div
-            className={`${themeMode ? "border border-solid" : "bg-[#242526]"} w-[500px] shadow-lg rounded-2xl px-6 py-4`}
-          >
+            className={`${themeMode ? "border border-solid" : "bg-[#242526]"} w-[500px] shadow-lg rounded-2xl px-6 py-4`}>
             {creatingAccount ? (
               <div className="flex flex-col justify-between h-full gap-3">
                 <Input
@@ -160,17 +219,15 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   error={errors.passwordRepeat?.message}
                 />
 
-                <ActionButton type="submit" >Załóż konto</ActionButton>
+                <ActionButton type="submit">Załóż konto</ActionButton>
                 <p
-                  className={`mt-3 text-center ${themeMode ? "text-black" : "text-white"}`}
-                >
+                  className={`mt-3 text-center ${themeMode ? "text-black" : "text-white"}`}>
                   Masz konto?
                 </p>
                 <Button
                   onClick={() => setCreatingAccount(false)}
                   variant="ghost"
-                  colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
-                >
+                  colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}>
                   Zaloguj się
                 </Button>
               </div>
@@ -195,17 +252,17 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   <div>
                     {/* Forgot Password Link */}
                     <Button
-                      variant='link'
-                      colorScheme={themeMode ? 'blackAlpha' : 'whiteAlpha'}
-                      className='mt-3 text-sm text-center'
+                      variant="link"
+                      colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
+                      className="mt-3 text-sm text-center"
                       onClick={() => setForgotPasswordModalOpen(true)}
                     >
                       Zapomniałeś hasła?
                     </Button>
                     <ForgotPasswordModal
-                        isOpen={forgotPasswordModalOpen}
-                        onClose={() => setForgotPasswordModalOpen(false)}
-                        themeMode={themeMode}
+                      isOpen={forgotPasswordModalOpen}
+                      onClose={() => setForgotPasswordModalOpen(false)}
+                      themeMode={themeMode}
                     />
                   </div>
                   <ActionButton type="submit">Zaloguj się</ActionButton>
@@ -220,8 +277,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   <Button
                     onClick={() => setCreatingAccount(true)}
                     variant="ghost"
-                    colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
-                  >
+                    colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}>
                     Załóż konto
                   </Button>
                 </div>

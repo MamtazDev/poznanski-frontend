@@ -1,7 +1,7 @@
 import { Spinner } from "@chakra-ui/react";
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import NavBar from "../Components/Layout/NavBar";
 import ScrollToTopOnPageChange from "../Components/ScrollToTop";
 import YoutubePlayer from "../Components/YoutubePlayer";
@@ -14,6 +14,12 @@ import { logout } from "../reducers/user";
 import { deleteCookie, getCookie, parseJwt } from "../utils/auth";
 import TopArtist from "../Pages/TopArtist";
 import ArtistDetailsPage from "../Pages/Artist/ArtistDetailsPage";
+import TvRadioDetails from "../Pages/Video/TvRadioDetails";
+import MaterialsDetails from "../Pages/Material/MaterialsDetails";
+import VerifyEmail from "../Pages/Login/VerifyEmail";
+import ResetPassword from "../Pages/Login/ResetPass";
+import { Link } from "react-router-dom";
+import Notification from "../Pages/Notification";
 
 const Home = lazy(() => import("../Pages/Home"));
 const SubmitPage = lazy(() => import("../Pages/Submit"));
@@ -23,7 +29,7 @@ const ArticleMainPage = lazy(() => import("../Pages/Article"));
 const ArtistMainPage = lazy(() => import("../Pages/Artist"));
 const MaterialMainPage = lazy(() => import("../Pages/Material"));
 const AlbumsMainPage = lazy(() => import("../Pages/Albums/index"));
-const SearchMainPage = lazy(() => import('../Pages/Search'));
+const SearchMainPage = lazy(() => import("../Pages/Search"));
 
 const ArticleDetailPage = lazy(
   () => import("../Pages/Article/articleDetailPage")
@@ -50,7 +56,18 @@ const AppMain: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
   const [isOpen, setIsOpen] = useState<boolean>(playerOpen);
   const [type, setPropsType] = useState<boolean>(false);
+
+  const userStore = useSelector((state: RootState) => state.user);
+  const loggedIn = userStore.isLoggedIn;
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  useEffect(() => {
+    if (loggedIn) {
+      setAnchorEl(null);
+    }
+  }, [userStore]);
   const handleLogout = () => {
     deleteCookie("accessToken");
     deleteCookie("refreshToken");
@@ -98,15 +115,6 @@ const AppMain: React.FC = () => {
     };
   }, []);
 
-  const mockUser = {
-    nickname: "JohnDoe",
-    email: "john.doe@example.com",
-    profilePicture: "",
-    role: "user",
-    isVerified: true,
-    resetPasswordExpires: "2025-01-30T23:59:59.999Z",
-  };
-
   return (
     <div className={` ${!themeMode && "back-dark"}`}>
       <NavBar themeMode={themeMode} type={type} />
@@ -121,86 +129,144 @@ const AppMain: React.FC = () => {
               size="lg"
             />
           </div>
-        }
-      >
+        }>
         <ScrollToTopOnPageChange />
         <Routes>
           <Route
             path="/"
             element={<Home themeMode={themeMode} type={type} />}
           />
-          {/* <Route
-            path="/test-artist"
-            element={<TestArtist />}
-          /> */}
-          <Route path="/profile" element={<ProfilePage themeMode={themeMode} />} />
-          {/* <Route path="/top-artist" element={<TopArtist themeMode={themeMode} type={type} />} /> */}
+
+          <Route
+            path="/profile"
+            element={
+              loggedIn ? (
+                <ProfilePage themeMode={themeMode} />
+              ) : (
+                <>
+                  <div
+                    className="flex justify-center gap-2 items-center text-xl font-medium h-screen w-full"
+                    style={{
+                      color: themeMode ? "black" : "white",
+                    }}>
+                    Please log in first.{" "}
+                    <Link
+                      to="/login"
+                      className="font-semibold"
+                      style={{
+                        color: themeMode ? "#3BD6C6 " : "#5A1073",
+                      }}>
+                      Login
+                    </Link>
+                  </div>
+                  {/* Redirect or show login link */}
+                </>
+              )
+            }
+          />
           <Route path={common.NEWS_PATH}>
             <Route
               path=""
               element={<ArticleMainPage themeMode={themeMode} type={type} />}
             />
+
             <Route
               path=":id"
               element={<ArticleDetailPage themeMode={themeMode} type={type} />}
             />
           </Route>
-          <Route
-            path={common.TV_RADIO_PATH}
-            element={<VideoMainPage themeMode={themeMode} type={type} />}
-          />
-
           {/* top-artist */}
           <Route
             path={common.TOP_ARTIST_PATH}
             element={<TopArtist themeMode={themeMode} type={type} />}
           />
-          <Route
+
+          {/* <Route
             path={common.MATERIAL_PATH}
             element={<MaterialMainPage themeMode={themeMode} type={type} />}
-          />
+          /> */}
+
+          <Route path={common.MATERIAL_PATH}>
+            <Route
+              path=""
+              element={<MaterialMainPage themeMode={themeMode} type={type} />}
+            />
+
+            <Route
+              path=":id"
+              element={<MaterialsDetails themeMode={themeMode} type={type} />}
+            />
+          </Route>
+
           <Route
             path={common.CONCERT_PATH}
             element={<ConcertMainPage themeMode={themeMode} type={type} />}
           />
           <Route
-            path={common.NEWRELEASE_PATH}
-            element={<AlbumsMainPage themeMode={themeMode} type={type} />}
+            path={common.Notification_PATH}
+            element={<Notification themeMode={themeMode} type={type} />}
           />
-          <Route
-            path={common.ARTISTS_PATH}>
+
+          <Route path={common.NEWRELEASE_PATH}>
+            <Route
+              path=""
+              element={<AlbumsMainPage themeMode={themeMode} type={type} />}
+            />
+
+            <Route
+              path=":id"
+              element={<TopArtist themeMode={themeMode} type={type} />}
+            />
+          </Route>
+
+          {/* radios  */}
+          <Route path={common.TV_RADIO_PATH}>
+            <Route
+              path=""
+              element={<VideoMainPage themeMode={themeMode} type={type} />}
+            />
+
+            <Route
+              path=":id"
+              element={<TvRadioDetails themeMode={themeMode} type={type} />}
+            />
+          </Route>
+
+          <Route path={common.ARTISTS_PATH}>
             <Route
               path=""
               element={<ArtistMainPage themeMode={themeMode} type={type} />}
             />
+
             <Route
               path=":id"
-              element={<ArtistDetailsPage themeMode={themeMode} type={type}/>}
+              element={<ArtistDetailsPage themeMode={themeMode} type={type} />}
             />
           </Route>
+
           <Route
             path={common.CREATE_NEWS}
             element={<SubmitPage themeMode={themeMode} type={type} />}
           />
+
           <Route
             path={common.SEARCH_PATH}
-            element={
-              <SearchMainPage themeMode={themeMode} type={type} />
-            }
+            element={<SearchMainPage themeMode={themeMode} type={type} />}
           />
+
           <Route
             path={common.LOGIN_PATH}
-            element={<LoginPage themeMode={themeMode} type={type} />}
-          >
+            element={<LoginPage themeMode={themeMode} type={type} />}>
             <Route
               path=""
               element={<LoginPage themeMode={themeMode} type={type} />}
             />
-            <Route
-              path="verify-email/:token"
-              element={<LoginPage themeMode={themeMode} type={type} />}
-            />
           </Route>
+
+          <Route path={common.VERIFY_EMAIL} element={<VerifyEmail />} />
+
+          <Route path={common.RESET_PASS} element={<ResetPassword />} />
+
           <Route path={common.VERIFY_PATH} element={<SubmitConfirmation />} />
         </Routes>
       </Suspense>

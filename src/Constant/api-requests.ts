@@ -1,3 +1,4 @@
+import axios from "axios";
 import { FileFromEditor } from "../Components/TipTap/TipTap";
 import { Article } from "../hooks/usePaginatedNews";
 import { apiGetReq, apiPostReq, apiPutReq } from "./api-functions";
@@ -14,7 +15,8 @@ export const fetchCSRF = async () => {
 };
 
 export const checkIfLoggedIn = async (): Promise<any> => {
-  return await apiGetReq("auth/verify", {});
+  const resData = await apiGetReq("auth/verify", {})
+  return resData;
 };
 
 export const refreshTokenRequest = async () => {
@@ -41,22 +43,41 @@ export const registerRequest = async (
   email: string,
   nickname: string
 ) => {
-  await apiPostReq("auth/register", { nickname, email, password }, false);
+  const data = await apiPostReq("auth/register", { nickname, email, password }, false);
+  return data
+};
+
+export const forgetPasswordReq = async (email: string) => {
+  await apiPostReq("auth/forgot-password", { email }, false);
 };
 
 export const profileUpdateRequest = async (
-  _id: string,
+  rafa: string,
   nickname: string,
-  profilePicture: string | null
+  profilePicture?: string | null
 ) => {
   const reqData = {
-    nickname: nickname,
-    profilePicture: profilePicture,
+    nickname,
+    profilePicture,
   };
+  const path = `/auth/users/${rafa}`;
+  console.log("request Data", reqData, path)
 
-  const path = `/auth/users/${_id}`;
   await apiPutReq(path, reqData);
 };
+
+// export const profileUpdateRequest = async (userId: string, nickname: string, profileImage: string) => {
+//   const payload = { nickname, profilePicture: profileImage };
+
+//   try {
+//     const response = await axios.put(`http://localhost:8000/api/auth/users/${userId}`, payload);
+//     return response.data;
+//   }
+//   catch (error) {
+//     throw new Error("Error updating profile: " + error);
+//   }
+// };
+
 
 export const profilePicRequest = async (file: File): Promise<string> => {
   const formData = new FormData();

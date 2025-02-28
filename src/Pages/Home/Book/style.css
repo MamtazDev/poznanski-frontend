@@ -45,7 +45,7 @@
     color: var(--Base-base-500, #252733);
     font-family: Urbanist;
     font-size: 14px;
-    font-style: normal;
+    font-style: meedium;
     font-weight: 500;
     line-height: normal;
 }
@@ -125,10 +125,12 @@
 
 
   .book-back {
-    background: #FFF;
     border-radius: 16px;
-    box-shadow: 0.1px 0.1px 0.1px 1px rgba(138, 138, 138, 0.24);
+    background: #FFF;
+    box-shadow: 0px 0px 7.447px 0px rgba(138, 138, 138, 0.24);
+    backdrop-filter: blur(74.47470092773438px);
   }
+
   .book-back-dark {
     background: #242526;
     border-radius: 16px;

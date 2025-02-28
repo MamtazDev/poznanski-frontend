@@ -15,8 +15,16 @@ import {
   getLastVisitedId,
 } from "../../reducers/NewsReducer";
 import "../mainPageStyle.css";
-
 import Articles from "./artices";
+
+interface filterProperties {
+  sort: string;
+  quantity: number;
+  startDate: string;
+  endDate: string;
+  order: string;
+  search: string | undefined;
+}
 
 export const getFirstTag = (tags: string) => {
   return tags.split("#")[0];
@@ -33,36 +41,24 @@ const scrollToById = (id: string) => {
 
 const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const dispatch = useDispatch();
-
   const [filterText, setFilterText] = useState<string>("");
-
-  // Show first 10 items initially
-
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<filterProperties>({
     sort: "A to Z",
-    limit: 7,
+    quantity: 5,
     startDate: "",
     endDate: "",
     order: "desc",
+    search: "",
   });
-
   const lastVisitedId = useSelector((state: RootState) =>
     getLastVisitedId(state)
   );
-
   if (lastVisitedId) {
     setTimeout(() => {
       scrollToById(lastVisitedId);
       dispatch(addLastVisited(""));
     }, 300);
   }
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     forceRevalidateAll();
-  //   }, 30000);
-  //   return () => clearInterval(interval);
-  // }, [forceRevalidateAll]);
 
   return (
     <>

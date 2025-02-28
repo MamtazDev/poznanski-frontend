@@ -6,92 +6,100 @@ import MaterialCard from "../../Components/Card/MaterialCard";
 import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
 import Layout from "../../Components/Layout";
-import PaginationBar from "../../Components/PaginationBar";
-import { apiGetReq } from "../../Constant/api-functions";
 import "../mainPageStyle.css";
-import { data } from 'autoprefixer';
+import { apiBaseUrl } from "../../Constant/config";
+import { useToast } from "@chakra-ui/react";
 
 interface Product {
+  _id: unknown;
   id: string;
   title: string;
   description: string;
+  thumbnail: string;
   youTube: string;
   tags: string;
   date: string;
+  videoId: string;
+  channelId: string;
+  channelTitle: string;
+  playlistId: string;
+}
+
+interface filterProperties {
+  sort: string;
+  quantity: number;
+  startDate: string;
+  endDate: string;
+  order: string;
+  search: string | undefined;
 }
 
 const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-  const [selectedPage, setSelectedPage] = useState<number>(1);
-  const [pages, setPages] = useState<number>(1);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<Product[]>([]);
-  const [filteredData, setFilteredData] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const toast = useToast();
 
-
-  // const [sortBy, setSortBy] = useState<string>("");
-  // const [order, setOrder] = useState<string>("desc");
-  // const [startDate, setStartDate] = useState<string>("2025-01-01");
-  // const [limit, setLimit] = useState<number>(6);
-  // const [endDate, setEndDate] = useState<string>("2025-01-01");
-
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<filterProperties>({
     sort: "A to Z",
-    limit: 7,
+    quantity: 50,
     startDate: "",
     endDate: "",
-    order: "desc"
+    order: "desc",
+    search: "",
   });
 
-
-  const handleData = (response: any) => {
-    const materials = response.materials || [];
-    const formattedProducts: Product[] = materials.map((item: any) => ({
-      id: item._id,
-      title: item.title,
-      description: item.description,
-      youTube: item.youTube,
-      tags: item.tags,
-      date: new Date(item.date).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-    }));
-
-    setCardData(formattedProducts);
-    setPages(Math.ceil(formattedProducts.length / rowsPerPage));
-    setFilteredData(formattedProducts.slice(0, rowsPerPage));
+  const fetchPlaylists = async (page: number) => {
+    setLoading(true);
+    try {
+      const result = await fetch(`${apiBaseUrl}/playlist?page=${page}&limit=10`);
+      const data = await result.json();
+      const mappedData = data.data.map((item: any) => ({
+        id: item._id,
+        title: item.title,
+        description: item.description,
+        thumbnail: item.thumbnail,
+        videoId: item.videoId,
+        channelId: item.channelId,
+        youTube: item.youTube,
+        channelTitle: item.channelTitle,
+        playlistId: item.playlistId,
+        tags: item.tags || "",
+        date: new Date(item.publishedAt).toISOString().split("T")[0],
+      }));
+      setCardData(mappedData);
+      setTotalPages(data.totalPages);
+      setCurrentPage(page);
+    } catch (error: any) {
+      toast({
+        title: "Error fetching playlists",
+        description: error.message || "Something went wrong.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    setLoading(true);
-    // apiGetReq(`http://localhost:8000/api/materials?order=${order}&limit=${limit}&startDate=${startDate}&endDate=${endDate}`, {})
-    apiGetReq(`http://localhost:8000/api/materials?sortBy=title&order=${filters.order}&limit=${filters.limit}&startDate=${filters.startDate}&page=1`, {})
-      .then((res) => {
-        handleData(res);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  }, []);
+    fetchPlaylists(currentPage);
+  }, [currentPage]);
+
+  const handleSearch = (inputValue: string) => {
+    if (!inputValue) return fetchPlaylists(1);
+    const filtered = cardData.filter((item) =>
+      item.title.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    setCardData(filtered);
+  };
 
   useEffect(() => {
-    const filtered = filterText
-      ? cardData.filter(
-        (item) =>
-          item.title.toLowerCase().includes(filterText.toLowerCase()) ||
-          item.description.toLowerCase().includes(filterText.toLowerCase())
-      )
-      : cardData;
-
-    setPages(Math.ceil(filtered.length / rowsPerPage));
-    setFilteredData(
-      filtered.slice((selectedPage - 1) * rowsPerPage, selectedPage * rowsPerPage)
-    );
-  }, [filterText, cardData, selectedPage, rowsPerPage]);
+    fetchPlaylists(currentPage);
+  }, [filters]);
 
   return (
     <Layout themeMode={themeMode}>
@@ -106,39 +114,75 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             <ContentTitle titleType="VIDEOS" title="Materials" />
           </div>
           <div className="md:mt-6 mt-4">
-            <FilterInput type={type} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
+            <FilterInput
+              type={type}
+              handler={handleSearch}
+              filterText={filterText}
+              setFilterText={setFilterText}
+              setFilters={setFilters}
+              filters={filters}
+            />
           </div>
-          <div className="md:mt-12 mt-8" style={{ minHeight: "908px", width: "100%" }}>
+          <div className="md:mt-12 mt-8">
             {loading ? (
-              <div className="w-full flex justify-center items-center" style={{ minHeight: "908px" }}>
-                <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="lg" />
+              <div
+                className="w-full flex justify-center items-center"
+                style={{ minHeight: "908px" }}
+              >
+                <Spinner
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="blue.500"
+                  size="lg"
+                />
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5">
-                {filteredData.map((item, index) => (
-                  <div key={`main-video-card-${index}`} className="w-full">
-                    <MaterialCard
-                      type={type ? "vertical" : "horizontal"}
-                      video={item.youTube}
-                      data={item}
-                      feature={item.tags}
-                      title={item.title}
-                      date={item.date}
-                      link={item.youTube}
-                    />
-                  </div>
-                ))}
+                {cardData.length > 0 ? (
+                  cardData.map((item, index) => (
+                    <div key={`main-video-card-${index}`} className="w-full">
+                      <MaterialCard
+                        type={type ? "vertical" : "horizontal"}
+                        video={item.videoId}
+                        data={item}
+                        id={item.id}
+                        thumbnail={item.thumbnail}
+                        feature={item.tags}
+                        title={item.title}
+                        date={item.date}
+                        link={item.youTube}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-blue-500 text-5xl py-3 text-center">
+                    There is no data
+                  </p>
+                )}
               </div>
             )}
           </div>
           <div className="flex justify-center mt-5">
-            <PaginationBar
-              selectedPage={selectedPage}
-              setSelectedPage={setSelectedPage}
-              pages={pages}
-              entriesPerPage={rowsPerPage}
-              setEntriesPerPage={setRowsPerPage}
-            />
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+            >
+              Previous
+            </button>
+            <span className="mx-4">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>

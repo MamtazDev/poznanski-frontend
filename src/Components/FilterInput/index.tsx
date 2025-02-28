@@ -3,81 +3,62 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
 import PopUp from "./PopUp";
 import "./style.css";
+import SearchIcon from "../../assets/svg/search-icon.svg"
 
 interface FilterInputProps {
   type: boolean;
   filterText: string;
   setFilterText: React.Dispatch<React.SetStateAction<string>>;
-  setFilters: React.Dispatch<React.SetStateAction<any>>; 
-  filters: any; 
+  setFilters: React.Dispatch<React.SetStateAction<any>>;
+  filters: any;
+  handler?: (inputValue: string) => void; // Update handler to accept inputValue as a string
 }
-const FilterInput: React.FC<FilterInputProps> = ({ type,filterText, setFilterText, setFilters,filters }) => {
+
+const FilterInput: React.FC<FilterInputProps> = ({
+  type,
+  handler,
+  setFilterText,
+  setFilters,
+  filters,
+}) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-    // console.log(themeMode, "theme pai nai ")
+  const [inputValue, setInputValue] = useState(""); // State for input value
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-
 
   const handleShowPopup = () => {
     setIsPopupOpen(true);
   };
 
-
   const handleClosePopup = () => {
     setIsPopupOpen(false);
   };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFilterText(e.target.value);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
   };
 
   return (
     <>
       <div className="w-full">
         <div
-          className={`${!themeMode ? "filter-box-dark-2" : "filter-box-2 "} ${type ? "filter-box-mobile-2" : "filter-box-web-2"} flex place-items-center`}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={type ? "18" : "26"}
-            height={type ? "18" : "26"}
-            viewBox="0 0 22 22"
-            fill="none"
-          >
-            <path
-              d="M12.8334 4.5835H18.3334"
-              stroke="#BBBCC0"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M12.8334 7.3335H15.5834"
-              stroke="#BBBCC0"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M19.25 10.5418C19.25 15.3543 15.3542 19.2502 10.5417 19.2502C5.72921 19.2502 1.83337 15.3543 1.83337 10.5418C1.83337 5.72933 5.72921 1.8335 10.5417 1.8335"
-              stroke="#BBBCC0"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M20.1667 20.1668L18.3334 18.3335"
-              stroke="#BBBCC0"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          className={`${!themeMode ? "filter-box-dark-2" : "filter-box-2 mb-5 "} ${type ? "filter-box-mobile-2" : "filter-box-web-2"} flex place-items-center`}>
+          <img src={SearchIcon} alt="search-icon" />
           <input
             className="ml-2.5 ml-peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline-none"
             placeholder="Search Anything"
+            value={inputValue}
             onChange={handleInputChange}
-          ></input>
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                // If the handler function is provided, call it with the current input value
+                if (handler) {
+                  setFilters({ ...filters, search: inputValue });
+                  handler(inputValue);
+                }
+              }
+            }}
+          />
+
           <div
             className={`w-0 border h-full`}
             style={{
@@ -92,8 +73,7 @@ const FilterInput: React.FC<FilterInputProps> = ({ type,filterText, setFilterTex
               width={!type ? "27" : "19"}
               height={!type ? "26" : "18"}
               viewBox="0 0 27 26"
-              fill="none"
-            >
+              fill="none">
               <path
                 d="M24.333 7.04199H17.833"
                 stroke="#6D6E76"
@@ -146,7 +126,12 @@ const FilterInput: React.FC<FilterInputProps> = ({ type,filterText, setFilterTex
           </button>
         </div>
         {isPopupOpen && (
-          <PopUp handleClosePopup={handleClosePopup} themeMode={themeMode} setFilters={setFilters} filters={filters}/>
+          <PopUp
+            handleClosePopup={handleClosePopup}
+            themeMode={themeMode}
+            setFilters={setFilters}
+            filters={filters}
+          />
         )}
       </div>
     </>

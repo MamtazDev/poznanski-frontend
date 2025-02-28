@@ -27,7 +27,7 @@ const ReleaseCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                   cardData[index] && (
                     <div key={`card-${index}-0`} className="w-full">
                       <NewReleaseCard
-                        data=''
+                         data={{ songs: [] }}
                         youTube=''
                         img={cardData[index].img}
                         feature={cardData[index].feature}
@@ -52,7 +52,7 @@ const ReleaseCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                           cardData[idx * cardNum + index] && (
                             <div key={`card-${index}-0`} className="w-full">
                               <NewReleaseCard
-                                data=''
+                                 data={{ songs: [] }} // Default value to prevent errors
                                 youTube=''
                                 img={cardData[idx * cardNum + index].img}
                                 feature={
@@ -84,7 +84,7 @@ const ReleaseCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                 if (cardData[index]) {
                   return (
                     <NewReleaseCard
-                      data=''
+                    data={{ songs: [] }}
                       key={`newRelease-caraousel-0-${index}-2`}
                       youTube=''
                       img={cardData[index].img}
@@ -114,7 +114,7 @@ const ReleaseCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                         if (cardData[idx * 5 + index]) {
                           return (
                             <NewReleaseCard
-                              data=''
+                            data={{ songs: [] }}
                               key={`newRelease-caraousel-${idx}-${index}-2`}
                               youTube=''
                               img={cardData[idx * 5 + index].img}

@@ -24,7 +24,7 @@ export const AccountMenu: React.FC<{
 	themeMode?: boolean;
 	width?: string;
 	height?: string;
-}> = ({themeMode, width=32, height=32}) => {
+}> = ({themeMode, width=24, height=24}) => {
 	const dispatch = useDispatch();
 	const userStore = useSelector((state: RootState) => state.user);
 	const loggedIn = userStore.isLoggedIn;
@@ -45,7 +45,7 @@ export const AccountMenu: React.FC<{
 
 	const handleLogout = () => {
 		optimisticLogout();
-		logoutRequest();
+		// logoutRequest();
 		handleClose();
 	};
 
@@ -55,8 +55,8 @@ export const AccountMenu: React.FC<{
 		}
 	}, [userStore]);
 
-	const UserAvatar = () => <Avatar sx={{width: 32, backgroundColor: 'transparent',
-		height: 32, borderWidth: 2, color: themeMode ? '#5A1073' : '#21E3CE', borderColor: themeMode ? '#5A1073' : '#21E3CE'}}>
+	const UserAvatar = () => <Avatar sx={{width: 24, backgroundColor: 'transparent',
+		height: 24, borderWidth: 2, color: themeMode ? '#5A1073' : '#21E3CE', borderColor: themeMode ? '#5A1073' : '#21E3CE'}}>
 	   {`${userStore?.user?.nickname}`[0].toUpperCase() ??
 		   'X'}
    </Avatar>
@@ -116,8 +116,8 @@ export const AccountMenu: React.FC<{
 								filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
 								mt: 1.5,
 								'& .MuiAvatar-root': {
-									width: 35,
-									height: 32,
+									width: 24,
+									height: 24,
 									ml: -0.5,
 									mr: 1,
 								},
@@ -163,10 +163,9 @@ export const AccountMenu: React.FC<{
 					<MenuItem onClick={handleClose}>
 					<Link to='/profile' className='flex gap-2 items-center'><UserAvatar /> Profile</Link>
 					</MenuItem>
-					<Divider />
-					<MenuItem onClick={handleClose}>
+					{/* <MenuItem onClick={handleClose}>
 						<Link to='/notification'>powiadomienie</Link>
-					</MenuItem>
+					</MenuItem> */}
 					<MenuItem onClick={handleClose}>
 						Ustawienia
 					</MenuItem>

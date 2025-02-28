@@ -34,7 +34,8 @@ const BookVerticalCarousel: React.FC<TicketProps> = ({ state, data }) => {
       {!nowState ? (
         <div className="mt-10">
           <Carousel verticalMode={true} verticalBtn={true}>
-            {[...Array(Math.ceil(data.length / 6))].map((_, index) => (
+            {[...Array(Math.ceil(data.length / 6))].map((_, index) => {
+              return (
                 <div key={`ticket-card-${index}`}>
                   <div
                     className={`${themeMode ? "book-back" : "book-back-dark"}`}
@@ -43,7 +44,6 @@ const BookVerticalCarousel: React.FC<TicketProps> = ({ state, data }) => {
                     {[...Array(6)].map((_, idx) =>
                       data[index * 6 + idx] ? (
                         <div
-                        key={idx}
                           className={`grid grid-cols-4 ${idx !== 5 && "ticket-bottom-border"} items-center px-3`}
                           style={{ height: 75 }}
                         >
@@ -97,8 +97,8 @@ const BookVerticalCarousel: React.FC<TicketProps> = ({ state, data }) => {
                     )}
                   </div>
                 </div>
-              )
-            )}
+              );
+            })}
           </Carousel>
         </div>
       ) : (

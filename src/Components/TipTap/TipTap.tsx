@@ -45,7 +45,7 @@ export const getExtensionsData = (
 	}),
 		Image.configure({
 		HTMLAttributes: {
-			class: 'mx-auto my-3 max-h-[494px] max-w-[870px] object-cover',
+			class: 'mx-auto my-3 max-h-[494px] object-cover',
 			style: `border-radius: 16px; border: 1px solid #e5e7eb;`
 		},
 	}),
