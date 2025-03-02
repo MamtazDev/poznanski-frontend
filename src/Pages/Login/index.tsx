@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { PageBasicProps } from "../../AppMain";
 import Layout from "../../Components/Layout";
 import Input from "../../Components/TextField/Input";
-import { Button } from "@chakra-ui/react";
+import { Button, useToast, Spinner } from "@chakra-ui/react";
 import { Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { apiPostReq } from "../../Constant/api-functions";
@@ -60,7 +60,6 @@ async function loginUser(
       },
       body: JSON.stringify({ email, password }),
       credentials: "include", // Ensure cookies are included
-
     });
 
     // Check if the response is not ok
@@ -72,7 +71,7 @@ async function loginUser(
     // Parse and return the response as `LoginResponse`
     const data: LoginResponse = await response.json();
     console.log("Login successful:", data.user);
-    localStorage.setItem('creds', JSON.stringify(data.user))
+    localStorage.setItem("creds", JSON.stringify(data.user));
     return data;
   } catch (error) {
     console.error("Error logging in:", { error });
@@ -87,6 +86,7 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [creatingAccount, setCreatingAccount] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -102,80 +102,62 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     mode: "all",
   });
 
+  const { showPromiseToast } = usePromiseToast({});
+
   const sendUserData = async (data: Partial<SubmitUserForm>) => {
+    setIsLoading(true);
     const { email, nickname, password, passwordRepeat } = data;
-    if (creatingAccount && password !== passwordRepeat) {
-      alert("Hasła nie są takie same");
-    } else if (creatingAccount && password === passwordRepeat) {
-      try {
-        const regRes = await registerRequest(
-          `${password}`,
-          `${email}`,
-          `${nickname}`
-        );
-        console.log("Registered", regRes.verificationToken);
-        verifyEmailWithNotification(regRes.verificationToken);
-      } catch (error) {
-        console.error("Registration failed:", error);
-        throw error;
-      } finally {
-        navigate("/login", { replace: true });
+    try {
+      if (creatingAccount && password !== passwordRepeat) {
+        throw new Error("Passwords do not match");
       }
-    } else if (nickname && password) {
-      try {
-        await loginUser(nickname, password)
-          .then((data) => {
-            dispatch(setUserLoggedIn(data.user));
-          })
-          .catch((error) => {
-            throw new Error(error.message);
-          });
-      } catch (error) {
-        console.error("Login failed:", error);
-        throw error;
-      } finally {
+
+      if (creatingAccount && password === passwordRepeat) {
+        await showPromiseToast(
+          () => registerRequest(`${password}`, `${email}`, `${nickname}`),
+          {
+            loading: { title: "Registering..." },
+            success: {
+              title: "Registration successful!",
+              description: "Please check your email for verification",
+            },
+            error: { title: "Registration failed" },
+          }
+        );
+        navigate("/login", { replace: true });
+      } else if (nickname && password) {
+        const loginData = await showPromiseToast(
+          () => loginUser(nickname, password),
+          {
+            loading: { title: "Logging in..." },
+            success: { title: "Login successful!" },
+            error: { title: "Login failed" },
+          }
+        );
+        if (loginData?.user) {
+          dispatch(setUserLoggedIn(loginData.user));
+        }
         location.state ? navigate(location.state) : navigate("/");
         reset();
       }
+    } catch (error: any) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const { wrappedSubmit } = usePromiseBasedToast({
-    handleSubmit,
-    onSubmit: sendUserData,
-    toastMessages: {
-      success: { title: "Login successful", description: "Welcome back!" },
-      error: {
-        title: "Login failed",
-        description: "Invalid credentials or other error occurred",
-      },
-      loading: { title: "Logging in", description: "Please wait" },
-    },
-  });
-
-  const { showPromiseToast } = usePromiseToast({});
-
-  const verifyEmailWithNotification = (token: string) => {
-    console.log("Token", token);
-    showPromiseToast(async () => await verifyEmailRequest(token), {
-      success: {
-        title: "Email verified",
-        description: "You can now log in",
-      },
-      error: {
-        title: "Email verification failed",
-        description: "Invalid token",
-      },
-      loading: { title: "Verifying email", description: "Please wait" },
-    });
-  };
+  // const verifyEmailWithNotification = async (token: string) => {
+  //   await showPromiseToast(verifyEmailRequest(token), {
+  //     loading: "Verifying email...",
+  //     success: "Email verified successfully",
+  //     error: (err) => err.message || "Email verification failed",
+  //   });
+  // };
 
   useEffect(() => {
     if (user) {
       navigate("/");
-    } else if (token) {
-      verifyEmailWithNotification(token);
-      navigate("/login", { replace: true });
     }
   }, []);
 
@@ -184,10 +166,11 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   return (
     <Layout type={type} themeMode={themeMode}>
-      <form onSubmit={wrappedSubmit}>
+      <form onSubmit={handleSubmit(sendUserData)}>
         <div className="flex w-full justify-center mt-20">
           <div
-            className={`${themeMode ? "border border-solid" : "bg-[#242526]"} w-[500px] shadow-lg rounded-2xl px-6 py-4`}>
+            className={`${themeMode ? "border border-solid" : "bg-[#242526]"} w-[500px] shadow-lg rounded-2xl px-6 py-4`}
+          >
             {creatingAccount ? (
               <div className="flex flex-col justify-between h-full gap-3">
                 <Input
@@ -219,15 +202,19 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   error={errors.passwordRepeat?.message}
                 />
 
-                <ActionButton type="submit">Załóż konto</ActionButton>
+                <ActionButton type="submit" disabled={isLoading}>
+                  {isLoading ? <Spinner size="sm" /> : "Załóż konto"}
+                </ActionButton>
                 <p
-                  className={`mt-3 text-center ${themeMode ? "text-black" : "text-white"}`}>
+                  className={`mt-3 text-center ${themeMode ? "text-black" : "text-white"}`}
+                >
                   Masz konto?
                 </p>
                 <Button
                   onClick={() => setCreatingAccount(false)}
                   variant="ghost"
-                  colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}>
+                  colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
+                >
                   Zaloguj się
                 </Button>
               </div>
@@ -250,7 +237,6 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   />
 
                   <div>
-                    {/* Forgot Password Link */}
                     <Button
                       variant="link"
                       colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
@@ -265,19 +251,23 @@ export const Login: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       themeMode={themeMode}
                     />
                   </div>
-                  <ActionButton type="submit">Zaloguj się</ActionButton>
+                  <ActionButton type="submit" disabled={isLoading}>
+                    {isLoading ? <Spinner size="sm" /> : "Zaloguj się"}
+                  </ActionButton>
                 </div>
                 <div className="flex flex-col">
                   <p
-                    className={` mt-3 mb-3 text-center ${themeMode ? "text-black" : "text-white"
-                      }`}
+                    className={` mt-3 mb-3 text-center ${
+                      themeMode ? "text-black" : "text-white"
+                    }`}
                   >
                     lub
                   </p>
                   <Button
                     onClick={() => setCreatingAccount(true)}
                     variant="ghost"
-                    colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}>
+                    colorScheme={themeMode ? "blackAlpha" : "whiteAlpha"}
+                  >
                     Załóż konto
                   </Button>
                 </div>

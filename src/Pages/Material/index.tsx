@@ -140,7 +140,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5">
                 {cardData.length > 0 ? (
-                  cardData.map((item, index) => (
+                  cardData?.map((item, index) => (
                     <div key={`main-video-card-${index}`} className="w-full">
                       <MaterialCard
                         type={type ? "vertical" : "horizontal"}

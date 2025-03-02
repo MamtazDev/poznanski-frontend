@@ -14,12 +14,14 @@ import {
 import storage from "redux-persist/lib/storage";
 import newsReducer from "./NewsReducer";
 import userReducer from "./user";
+import notificationReducer from "./NotificationReducer";
 
 const rootReducer = combineReducers({
   themeMode: ThemeReducer,
   player: PlayerReducer,
   news: newsReducer,
   user: userReducer,
+  notifications: notificationReducer,
 });
 
 const persistConfig = {

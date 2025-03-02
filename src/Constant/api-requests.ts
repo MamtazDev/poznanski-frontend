@@ -15,7 +15,7 @@ export const fetchCSRF = async () => {
 };
 
 export const checkIfLoggedIn = async (): Promise<any> => {
-  const resData = await apiGetReq("auth/verify", {})
+  const resData = await apiGetReq("auth/verify", {});
   return resData;
 };
 
@@ -43,8 +43,12 @@ export const registerRequest = async (
   email: string,
   nickname: string
 ) => {
-  const data = await apiPostReq("auth/register", { nickname, email, password }, false);
-  return data
+  const data = await apiPostReq(
+    "auth/register",
+    { nickname, email, password },
+    false
+  );
+  return data;
 };
 
 export const forgetPasswordReq = async (email: string) => {
@@ -61,7 +65,7 @@ export const profileUpdateRequest = async (
     profilePicture,
   };
   const path = `/auth/users/${rafa}`;
-  console.log("request Data", reqData, path)
+  console.log("request Data", reqData, path);
 
   await apiPutReq(path, reqData);
 };
@@ -77,7 +81,6 @@ export const profileUpdateRequest = async (
 //     throw new Error("Error updating profile: " + error);
 //   }
 // };
-
 
 export const profilePicRequest = async (file: File): Promise<string> => {
   const formData = new FormData();
@@ -124,8 +127,20 @@ export const getNewsRequests = async (
 // comments
 export enum PostModels {
   news = "News",
+  material = "material",
+  artist = "audio",
+  article = "article",
+  event = "event",
   comment = "Comment",
 }
+
+export const Comment_Sections = {
+  NEWS: "News",
+  MATERIAL: "material",
+  ARTIST: "audio",
+  ARTICLE: "article",
+  EVENT: "event",
+};
 
 interface GetCommentRequest {
   entityModel: PostModels;
