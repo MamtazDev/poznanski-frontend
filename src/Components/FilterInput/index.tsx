@@ -11,7 +11,7 @@ interface FilterInputProps {
   setFilterText: React.Dispatch<React.SetStateAction<string>>;
   setFilters: React.Dispatch<React.SetStateAction<any>>;
   filters: any;
-  handler?: (inputValue: string) => void; // Update handler to accept inputValue as a string
+  handler?: (inputValue: string) => void;
 }
 
 const FilterInput: React.FC<FilterInputProps> = ({
@@ -22,7 +22,7 @@ const FilterInput: React.FC<FilterInputProps> = ({
   filters,
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-  const [inputValue, setInputValue] = useState(""); // State for input value
+  const [inputValue, setInputValue] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleShowPopup = () => {
@@ -33,14 +33,24 @@ const FilterInput: React.FC<FilterInputProps> = ({
     setIsPopupOpen(false);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newValue = e.target.value;
+  //   setInputValue(newValue);
+  //   setFilterText(newValue);
+
+  //   if (handler) {
+  //     handler(newValue);
+  //   }
+  // };
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setInputValue(newValue);
     setFilterText(newValue);
 
-    if (handler) {
-      handler(newValue);
-    }
+    setFilters((prevFilters: any) => ({
+      ...prevFilters,
+      search: newValue,
+    }));
   };
 
   return (

@@ -7,7 +7,7 @@ import { RootState } from "../../reducers";
 import { getLastPageNumber } from "../../reducers/NewsReducer";
 import FilterInput from "../../Components/FilterInput";
 
-const Articles = ({ themeMode, type }: any) => {
+const Articles = ({ themeMode, type, filters, setFilters }: any) => {
   const currentPage = useSelector((state: RootState) =>
     getLastPageNumber(state)
   );
@@ -18,18 +18,43 @@ const Articles = ({ themeMode, type }: any) => {
   const [displayedItems, setDisplayedItems] = useState<NewsItem[]>([]);
   const [lastScrollTime, setLastScrollTime] = useState(0);
   const [filterText, setFilterText] = useState("");
-  const [filters, setFilters] = useState<{ search?: string }>({});
   const { data, loading } = usePaginatedNews(pageSize, selectedPage);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (data?.length > 0) {
-      const filteredData = data.filter((item) =>
-        item.title.toLowerCase().includes(filterText.toLowerCase())
-      );
+      let filteredData = data;
+
+      // Filter by search text
+      if (filters.search) {
+        filteredData = filteredData.filter((item) =>
+          item.title.toLowerCase().includes(filters.search.toLowerCase())
+        );
+      }
+
+      // Filter by date range
+      if (filters.startDate && filters.endDate) {
+        filteredData = filteredData.filter((item) => {
+          const itemDate = new Date(item.date as string);
+          const startDate = new Date(filters.startDate);
+          const endDate = new Date(filters.endDate);
+          return itemDate >= startDate && itemDate <= endDate;
+        });
+      }
+
+      // Sort data
+      if (filters.sort === "A to Z") {
+        filteredData.sort((a, b) => a.title.localeCompare(b.title));
+      } else if (filters.sort === "Z to A") {
+        filteredData.sort((a, b) => b.title.localeCompare(a.title));
+      }
+
+      // Limit the quantity
+      filteredData = filteredData.slice(0, filters.quantity);
+
       setDisplayedItems(filteredData.slice(0, visibleCount));
     }
-  }, [data, filterText, visibleCount]);
+  }, [data, filters, visibleCount]);
 
   // Infinite Scroll Handler with Delay
   const handleScroll = () => {
@@ -37,7 +62,6 @@ const Articles = ({ themeMode, type }: any) => {
       const { scrollTop, scrollHeight, clientHeight } =
         scrollContainerRef.current;
       const now = Date.now();
-
       if (
         scrollTop + clientHeight >= scrollHeight - 100 &&
         !isLoading &&
@@ -60,6 +84,7 @@ const Articles = ({ themeMode, type }: any) => {
     if (container) {
       container.addEventListener("scroll", handleScroll);
     }
+
     return () => {
       if (container) container.removeEventListener("scroll", handleScroll);
     };

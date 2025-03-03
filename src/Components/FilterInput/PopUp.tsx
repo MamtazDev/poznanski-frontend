@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 
-const PopUp = ({ handleClosePopup, themeMode,setFilters,filters }: any) => {
+const PopUp = ({ handleClosePopup, themeMode, setFilters, filters }: any) => {
   const [quantity, setQuantity] = useState<number>(10);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [selectedSort, setSelectedSort] = useState<string | null>("A to Z");
-
 
   useEffect(() => {
     setQuantity(filters?.quantity || 10);
@@ -14,11 +13,9 @@ const PopUp = ({ handleClosePopup, themeMode,setFilters,filters }: any) => {
     setSelectedSort(filters?.sort || "A to Z");
   }, [filters]);
 
-
   const handleSortSelection = (sortOption: string) => {
     setSelectedSort(sortOption);
   };
-
 
   const handleApplyFilters = () => {
     const updatedFilters = {
@@ -26,6 +23,7 @@ const PopUp = ({ handleClosePopup, themeMode,setFilters,filters }: any) => {
       quantity: quantity,
       startDate: startDate,
       endDate: endDate,
+      search: filters.search,
     };
     setFilters(updatedFilters);
     handleClosePopup();
@@ -56,9 +54,9 @@ const PopUp = ({ handleClosePopup, themeMode,setFilters,filters }: any) => {
           </label>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => handleSortSelection("asc")}
+              onClick={() => handleSortSelection("A to Z")}
               className={`flex-1 p-2 text-center rounded-md ${
-                selectedSort === "asc"
+                selectedSort === "A to Z"
                   ? "bg-[#5A1073] text-white"
                   : `border border-gray-300 ${themeMode ? "text-black" : "text-white"}`
               }`}
@@ -66,9 +64,9 @@ const PopUp = ({ handleClosePopup, themeMode,setFilters,filters }: any) => {
               <span> A to Z</span>
             </button>
             <button
-              onClick={() => handleSortSelection("desc")}
+              onClick={() => handleSortSelection("Z to A")}
               className={`flex-1 p-2 text-center rounded-md ${
-                selectedSort === "desc"
+                selectedSort === "Z to A"
                   ? "bg-[#5A1073] text-white"
                   : `border border-gray-300 ${themeMode ? "text-black" : "text-white"}`
               }`}
@@ -93,7 +91,7 @@ const PopUp = ({ handleClosePopup, themeMode,setFilters,filters }: any) => {
             <input
               type="range"
               min="10"
-              step ="5"
+              step="5"
               max="100"
               value={quantity}
               onChange={(e) => setQuantity(Number(e.target.value))}
