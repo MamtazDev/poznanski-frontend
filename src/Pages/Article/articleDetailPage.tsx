@@ -21,9 +21,10 @@ import DelayedComponent from "../../Components/_utility/DelayedComponent";
 import { PostModels } from "../../Constant/api-requests";
 import defaultimg from "../../assets/svg/userIcon.svg";
 import singer from "../../assets/png/ticketBanner.png";
-import BreadCrumb from './../../Components/BreadCrumb/index';
+import BreadCrumb from "./../../Components/BreadCrumb/index";
 import SocialShare from "../../Components/SocialShare/SocialShare";
 import { BiCommentDetail } from "react-icons/bi";
+import Comments from "../../Components/common/Comments";
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 interface CommentForm {
@@ -86,57 +87,66 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   // When the data is fetched, set it to the local state
   useEffect(() => {
     if (data) {
-      setNews(data);  // Set the fetched data to local state
+      setNews(data); // Set the fetched data to local state
     }
   }, [data]);
 
   if (error) return <div>Error loading data.</div>;
-  if (!news) return (
-    <div className="flex justify-center items-center h-screen w-full"
-      style={{
-        backgroundColor: themeMode ? "white" : "black"
-      }}>
-      <p className="text-xl font-semibold " style={{
-        color: themeMode ? "black" : "white"
-      }} >Loading...</p>
-      <div className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+  if (!news)
+    return (
+      <div
+        className="flex justify-center items-center h-screen w-full"
         style={{
-          borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
-          borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
-          borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
-        }}>
+          backgroundColor: themeMode ? "white" : "black",
+        }}
+      >
+        <p
+          className="text-xl font-semibold "
+          style={{
+            color: themeMode ? "black" : "white",
+          }}
+        >
+          Loading...
+        </p>
+        <div
+          className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+          style={{
+            borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+            borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+            borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+          }}
+        ></div>
       </div>
-    </div>
-  );
+    );
 
-
-
-  const wordArray = tags ? data?.news?.tags.split(",").map((word: string) => word.trim()) : [];
+  const wordArray = tags
+    ? data?.news?.tags.split(",").map((word: string) => word.trim())
+    : [];
   return (
     <Layout themeMode={themeMode} type={type}>
-      <div className='flex justify-center '>
-        <div className='container'>
+      <div className="flex justify-center ">
+        <div className="container">
           {type ? (
-            ''
+            ""
           ) : (
-            <div className='md:mt-12 mt-8'>
+            <div className="md:mt-12 mt-8">
               <BreadCrumb />
             </div>
           )}
-          <div >
+          <div>
             <div>
-              <div className='md:mt-7 mt-10'>
+              <div className="md:mt-7 mt-10">
                 <ContentTitle
-                  titleType='NEWS'
-                  title={data.news?.title || 'News Page Title'}
+                  titleType="NEWS"
+                  title={data.news?.title || "News Page Title"}
                 />
               </div>
               <p
-                className={`py-5 text-left ${!themeMode ? 'text-[#BBBCC0]' : 'text-[#6D6E76]'}`}
+                className={`py-5 text-left ${!themeMode ? "text-[#BBBCC0]" : "text-[#6D6E76]"}`}
               >
                 <b>{data.news?.intro}</b>
               </p>
-              <div className='flex lg:flex-row flex-col justify-between mx-auto gap-5'>
+              <div className="flex lg:flex-row flex-col justify-between mx-auto gap-5">
                 <div className="md:w-[900px]">
                   <Image
                     src={data?.news?.files?.[0] || defaultimg}
@@ -151,25 +161,38 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     />
                     <div
                       className={`${themeMode ? "editorContainer" : "editorContainerDark"} h-full p-4 mt-4  rounded-md `}
-                      dangerouslySetInnerHTML={{ __html: data?.news?.content || "" }}
+                      dangerouslySetInnerHTML={{
+                        __html: data?.news?.content || "",
+                      }}
                       style={{
-                        color: themeMode ? "black" : "white"
+                        color: themeMode ? "black" : "white",
                       }}
                     />
-                    <CommentForm
+                    {/* <CommentForm
                       // ref={commentFormRef}
                       postModel={PostModels.news}
                       commentData={pageData?.commentsSection ?? null}
-                    />
+                    /> */}
+                    {data?.news?._id && (
+                      <Comments
+                        postId={data?.news?._id}
+                        type={PostModels.news}
+                      />
+                    )}
                   </DelayedComponent>
                 </div>
                 <div className=" lg:w-[400px] lg:mx-auto">
                   <div
-                    className={`shadow-md rounded-2xl ${!type ? (themeMode ? 'right-card' : 'right-card-dark') : ''
-                      } mb-6  py-4 px-3`}
+                    className={`shadow-md rounded-2xl ${
+                      !type
+                        ? themeMode
+                          ? "right-card"
+                          : "right-card-dark"
+                        : ""
+                    } mb-6  py-4 px-3`}
                   >
                     <div
-                      className={`${themeMode ? 'tag-card-title' : 'tag-card-title-dark'} text-left md:mb-3 mb-4`}
+                      className={`${themeMode ? "tag-card-title" : "tag-card-title-dark"} text-left md:mb-3 mb-4`}
                     >
                       Tagi
                     </div>
@@ -180,10 +203,13 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                             tag && (
                               <span
                                 key={index}
-                                className={`px-2 py-1 rounded-full md:text-sm text-[10px] font-semibold ${!themeMode && "btn-dark-bg-color"
-                                  }`}
+                                className={`px-2 py-1 rounded-full md:text-sm text-[10px] font-semibold ${
+                                  !themeMode && "btn-dark-bg-color"
+                                }`}
                                 style={{
-                                  backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
+                                  backgroundColor: themeMode
+                                    ? "#E8ECFE"
+                                    : "#2FC4B2",
                                   color: themeMode ? "#5A1073" : "#5A1073",
                                 }}
                               >
@@ -193,9 +219,13 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         )}
                       </div>
                     ) : (
-                      <p style={{
-                        color: themeMode ? "black" : "white"
-                      }}>no tags here</p>
+                      <p
+                        style={{
+                          color: themeMode ? "black" : "white",
+                        }}
+                      >
+                        no tags here
+                      </p>
                     )}
 
                     {filteredRelatedData?.length > 0 && (
@@ -210,7 +240,11 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         <div className={`flex flex-col gap-3 md:mt-3 mt-4`}>
                           {filteredRelatedData &&
                             filteredRelatedData?.map((item) => (
-                              <Link replace to={`/news/${item._id}`} key={item._id}>
+                              <Link
+                                replace
+                                to={`/news/${item._id}`}
+                                key={item._id}
+                              >
                                 <div className={`flex gap-3`}>
                                   <Image
                                     src={`${process.env.REACT_APP_FILES_URL + item.files[0].url}`}
@@ -234,7 +268,8 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                                     <p
                                       className={`mt-1 ${themeMode ? "text-stone-500" : "text-stone-300"} w-full text-left text-xs`}
                                     >
-                                      {item.intro.slice(0, type ? 100 : 75) + "..."}
+                                      {item.intro.slice(0, type ? 100 : 75) +
+                                        "..."}
                                     </p>
                                   </div>
                                 </div>
@@ -244,47 +279,86 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       </div>
                     )}
 
-
                     {/* <SocialShare
                   themeMode={themeMode}
                   url={url}
                   title={`${pageData?.title}`}
                 /> */}
-
                   </div>
                   {/* Related Content */}
                   {data?.relatedNews && (
                     <div className="max-h-[500px] overflow-y-auto scrollbar-hide shadow-md rounded-2xl relative">
                       <div className="rounded-lg py-4 px-3">
-                        <h2 className="font-semibold md:mb-3 mb-4 text-xl" style={{ color: themeMode ? "black" : "white" }}>
+                        <h2
+                          className="font-semibold md:mb-3 mb-4 text-xl"
+                          style={{ color: themeMode ? "black" : "white" }}
+                        >
                           Related Content
                         </h2>
 
-                        {data?.relatedNews?.map((newsItem: { _id: React.Key | null | undefined; files: any[]; title: string | number | boolean | React.ReactElement; intro: string | number | boolean | React.ReactElement }) => (
-                          <div key={newsItem._id} className={`flex gap-2 mb-3 p-2 rounded-2xl transition-colors duration-300
+                        {data?.relatedNews?.map(
+                          (newsItem: {
+                            _id: React.Key | null | undefined;
+                            files: any[];
+                            title:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement;
+                            intro:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement;
+                          }) => (
+                            <div
+                              key={newsItem._id}
+                              className={`flex gap-2 mb-3 p-2 rounded-2xl transition-colors duration-300
           ${themeMode ? "hover:bg-[#FFFFFF] hover:shadow-lg" : "hover:bg-[#242526]"}`}
-
-                          >
-                            <img src={newsItem?.files?.[0] || singer} alt="news thumbnail" className="h-[62px] w-[62px] object-cover rounded" />
-                            <div>
-                              <p className="font-semibold line-clamp-1" style={{ color: themeMode ? "black" : "white" }}>
-                                {newsItem.title}
-                              </p>
-                              <p className="text-sm font-medium line-clamp-1" style={{ color: themeMode ? "black" : "white" }}>
-                                {newsItem.intro}
-                              </p>
+                            >
+                              <img
+                                src={newsItem?.files?.[0] || singer}
+                                alt="news thumbnail"
+                                className="h-[62px] w-[62px] object-cover rounded"
+                              />
+                              <div>
+                                <p
+                                  className="font-semibold line-clamp-1"
+                                  style={{
+                                    color: themeMode ? "black" : "white",
+                                  }}
+                                >
+                                  {newsItem.title}
+                                </p>
+                                <p
+                                  className="text-sm font-medium line-clamp-1"
+                                  style={{
+                                    color: themeMode ? "black" : "white",
+                                  }}
+                                >
+                                  {newsItem.intro}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          )
+                        )}
                       </div>
                       {/* Sticky See More Button */}
-                      <div className="sticky bottom-0 py-3 text-center shadow-md"
+                      <div
+                        className="sticky bottom-0 py-3 text-center shadow-md"
                         style={{
-                          backgroundColor: themeMode ? "white" : "#242526"
-                        }}>
-                        <Link to="/news" className="font-semibold" style={{
-                          color: themeMode ? "#5A1073" : "#2FC4B2",
-                        }}>See More..</Link>
+                          backgroundColor: themeMode ? "white" : "#242526",
+                        }}
+                      >
+                        <Link
+                          to="/news"
+                          className="font-semibold"
+                          style={{
+                            color: themeMode ? "#5A1073" : "#2FC4B2",
+                          }}
+                        >
+                          See More..
+                        </Link>
                       </div>
                     </div>
                   )}
@@ -307,7 +381,6 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       <span>Comment</span>
                     </button>
                   </div>
-
                 </div>
               </div>
             </div>

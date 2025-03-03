@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { RouteChangeTracker, initGA } from "./utils/analytics";
 import { logout, setUserLoggedIn } from "./reducers/user";
 import { deleteCookie, getCookie, parseJwt } from "./utils/auth";
+import SSEProvider from "./contextApi/sseContext";
 
 function App() {
   useEffect(() => {
@@ -18,12 +19,14 @@ function App() {
     <div className={`App`}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <ChakraProvider>
-            <BrowserRouter>
-              <RouteChangeTracker />
-              <AppMain />
-            </BrowserRouter>
-          </ChakraProvider>
+          <SSEProvider>
+            <ChakraProvider>
+              <BrowserRouter>
+                <RouteChangeTracker />
+                <AppMain />
+              </BrowserRouter>
+            </ChakraProvider>
+          </SSEProvider>
         </PersistGate>
       </Provider>
     </div>

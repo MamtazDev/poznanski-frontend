@@ -9,7 +9,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
 interface News {
-  type: string;
+  type?: string;
   id?: any;
   _id?: any;
   video: string;
@@ -48,7 +48,7 @@ const handlePlay = () => {
     : [];
 
   const handleClick = (id: any) => {
-    navigate(`/materials/${id}`);
+    navigate(`/playlist/${id}`);
     console.log(id, "materials");
   };
   return (

@@ -129,7 +129,8 @@ const AppMain: React.FC = () => {
               size="lg"
             />
           </div>
-        }>
+        }
+      >
         <ScrollToTopOnPageChange />
         <Routes>
           <Route
@@ -148,14 +149,16 @@ const AppMain: React.FC = () => {
                     className="flex justify-center gap-2 items-center text-xl font-medium h-screen w-full"
                     style={{
                       color: themeMode ? "black" : "white",
-                    }}>
+                    }}
+                  >
                     Please log in first.{" "}
                     <Link
                       to="/login"
                       className="font-semibold"
                       style={{
                         color: themeMode ? "#3BD6C6 " : "#5A1073",
-                      }}>
+                      }}
+                    >
                       Login
                     </Link>
                   </div>
@@ -256,7 +259,8 @@ const AppMain: React.FC = () => {
 
           <Route
             path={common.LOGIN_PATH}
-            element={<LoginPage themeMode={themeMode} type={type} />}>
+            element={<LoginPage themeMode={themeMode} type={type} />}
+          >
             <Route
               path=""
               element={<LoginPage themeMode={themeMode} type={type} />}
