@@ -8,7 +8,6 @@ import Layout from "../../Components/Layout";
 import { isInViewport } from "../../Constant/helpers";
 import { NewsItem, usePaginatedNews } from "../../hooks/useSWRNews";
 import { RootState } from "../../reducers";
-
 import {
   addLastVisited,
   getLastPageNumber,
@@ -16,7 +15,6 @@ import {
 } from "../../reducers/NewsReducer";
 import "../mainPageStyle.css";
 import Articles from "./artices";
-import { apiGetReq } from "../../Constant/api-functions";
 
 interface filterProperties {
   sort: string;
@@ -42,7 +40,6 @@ const scrollToById = (id: string) => {
 
 const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const dispatch = useDispatch();
-  const [filterText, setFilterText] = useState<string>("");
   const [filters, setFilters] = useState<filterProperties>({
     sort: "A to Z",
     quantity: 5,
@@ -72,17 +69,13 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           <div className="md:mt-7 mt-10">
             <ContentTitle titleType="NEWS" title="See Our Latest News" />
           </div>
-          {/* <div className="md:mt-6 mt-4">
-            <FilterInput
-              type={type}
-              filterText={filterText}
-              setFilterText={setFilterText}
-              setFilters={setFilters}
-              filters={filters}
-            />
-          </div> */}
           {/* Pass filters to Articles */}
-          <Articles filters={filters} themeMode={themeMode} type={type} />
+          <Articles
+            filters={filters}
+            setFilters={setFilters}
+            themeMode={themeMode}
+            type={type}
+          />
         </div>
       </div>
     </Layout>

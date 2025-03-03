@@ -26,18 +26,18 @@ interface Product {
 }
 
 export interface filterProperties {
-  sort: string,
-  quantity: number,
-  startDate: string,
-  endDate: string,
-  order: string,
-  search: string | undefined
+  sort: string;
+  quantity: number;
+  startDate: string;
+  endDate: string;
+  order: string;
+  search: string | undefined;
 }
 
 const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<Product[]>([]);
-  console.log(cardData)
+  console.log(cardData);
   const [cardNum, setCardNum] = useState<number>(4);
   const [lineNum, setLineNum] = useState<number>(3);
   const [loading, setLoading] = useState<boolean>(false);
@@ -45,55 +45,45 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [visibleCount, setVisibleCount] = useState(4);
   const [displayedItems, setDisplayedItems] = useState<Product[]>([]);
 
-
   const [filters, setFilters] = useState<filterProperties>({
-    sort: "asc",
-    quantity: 100,
+    sort: "A to Z",
+    quantity: 5,
     startDate: "",
     endDate: "",
     order: "desc",
-    search: ""
+    search: "",
   });
 
-  const fetchData = async (inputValue?: filterProperties) => {
+  const fetchData = async (inputFilters?: filterProperties) => {
     setLoading(true);
-    let url = `${apiBaseUrl}/radio`; // Default URL
-    // Building the query string based on available filter properties
-    let searchQuery = [];
 
-    if (inputValue?.search) {
-      searchQuery.push(`search=${encodeURIComponent(inputValue.search)}`);
+    let url = `${apiBaseUrl}/radio`;
+    let queryParams = new URLSearchParams();
+
+    if (inputFilters?.search) {
+      queryParams.append("search", inputFilters.search);
+    }
+    if (inputFilters?.sort) {
+      queryParams.append("order", inputFilters.sort);
+    }
+    if (inputFilters?.quantity) {
+      queryParams.append("limit", inputFilters.quantity.toString());
+    }
+    if (inputFilters?.startDate) {
+      queryParams.append("startDate", inputFilters.startDate);
+    }
+    if (inputFilters?.endDate) {
+      queryParams.append("endDate", inputFilters.endDate);
     }
 
-    if (inputValue?.sort) {
-      searchQuery.push(`order=${encodeURIComponent(inputValue.sort)}`);
-    }
-
-    if (inputValue?.quantity) {
-      searchQuery.push(`limit=${inputValue.quantity}`);
-    }
-
-    if (inputValue?.startDate) {
-      searchQuery.push(`startDate=${encodeURIComponent(inputValue.startDate)}`);
-    }
-
-    if (inputValue?.endDate) {
-      searchQuery.push(`endDate=${encodeURIComponent(inputValue.endDate)}`);
-    }
-
-    // if (inputValue?.order) {
-    //   searchQuery.push(`order=${encodeURIComponent(inputValue.order)}`);
-    // }
-    // If there are query parameters, append them to the URL
-    if (searchQuery.length > 0) {
-      url = `${url}?${searchQuery.join('&')}`;
+    if (queryParams.toString()) {
+      url += `?${queryParams.toString()}`;
     }
 
     try {
       const response = await fetch(url);
       const data = await response.json();
-      setCardData(data?.records);
-      console.log(data?.records, "data?.records")
+      setCardData(data?.records || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -101,11 +91,13 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
   };
 
+
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const setDisplayUpdatedName = () => {
     setDisplayedItems(cardData.slice(0, 2));
   };
+
   const loadMoreItems = () => {
     if (loading || visibleCount >= cardData.length) return;
     setLoading(true);
@@ -115,10 +107,12 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       setLoading(false);
     }, 1000);
   };
+
   const handleScroll = () => {
     if (!scrollContainerRef.current) return;
 
-    const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+    const { scrollTop, scrollHeight, clientHeight } =
+      scrollContainerRef.current;
 
     if (scrollTop + clientHeight >= scrollHeight - 5) {
       loadMoreItems();
@@ -127,7 +121,6 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   useEffect(() => {
     setDisplayedItems(cardData.slice(0, visibleCount));
   }, [cardData, visibleCount]);
-
 
   useEffect(() => {
     fetchData();
@@ -173,11 +166,9 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     fetchData(filters);
   }, [filters]); // Fetch data when filters change, including search
 
-
   useEffect(() => {
-    fetchData(filters)
-  }, [filters])
-
+    fetchData(filters);
+  }, [filters]);
 
   return (
     <>
@@ -195,7 +186,14 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <ContentTitle titleType="TOP HITS" title="TV/RADIO" />
             </div>
             <div className="md:mt-6 mt-4">
-              <FilterInput type={type} handler={handleSearch} filterText={filterText} setFilterText={setFilterText} setFilters={setFilters} filters={filters} />
+              <FilterInput
+                type={type}
+                handler={handleSearch}
+                filterText={filterText}
+                setFilterText={setFilterText}
+                setFilters={setFilters}
+                filters={filters}
+              />
             </div>
             <div
               className={`md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide`}
@@ -203,17 +201,14 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 width: "100%",
               }}
               ref={scrollContainerRef}
-              onScroll={handleScroll}
-            >
+              onScroll={handleScroll}>
               {loading ? (
                 <div
                   className="flex justify-center items-center  w-full"
-                  style={{ backgroundColor: themeMode ? "white" : "#111217" }}
-                >
+                  style={{ backgroundColor: themeMode ? "white" : "#111217" }}>
                   <p
                     className="text-xl font-semibold"
-                    style={{ color: themeMode ? "black" : "white" }}
-                  >
+                    style={{ color: themeMode ? "black" : "white" }}>
                     Loading...
                   </p>
                   <div
@@ -222,31 +217,34 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
                       borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
                       borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
-                    }}
-                  ></div>
+                    }}></div>
                 </div>
               ) : (
                 <div
-                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5 mb-16`}
-                >
-                  {cardData?.length > 0 ? cardData.map((item, index) => (
-                    <div key={index} className="w-full">
-                      <TVCard
-                        data={item}
-                        // id={item._id}
-                        id={item.id}
-                        video=""
-                        type={type ? "vertical" : "horizontal"}
-                        youTube={item.youTube}
-                        feature={item.title}
-                        title={item.artists?.[0]?.name || "Unknown Artist"}
-                        link={item.link}
-                      />
-                    </div>
-                  )) : <p className="text-blue-500 text-5xl py-3 text-center">There is no data</p>}
+                  className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5 mb-16`}>
+                  {cardData?.length > 0 ? (
+                    cardData.map((item, index) => (
+                      <div key={index} className="w-full">
+                        <TVCard
+                          data={item}
+                          // id={item._id}
+                          id={item.id}
+                          video=""
+                          type={type ? "vertical" : "horizontal"}
+                          youTube={item.youTube}
+                          feature={item.title}
+                          title={item.artists?.[0]?.name || "Unknown Artist"}
+                          link={item.link}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-blue-500 text-5xl py-3 text-center">
+                      There is no data
+                    </p>
+                  )}
                 </div>
               )}
-
             </div>
           </div>
         </div>
