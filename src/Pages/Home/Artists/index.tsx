@@ -196,7 +196,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
               </div>
               {artist.products.length > 0 && (
                 <div
-                  className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "md:h-[350px] h-72" : "h-0 overflow-hidden"}`}>
+                  className={`mx-auto px-5 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "md:h-[350px] h-full" : "h-0 overflow-hidden"}`}>
                   {
                     <ArtistsCarousel
                       cardNum={cardNum}

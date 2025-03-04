@@ -37,11 +37,11 @@ const MaterialCard: React.FC<News> = ({
 
   const dispatch = useDispatch();
   const dateFormated = moment(date).format("MM/ DD/ YYYY");
-const handlePlay = () => {
-  if (video) {
-    dispatch(openPlayer(video));
-  }
-};
+  const handlePlay = () => {
+    if (video) {
+      dispatch(openPlayer(video));
+    }
+  };
 
   const wordArray = feature
     ? feature.split(",").map((word) => word.trim())
@@ -55,7 +55,7 @@ const handlePlay = () => {
     <div className="product-card1 flex w-full">
       <div
         className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md
-      ${themeMode ? "border border-white" : "border border-[#242526] bg-[#242526]"}
+      ${themeMode ? "border border-gray-300" : "border border-[#242526] bg-[#242526]"}
       ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
       `}
         style={{
