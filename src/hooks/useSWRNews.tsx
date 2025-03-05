@@ -61,3 +61,34 @@ export const usePaginatedNews = (
     totalPages: data?.totalPages || 0,
   };
 };
+export const useMyNews = (
+  pageSize: number,
+  selectedPage: number
+): {
+  data: NewsItem[];
+  loading: boolean;
+  error: any;
+  forceRevalidateAll: () => void;
+  totalPages: number;
+} => {
+  const storages: any = localStorage.getItem('creds')
+  // console.log("email", storages)
+  const parsedData = JSON.parse(storages);
+  const email = parsedData.email
+  const { data, error, isValidating, mutate } = useSWR(
+    `/news/${email}?page=${selectedPage}&limit=${pageSize}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 10000,
+    }
+  );
+
+  return {
+    data: data?.news || [],
+    loading: isValidating,
+    error,
+    forceRevalidateAll: mutate,
+    totalPages: data?.totalPages || 0,
+  };
+};
