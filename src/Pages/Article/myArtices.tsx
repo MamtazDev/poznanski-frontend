@@ -98,7 +98,8 @@ const MyArticles = ({ themeMode, type }: any) => {
         ) : (
           <>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 py-5">
-              {displayedItems.map((item) => (
+              {displayedItems ?
+              displayedItems?.map((item) => (
                 <div
                   id={item._id}
                   key={`main-news-card-${item._id}`}
@@ -112,7 +113,11 @@ const MyArticles = ({ themeMode, type }: any) => {
                     _id={item._id}
                   />
                 </div>
-              ))}
+              ))
+                :
+                  <p>There is no news</p>
+              }
+
             </div>
 
             {/* Infinite Scroll Loading Spinner */}

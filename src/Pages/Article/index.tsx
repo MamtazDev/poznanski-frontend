@@ -18,6 +18,7 @@ import "../mainPageStyle.css";
 import Articles from "./artices";
 import { apiGetReq } from "../../Constant/api-functions";
 import MyArticles from "./myArtices";
+import { useLocation } from "react-router-dom";
 
 interface filterProperties {
   sort: string;
@@ -43,6 +44,7 @@ const scrollToById = (id: string) => {
 
 const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [filterText, setFilterText] = useState<string>("");
   const [filters, setFilters] = useState<filterProperties>({
     sort: "A to Z",
@@ -63,6 +65,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }, 300);
   }
 
+  const isProfileNewsPage = location.pathname === "/profile/news";
   return (
     <Layout type={type} themeMode={themeMode}>
       <div className="flex justify-center">
@@ -83,8 +86,14 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             />
           </div> */}
           {/* Pass filters to Articles */}
-          {/* <Articles filters={filters} themeMode={themeMode} type={type} /> */}
-          <MyArticles filters={filters} themeMode={themeMode} type={type} />
+          {/* <Articles filters={filters} themeMode={themeMode} type={type} />
+          <MyArticles filters={filters} themeMode={themeMode} type={type} /> */}
+          {/* Conditional Rendering */}
+          {isProfileNewsPage ? (
+            <MyArticles filters={filters} themeMode={themeMode} type={type} />
+          ) : (
+            <Articles filters={filters} themeMode={themeMode} type={type} />
+          )}
         </div>
       </div>
     </Layout>
