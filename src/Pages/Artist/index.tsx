@@ -141,8 +141,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 className={`p-5 rounded-2xl ${hoveredCard === `${_idx_}` && (themeMode ? "artists-body" : "artists-body-dark")}`}
                 style={{ transition: "0.5s ease-in-out" }}
                 onMouseEnter={() => setHoveredCard(`${_idx_}`)}
-                onMouseLeave={() => setHoveredCard(null)}
-                >
+                onMouseLeave={() => setHoveredCard(null)}>
                 <div className="flex items-start w-full">
                   <div onClick={() => handleClick(artist.id)}>
                     <Avatar
@@ -157,7 +156,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   </div>
                 </div>
                 {artist?.products?.length > 0 && (
-                  <div className={`mx-auto px-5 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "md:h-[350px] h-full" : "h-0 overflow-hidden"}`}>
+                  <div className={`md:pr-16 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "md:h-[350px] h-72" : "h-0 overflow-hidden"}`}>
                     <ArtistsCarousel cardNum={cardNum} cardData={artist.products} />
                   </div>
                 )}

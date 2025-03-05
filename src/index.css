@@ -247,33 +247,3 @@ code {
   border-radius: 50px;
   background: #E8ECFE !important;
   transform: none !important;}
-
-  .swiper{
-    margin-left: 14px;
-    margin-right: auto;
-    position: relative;
-    overflow: hidden;
-    list-style: none;
-    padding: 0;
-    z-index: 1;
-    display: block;
-  }
-
-  .slider-arrow {
-    z-index: 10;
-  }
-
-  .slick-next{
-    color:red
-  }
-  .slick-next {
-    right: -25px;
-    color: red;
-}
-
-svg.slick-arrow.slick-next {
- color: black;
-}
-svg.slick-arrow.slick-prev {
- color: black;
-}

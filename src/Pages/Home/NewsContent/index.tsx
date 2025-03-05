@@ -9,13 +9,12 @@ import { RootState } from "../../../reducers";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { Navigation, Pagination } from "swiper/modules";
 import { Button } from "@mui/material";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { text } from 'stream/consumers';
 
 interface Product {
   id: string;
@@ -40,12 +39,9 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
   const [cardData, setCardData] = useState<CartInterface | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  // const swiperRef = useRef<SwiperInstance | null>(null);
+  const swiperRef = useRef<SwiperInstance | null>(null);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-  const [showPagination, setShowPagination] = useState(window.innerWidth < 768);
-  const [showNavigation, setShowNavigation] = useState(window.innerWidth >= 768);
-  const [itemsPerRow, setItemsPerRow] = useState(3);
-  const [cardNum, setCardNum] = useState(window.innerWidth < 768 ? 1 : 3);
+
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -74,23 +70,10 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
     fetchNews();
   }, []);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 1024) {
-        setCardNum(2);
-        if (window.innerWidth < 768) setCardNum(1);
-      } else {
-        setCardNum(3);
-      }
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const [showPagination, setShowPagination] = useState(window.innerWidth < 768);
+  const [showNavigation, setShowNavigation] = useState(window.innerWidth >= 768);
+  const [itemsPerRow, setItemsPerRow] = useState(3);
+  const [cardNum, setCardNum] = useState(window.innerWidth < 768 ? 1 : 3);
 
   useEffect(() => {
     const updateUI = () => {
@@ -116,36 +99,40 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
     updateUI();
     window.addEventListener("resize", updateUI);
     return () => window.removeEventListener("resize", updateUI);
-  }, [showPagination]);
+  }, [showPagination]); // **Dependency হিসাবে Add করুন**
 
 
-  const swiperRef = useRef<SwiperClass | null>(null);
-  const [showPrevButton, setShowPrevButton] = useState<boolean>(false);
-  const [showNextButton, setShowNextButton] = useState<boolean>(true);
-
-  const handleSlideChange = () => {
-    if (swiperRef.current) {
-      const swiper = swiperRef.current;
-
-      const slidesPerView = Array.isArray(swiper.params.slidesPerView)
-        ? swiper.params.slidesPerView[0] || 1
-        : swiper.params.slidesPerView || 1;
-
-      const isFirstSlide = swiper.activeIndex === 0;
-      const isLastSlide = swiper.activeIndex >= swiper.slides.length - slidesPerView;
-
-      setShowPrevButton(!isFirstSlide);
-      setShowNextButton(!isLastSlide);
-    }
+  const handleNext = () => {
+    if (swiperRef.current) swiperRef.current.slideNext();
   };
 
-  const handleNext = () => swiperRef.current?.slideNext();
-  const handlePrev = () => swiperRef.current?.slidePrev();
+  const handlePrev = () => {
+    if (swiperRef.current) swiperRef.current.slidePrev();
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setCardNum(2);
+        if (window.innerWidth < 768) setCardNum(1);
+      } else {
+        setCardNum(3);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
 
-  // function handlePlay(youTube: any): void {
-  //   throw new Error("Function not implemented.");
-  // }
+
+  function handlePlay(youTube: any): void {
+    throw new Error("Function not implemented.");
+  }
 
   return cardData && cardData.news.length > 0 ? (
     <div className="flex justify-center">
@@ -165,7 +152,6 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
         <div className="w-full relative">
           <Swiper
             onSwiper={(swiper: any) => (swiperRef.current = swiper)}
-            onSlideChange={handleSlideChange}
             pagination={showPagination ? { clickable: true } : false} // ✅
             slidesPerView={3}
             slidesPerGroup={2}
@@ -189,7 +175,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
                 return rows;
               }, [])
               .map((row, rowIndex) => (
-                <SwiperSlide key={rowIndex} className="md:mb-16 mb-8 md:p-4">
+                <SwiperSlide key={rowIndex} className="md:mb-16 mb-8">
                   <div className="grid grid-cols-1 gap-5">
                     {row.map((item, index) => (
                       <div key={index}>
@@ -218,20 +204,17 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
           {/* Custom Navigation Buttons - Hidden on Mobile */}
           {showNavigation && (
             <>
-              {showPrevButton && (
-               <div className="absolute top-[46%] left-[-52px] transform -translate-y-1/2 z-10 hidden md:block">
-               <button onClick={handlePrev} className="swiper-button-prev">
-                 <IoIosArrowBack className={`text-3xl text-gray-600  ${themeMode? "hover:text:black":"hover:text-white"}`} />
-               </button>
-               </div>
-              )}
-              {showNextButton && (
-                <div className="absolute top-[46%] right-[-52px] transform -translate-y-1/2 z-10 hidden md:block">
-                <button onClick={handleNext} className="swiper-button-next">
-                  <IoIosArrowForward className={`text-3xl text-gray-600  ${themeMode? "hover:text:black":"hover:text-white"}`} />
+              <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10 hidden md:block">
+                <button onClick={handlePrev} className="swiper-button-prev">
+                  <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
                 </button>
-                </div>
-              )}
+              </div>
+
+              <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10 hidden md:block">
+                <button onClick={handleNext} className="swiper-button-next">
+                  <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
+                </button>
+              </div>
             </>
           )}
         </div>
@@ -263,8 +246,8 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
           borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
           borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
           borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
-        }} >
-      </div>
+        }}
+      ></div>
     </div>
   ) : (
     <div>No news available</div>

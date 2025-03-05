@@ -1,12 +1,12 @@
 import { Button, Image, Select, Spinner } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../reducers';
 import ContentTitle from '../../../Components/ContentTitle';
 import FilterInput from '../../../Components/FilterInput';
 import { apiBaseUrl } from '../../../Constant/config';
-import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
 import playIcon from "../../../assets/svg/play-icon.svg";
 import { Link } from 'react-router-dom';
 import DetailButton from '../../../Components/Buttons/DetailButton';
@@ -14,7 +14,6 @@ import BookCard from './BookCard';
 import { useDispatch } from 'react-redux';
 import { openPlayer } from '../../../reducers/PlayerReducer';
 import novideo from "../../../assets/png/novideo.png";
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 interface Product {
   ticket: any;
@@ -170,45 +169,14 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
     // }
   };
 
-  const [showPagination, setShowPagination] = useState(window.innerWidth < 768);
-  const [showNavigation, setShowNavigation] = useState(window.innerWidth >= 768);
-  const [itemsPerRow, setItemsPerRow] = useState(3);
-
-  useEffect(() => {
-    const updateUI = () => {
-      const width = window.innerWidth;
-
-      if (width >= 1480) {
-        setItemsPerRow(2);
-        setShowNavigation(true);
-        setShowPagination(false);
-      } else if (width >= 768) {
-        setItemsPerRow(2);
-        setShowNavigation(true);
-        setShowPagination(false);
-      } else {
-        setItemsPerRow(5);
-        setShowNavigation(false);
-        setShowPagination(true);
-      }
-
-      console.log("Width:", width, "ShowPagination:", showPagination);
-    };
-
-    updateUI();
-    window.addEventListener("resize", updateUI);
-    return () => window.removeEventListener("resize", updateUI);
-  }, [showPagination]);
-
-
   const handlePlay = (youTubeLink?: string) => {
     if (youTubeLink) {
-      const videoId = extractYouTubeId(youTubeLink);
-      if (videoId) {
-        dispatch(openPlayer(videoId));
-      }
+        const videoId = extractYouTubeId(youTubeLink);
+        if (videoId) {
+            dispatch(openPlayer(videoId));
+        }
     }
-  };
+};
 
   useEffect(() => {
     fetchData();
@@ -225,31 +193,9 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
   const extractYouTubeId = (url: string) => {
     const match = url.match(/(?:youtube\.com\/(?:.*v=|embed\/|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
     return match ? match[1] : null;
-  };
-
-  const swiperRef = useRef<SwiperClass | null>(null);
-  const [showPrevButton, setShowPrevButton] = useState<boolean>(false);
-  const [showNextButton, setShowNextButton] = useState<boolean>(true);
+};
 
 
-  const handleSlideChange = () => {
-    if (swiperRef.current) {
-      const swiper = swiperRef.current;
-
-      const slidesPerView = Array.isArray(swiper.params.slidesPerView)
-        ? swiper.params.slidesPerView[0] || 1
-        : swiper.params.slidesPerView || 1;
-
-      const isFirstSlide = swiper.activeIndex === 0;
-      const isLastSlide = swiper.activeIndex >= swiper.slides.length - slidesPerView;
-
-      setShowPrevButton(!isFirstSlide);
-      setShowNextButton(!isLastSlide);
-    }
-  };
-
-  const handleNext = () => swiperRef.current?.slideNext();
-  const handlePrev = () => swiperRef.current?.slidePrev();
   return (
     <>
       <div className="flex justify-center">
@@ -260,11 +206,8 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
               title="Concerts Around You"
             />
           </div>
-
-          <div className="w-full relative md:mt-8 mt-4">
+          <div className="md:mt-16">
             <Swiper
-            onSwiper={(swiper:any) => (swiperRef.current = swiper)}
-              onSlideChange={handleSlideChange}
               pagination={{
                 dynamicBullets: true,
                 clickable: true,
@@ -273,7 +216,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
               className="mySwiper event-carousel">
               {cardData?.isFeatured && Array.isArray(cardData.isFeatured) ? (
                 cardData.isFeatured.map((item, idx) => (
-                  <SwiperSlide key={idx} className="p-2 md:mb-16 mb-8 md:p-4">
+                  <SwiperSlide key={idx} className="p-2 md:mb-16 mb-8">
                     <div
                       className={`grid md:grid-cols-2 grid-cols-1  md:gap-20 gap-6`}>
                       <div className={`relative`} onClick={() => handlePlay(item.link)}>
@@ -289,8 +232,8 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                       <div className={`flex flex-col`}>
                         <div
                           className={`line-clamp-2 text-[22px] md:text-[48px] ${themeMode ? "ticket-detail-tilte" : "ticket-detail-tilte-dark"}`}
-                        // style={{ fontSize: type ? "22px" : "48px" }}
-                        >
+                          // style={{ fontSize: type ? "22px" : "48px" }}
+                          >
                           {item.name}
                         </div>
                         <div
@@ -352,13 +295,13 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                           </div>
                         </div> */}
                         <div className="md:mt-10 mt-8">
-                          <Link to={item.ticket} target="_blank">
-                            <DetailButton
-                              text="Buy Tickets Of Concert"
-                              btnType="web"
-                            />
-                          </Link>
-                        </div>
+                            <Link to={item.ticket} target="_blank">
+                              <DetailButton
+                                text="Buy Tickets Of Concert"
+                                btnType="web"
+                              />
+                            </Link>
+                          </div>
                       </div>
                     </div>
                   </SwiperSlide>
@@ -367,36 +310,12 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                 <p>No featured items available</p>
               )}
             </Swiper>
-
-            {/* Pagination Dots - Only visible on mobile */}
-            {showPagination && (
-              <div className={` flex justify-center mt-4 !relative !bottom-0
-              ${themeMode ? "swiper-pagination" : "dark-swiper-pagination"}`}
-              ></div>
-            )}
-
-            {/* Custom Navigation Buttons - Hidden on Mobile */}
-            {showNavigation && (
-              <>
-                {showPrevButton && (
-                  <div className="absolute top-[46%] left-[-52px] transform -translate-y-1/2 z-10 hidden md:block">
-                    <button onClick={handlePrev} className="swiper-button-prev">
-                      <IoIosArrowBack className={`text-3xl text-gray-600  ${themeMode ? "hover:text:black" : "hover:text-white"}`} />
-                    </button>
-                  </div>
-                )}
-                {showNextButton && (
-                  <div className="absolute top-[46%] right-[-52px] transform -translate-y-1/2 z-10 hidden md:block">
-                    <button onClick={handleNext} className="swiper-button-next">
-                      <IoIosArrowForward className={`text-3xl text-gray-600  ${themeMode ? "hover:text:black" : "hover:text-white"}`} />
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
+            {/* {type && ( */}
+            <div className="md:mt-10 mt-8">
+              {/* <DetailButton text="Buy Tickets Of Concert" btnType="mobile" /> */}
+            </div>
+            {/* )} */}
           </div>
-
-
           <div>
             <div className="md:mt-7 mt-10">
               <ContentTitle
