@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { Navigation, Pagination } from "swiper/modules";
@@ -48,14 +48,11 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
   // const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-  const swiperRef = useRef<SwiperInstance | null>(null);
   const [type, setPropsType] = useState<boolean>(false);
-
   const [showPagination, setShowPagination] = useState(window.innerWidth < 768);
   const [showNavigation, setShowNavigation] = useState(window.innerWidth >= 768);
   const [itemsPerRow, setItemsPerRow] = useState(3);
   const [cardNum, setCardNum] = useState(window.innerWidth < 768 ? 1 : 3);
-
   const [filterText, setFilterText] = useState<string>("");
   const [cardData, setCardData] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -129,15 +126,6 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
   }, [showPagination]);
 
 
-  const handleNext = () => {
-    if (swiperRef.current) swiperRef.current.slideNext();
-  };
-
-  const handlePrev = () => {
-    if (swiperRef.current) swiperRef.current.slidePrev();
-  };
-
-
 
   const fetchPlaylists = async (page: number) => {
     setLoading(true);
@@ -178,6 +166,30 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
   }, [currentPage]);
 
 
+  const swiperRef = useRef<SwiperClass | null>(null);
+  const [showPrevButton, setShowPrevButton] = useState<boolean>(false);
+  const [showNextButton, setShowNextButton] = useState<boolean>(true);
+
+
+  const handleSlideChange = () => {
+    if (swiperRef.current) {
+      const swiper = swiperRef.current;
+
+      const slidesPerView = Array.isArray(swiper.params.slidesPerView)
+        ? swiper.params.slidesPerView[0] || 1
+        : swiper.params.slidesPerView || 1;
+
+      const isFirstSlide = swiper.activeIndex === 0;
+      const isLastSlide = swiper.activeIndex >= swiper.slides.length - slidesPerView;
+
+      setShowPrevButton(!isFirstSlide);
+      setShowNextButton(!isLastSlide);
+    }
+  };
+
+  const handleNext = () => swiperRef.current?.slideNext();
+  const handlePrev = () => swiperRef.current?.slidePrev();
+
   return (
     <div className="flex justify-center">
       <div className="container md:mt-36 md:pt-1.5 mt-20">
@@ -197,10 +209,11 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
         <div className="w-full relative mt-10">
           <Swiper
             onSwiper={(swiper: any) => (swiperRef.current = swiper)}
+            onSlideChange={handleSlideChange}
             pagination={showPagination ? { clickable: true } : false} // ✅
             slidesPerView={3}
             slidesPerGroup={2}
-            spaceBetween={20}
+            spaceBetween={10}
             loop={false}
             navigation={showNavigation}
             modules={[Navigation, Pagination]}
@@ -212,35 +225,6 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
             }}
             className="news-carousel"
           >
-            {/* {cardData?.materials
-              .reduce<any[][]>((rows:any, item:any, index:any) => {
-                const rowIndex = Math.floor(index / itemsPerRow);
-                if (!rows[rowIndex]) rows[rowIndex] = [];
-                rows[rowIndex].push(item);
-                return rows;
-              }, [])
-              .map((row, rowIndex) => (
-                <SwiperSlide key={rowIndex} className="md:mb-16 mb-8">
-                   <div className="grid grid-cols-1 gap-5">
-                    {row.map((item, index) => (
-                      <div key={index}>
-                        <MaterialCard
-                          key={item.id}
-                          type="horizontal" // Or "vertical" based on your preference
-                          video={item.youTube}
-                          data={item}
-                          feature={item.tags} // Joining tags if you want to display them as a string
-                          title={item.title}
-                          date={item.date}
-                          link={item.youTube}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </SwiperSlide>
-              ))} */}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5">
               {cardData?.reduce<any[][]>((rows, item, index) => {
                   const rowIndex = Math.floor(index / itemsPerRow);
                   if (!rows[rowIndex]) rows[rowIndex] = [];
@@ -248,8 +232,8 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
                   return rows;
                 }, [])
                 .map((row, rowIndex) => (
-                  <SwiperSlide key={rowIndex} className="md:mb-16 mb-8">
-                    <div className="grid grid-cols-1 gap-5">
+                  <SwiperSlide key={rowIndex} className="md:mb-16 mb-8 md:p-4">
+                    <div className="grid grid-cols-1 gap-6">
                       {row.map((item, index) => (
                         <MaterialCard
                         type={type ? "vertical" : "horizontal"}
@@ -266,9 +250,6 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
                     </div>
                   </SwiperSlide>
                 ))}
-
-            </div>
-
           </Swiper>
 
           {/* Pagination Dots - Only visible on mobile */}
@@ -281,17 +262,20 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
           {/* Custom Navigation Buttons - Hidden on Mobile */}
           {showNavigation && (
             <>
-              <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10 hidden md:block">
-                <button onClick={handlePrev} className="swiper-button-prev">
-                  <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
-                </button>
-              </div>
-
-              <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10 hidden md:block">
+              {showPrevButton && (
+               <div className="absolute top-[46%] left-[-52px] transform -translate-y-1/2 z-10 hidden md:block">
+               <button onClick={handlePrev} className="swiper-button-prev">
+                 <IoIosArrowBack className={`text-3xl text-gray-600  ${themeMode? "hover:text:black":"hover:text-white"}`} />
+               </button>
+               </div>
+              )}
+              {showNextButton && (
+                <div className="absolute top-[46%] right-[-52px] transform -translate-y-1/2 z-10 hidden md:block">
                 <button onClick={handleNext} className="swiper-button-next">
-                  <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
+                  <IoIosArrowForward className={`text-3xl text-gray-600  ${themeMode? "hover:text:black":"hover:text-white"}`} />
                 </button>
-              </div>
+                </div>
+              )}
             </>
           )}
         </div>
