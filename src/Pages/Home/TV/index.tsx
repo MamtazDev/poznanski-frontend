@@ -10,7 +10,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 import { useSelector } from "react-redux";
@@ -62,7 +62,6 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
   const [cardData, setCardData] = useState<TVData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const swiperRef = useRef<SwiperInstance | null>(null);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
   // useEffect(() => {
@@ -210,13 +209,29 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
   }, [showPagination]);
 
 
-  const handleNext = () => {
-    if (swiperRef.current) swiperRef.current.slideNext();
+  const swiperRef = useRef<SwiperClass | null>(null);
+  const [showPrevButton, setShowPrevButton] = useState<boolean>(false);
+  const [showNextButton, setShowNextButton] = useState<boolean>(true);
+
+
+  const handleSlideChange = () => {
+    if (swiperRef.current) {
+      const swiper = swiperRef.current;
+
+      const slidesPerView = Array.isArray(swiper.params.slidesPerView)
+        ? swiper.params.slidesPerView[0] || 1
+        : swiper.params.slidesPerView || 1;
+
+      const isFirstSlide = swiper.activeIndex === 0;
+      const isLastSlide = swiper.activeIndex >= swiper.slides.length - slidesPerView;
+
+      setShowPrevButton(!isFirstSlide);
+      setShowNextButton(!isLastSlide);
+    }
   };
 
-  const handlePrev = () => {
-    if (swiperRef.current) swiperRef.current.slidePrev();
-  };
+  const handleNext = () => swiperRef.current?.slideNext();
+  const handlePrev = () => swiperRef.current?.slidePrev();
 
 
   return (
@@ -235,9 +250,10 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
           </div>
         </div>
 
-        <div className="w-full relative">
+        <div className="w-full relative md:mt-8 mt-4">
           <Swiper
             onSwiper={(swiper: any) => (swiperRef.current = swiper)}
+            onSlideChange={handleSlideChange}
             pagination={showPagination ? { clickable: true } : false} // ✅
             slidesPerView={4}
             slidesPerGroup={2}
@@ -260,7 +276,7 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
               return rows;
             }, [])
               .map((row, rowIndex) => (
-                <SwiperSlide key={rowIndex} className="md:mb-16 mb-8">
+                <SwiperSlide key={rowIndex} className="md:mb-16 mb-8 md:p-4">
                   <div className="grid grid-cols-1 gap-5">
                     {row.map((item: any, index: number) => (
                       <div key={index}>
@@ -290,17 +306,20 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
           {/* Custom Navigation Buttons - Hidden on Mobile */}
           {showNavigation && (
             <>
-              <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10 hidden md:block">
-                <button onClick={handlePrev} className="swiper-button-prev">
-                  <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
-                </button>
-              </div>
-
-              <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10 hidden md:block">
-                <button onClick={handleNext} className="swiper-button-next">
-                  <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
-                </button>
-              </div>
+              {showPrevButton && (
+                <div className="absolute top-[46%] left-[-52px] transform -translate-y-1/2 z-10 hidden md:block">
+                  <button onClick={handlePrev} className="swiper-button-prev">
+                    <IoIosArrowBack className={`text-3xl text-gray-600  ${themeMode ? "hover:text:black" : "hover:text-white"}`} />
+                  </button>
+                </div>
+              )}
+              {showNextButton && (
+                <div className="absolute top-[46%] right-[-52px] transform -translate-y-1/2 z-10 hidden md:block">
+                  <button onClick={handleNext} className="swiper-button-next">
+                    <IoIosArrowForward className={`text-3xl text-gray-600  ${themeMode ? "hover:text:black" : "hover:text-white"}`} />
+                  </button>
+                </div>
+              )}
             </>
           )}
         </div>
