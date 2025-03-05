@@ -120,8 +120,8 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     );
 
   const wordArray = tags
-    ? data?.news?.tags.split(",").map((word: string) => word.trim())
-    : [];
+    // ? data?.news?.tags.split(",").map((word: string) => word.trim())
+    // : [];
   return (
     <Layout themeMode={themeMode} type={type}>
       <div className="flex justify-center ">

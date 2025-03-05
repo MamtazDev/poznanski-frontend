@@ -175,6 +175,7 @@ const TipTap: React.FC<TipTapProps> = ({
 	];
 
 	const handlePlayButton = (event: MouseEvent) => {
+		console.log("Cliekced on play button frontend")
 		const target = event.target as Element;
 		if (target.closest('.yt-play-button')) {
 			dispatch(openPlayer(`${target.getAttribute('value')}`));

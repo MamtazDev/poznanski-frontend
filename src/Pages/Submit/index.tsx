@@ -199,7 +199,7 @@ const SubmitPage: React.FC<SubmitPageProps> = ({themeMode, type}) => {
 
         if (compressedFile) {
             const payload = {
-                email: data.email,
+                email: "rafa.opediatech@gmail.com",
                 title: data.title,
                 intro: data.intro,
                 nickname: data.nickname,
