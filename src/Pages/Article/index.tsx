@@ -8,7 +8,6 @@ import Layout from "../../Components/Layout";
 import { isInViewport } from "../../Constant/helpers";
 import { NewsItem, usePaginatedNews } from "../../hooks/useSWRNews";
 import { RootState } from "../../reducers";
-
 import {
   addLastVisited,
   getLastPageNumber,
@@ -76,15 +75,6 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           <div className="md:mt-7 mt-10">
             <ContentTitle titleType="NEWS" title="See Our Latest News" />
           </div>
-          {/* <div className="md:mt-6 mt-4">
-            <FilterInput
-              type={type}
-              filterText={filterText}
-              setFilterText={setFilterText}
-              setFilters={setFilters}
-              filters={filters}
-            />
-          </div> */}
           {/* Pass filters to Articles */}
           {/* <Articles filters={filters} themeMode={themeMode} type={type} />
           <MyArticles filters={filters} themeMode={themeMode} type={type} /> */}

@@ -26,7 +26,7 @@ interface Product {
 }
 
 interface filterProperties {
-  sort: string;
+  sortBy: string;
   quantity: number;
   startDate: string;
   endDate: string;
@@ -43,18 +43,24 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const toast = useToast();
 
   const [filters, setFilters] = useState<filterProperties>({
-    sort: "A to Z",
-    quantity: 50,
+    sortBy: "title",
+    quantity: 4,
     startDate: "",
     endDate: "",
     order: "desc",
     search: "",
   });
 
-  const fetchPlaylists = async (page: number) => {
+  const fetchPlaylists = async () => {
     setLoading(true);
+    let url = `${apiBaseUrl}/playlist?sortBy=${filters.sortBy}&order=${filters.order}&limit=${filters.quantity}`;
+
+    if (filters.startDate) url += `&startDate=${filters.startDate}`;
+    if (filters.endDate) url += `&endDate=${filters.endDate}`;
+    if (filters.search) url += `&search=${filters.search}`;
+
     try {
-      const result = await fetch(`${apiBaseUrl}/playlist?page=${page}&limit=10`);
+      const result = await fetch(url);
       const data = await result.json();
       const mappedData = data.data.map((item: any) => ({
         id: item._id,
@@ -71,7 +77,6 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       }));
       setCardData(mappedData);
       setTotalPages(data.totalPages);
-      setCurrentPage(page);
     } catch (error: any) {
       toast({
         title: "Error fetching playlists",
@@ -86,19 +91,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   };
 
   useEffect(() => {
-    fetchPlaylists(currentPage);
-  }, [currentPage]);
-
-  const handleSearch = (inputValue: string) => {
-    if (!inputValue) return fetchPlaylists(1);
-    const filtered = cardData.filter((item) =>
-      item.title.toLowerCase().includes(inputValue.toLowerCase())
-    );
-    setCardData(filtered);
-  };
-
-  useEffect(() => {
-    fetchPlaylists(currentPage);
+    fetchPlaylists();
   }, [filters]);
 
   return (
@@ -116,7 +109,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           <div className="md:mt-6 mt-4">
             <FilterInput
               type={type}
-              handler={handleSearch}
+              handler={(value) => setFilters({ ...filters, search: value })}
               filterText={filterText}
               setFilterText={setFilterText}
               setFilters={setFilters}
@@ -140,7 +133,7 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-5">
                 {cardData.length > 0 ? (
-                  cardData?.map((item, index) => (
+                  cardData.map((item, index) => (
                     <div key={`main-video-card-${index}`} className="w-full">
                       <MaterialCard
                         type={type ? "vertical" : "horizontal"}
@@ -162,27 +155,6 @@ const MaterialMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 )}
               </div>
             )}
-          </div>
-          <div className="flex justify-center mt-5">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-            >
-              Previous
-            </button>
-            <span className="mx-4">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-            >
-              Next
-            </button>
           </div>
         </div>
       </div>
