@@ -17,6 +17,7 @@ import {
 import "../mainPageStyle.css";
 import Articles from "./artices";
 import { apiGetReq } from "../../Constant/api-functions";
+import MyArticles from "./myArtices";
 
 interface filterProperties {
   sort: string;
@@ -82,7 +83,8 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             />
           </div> */}
           {/* Pass filters to Articles */}
-          <Articles filters={filters} themeMode={themeMode} type={type} />
+          {/* <Articles filters={filters} themeMode={themeMode} type={type} /> */}
+          <MyArticles filters={filters} themeMode={themeMode} type={type} />
         </div>
       </div>
     </Layout>

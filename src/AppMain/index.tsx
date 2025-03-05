@@ -178,6 +178,17 @@ const AppMain: React.FC = () => {
               element={<ArticleDetailPage themeMode={themeMode} type={type} />}
             />
           </Route>
+          <Route path={common.My_NEWS_PATH}>
+            <Route
+              path=""
+              element={<ArticleMainPage  themeMode={themeMode} type={type} />}
+            />
+
+            <Route
+              path=":id"
+              element={<ArticleDetailPage themeMode={themeMode} type={type} />}
+            />
+          </Route>
           {/* top-artist */}
           <Route
             path={common.TOP_ARTIST_PATH}

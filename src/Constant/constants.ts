@@ -8,6 +8,7 @@ export const TOP_ARTIST_PATH = "/top-artist";
 export const CONCERT_PATH = "/concert";
 export const SEARCH_PATH = "/search";
 export const NEWS_PATH = "/news";
+export const My_NEWS_PATH = "/profile/news";
 export const ARTISTS_PATH = "/artist";
 export const ARTIST_DETAILS_PATH = "/artists/:id";
 // export const MATERIALS_DETAILS_PATH = "/materials/:id";
