@@ -119,7 +119,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       </div>
     );
 
-  const wordArray = tags
+  const wordArray = tags && typeof tags === 'string'
     ? data?.news?.tags.split(",").map((word: string) => word.trim())
     : [];
   return (
