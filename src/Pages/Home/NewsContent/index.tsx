@@ -18,7 +18,7 @@ import { AiOutlineArrowRight } from "react-icons/ai";
 import { text } from 'stream/consumers';
 
 interface Product {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   youTube?: string;
@@ -199,7 +199,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
                           tags={item.tags}
                           title={item.title}
                           date={item.date}
-                          _id={item.id}
+                          _id={item._id}
                         />
                       </div>
                     ))}
