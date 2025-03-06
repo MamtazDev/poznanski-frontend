@@ -119,9 +119,12 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       </div>
     );
 
-  const wordArray = tags && typeof tags === 'string'
-    ? data?.news?.tags.split(",").map((word: string) => word.trim())
-    : [];
+  const wordArray =
+  data?.news?.tags && typeof data?.news?.tags === "string"
+      ? data?.news?.tags.split(",").map((word: string) => word.trim())
+      : [];
+
+  console.log("wordArray", wordArray, typeof data?.news?.tags)
   return (
     <Layout themeMode={themeMode} type={type}>
       <div className="flex justify-center ">
@@ -296,7 +299,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                           Related Content
                         </h2>
 
-                        {data?.relatedNews?.map(
+                        {data?.relatedNews.length> 0 ? data?.relatedNews?.map(
                           (newsItem: {
                             _id: React.Key | null | undefined;
                             files: any[];
@@ -341,7 +344,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                               </div>
                             </div>
                           )
-                        )}
+                        ): <p>There is No related data.</p>}
                       </div>
                       {/* Sticky See More Button */}
                       <div
@@ -357,7 +360,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                             color: themeMode ? "#5A1073" : "#2FC4B2",
                           }}
                         >
-                          See More..
+                         {data?.relatedNews.length> 0 ? "See More..": "Go to News"}
                         </Link>
                       </div>
                     </div>

@@ -76,7 +76,7 @@ export const useMyNews = (
   const parsedData = JSON.parse(storages);
   const email = parsedData.email
   const { data, error, isValidating, mutate } = useSWR(
-    `/news/${email}?page=${selectedPage}&limit=${pageSize}`,
+    `/news/profile/${email}?page=${selectedPage}&limit=${pageSize}`,
     fetcher,
     {
       revalidateOnFocus: false,
