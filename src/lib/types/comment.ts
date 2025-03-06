@@ -1,3 +1,8 @@
+export type ICommentLike = {
+  user: string;
+  date: Date;
+};
+
 export interface IComment {
   _id: string;
   content: string;
@@ -7,6 +12,7 @@ export interface IComment {
   name: string;
   website: string;
   email: string;
+  likes: ICommentLike[];
   parentComment: string | null;
   createdAt: string;
   updatedAt: string;
