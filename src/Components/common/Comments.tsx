@@ -12,6 +12,7 @@ import type { IComment } from "../../lib/types/comment";
 
 import { useToast } from "@chakra-ui/react";
 import CommentItem from "./CommentItem";
+import { ActionButton } from "../Button";
 
 interface CommentFormData {
   content: string;
@@ -404,10 +405,13 @@ export default function Comments({ postId, type }: IProps) {
           </div>
 
           {user?._id ? (
-            <button
+            <ActionButton
               type="submit"
               disabled={isSubmitting}
-              className={`reply-button px-6 py-3 bg-blue-600 text-white font-medium rounded-md ${buttonHoverClass} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center transition-all shadow-sm hover:shadow`}
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
             >
               {isSubmitting ? (
                 <>
@@ -436,13 +440,10 @@ export default function Comments({ postId, type }: IProps) {
               ) : (
                 "Submit Comment"
               )}
-            </button>
+            </ActionButton>
           ) : (
-            <Link
-              to={`/login`}
-              className={`reply-button px-6 py-3 bg-blue-600 text-white font-medium rounded-md ${buttonHoverClass} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 inline-flex items-center justify-center transition-all shadow-sm hover:shadow`}
-            >
-              Login to comment
+            <Link to={`/login`} className={``}>
+              <ActionButton type="button">Login to comment</ActionButton>
             </Link>
           )}
         </form>

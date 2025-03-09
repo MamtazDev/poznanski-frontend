@@ -46,7 +46,7 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const location = useLocation();
   const [filterText, setFilterText] = useState<string>("");
   const [filters, setFilters] = useState<filterProperties>({
-    sort: "A to Z",
+    sort: "Z to A",
     quantity: 5,
     startDate: "",
     endDate: "",
@@ -80,9 +80,19 @@ const ArticleMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           <MyArticles filters={filters} themeMode={themeMode} type={type} /> */}
           {/* Conditional Rendering */}
           {isProfileNewsPage ? (
-            <MyArticles filters={filters} themeMode={themeMode} type={type} />
+            <MyArticles
+              filters={filters}
+              setFilters={setFilters}
+              themeMode={themeMode}
+              type={type}
+            />
           ) : (
-            <Articles filters={filters} themeMode={themeMode} type={type} />
+            <Articles
+              filters={filters}
+              setFilters={setFilters}
+              themeMode={themeMode}
+              type={type}
+            />
           )}
         </div>
       </div>

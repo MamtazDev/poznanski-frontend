@@ -1,15 +1,14 @@
 import { Spinner } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
-import useSWR from "swr";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { PageBasicProps } from "../../AppMain";
 import BreadCrumb from "../../Components/BreadCrumb";
 import NewReleaseCard from "../../Components/Card/NewReleaseCard";
 import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
-import PaginationBar from "../../Components/PaginationBar";
 import "../mainPageStyle.css";
 import Layout from "./../../Components/Layout/index";
 import { apiBaseUrl } from "../../Constant/config";
+import axios from "axios";
 
 interface Product {
   artists: { name: string }[];
@@ -17,102 +16,171 @@ interface Product {
   title: string;
   img: string;
   category: string;
-  date: string; // Ensure date is a valid ISO string
+  date: string;
   link: string;
   location: string;
   artist: string;
   star: number;
-  songs: { youTube?: string }[]; // Ensure this exists
+  songs: { youTube?: string }[];
+}
+
+export interface filterProperties {
+  sort: string;
+  quantity: number;
+  startDate: string;
+  endDate: string;
+  order: string;
+  search: string | undefined;
+}
+
+interface PaginationMeta {
+  totalAlbums: number;
+  totalPages: number;
+  currentPage: number;
+  success: boolean;
 }
 
 const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-  const [selectedPage, setSelectedPage] = useState<number>(1);
-  const [album, setAlbum] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [displayedItems, setDisplayedItems] = useState<Product[]>([]);
+  const [filterText, setFilterText] = useState<string>("");
+  const [paginationMeta, setPaginationMeta] = useState<PaginationMeta>({
+    totalAlbums: 0,
+    totalPages: 0,
+    currentPage: 1,
+    success: false,
+  });
 
-  const fetcher = () => fetch(`${apiBaseUrl}/album`).then((res) => res.json());
+  const lastItemRef = useRef<HTMLDivElement | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { data, error } = useSWR(`${apiBaseUrl}/album`, fetcher);
+  const [filters, setFilters] = useState<filterProperties>({
+    sort: "Z to A",
+    quantity: 5,
+    startDate: "",
+    endDate: "",
+    order: "desc",
+    search: "",
+  });
 
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const fetchData = async (pageNumber: number) => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams({
+        page: pageNumber.toString(),
+        limit: filters.quantity.toString(),
+        order: filters.sort === "Z to A" ? "desc" : "asc",
+        sortBy: "title",
+        ...(filters.startDate && { startDate: filters.startDate }),
+        ...(filters.endDate && { endDate: filters.endDate }),
+        ...(filters.search && { search: filters.search }),
+      });
 
-  const setDisplayUpdatedName = () => {
-    setDisplayedItems(album.slice(0, 2));
-  };
+      const response = await axios.get(`${apiBaseUrl}/album?${params}`);
+      const {
+        albums: newData,
+        totalAlbums,
+        totalPages,
+        currentPage,
+        success,
+      } = response.data;
 
-  const loadMoreItems = () => {
-    if (loading || visibleCount >= album.length) return;
-    setLoading(true);
+      setPaginationMeta({
+        totalAlbums: totalAlbums || 0,
+        totalPages:
+          totalPages || Math.ceil((totalAlbums || 0) / filters.quantity),
+        currentPage: currentPage || pageNumber,
+        success: success || false,
+      });
 
-    setTimeout(() => {
-      setVisibleCount((prev) => prev + 3);
+      setHasMore(currentPage < totalPages);
+
+      if (pageNumber === 1) {
+        setDisplayedItems(newData || []);
+      } else {
+        setDisplayedItems((prev) => [...prev, ...(newData || [])]);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setHasMore(false);
+    } finally {
       setLoading(false);
-    }, 1000);
-  };
-
-  const handleScroll = () => {
-    if (!scrollContainerRef.current) return;
-
-    const { scrollTop, scrollHeight, clientHeight } =
-      scrollContainerRef.current;
-
-    if (scrollTop + clientHeight >= scrollHeight - 5) {
-      loadMoreItems();
     }
   };
 
-  useEffect(() => {
-    if (album && album.length > 0) {
-      setDisplayUpdatedName();
-    }
-  }, [album]);
+  const handleIntersect = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const firstEntry = entries[0];
+      if (firstEntry.isIntersecting && hasMore && !isLoading) {
+        const bottomOffset = firstEntry.boundingClientRect.bottom;
+        const windowHeight = window.innerHeight;
 
-  useEffect(() => {
-    if (data) {
-      // Sort albums by date (latest first)
-      const sortedAlbums = data.albums.sort(
-        (a: Product, b: Product) =>
-          new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-      setAlbum(sortedAlbums);
-      setLoading(false);
-    }
-  }, [data]);
+        if (bottomOffset <= windowHeight + 50) {
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+          }
 
-  const filteredAlbums = album.filter((categoryItem) =>
-    categoryItem.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    categoryItem.artists.some((artist: any) =>
-      artist.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+          timeoutRef.current = setTimeout(() => {
+            setPage((prevPage) => prevPage + 1);
+          }, 500);
+        }
+      }
+    },
+    [hasMore, isLoading]
   );
 
-  if (error) return <div>Error loading data.</div>;
-  if (loading)
-    return (
-      <div
-        className="flex justify-center items-center h-screen w-full"
-        style={{
-          backgroundColor: themeMode ? "white" : "black",
-        }}>
-        <p
-          className="text-xl font-semibold "
-          style={{
-            color: themeMode ? "black" : "white",
-          }}>
-          Loading...
-        </p>
-        <div
-          className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
-          style={{
-            borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
-            borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
-            borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
-          }}></div>
-      </div>
-    );
+  useEffect(() => {
+    fetchData(page);
+  }, [page]);
+
+  useEffect(() => {
+    if (!hasMore || isLoading) return;
+
+    const options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: [0.5, 0.75, 1.0],
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, options);
+
+    if (lastItemRef.current) {
+      observer.observe(lastItemRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [hasMore, isLoading, handleIntersect]);
+
+  useEffect(() => {
+    setPage(1);
+    setDisplayedItems([]);
+    setHasMore(true);
+    setPaginationMeta({
+      totalAlbums: 0,
+      totalPages: 0,
+      currentPage: 1,
+      success: false,
+    });
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    fetchData(1);
+  }, [filters]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -129,23 +197,20 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           <div className="md:mt-6 mt-4">
             <FilterInput
               type={type}
-              filterText={searchQuery}
-              setFilterText={setSearchQuery}
-              setFilters={function (value: any): void {
-                throw new Error("Function not implemented.");
-              }}
-              filters={undefined}
+              handler={(inputValue) => setFilterText(inputValue)}
+              filterText={filterText}
+              setFilterText={setFilterText}
+              setFilters={setFilters}
+              filters={filters}
             />
           </div>
 
-          <div
-            className="md:mt-12 mt-8 max-h-[800px] overflow-y-auto rounded-lg p-2 scrollbar-hide"
-            ref={scrollContainerRef}
-            onScroll={handleScroll}>
-            {loading ? (
+          <div className="md:mt-6 mt-4 rounded-lg p-2">
+            {isLoading && displayedItems.length === 0 ? (
               <div
                 className="w-full flex justify-center items-center"
-                style={{ minHeight: type ? "816px" : "1147px" }}>
+                style={{ minHeight: "400px" }}
+              >
                 <Spinner
                   thickness="4px"
                   speed="0.65s"
@@ -155,38 +220,46 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 />
               </div>
             ) : (
-              <div
-                className={`grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-5 mt-10 mb-10`}>
-                {filteredAlbums.length > 0 ? (
-                  filteredAlbums.map((categoryItem) => (
+              <div className="grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-5 mt-10 mb-10">
+                {displayedItems.map((item, index) => (
+                  <div
+                    ref={
+                      index === displayedItems.length - 1 ? lastItemRef : null
+                    }
+                    key={item._id}
+                  >
                     <NewReleaseCard
-                      id={categoryItem._id}
-                      key={categoryItem._id}
-                      data={{ songs: categoryItem.songs }}
+                      id={item._id}
+                      data={{ songs: item.songs }}
                       youTube="https://www.youtube.com/embed/6JYIGclVQdw"
-                      title={categoryItem.title}
-                      nickname={categoryItem.artists[0]?.name}
-                      date={categoryItem.date}
-                      link={categoryItem.link}
+                      title={item.title}
+                      nickname={item.artists[0]?.name}
+                      date={item.date}
+                      link={item.link}
                       btn="See Details"
                     />
-                  ))
-                ) : (
-                  <div className="text-center text-gray-500">
-                    No results found
                   </div>
-                )}
+                ))}
               </div>
             )}
-          </div>
-          <div className={`flex ${type ? "justify-center" : "justify-end"}`}>
-            <PaginationBar
-              selectedPage={selectedPage}
-              setSelectedPage={setSelectedPage}
-              pages={1}
-              entriesPerPage={3}
-              setEntriesPerPage={() => {}}
-            />
+
+            {isLoading && displayedItems.length > 0 && (
+              <div className="flex justify-center py-4">
+                <Spinner
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="blue.500"
+                  size="md"
+                />
+              </div>
+            )}
+
+            {!hasMore && displayedItems.length > 0 && (
+              <div className="text-center py-4 text-gray-500">
+                {`Showing ${displayedItems.length} of ${paginationMeta.totalAlbums} albums`}
+              </div>
+            )}
           </div>
         </div>
       </div>

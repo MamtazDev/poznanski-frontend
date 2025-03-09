@@ -4,6 +4,9 @@ import { formatDistanceToNow } from "date-fns";
 import { Reply, Trash2, Heart } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../reducers";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import { ActionButton } from "../Button";
 
 type ICommentItemProps = {
   comment: IComment;
@@ -58,8 +61,21 @@ const CommentItem = ({
       className={`${bgClass} rounded-lg shadow-sm p-6 border ${borderClass} comment-item`}
     >
       <div className="flex items-start gap-4">
-        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium overflow-hidden">
+        {/* <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium overflow-hidden">
           {comment.name.slice(0, 1).toUpperCase()}
+        </div> */}
+
+        <div
+          className="w-10 h-10 rounded-full border-2 flex items-center justify-center"
+          style={{
+            borderWidth: 2,
+            borderColor: themeMode ? "#5A1073" : "#21E3CE",
+            color: themeMode ? "#5A1073" : "#21E3CE",
+          }}
+        >
+          <h1 className="font-extrabold text-2xl">
+            {`${comment?.name}`[0].toUpperCase() ?? "X"}
+          </h1>
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
@@ -210,18 +226,17 @@ const CommentItem = ({
               </div>
 
               <div className="flex justify-end mt-2">
-                <button
-                  type="button"
-                  onClick={() => setReplyingTo(null)}
-                  className={`px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 mr-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors`}
-                >
+                <ActionButton type="button" onClick={() => setReplyingTo(null)}>
                   Cancel
-                </button>
+                </ActionButton>
                 {user?._id ? (
-                  <button
+                  <ActionButton
                     type="submit"
                     disabled={isSubmitting}
-                    className={`px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md ${buttonHoverClass} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center transition-all`}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
                   >
                     {isSubmitting ? (
                       <>
@@ -250,13 +265,10 @@ const CommentItem = ({
                     ) : (
                       "Reply"
                     )}
-                  </button>
+                  </ActionButton>
                 ) : (
-                  <Link
-                    to={`/login`}
-                    className={`px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md ${buttonHoverClass} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all`}
-                  >
-                    Login to reply
+                  <Link to={`/login`} className={``}>
+                    <ActionButton type="button">Login to comment</ActionButton>
                   </Link>
                 )}
               </div>

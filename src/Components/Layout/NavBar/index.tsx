@@ -130,7 +130,8 @@ const NavBar: React.FC<NavBarProps> = (props) => {
     <Fragment>
       <div className={`Nav-bar  w-full z-50 shadow-xl`}>
         <div
-          className={`Nav-bar-top ${!props.themeMode && "Nav-bar-top-dark"} flex place-items-center justify-center`}>
+          className={`Nav-bar-top ${!props.themeMode && "Nav-bar-top-dark"} flex place-items-center justify-center`}
+        >
           <div className="flex justify-between gap-x-1 container py-4 px-4 md:px-6">
             <div className="flex w-full">
               <Link
@@ -139,7 +140,8 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                   isSearchExpanded && (isSmallDevice || !isSmallDevice)
                     ? "hidden"
                     : ""
-                }>
+                }
+              >
                 <PoznanskiLogoIcon
                   className="mr-4 rounded-full shadow-2xl w-10 h-10 md:w-12 md:h-12"
                   fill={props.themeMode ? "#000" : "#fff"}
@@ -153,7 +155,8 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                 />
                 <button
                   onClick={() => setOpenModal(true)}
-                  className={`md:hidden flex items-center justify-center w-10 h-10 ${isSearchExpanded ? "hidden" : ""}`}>
+                  className={`md:hidden flex items-center justify-center w-10 h-10 ${isSearchExpanded ? "hidden" : ""}`}
+                >
                   <MobileMenuIcon
                     className="w-6 h-6"
                     stroke={getIconsColor(props.themeMode)}
@@ -182,9 +185,13 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                       className="cursor-pointer"
                       stroke={getIconsColor(props.themeMode)}
                     />
-
                   </div>
-						<Link to='/notification'><FiBell className="text-2xl" style={{color: themeMode? "#5A1073":"#21E3CE"}}/></Link>
+                  <Link to="/notification">
+                    <FiBell
+                      className="text-2xl"
+                      style={{ color: themeMode ? "#5A1073" : "#21E3CE" }}
+                    />
+                  </Link>
 
                   <AccountMenu themeMode={props.themeMode} />
                   {/* <Link to={common.CREATE_NEWS}>
@@ -207,7 +214,8 @@ const NavBar: React.FC<NavBarProps> = (props) => {
 
         {props.type || (
           <div
-            className={`Nav-bar-down ${!props.themeMode && "Nav-bar-down-dark"} space-around`}>
+            className={`Nav-bar-down ${!props.themeMode && "Nav-bar-down-dark"} space-around`}
+          >
             <div className="flex justify-center gap-10">
               {menu.map((item, idx) => (
                 <div
@@ -216,7 +224,8 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                     item === selectedMenu &&
                     (props.themeMode ? "selected-menu" : "selected-menu-dark")
                   }`}
-                  onClick={() => onClick(item)}>
+                  onClick={() => onClick(item)}
+                >
                   {item}
                 </div>
               ))}
@@ -227,7 +236,8 @@ const NavBar: React.FC<NavBarProps> = (props) => {
       <Modal onClose={onClose} size="full" isOpen={openModal}>
         <ModalOverlay />
         <ModalContent
-          className={`container ${!props.themeMode && "back-dark"} justify-between h-screen p-4 md:p-6`}>
+          className={`container ${!props.themeMode && "back-dark"} justify-between h-screen p-4 md:p-6`}
+        >
           <div className="flex-col h-full">
             <div className="flex justify-between my-4">
               <div className="cursor-pointer">
@@ -255,7 +265,8 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                     item === selectedMenu &&
                     (props.themeMode ? "selected-menu" : "text-dark-color")
                   } h-[15%] content-center`}
-                  onClick={() => onClick(item)}>
+                  onClick={() => onClick(item)}
+                >
                   {item}
                 </div>
               ))}

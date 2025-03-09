@@ -48,13 +48,17 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const tags = tagsToRemap;
   const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
   // const [showShareOptions, setShowShareOptions] = useState(false);
-  // const commentFormRef = useRef<HTMLDivElement | null>(null);
 
-  // const handleScrollToCommentForm = () => {
-  //   if (commentFormRef.current) {
-  //     commentFormRef.current.scrollIntoView({ behavior: "smooth", block: "start" }); // ✅ No error
-  //   }
-  // };
+  const commentFormRef = useRef<HTMLDivElement | null>(null);
+
+  const handleScrollToCommentForm = () => {
+    if (commentFormRef.current) {
+      commentFormRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      }); // ✅ No error
+    }
+  };
 
   const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
     get5RandomNewsByTags(state, pageDataTags || [])
@@ -91,6 +95,80 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     }
   }, [data]);
 
+  const [relatedNewsPage, setRelatedNewsPage] = useState(1);
+  const [hasMoreRelated, setHasMoreRelated] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [displayedRelatedNews, setDisplayedRelatedNews] = useState<any[]>([]);
+  const lastItemRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const ITEMS_PER_PAGE = 6;
+
+  // Add this effect to load first page when component mounts
+  useEffect(() => {
+    if (id) {
+      fetchMoreRelatedNews(1);
+    }
+  }, [id]);
+
+  // Update the scroll handler
+  useEffect(() => {
+    if (!hasMoreRelated || loadingMore) return;
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const lastItem = lastItemRef.current;
+      if (!lastItem) return;
+
+      const containerBottom = container.scrollTop + container.clientHeight;
+      const lastItemPosition = lastItem.offsetTop + lastItem.clientHeight;
+      const threshold = 50; // pixels before bottom
+
+      if (
+        containerBottom + threshold >= lastItemPosition &&
+        !loadingMore &&
+        hasMoreRelated
+      ) {
+        fetchMoreRelatedNews(relatedNewsPage + 1);
+        setRelatedNewsPage((prev) => prev + 1);
+      }
+    };
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [hasMoreRelated, loadingMore, relatedNewsPage]);
+
+  // Update the fetch function to handle errors better
+  const fetchMoreRelatedNews = async (pageNumber: number) => {
+    try {
+      setLoadingMore(true);
+      const response = await fetch(
+        `${urlEndoint}/${id}/related?page=${pageNumber}&limit=${ITEMS_PER_PAGE}`
+      );
+      const newData = await response.json();
+
+      if (newData?.relatedNews?.length) {
+        if (pageNumber === 1) {
+          // For first page, replace existing data
+          setDisplayedRelatedNews(newData.relatedNews);
+        } else {
+          // For subsequent pages, append data
+          setDisplayedRelatedNews((prev) => [...prev, ...newData.relatedNews]);
+        }
+        // Only set hasMore to true if we received the full page size
+        setHasMoreRelated(newData.relatedNews.length === ITEMS_PER_PAGE);
+      } else {
+        setHasMoreRelated(false);
+      }
+    } catch (error) {
+      console.error("Error fetching more related news:", error);
+      setHasMoreRelated(false);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
   if (error) return <div>Error loading data.</div>;
   if (!news)
     return (
@@ -120,11 +198,12 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     );
 
   const wordArray =
-  data?.news?.tags && typeof data?.news?.tags === "string"
+    data?.news?.tags && typeof data?.news?.tags === "string"
       ? data?.news?.tags.split(",").map((word: string) => word.trim())
       : [];
 
-  console.log("wordArray", wordArray, typeof data?.news?.tags)
+  // console.log("wordArray", wordArray, typeof data?.news?.tags);
+
   return (
     <Layout themeMode={themeMode} type={type}>
       <div className="flex justify-center ">
@@ -176,12 +255,14 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       postModel={PostModels.news}
                       commentData={pageData?.commentsSection ?? null}
                     /> */}
-                    {data?.news?._id && (
-                      <Comments
-                        postId={data?.news?._id}
-                        type={PostModels.news}
-                      />
-                    )}
+                    <div ref={commentFormRef}>
+                      {data?.news?._id && (
+                        <Comments
+                          postId={data?.news?._id}
+                          type={PostModels.news}
+                        />
+                      )}
+                    </div>
                   </DelayedComponent>
                 </div>
                 <div className=" lg:w-[400px] lg:mx-auto">
@@ -241,43 +322,46 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                           Zobacz również
                         </div>
                         <div className={`flex flex-col gap-3 md:mt-3 mt-4`}>
-                          {filteredRelatedData &&
-                            filteredRelatedData?.map((item) => (
-                              <Link
-                                replace
-                                to={`/news/${item._id}`}
-                                key={item._id}
+                          {displayedRelatedNews.map((newsItem, index) => (
+                            <Link
+                              to={`/news/${newsItem._id}`}
+                              key={newsItem._id}
+                            >
+                              <div
+                                ref={
+                                  index === displayedRelatedNews.length - 1
+                                    ? lastItemRef
+                                    : null
+                                }
+                                className={`flex gap-2 mb-3 p-2 rounded-2xl transition-colors duration-300
+                                ${themeMode ? "hover:bg-[#FFFFFF] hover:shadow-lg" : "hover:bg-[#242526]"}`}
                               >
-                                <div className={`flex gap-3`}>
-                                  <Image
-                                    src={`${process.env.REACT_APP_FILES_URL + item.files[0].url}`}
-                                    className="cursor-pointer object-cover"
-                                    height={type ? "54px" : "62px"}
-                                    width={type ? "54px" : "62px"}
-                                    alt={item.files[0].name}
-                                    borderRadius={type ? "8px" : "10px"}
-                                  />
+                                <img
+                                  src={newsItem?.files?.[0] || singer}
+                                  alt="news thumbnail"
+                                  className="h-[62px] w-[62px] object-cover rounded"
+                                />
+                                <div
+                                  className={`flex flex-col justify-center overflow-hidden`}
+                                >
                                   <div
-                                    className={`flex flex-col justify-center overflow-hidden`}
+                                    className={`${themeMode ? "tag-title" : "tag-title-dark"} w-full text-left`}
+                                    style={{
+                                      fontSize: type ? "14px" : "12px",
+                                    }}
                                   >
-                                    <div
-                                      className={`${themeMode ? "tag-title" : "tag-title-dark"} w-full text-left`}
-                                      style={{
-                                        fontSize: type ? "14px" : "12px",
-                                      }}
-                                    >
-                                      {item.title}
-                                    </div>
-                                    <p
-                                      className={`mt-1 ${themeMode ? "text-stone-500" : "text-stone-300"} w-full text-left text-xs`}
-                                    >
-                                      {item.intro.slice(0, type ? 100 : 75) +
-                                        "..."}
-                                    </p>
+                                    {newsItem.title}
                                   </div>
+                                  <p
+                                    className={`mt-1 ${themeMode ? "text-stone-500" : "text-stone-300"} w-full text-left text-xs`}
+                                  >
+                                    {newsItem.intro.slice(0, type ? 100 : 75) +
+                                      "..."}
+                                  </p>
                                 </div>
-                              </Link>
-                            ))}
+                              </div>
+                            </Link>
+                          ))}
                         </div>
                       </div>
                     )}
@@ -289,87 +373,148 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 /> */}
                   </div>
                   {/* Related Content */}
-                  {data?.relatedNews && (
-                    <div className="max-h-[500px] overflow-y-auto scrollbar-hide shadow-md rounded-2xl relative">
-                      <div className="rounded-lg py-4 px-3">
+                  {(displayedRelatedNews.length > 0 || loadingMore) && (
+                    <div className="shadow-md rounded-2xl relative">
+                      {/* Sticky header */}
+                      <div
+                        className="sticky top-0 z-10 py-4 px-3 rounded-t-2xl"
+                        style={{
+                          backgroundColor: themeMode ? "white" : "#242526",
+                          borderBottom: themeMode
+                            ? "1px solid #eee"
+                            : "1px solid #333",
+                        }}
+                      >
                         <h2
-                          className="font-semibold md:mb-3 mb-4 text-xl"
+                          className="font-semibold text-xl"
                           style={{ color: themeMode ? "black" : "white" }}
                         >
                           Related Content
                         </h2>
-
-                        {data?.relatedNews.length> 0 ? data?.relatedNews?.map(
-                          (newsItem: {
-                            _id: React.Key | null | undefined;
-                            files: any[];
-                            title:
-                              | string
-                              | number
-                              | boolean
-                              | React.ReactElement;
-                            intro:
-                              | string
-                              | number
-                              | boolean
-                              | React.ReactElement;
-                          }) => (
-                            <div
-                              key={newsItem._id}
-                              className={`flex gap-2 mb-3 p-2 rounded-2xl transition-colors duration-300
-          ${themeMode ? "hover:bg-[#FFFFFF] hover:shadow-lg" : "hover:bg-[#242526]"}`}
-                            >
-                              <img
-                                src={newsItem?.files?.[0] || singer}
-                                alt="news thumbnail"
-                                className="h-[62px] w-[62px] object-cover rounded"
-                              />
-                              <div>
-                                <p
-                                  className="font-semibold line-clamp-1"
-                                  style={{
-                                    color: themeMode ? "black" : "white",
-                                  }}
-                                >
-                                  {newsItem.title}
-                                </p>
-                                <p
-                                  className="text-sm font-medium line-clamp-1"
-                                  style={{
-                                    color: themeMode ? "black" : "white",
-                                  }}
-                                >
-                                  {newsItem.intro}
-                                </p>
-                              </div>
-                            </div>
-                          )
-                        ): <p>There is No related data.</p>}
                       </div>
-                      {/* Sticky See More Button */}
+
+                      {/* Scrollable content */}
                       <div
-                        className="sticky bottom-0 py-3 text-center shadow-md"
-                        style={{
-                          backgroundColor: themeMode ? "white" : "#242526",
-                        }}
+                        ref={containerRef}
+                        className="max-h-[500px] overflow-y-auto scrollbar-hide"
                       >
-                        <Link
-                          to="/news"
-                          className="font-semibold"
-                          style={{
-                            color: themeMode ? "#5A1073" : "#2FC4B2",
-                          }}
-                        >
-                         {data?.relatedNews.length> 0 ? "See More..": "Go to News"}
-                        </Link>
+                        <div className="py-4 px-3">
+                          {loadingMore && displayedRelatedNews.length === 0 ? (
+                            <div className="flex justify-center py-4">
+                              <div
+                                className="w-6 h-6 border-2 border-t-transparent rounded-full animate-spin"
+                                style={{
+                                  borderColor: themeMode
+                                    ? "#5A1073"
+                                    : "#2FC4B2",
+                                  borderTopColor: "transparent",
+                                }}
+                              ></div>
+                            </div>
+                          ) : displayedRelatedNews.length > 0 ? (
+                            <>
+                              <div className="space-y-3">
+                                {displayedRelatedNews.map((newsItem, index) => (
+                                  <Link
+                                    to={`/news/${newsItem._id}`}
+                                    key={newsItem._id}
+                                  >
+                                    <div
+                                      ref={
+                                        index ===
+                                        displayedRelatedNews.length - 1
+                                          ? lastItemRef
+                                          : null
+                                      }
+                                      className={`flex gap-2 p-2 rounded-2xl transition-colors duration-300
+                                      ${themeMode ? "hover:bg-[#FFFFFF] hover:shadow-lg" : "hover:bg-[#242526]"}`}
+                                    >
+                                      <img
+                                        src={newsItem?.files?.[0] || singer}
+                                        alt="news thumbnail"
+                                        className="h-[62px] w-[62px] object-cover rounded"
+                                      />
+                                      <div>
+                                        <p
+                                          className="font-semibold line-clamp-1"
+                                          style={{
+                                            color: themeMode
+                                              ? "black"
+                                              : "white",
+                                          }}
+                                        >
+                                          {newsItem.title}
+                                        </p>
+                                        <p
+                                          className="text-sm font-medium line-clamp-1"
+                                          style={{
+                                            color: themeMode
+                                              ? "black"
+                                              : "white",
+                                          }}
+                                        >
+                                          {newsItem.intro}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </Link>
+                                ))}
+                              </div>
+                              {/* Bottom Loading Indicator */}
+                              {loadingMore && (
+                                <div className="sticky bottom-0 left-0 right-0 py-3 bg-gradient-to-t from-white dark:from-[#242526] to-transparent">
+                                  <div className="flex justify-center items-center gap-2">
+                                    <div
+                                      className="w-5 h-5 border-2 border-t-transparent rounded-full animate-spin"
+                                      style={{
+                                        borderColor: themeMode
+                                          ? "#5A1073"
+                                          : "#2FC4B2",
+                                        borderTopColor: "transparent",
+                                      }}
+                                    ></div>
+                                    <span
+                                      style={{
+                                        color: themeMode
+                                          ? "#5A1073"
+                                          : "#2FC4B2",
+                                      }}
+                                    >
+                                      Loading more...
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          ) : null}
+                        </div>
+                        {/* Sticky See More Button - only show if there are more items to load and not currently loading */}
+                        {hasMoreRelated && !loadingMore && (
+                          <div
+                            className="sticky bottom-0 py-3 text-center shadow-md"
+                            style={{
+                              backgroundColor: themeMode ? "white" : "#242526",
+                            }}
+                          >
+                            <Link
+                              to="/news"
+                              className="font-semibold"
+                              style={{
+                                color: themeMode ? "#5A1073" : "#2FC4B2",
+                              }}
+                            >
+                              See More..
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
 
                   <div className="flex gap-3 items-center mt-2">
                     <SocialShare
-                      shareUrl="https://yourwebsite.com/article"
-                      title="Check out this amazing article!"
+                      shareUrl={window.location.href}
+                      title={data.news?.title || "Default Article Title"}
                     />
 
                     <button
@@ -378,7 +523,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         color: themeMode ? "#5A1073" : "#2FC4B2",
                         backgroundColor: themeMode ? "white" : "#242526",
                       }}
-                      // onClick={handleScrollToCommentForm}
+                      onClick={() => handleScrollToCommentForm()}
                     >
                       <BiCommentDetail className="text-lg" />
                       <span>Comment</span>

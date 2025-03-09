@@ -181,7 +181,7 @@ const AppMain: React.FC = () => {
           <Route path={common.My_NEWS_PATH}>
             <Route
               path=""
-              element={<ArticleMainPage  themeMode={themeMode} type={type} />}
+              element={<ArticleMainPage themeMode={themeMode} type={type} />}
             />
 
             <Route

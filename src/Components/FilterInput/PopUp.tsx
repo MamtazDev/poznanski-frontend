@@ -30,8 +30,12 @@ const PopUp = ({ handleClosePopup, themeMode, setFilters, filters }: any) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex justify-center items-center" onClick={handleClosePopup}>
-      <div onClick={(e) => e.stopPropagation()}
+    <div
+      className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex justify-center items-center"
+      onClick={handleClosePopup}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
         className={`w-full max-w-[750px] rounded-lg shadow-lg p-6 relative ${themeMode ? "bg-white" : "bg-black"}`}
       >
         <button
@@ -90,7 +94,7 @@ const PopUp = ({ handleClosePopup, themeMode, setFilters, filters }: any) => {
             </span>
             <input
               type="range"
-              min="10"
+              min="5"
               step="5"
               max="100"
               value={quantity}
@@ -146,7 +150,10 @@ const PopUp = ({ handleClosePopup, themeMode, setFilters, filters }: any) => {
           >
             Cancel
           </button>
-          <button className={`px-6 py-2 text-white bg-[#5A1073] rounded-md`} onClick={handleApplyFilters}>
+          <button
+            className={`px-6 py-2 text-white bg-[#5A1073] rounded-md`}
+            onClick={handleApplyFilters}
+          >
             Apply Filters
           </button>
         </div>

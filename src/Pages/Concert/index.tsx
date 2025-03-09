@@ -1,5 +1,5 @@
 import React from "react";
-import {  useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import BreadCrumb from "../../Components/BreadCrumb";
 import ContentTitle from "../../Components/ContentTitle";
 import FilterInput from "../../Components/FilterInput";
@@ -8,7 +8,7 @@ import FilterInput from "../../Components/FilterInput";
 import DetailButton from "../../Components/Buttons/DetailButton";
 import Layout from "../../Components/Layout";
 import { apiBaseUrl, fileUrl } from "../../Constant/config";
-import {Image } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
 import { Spinner } from "@chakra-ui/react";
 // import Carousel from "../../Components/Carousel";
 // import { useSelector } from "react-redux";
@@ -154,7 +154,6 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     } finally {
       setLoading(false);
     }
-
   };
 
   useEffect(() => {
@@ -170,37 +169,50 @@ const ConcertMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   }, [filters]);
 
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
-  const { data, error } = useSWR('http://localhost:8000/api/concert', fetcher);
+  const { data, error } = useSWR("http://localhost:8000/api/concert", fetcher);
 
   if (error) return <p>Error loading concerts.</p>;
-  if (loading) return <div className="flex justify-center items-center h-screen w-full"
-  style={{
-    backgroundColor: themeMode ? "white" : "black"
-  }}>
-  <p className="text-xl font-semibold " style={{
-    color: themeMode ? "black" : "white"
-  }} >Loading...</p>
-  <div className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
-    style={{
-      borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
-      borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
-      borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
-    }}>
-  </div>
-</div>;
+  // if (loading)
+  //   return (
+  //     <div
+  //       className="flex justify-center items-center h-screen w-full"
+  //       style={{
+  //         backgroundColor: themeMode ? "white" : "black",
+  //       }}
+  //     >
+  //       <p
+  //         className="text-xl font-semibold "
+  //         style={{
+  //           color: themeMode ? "black" : "white",
+  //         }}
+  //       >
+  //         Loading...
+  //       </p>
+  //       <div
+  //         className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
+  //         style={{
+  //           borderRightColor: themeMode ? "#5A1073" : "#2FC4B2",
+  //           borderBottomColor: themeMode ? "#5A1073" : "#2FC4B2",
+  //           borderLeftColor: themeMode ? "#5A1073" : "#2FC4B2",
+  //         }}
+  //       ></div>
+  //     </div>
+  //   );
 
-const extractYouTubeId = (url: string) => {
-  const match = url.match(/(?:youtube\.com\/(?:.*v=|embed\/|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  return match ? match[1] : null;
-};
+  const extractYouTubeId = (url: string) => {
+    const match = url.match(
+      /(?:youtube\.com\/(?:.*v=|embed\/|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+    );
+    return match ? match[1] : null;
+  };
   const handlePlay = (youTubeLink?: string) => {
     if (youTubeLink) {
-        const videoId = extractYouTubeId(youTubeLink);
-        if (videoId) {
-            dispatch(openPlayer(videoId));
-        }
+      const videoId = extractYouTubeId(youTubeLink);
+      if (videoId) {
+        dispatch(openPlayer(videoId));
+      }
     }
-};
+  };
   // console.log('Concert Data:', data);
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -238,13 +250,18 @@ const extractYouTubeId = (url: string) => {
                 clickable: true,
               }}
               modules={[Pagination]}
-              className=" event-carousel">
+              className=" event-carousel"
+            >
               {cardData?.isFeatured && Array.isArray(cardData.isFeatured) ? (
                 cardData?.isFeatured.map((item, idx) => (
                   <SwiperSlide key={idx} className="p-2 md:mb-16 mb-8">
                     <div
-                      className={`grid md:grid-cols-2 grid-cols-1  md:gap-20 gap-6`}>
-                      <div className={`relative`} onClick={() => handlePlay(item.link)}>
+                      className={`grid md:grid-cols-2 grid-cols-1  md:gap-20 gap-6`}
+                    >
+                      <div
+                        className={`relative`}
+                        onClick={() => handlePlay(item.link)}
+                      >
                         <Image
                           src={item.img}
                           className="object-cover h-full w-full"
@@ -258,11 +275,13 @@ const extractYouTubeId = (url: string) => {
                       <div className={`flex flex-col`}>
                         <div
                           className={`line-clamp-1 ${themeMode ? "ticket-detail-tilte" : "ticket-detail-tilte-dark"}`}
-                          style={{ fontSize: type ? "22px" : "48px" }}>
+                          style={{ fontSize: type ? "22px" : "48px" }}
+                        >
                           {item.name}
                         </div>
                         <div
-                          className={` line-clamp-2 ${themeMode ? "ticket-detail" : "ticket-detail-dark"} md:mt-6 mt-3`}>
+                          className={` line-clamp-2 ${themeMode ? "ticket-detail" : "ticket-detail-dark"} md:mt-6 mt-3`}
+                        >
                           {item.description}
                         </div>
                         <div className={`flex md:mt-4 mt-3`}>
@@ -272,7 +291,8 @@ const extractYouTubeId = (url: string) => {
                               width="24"
                               height="24"
                               viewBox="0 0 24 24"
-                              fill="none">
+                              fill="none"
+                            >
                               <path
                                 d="M11.9999 13.4295C13.723 13.4295 15.1199 12.0326 15.1199 10.3095C15.1199 8.58633 13.723 7.18945 11.9999 7.18945C10.2768 7.18945 8.87988 8.58633 8.87988 10.3095C8.87988 12.0326 10.2768 13.4295 11.9999 13.4295Z"
                                 stroke={themeMode ? "#6D6E76" : "#BBBCC0"}
@@ -286,7 +306,8 @@ const extractYouTubeId = (url: string) => {
                             </svg>
                           </div>
                           <div
-                            className={`flex ml-2 items-center ${themeMode ? "ticket-detail" : "ticket-detail-dark"}`}>
+                            className={`flex ml-2 items-center ${themeMode ? "ticket-detail" : "ticket-detail-dark"}`}
+                          >
                             {item.location}
                           </div>
                         </div>
@@ -346,11 +367,13 @@ const extractYouTubeId = (url: string) => {
           </div>
           <div
             className={`md:mt-16 mt-8`}
-            style={{ minHeight: type ? "250px" : "150px", width: "100%" }}>
+            style={{ minHeight: type ? "250px" : "150px", width: "100%" }}
+          >
             {loading ? (
               <div
                 className="w-full flex justify-center items-center"
-                style={{ minHeight: type ? "689px" : "450px" }}>
+                style={{ minHeight: type ? "689px" : "450px" }}
+              >
                 <Spinner
                   thickness="4px"
                   speed="0.65s"

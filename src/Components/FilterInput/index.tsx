@@ -47,17 +47,18 @@ const FilterInput: React.FC<FilterInputProps> = ({
     setInputValue(newValue);
     setFilterText(newValue);
 
-    setFilters((prevFilters: any) => ({
-      ...prevFilters,
-      search: newValue,
-    }));
+    // setFilters((prevFilters: any) => ({
+    //   ...prevFilters,
+    //   search: newValue,
+    // }));
   };
 
   return (
     <>
       <div className="w-full">
         <div
-          className={`${!themeMode ? "filter-box-dark-2" : "filter-box-2 mb-5 "} ${type ? "filter-box-mobile-2" : "filter-box-web-2"} flex place-items-center`}>
+          className={`${!themeMode ? "filter-box-dark-2" : "filter-box-2 mb-5 "} ${type ? "filter-box-mobile-2" : "filter-box-web-2"} flex place-items-center`}
+        >
           <img src={SearchIcon} alt="search-icon" />
           <input
             className="ml-2.5 ml-peer w-full h-full bg-transparent text-blue-gray-700 font-sans font-normal outline-none"
@@ -88,7 +89,8 @@ const FilterInput: React.FC<FilterInputProps> = ({
               width={!type ? "27" : "19"}
               height={!type ? "26" : "18"}
               viewBox="0 0 27 26"
-              fill="none">
+              fill="none"
+            >
               <path
                 d="M24.333 7.04199H17.833"
                 stroke="#6D6E76"
