@@ -21,8 +21,14 @@ type Song = {
 
 type IProps = {
   headTitle: string;
-  data: { id: string; title?: string; location?: string; tags?: string; date?: string; songs?: Song[] }[];
-
+  data: {
+    id: string;
+    title?: string;
+    location?: string;
+    tags?: string;
+    date?: string;
+    songs?: Song[];
+  }[];
 };
 
 const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
@@ -48,7 +54,6 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
 
   const dispatch = useDispatch();
 
-
   const getYouTubeID = (url: string) => {
     if (!url) {
       console.error("YouTube URL is invalid or missing.");
@@ -64,7 +69,6 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
     return videoId;
   };
 
-
   const handlePlay = (youTube?: string) => {
     if (!youTube) {
       console.error("YouTube URL is missing.");
@@ -77,7 +81,6 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
     }
     dispatch(openPlayer(videoId));
   };
-
 
   if (!Array.isArray(data)) {
     console.error("Expected an array, received:", data);
@@ -108,93 +111,14 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
           }}
         >
           {data.map((item: any) => (
-            <SwiperSlide
-              key={item._id}
-            >
-
-              <div className='p-5 rounded-3xl mt-6'
-                onClick={() => handleClick(item.id)}
-                style={{
-                  backgroundColor: themeMode ? "#FFF" : "#242526",
-                  color: themeMode ? "black" : "#fff",
-                  borderRadius: "25px",
-                  border: `2px solid ${themeMode ? "#f8f8ff" : "#242526"}`
-                }}>
-                <div
-                  className={`relative bg-gray-100 cursor-pointer h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handlePlay(item.songs?.[0]?.youTube);
-                  }}
-                >
-                  {/* YouTube Thumbnail or Fallback Image */}
-                  {item.songs?.[0]?.youTube ? (
-                    <img
-                      src={`https://img.youtube.com/vi/${getYouTubeID(item.songs[0]?.youTube)}/hqdefault.jpg`}
-                      className="w-full h-full object-cover"
-                      alt="YouTube Thumbnail"
-                    />
-                  ) : (
-                    <img
-                      src={novideo}
-                      className="md:w-full w-[119px] h-[88px] md:h-[230px] object-cover rounded-lg"
-                      alt="No Video Available"
-                    />
-                  )}
-
-                  {/* Play Button */}
-                  {item.songs?.[0]?.youTube && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      {themeMode ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="58" height="57" viewBox="0 0 58 57" fill="none">
-                          <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
-                          <path d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z" fill="white" />
-                        </svg>
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55" fill="none">
-                          <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
-                          <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
-                        </svg>
-                      )}
-                    </div>
-                  )}
-                </div>
-                {
-                  item.tags && <>
-                  </>
-                }
-                <button className='py-1 px-5 text-center rounded-full font-semibold mt-4'
-                  style={{
-                    backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
-                    color: themeMode ? "#5A1073" : "#5A1073"
-                  }}>{item.tags}</button>
-                {
-                  item.title && <>
-                    <p className='mt-2 text-lg font-semibold' >{item.title}</p>
-                  </>
-                }
-
-                <div className='space-y-2'>
-                  {
-                    item.location && <>
-                      <p className='flex gap-1 items-center' style={{
-                        color: themeMode ? "#9B9CA1" : "#9B9CA1"
-                      }}><IoLocationOutline /> {item.location}</p>
-                      <GoDotFill style={{ color: themeMode ? "#D9D9D9" : "D9D9D9", }} />
-                    </>
-                  }
-                  {item.date && <>
-                    <p className='flex gap-1 items-center' style={{
-                      color: themeMode ? "#9B9CA1" : "#9B9CA1"
-                    }}><BsCalendar2Date />{item.date}</p>
-                  </>}
-                  {item && <>
-                    <button
-                      onClick={() => handleClick(item.id)}
-                      className='flex gap-1 items-center' style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}>view details</button>
-                  </>}
-                </div>
-              </div>
+            <SwiperSlide key={item._id}>
+              <AlbumeItem
+                themeMode={themeMode}
+                item={item}
+                handleClick={handleClick}
+                getYouTubeID={getYouTubeID}
+                handlePlay={handlePlay}
+              />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -217,3 +141,146 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
 };
 
 export default CommonTitleText;
+
+const AlbumeItem = ({
+  handleClick,
+  themeMode,
+  handlePlay,
+  getYouTubeID,
+  item,
+}: any) => {
+  const formattedTags =
+    item?.tags && typeof item.tags === "string"
+      ? item.tags.split(",").map((tag: any) => tag.trim())
+      : [];
+  console.log("item", formattedTags);
+  const displayedTags = item.tags.slice(0, 5);
+  return (
+    <div
+      className="p-5 rounded-3xl mt-6"
+      onClick={() => handleClick(item.id)}
+      style={{
+        backgroundColor: themeMode ? "#FFF" : "#242526",
+        color: themeMode ? "black" : "#fff",
+        borderRadius: "25px",
+        border: `2px solid ${themeMode ? "#f8f8ff" : "#242526"}`,
+      }}
+    >
+      <div
+        className={`relative bg-gray-100 cursor-pointer h-48 rounded-md overflow-hidden ${!themeMode && "dark-bg-color"}`}
+        onClick={(e) => {
+          e.stopPropagation();
+          handlePlay(item.songs?.[0]?.youTube);
+        }}
+      >
+        {/* YouTube Thumbnail or Fallback Image */}
+        {item.songs?.[0]?.youTube ? (
+          <img
+            src={`https://img.youtube.com/vi/${getYouTubeID(item.songs[0]?.youTube)}/hqdefault.jpg`}
+            className="w-full h-full object-cover"
+            alt="YouTube Thumbnail"
+          />
+        ) : (
+          <img
+            src={novideo}
+            className="md:w-full w-[119px] h-[88px] md:h-[230px] object-cover rounded-lg"
+            alt="No Video Available"
+          />
+        )}
+
+        {/* Play Button */}
+        {item.songs?.[0]?.youTube && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            {themeMode ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="58"
+                height="57"
+                viewBox="0 0 58 57"
+                fill="none"
+              >
+                <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+                <path
+                  d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z"
+                  fill="white"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="55"
+                height="55"
+                viewBox="0 0 55 55"
+                fill="none"
+              >
+                <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
+                <path
+                  d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z"
+                  fill="#111217"
+                />
+              </svg>
+            )}
+          </div>
+        )}
+      </div>
+      {item.tags && <></>}
+      {displayedTags?.map((tag: any, index: any) => (
+        <button
+          key={index}
+          className="py-1 mt-1 ml-1 px-3 text-center rounded-full font-semibold"
+          style={{
+            backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
+            color: "#5A1073",
+          }}
+        >
+          {tag}
+        </button>
+      ))}
+      {item.title && (
+        <>
+          <p className="mt-2 text-lg font-semibold">{item.title}</p>
+        </>
+      )}
+
+      <div className="space-y-2">
+        {item.location && (
+          <>
+            <p
+              className="flex gap-1 items-center"
+              style={{
+                color: themeMode ? "#9B9CA1" : "#9B9CA1",
+              }}
+            >
+              <IoLocationOutline /> {item.location}
+            </p>
+            <GoDotFill style={{ color: themeMode ? "#D9D9D9" : "D9D9D9" }} />
+          </>
+        )}
+        {item.date && (
+          <>
+            <p
+              className="flex gap-1 items-center"
+              style={{
+                color: themeMode ? "#9B9CA1" : "#9B9CA1",
+              }}
+            >
+              <BsCalendar2Date />
+              {item.date}
+            </p>
+          </>
+        )}
+        {item && (
+          <>
+            <button
+              onClick={() => handleClick(item.id)}
+              className="flex gap-1 items-center"
+              style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
+            >
+              view details
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};

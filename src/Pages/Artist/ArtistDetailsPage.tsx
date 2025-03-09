@@ -233,140 +233,13 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   >
                     {radios?.map((radio) => (
                       <SwiperSlide key={radio.id}>
-                        <div
-                          className="p-5 rounded-3xl"
-                          style={{
-                            backgroundColor: themeMode ? "#FFF" : "#242526",
-                            color: themeMode ? "black" : "#fff",
-                            borderRadius: "25px",
-                            border: `2px solid ${themeMode ? "#f8f8ff" : "#242526"}`,
-                          }}
-                        >
-                          <div
-                            className={`relative bg-gray-100 cursor-pointer h-48 rounded-md overflow-hidden ${
-                              !themeMode && "dark-bg-color"
-                            }`}
-                            onClick={() => handlePlay(radio.youTube)}
-                          >
-                            {/* YouTube Thumbnail */}
-                            <img
-                              src={
-                                radio.youTube
-                                  ? `https://img.youtube.com/vi/${getYouTubeID(radio.youTube)}/hqdefault.jpg`
-                                  : "default-thumbnail.jpg"
-                              }
-                              className="w-full h-full object-cover"
-                              alt="YouTube Thumbnail"
-                            />
-                            {/* Play Button */}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              {themeMode ? (
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="58"
-                                  height="57"
-                                  viewBox="0 0 58 57"
-                                  fill="none"
-                                >
-                                  <circle
-                                    cx="29"
-                                    cy="28.5"
-                                    r="28"
-                                    fill="#5A1073"
-                                  />
-                                  <path
-                                    d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z"
-                                    fill="white"
-                                  />
-                                </svg>
-                              ) : (
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="55"
-                                  height="55"
-                                  viewBox="0 0 55 55"
-                                  fill="none"
-                                >
-                                  <circle
-                                    cx="27.5"
-                                    cy="27.5"
-                                    r="27.5"
-                                    fill="#2FC4B2"
-                                  />
-                                  <path
-                                    d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z"
-                                    fill="#111217"
-                                  />
-                                </svg>
-                              )}
-                            </div>
-                          </div>
-                          {radio.tags && <></>}
-                          <button
-                            className="py-1 px-5 text-center rounded-full font-semibold mt-4"
-                            style={{
-                              backgroundColor: themeMode
-                                ? "#E8ECFE"
-                                : "#3BD6C6",
-                              color: themeMode ? "#5A1073" : "#5A1073",
-                            }}
-                          >
-                            {radio.tags}
-                          </button>
-                          {radio.title && (
-                            <>
-                              <p className="mt-2 text-lg font-semibold line-clamp-1">
-                                {radio.title}
-                              </p>
-                            </>
-                          )}
-
-                          <div className="space-y-2">
-                            {radio.location && (
-                              <>
-                                <p
-                                  className="flex gap-1 items-center"
-                                  style={{
-                                    color: themeMode ? "#9B9CA1" : "#9B9CA1",
-                                  }}
-                                >
-                                  <IoLocationOutline /> {radio.location}
-                                </p>
-                                <GoDotFill
-                                  style={{
-                                    color: themeMode ? "#D9D9D9" : "D9D9D9",
-                                  }}
-                                />
-                              </>
-                            )}
-                            {radio.date && (
-                              <>
-                                <p
-                                  className="flex gap-1 items-center"
-                                  style={{
-                                    color: themeMode ? "#9B9CA1" : "#9B9CA1",
-                                  }}
-                                >
-                                  <BsCalendar2Date />
-                                  {radio.date}
-                                </p>
-                              </>
-                            )}
-                            {radio && (
-                              <>
-                                <button
-                                  onClick={() => handleClick(radio._id)}
-                                  className="flex gap-1 items-center"
-                                  style={{
-                                    color: themeMode ? "#5A1073" : "#3BD6C6",
-                                  }}
-                                >
-                                  view details
-                                </button>
-                              </>
-                            )}
-                          </div>
-                        </div>
+                        <RadioItem
+                          themeMode={themeMode}
+                          radio={radio}
+                          handleClick={handleClick}
+                          getYouTubeID={getYouTubeID}
+                          handlePlay={handlePlay}
+                        />
                       </SwiperSlide>
                     ))}
                   </Swiper>
@@ -525,3 +398,141 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 };
 
 export default ArtistDetailsPage;
+
+const RadioItem = ({
+  themeMode,
+  handlePlay,
+  radio,
+  handleClick,
+  getYouTubeID,
+}: any) => {
+  const formattedTags =
+    radio?.tags && typeof radio.tags === "string"
+      ? radio.tags.split(",").map((tag: any) => tag.trim())
+      : [];
+  const displayedTags = formattedTags.slice(0, 5);
+  return (
+    <div
+      className="p-5 rounded-3xl"
+      style={{
+        backgroundColor: themeMode ? "#FFF" : "#242526",
+        color: themeMode ? "black" : "#fff",
+        borderRadius: "25px",
+        border: `2px solid ${themeMode ? "#f8f8ff" : "#242526"}`,
+      }}
+    >
+      <div
+        className={`relative bg-gray-100 cursor-pointer h-48 rounded-md overflow-hidden ${
+          !themeMode && "dark-bg-color"
+        }`}
+        onClick={() => handlePlay(radio.youTube)}
+      >
+        {/* YouTube Thumbnail */}
+        <img
+          src={
+            radio.youTube
+              ? `https://img.youtube.com/vi/${getYouTubeID(radio.youTube)}/hqdefault.jpg`
+              : "default-thumbnail.jpg"
+          }
+          className="w-full h-full object-cover"
+          alt="YouTube Thumbnail"
+        />
+        {/* Play Button */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          {themeMode ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="58"
+              height="57"
+              viewBox="0 0 58 57"
+              fill="none"
+            >
+              <circle cx="29" cy="28.5" r="28" fill="#5A1073" />
+              <path
+                d="M22.6 17.3L41.8 28.8L22.2 39.6L22.6 17.3Z"
+                fill="white"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="55"
+              height="55"
+              viewBox="0 0 55 55"
+              fill="none"
+            >
+              <circle cx="27.5" cy="27.5" r="27.5" fill="#2FC4B2" />
+              <path d="M20.8 16L39.3 27.1L20.5 37.5L20.8 16Z" fill="#111217" />
+            </svg>
+          )}
+        </div>
+      </div>
+      {radio.tags && <></>}
+      {displayedTags.map((tag: any, index: any) => (
+        <button
+          key={index}
+          className="py-1 mt-1 ml-1 px-3 text-center rounded-full font-semibold"
+          style={{
+            backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
+            color: "#5A1073",
+          }}
+        >
+          {tag}
+        </button>
+      ))}
+      {radio.title && (
+        <>
+          <p className="mt-2 text-lg font-semibold line-clamp-1">
+            {radio.title}
+          </p>
+        </>
+      )}
+
+      <div className="space-y-2">
+        {radio.location && (
+          <>
+            <p
+              className="flex gap-1 items-center"
+              style={{
+                color: themeMode ? "#9B9CA1" : "#9B9CA1",
+              }}
+            >
+              <IoLocationOutline /> {radio.location}
+            </p>
+            <GoDotFill
+              style={{
+                color: themeMode ? "#D9D9D9" : "D9D9D9",
+              }}
+            />
+          </>
+        )}
+        {radio.date && (
+          <>
+            <p
+              className="flex gap-1 items-center"
+              style={{
+                color: themeMode ? "#9B9CA1" : "#9B9CA1",
+              }}
+            >
+              <BsCalendar2Date />
+              {radio.date}
+            </p>
+          </>
+        )}
+        {radio && (
+          <>
+            <button
+              onClick={() => handleClick(radio._id)}
+              className="flex gap-1 items-center"
+              style={{
+                color: themeMode ? "#5A1073" : "#3BD6C6",
+              }}
+            >
+              view details
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};

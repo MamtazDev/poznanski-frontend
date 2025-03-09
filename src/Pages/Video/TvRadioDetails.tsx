@@ -33,6 +33,7 @@ import {
 import { useDispatch } from "react-redux";
 import { ArticleToDisplay } from "../Home/NewsContent/Carousel";
 import Comments from "../../Components/common/Comments";
+import { FaRegFaceSadCry } from "react-icons/fa6";
 
 interface Artist {
   _id: string;
@@ -69,7 +70,7 @@ interface Radio {
   createdAt: string;
   updatedAt: string;
   __v: number;
-  songs: string[];
+  relatedNews: string[];
 }
 
 const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
@@ -125,11 +126,14 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     fetch(`http://localhost:8000/api/radio/${id}`).then((res) => res.json());
   const { data, error } = useSWR(`/api/radio/${id}`, fetcher);
   const [radio, setRadio] = useState<Radio | null>(null);
+  const [relatedNews, setRelatedNews] = useState<any[]>([]);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const toggleDescription = () => setShowFullDescription(!showFullDescription);
   useEffect(() => {
     if (data) {
       setRadio(data.record);
+      setRelatedNews(Array.isArray(data.relatedNews) ? data.relatedNews : []);
+      console.log("Related News:", data.relatedNews);
     }
   }, [data]);
 
@@ -160,6 +164,15 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
         ></div>
       </div>
     );
+
+  const formattedMainTags =
+    radio?.tags && typeof radio.tags === "string"
+      ? radio.tags.split(",").map((tag) => tag.trim())
+      : [];
+  {
+    /* Show up to 5 tags */
+  }
+  const displayedMainTags = formattedMainTags.slice(0, 5);
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -244,7 +257,21 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </button>
             )}
           </div>
-          {radio?.songs && (
+          <div className="mt-3">
+            {displayedMainTags?.map((tag, index) => (
+              <button
+                key={index}
+                className="py-1 mt-1 ml-1 px-3 text-center rounded-full font-semibold"
+                style={{
+                  backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
+                  color: "#5A1073",
+                }}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+          {relatedNews.length > 0 && (
             <div className="mt-12">
               <h1
                 className="text-xl font-semibold"
@@ -268,55 +295,9 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     425: { slidesPerView: 1 },
                   }}
                 >
-                  {radio?.songs?.map((songId: string, index: number) => (
+                  {relatedNews?.map((item: Radio, index: number) => (
                     <SwiperSlide key={index}>
-                      <div
-                        className="p-5 rounded-3xl mt-6"
-                        style={{
-                          backgroundColor: themeMode ? "#FFF" : "#242526",
-                          color: themeMode ? "black" : "#fff",
-                          borderRadius: "25px",
-                          border: `2px solid ${themeMode ? "#f8f8ff" : "#242526"}`,
-                        }}
-                      >
-                        <img src={singer} alt="img" className="w-full" />
-                        <button
-                          className="py-1 px-5 text-center rounded-full font-semibold mt-4"
-                          style={{
-                            backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
-                            color: themeMode ? "#5A1073" : "#5A1073",
-                          }}
-                        >
-                          {radio.tags}
-                        </button>
-                        <p className="mt-2 text-lg font-semibold">
-                          Drake Ignites the Stage with Spectacular New Concert
-                          Experience!
-                        </p>
-                        <div className="flex gap-2 items-center">
-                          <p
-                            className="flex gap-1 items-center"
-                            style={{
-                              color: themeMode ? "#9B9CA1" : "#9B9CA1",
-                            }}
-                          >
-                            <IoLocationOutline /> New York
-                          </p>
-                          <GoDotFill
-                            style={{
-                              color: themeMode ? "#D9D9D9" : "D9D9D9",
-                            }}
-                          />
-                          <p
-                            className="flex gap-1 items-center"
-                            style={{
-                              color: themeMode ? "#9B9CA1" : "#9B9CA1",
-                            }}
-                          >
-                            <BsCalendar2Date /> 20/4/2023
-                          </p>
-                        </div>
-                      </div>
+                      <RelatedDetails themeMode={themeMode} item={item} />
                     </SwiperSlide>
                   ))}
                 </Swiper>
@@ -350,3 +331,55 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 };
 
 export default TvRadioDetails;
+
+const RelatedDetails = ({ themeMode, item }: any) => {
+  const formattedTags =
+    item?.tags && typeof item.tags === "string"
+      ? item.tags.split(",").map((tag: any) => tag.trim())
+      : [];
+  const displayedTags = formattedTags.slice(0, 5);
+
+  console.log("item", item);
+  return (
+    <div
+      className="p-5 rounded-3xl mt-6"
+      style={{
+        backgroundColor: themeMode ? "#FFF" : "#242526",
+        color: themeMode ? "black" : "#fff",
+        borderRadius: "25px",
+        border: `2px solid ${themeMode ? "#f8f8ff" : "#242526"}`,
+      }}
+    >
+      <img src={singer} alt="img" className="w-full" />
+      {displayedTags.map((tag: any, index: any) => (
+        <button
+          key={index}
+          className="py-1 mt-1 ml-1 px-3 text-center rounded-full font-semibold"
+          style={{
+            backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
+            color: "#5A1073",
+          }}
+        >
+          {tag}
+        </button>
+      ))}
+      <p className="mt-2 text-lg font-semibold">{item.title}</p>
+      <div className="flex gap-2 items-center">
+        <GoDotFill
+          style={{
+            color: themeMode ? "#D9D9D9" : "D9D9D9",
+          }}
+        />
+        <p
+          className="flex gap-1 items-center"
+          style={{
+            color: themeMode ? "#9B9CA1" : "#9B9CA1",
+          }}
+        >
+          <BsCalendar2Date />
+          {item.date}
+        </p>
+      </div>
+    </div>
+  );
+};
