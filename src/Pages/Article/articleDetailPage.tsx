@@ -45,6 +45,8 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const dispatch = useDispatch();
   const [pageData, setPageData] = useState<ArticleToDisplay>();
   const [, ...tagsToRemap] = targetNewsSelected?.tags?.split("#") || [];
+  const [loading, setLoading] = useState(true);
+
   const tags = tagsToRemap;
   const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
   // const [showShareOptions, setShowShareOptions] = useState(false);
@@ -170,6 +172,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   };
 
   if (error) return <div>Error loading data.</div>;
+  // if (loading) return <p>Loading...</p>;
   if (!news)
     return (
       <div
@@ -204,6 +207,10 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   // console.log("wordArray", wordArray, typeof data?.news?.tags);
 
+
+
+
+
   return (
     <Layout themeMode={themeMode} type={type}>
       <div className="flex justify-center ">
@@ -220,13 +227,13 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               <div className="md:mt-7 mt-10">
                 <ContentTitle
                   titleType="NEWS"
-                  title={data.news?.title || "News Page Title"}
+                  title={data?.news?.title || "News Page Title"}
                 />
               </div>
               <p
                 className={`py-5 text-left ${!themeMode ? "text-[#BBBCC0]" : "text-[#6D6E76]"}`}
               >
-                <b>{data.news?.intro}</b>
+                <b>{data?.news?.intro}</b>
               </p>
               <div className="flex lg:flex-row flex-col justify-between mx-auto gap-5">
                 <div className="md:w-[900px]">
@@ -514,7 +521,7 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                   <div className="flex gap-3 items-center mt-2">
                     <SocialShare
                       shareUrl={window.location.href}
-                      title={data.news?.title || "Default Article Title"}
+                      title={data?.news?.title || "Default Article Title"}
                     />
 
                     <button

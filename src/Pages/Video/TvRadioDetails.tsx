@@ -213,7 +213,7 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             className="p-6 rounded-2xl shadow-lg mt-6"
             style={{ backgroundColor: themeMode ? "#FFF" : "#242526" }}
           >
-            <p
+            {/* <p
               className="flex gap-1 items-center font-medium"
               style={{
                 color: themeMode ? "#252733" : "#BBBCC0",
@@ -228,7 +228,7 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 />{" "}
                 4 Hours Ago
               </span>
-            </p>
+            </p> */}
             <p style={{ color: themeMode ? "#6D6E76" : "#BBBCC0" }}>
               {showFullDescription
                 ? radio.description
