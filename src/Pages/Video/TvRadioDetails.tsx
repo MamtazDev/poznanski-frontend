@@ -129,7 +129,7 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const toggleDescription = () => setShowFullDescription(!showFullDescription);
   useEffect(() => {
     if (data) {
-      setRadio(data);
+      setRadio(data.record);
     }
   }, [data]);
 
