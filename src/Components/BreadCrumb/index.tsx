@@ -15,7 +15,7 @@ const CONCERT_PATH = "/concert";
 const NEWS_PATH = "/news";
 const SEARCH_PATH = "/search";
 const MATERIAL_PATH = "/playlist";
-const NEWRELEASE_PATH = "/newrelease";
+const NEWRELEASE_PATH = "/album";
 const CREATE_NEWS = "/create-news";
 
 const BreadCrumb = () => {
@@ -55,14 +55,16 @@ const BreadCrumb = () => {
         if (apiUrl.includes("/api/news/")) {
           title = data?.news?.title || "Szczegóły";
         } else if (apiUrl.includes("/api/radio/")) {
-          title = data?.records?.title || "tv";
+          title =  data?.record?.title || "tv";
         } else if (apiUrl.includes("/api/artist/")) {
           title = data?.artist?.name || "Szczegóły";
-          
+
         } else if (apiUrl.includes("/api/album/")) {
-          title = data?.albums.title || "Szczegóły";
+          console.log("data?.data.title", data?.title)
+          title = data?.title || "Szczegóły";
         }
         else if (apiUrl.includes("/api/playlist/")) {
+
           title = data?.data.title || "Szczegóły";
         }
         // Logging extracted title for debugging
@@ -109,7 +111,7 @@ const BreadCrumb = () => {
         return;
       }
     } else if (currentRoute.includes(MATERIAL_PATH)) {
-      newMenu.push({ Koncerty: MATERIAL_PATH });
+      newMenu.push({ Material: MATERIAL_PATH });
 
       if (currentRoute.match(new RegExp(`^${MATERIAL_PATH}/.+$`))) {
         const playlistId = currentRoute.split("/").pop();
