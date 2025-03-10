@@ -207,10 +207,6 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   // console.log("wordArray", wordArray, typeof data?.news?.tags);
 
-
-
-
-
   return (
     <Layout themeMode={themeMode} type={type}>
       <div className="flex justify-center ">

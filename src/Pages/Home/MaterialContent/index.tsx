@@ -11,23 +11,12 @@ import "swiper/css/grid";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
-import { Swiper as SwiperInstance } from "swiper";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { Navigation, Pagination, Grid } from "swiper/modules";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useToast, Spinner } from "@chakra-ui/react";
 
-interface MaterialData {
-  id: string;
-  title: string;
-  description: string;
-  youTube: string;
-  tags: string;
-  date: string;
-}
-
 interface Product {
-  _id: unknown;
   id: string;
   title: string;
   description: string;
@@ -44,72 +33,52 @@ interface Product {
 const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
   const navigate = useNavigate();
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
-  const [type, setPropsType] = useState<boolean>(false);
-  const [showPagination, setShowPagination] = useState(window.innerWidth < 768);
-  const [showNavigation, setShowNavigation] = useState(
-    window.innerWidth >= 768
-  );
-  const [itemsPerRow, setItemsPerRow] = useState(3);
-  const [cardNum, setCardNum] = useState(window.innerWidth < 768 ? 1 : 3);
-  const [filterText, setFilterText] = useState<string>("");
+  const toast = useToast();
+  const swiperRef = useRef<SwiperClass | null>(null);
+
   const [cardData, setCardData] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const toast = useToast();
+
+  const [cardNum, setCardNum] = useState(6); // Default for desktop
+  const [showPagination, setShowPagination] = useState(false);
+  const [showNavigation, setShowNavigation] = useState(true);
 
   useEffect(() => {
-    const handleResize = () => {
+    const updateLayout = () => {
       const width = window.innerWidth;
       if (width >= 1024) {
-        setCardNum(6); // Desktop: 3 columns × 2 rows
-      } else if (width >= 768) {
-        setCardNum(4); // Medium: 2 columns × 2 rows
-      } else {
-        setCardNum(5); // Small: 1 column × 5 items (showing 5 items total)
-      }
-    };
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    const updateUI = () => {
-      const width = window.innerWidth;
-      if (width >= 1024) {
-        setItemsPerRow(3); // Desktop: 3 columns
+        setCardNum(6); // 3 columns × 2 rows
         setShowNavigation(true);
         setShowPagination(false);
       } else if (width >= 768) {
-        setItemsPerRow(2); // Medium: 2 columns
+        setCardNum(4); // 2 columns × 2 rows
         setShowNavigation(true);
         setShowPagination(false);
       } else {
-        setItemsPerRow(1); // Small: 1 column
+        setCardNum(5); // 1 column × 5 rows
         setShowNavigation(false);
         setShowPagination(true);
       }
     };
 
-    updateUI();
-    window.addEventListener("resize", updateUI);
-    return () => window.removeEventListener("resize", updateUI);
-  }, [showPagination]);
+    updateLayout();
+    window.addEventListener("resize", updateLayout);
+    return () => window.removeEventListener("resize", updateLayout);
+  }, []);
 
   const fetchPlaylists = async (page: number, append: boolean = false) => {
     if (!hasMore || loading) return;
-
     setLoading(true);
+
     try {
       const result = await fetch(
-        `${apiBaseUrl}/playlist?page=${page}&limit=${cardNum * 2}`
+        `${apiBaseUrl}/playlist?page=${page}&limit=12`
       );
       const data = await result.json();
+
       const mappedData = data.data.map((item: any) => ({
         id: item._id,
         title: item.title,
@@ -143,22 +112,20 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
 
   useEffect(() => {
     fetchPlaylists(1, false);
-  }, [cardNum]);
+  }, []);
 
-  const swiperRef = useRef<SwiperClass | null>(null);
-  const [showPrevButton, setShowPrevButton] = useState<boolean>(false);
-  const [showNextButton, setShowNextButton] = useState<boolean>(true);
+  const [showNext, setShowNext] = useState(true);
+  const [showPrev, setShowPrev] = useState(false);
 
   const handleSlideChange = () => {
     if (swiperRef.current) {
       const swiper = swiperRef.current;
-      const isFirstSlide = swiper.activeIndex === 0;
-      const isLastSlide = swiper.isEnd;
+      setShowPrev(!swiper.isBeginning);
+      setShowNext(!swiper.isEnd);
 
-      setShowPrevButton(!isFirstSlide);
-      setShowNextButton(!isLastSlide);
-
-      // Load more data when reaching near the end
+      // console.log("isBeginning", swiper.isBeginning, "isEnd", swiper.isEnd);
+      // console.log("progress", swiper.progress);
+      // Fetch only when moving forward
       if (swiper.progress > 0.7 && hasMore && !loading) {
         fetchPlaylists(currentPage + 1, true);
       }
@@ -168,7 +135,9 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
   const handleNext = () => {
     if (swiperRef.current) {
       swiperRef.current.slideNext();
-      if (hasMore && !loading && swiperRef.current.progress > 0.7) {
+      setShowPrev(true); // Always show Prev when moving forward
+
+      if (hasMore && !loading) {
         fetchPlaylists(currentPage + 1, true);
       }
     }
@@ -177,6 +146,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
   const handlePrev = () => {
     if (swiperRef.current) {
       swiperRef.current.slidePrev();
+      setShowNext(true); // Ensure Next button is visible when going back
     }
   };
 
@@ -185,75 +155,31 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
       <div className="container md:mt-36 md:pt-1.5 mt-20">
         <div className="flex justify-between">
           <ContentTitle titleType="VIDEOS" title="Materials" />
-          <div className="flex items-end">
-            <div className="md:block hidden">
-              <DetailButton
-                text="See All Videos"
-                btnType="web"
-                onClick={() => navigate("/materials")}
-              />
-            </div>
+          <div className="md:block hidden">
+            <DetailButton
+              text="See All Videos"
+              btnType="web"
+              onClick={() => navigate("/materials")}
+            />
           </div>
         </div>
 
         <div className="w-full relative mt-10">
-          {/* Loading Overlay */}
-          {loading && (
-            <div className="absolute inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 rounded-lg">
-              <div
-                className={`p-6 rounded-lg ${themeMode ? "bg-white" : "bg-gray-800"} shadow-lg flex flex-col items-center gap-3`}
-              >
-                <Spinner
-                  thickness="4px"
-                  speed="0.65s"
-                  emptyColor={themeMode ? "gray.200" : "gray.600"}
-                  color={themeMode ? "#5A1073" : "#2FC4B2"}
-                  size="xl"
-                />
-                <span
-                  className={`text-sm font-medium ${themeMode ? "text-gray-800" : "text-gray-200"}`}
-                >
-                  Loading more videos...
-                </span>
-              </div>
-            </div>
-          )}
-
           <div className="relative group">
             <Swiper
               onSwiper={(swiper: any) => (swiperRef.current = swiper)}
               onSlideChange={handleSlideChange}
-              onReachEnd={() => {
-                if (hasMore && !loading) {
-                  fetchPlaylists(currentPage + 1, true);
-                }
-              }}
               pagination={showPagination ? { clickable: true } : false}
-              slidesPerView={3}
+              slidesPerView={cardNum / 2}
               slidesPerGroup={1}
-              grid={{
-                rows: 2,
-                fill: "row",
-              }}
+              grid={{ rows: cardNum / 3, fill: "row" }}
               spaceBetween={20}
               loop={false}
               modules={[Navigation, Pagination, Grid]}
               breakpoints={{
-                1024: {
-                  slidesPerView: 3,
-                  slidesPerGroup: 1,
-                  grid: { rows: 2, fill: "row" },
-                },
-                768: {
-                  slidesPerView: 2,
-                  slidesPerGroup: 1,
-                  grid: { rows: 2, fill: "row" },
-                },
-                320: {
-                  slidesPerView: 1,
-                  slidesPerGroup: 1,
-                  grid: { rows: 5, fill: "row" },
-                },
+                1024: { slidesPerView: 3, grid: { rows: 2, fill: "row" } },
+                768: { slidesPerView: 2, grid: { rows: 2, fill: "row" } },
+                320: { slidesPerView: 1, grid: { rows: 5, fill: "row" } },
               }}
               className="news-carousel"
             >
@@ -261,7 +187,6 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
                 <SwiperSlide key={index} className="h-auto">
                   <div className="h-full p-2">
                     <MaterialCard
-                      type={type ? "vertical" : "horizontal"}
                       video={item.videoId}
                       data={item}
                       id={item.id}
@@ -274,45 +199,38 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
                   </div>
                 </SwiperSlide>
               ))}
+
+              {loading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                  <Spinner size="xl" color="purple.500" />
+                </div>
+              )}
             </Swiper>
 
-            {/* Navigation Buttons */}
-            {showNavigation && (
-              <>
-                <button
-                  onClick={handlePrev}
-                  className={`absolute top-1/2 -left-12 transform -translate-y-1/2 z-10 hidden md:block transition-opacity duration-300 ${!showPrevButton ? "opacity-0" : "opacity-100"}`}
-                  disabled={!showPrevButton || loading}
-                >
+            <>
+              <div className="absolute top-[46%] left-[-52px] transform -translate-y-1/2 z-10 hidden md:block">
+                <button onClick={handlePrev} className="swiper-button-prev">
                   <IoIosArrowBack
-                    className={`text-4xl ${themeMode ? "text-gray-600 hover:text-black" : "text-gray-400 hover:text-white"}`}
+                    className={`text-3xl text-gray-600  ${themeMode ? "hover:text:black" : "hover:text-white"}`}
                   />
                 </button>
-                <button
-                  onClick={handleNext}
-                  className={`absolute top-1/2 -right-12 transform -translate-y-1/2 z-10 hidden md:block transition-opacity duration-300 ${!hasMore && swiperRef.current?.isEnd ? "opacity-0" : "opacity-100"}`}
-                  disabled={loading}
-                >
-                  <IoIosArrowForward
-                    className={`text-4xl ${themeMode ? "text-gray-600 hover:text-black" : "text-gray-400 hover:text-white"}`}
-                  />
-                </button>
-              </>
-            )}
-          </div>
+              </div>
 
-          {/* Pagination for mobile */}
-          {showPagination && (
-            <div
-              className={`flex justify-center mt-4 !relative !bottom-0 ${themeMode ? "swiper-pagination" : "dark-swiper-pagination"}`}
-            />
-          )}
+              <div className="absolute top-[46%] right-[-52px] transform -translate-y-1/2 z-10 hidden md:block">
+                <button onClick={handleNext} className="swiper-button-next">
+                  <IoIosArrowForward
+                    className={`text-3xl text-gray-600  ${themeMode ? "hover:text:black" : "hover:text-white"}`}
+                  />
+                </button>
+              </div>
+            </>
+          </div>
         </div>
-        <div className="md:hidden block mt-4">
+
+        <div className="md:hidden block">
           <button
             className={`text-sm p-4 font-semibold text-[#5A1073] flex gap-2 items-center w-full text-center justify-center rounded-lg ${themeMode ? "bg-[#EFE7F1]" : "bg-[#2FC4B2]"}`}
             onClick={() => navigate("/playlist")}
-            disabled={loading}
           >
             See All Videos
             <AiOutlineArrowRight size={24} />

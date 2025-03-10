@@ -19,7 +19,11 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Layout from "../../Components/Layout";
-import { logoutRequest, profilePicRequest, profileUpdateRequest } from "../../Constant/api-requests";
+import {
+  logoutRequest,
+  profilePicRequest,
+  profileUpdateRequest,
+} from "../../Constant/api-requests";
 import { deleteCookie } from "../../utils/auth";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../reducers/user";
@@ -42,20 +46,19 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
     const updatedUserInfo = {
       ...userInfo,
       nickname,
-      profilePicture: profileImage
+      profilePicture: profileImage,
     };
     localStorage.setItem("creds", JSON.stringify(updatedUserInfo));
   };
+
+  const [newImage, setNewImage] = useState<File | null>(null);
 
   // Handle profile image upload
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      try {
-        const uploadedImageUrl = await profilePicRequest(file);
-        setProfileImage(uploadedImageUrl); // Set the uploaded image URL here
-      } catch (error) {
-        console.error("Image upload failed", error);
+      if (file) {
+        setNewImage(file);
       }
     }
   };
@@ -63,6 +66,12 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
   // Handle nickname update
   const handleSubmit = async () => {
     try {
+      if (newImage) {
+        const uploadedImageUrl = await profilePicRequest(newImage);
+        if (uploadedImageUrl) {
+          setProfileImage(uploadedImageUrl); // Set the uploaded image URL here
+        }
+      }
       // Call the profileUpdateRequest with user ID, nickname, and profile image
       await profileUpdateRequest(userInfo._id, nickname, profileImage);
       console.log("Profile updated successfully");
@@ -78,18 +87,18 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
   };
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem('creds') || '{}');
+    const userInfo = JSON.parse(localStorage.getItem("creds") || "{}");
     setProfileImage(userInfo?.profilePicture || defaultImage);
     setNickname(userInfo?.nickname || "");
   }, []);
 
-    const handleLogout = () => {
-      deleteCookie("accessToken");
-      deleteCookie("refreshToken");
-      dispatch(logout());
-      logoutRequest();
-      navigate("/login");
-    };
+  const handleLogout = () => {
+    deleteCookie("accessToken");
+    deleteCookie("refreshToken");
+    dispatch(logout());
+    logoutRequest();
+    navigate("/login");
+  };
 
   return (
     <Layout themeMode={themeMode}>
@@ -100,21 +109,35 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
             className={`p-6 w-[300px] rounded-lg border ${themeMode ? "bg-gray-100 text-white" : "bg-gray-800 text-black"}`}
           >
             <div className="flex flex-col items-center space-y-6">
-              <Avatar size="2xl" src={profileImage} mb={4} />
+              <Avatar
+                size="2xl"
+                src={profileImage} // Convert File to URL
+                mb={4}
+              />
+
               {/* Display nickname directly */}
-              <h2 className="text-xl font-medium" style={{ color: themeMode ? "black" : "white" }}>
+              <h2
+                className="text-xl font-medium"
+                style={{ color: themeMode ? "black" : "white" }}
+              >
                 {nickname || "User"}
               </h2>
-              <Button onClick={onOpen} colorScheme="blue" size="sm" width="full">
+              <Button
+                onClick={onOpen}
+                colorScheme="blue"
+                size="sm"
+                width="full"
+              >
                 Edit Profile
               </Button>
               <Button
-                             onClick={handleLogout}
-                             colorScheme="red"
-                             size="sm"
-                             width="full">
-                             Log Out
-                           </Button>
+                onClick={handleLogout}
+                colorScheme="red"
+                size="sm"
+                width="full"
+              >
+                Log Out
+              </Button>
             </div>
           </Box>
         </div>
@@ -130,8 +153,16 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
                 <FormControl>
                   <FormLabel>Profile Picture</FormLabel>
                   <HStack>
-                    <Avatar size="md" src={profileImage} />
-                    <Button onClick={() => fileInputRef.current?.click()} colorScheme="blue">
+                    <Avatar
+                      size="md"
+                      src={
+                        newImage ? URL.createObjectURL(newImage) : profileImage
+                      }
+                    />
+                    <Button
+                      onClick={() => fileInputRef.current?.click()}
+                      colorScheme="blue"
+                    >
                       Upload Image
                     </Button>
                     <Input

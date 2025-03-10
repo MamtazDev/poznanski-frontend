@@ -4,6 +4,8 @@ import { RootState } from "../../reducers";
 import { IoLogoTwitter, IoLogoWhatsapp, IoShareOutline } from "react-icons/io5";
 import { BiCommentDetail } from "react-icons/bi";
 import { FaFacebook } from "react-icons/fa6";
+// import from lucide
+import { MessageCircle, MessageSquareMoreIcon } from "lucide-react";
 
 // Import everything from react-share to avoid import issues
 import * as ReactShare from "react-share";
@@ -12,7 +14,7 @@ import * as ReactShare from "react-share";
 const FacebookShareButton = ReactShare.FacebookShareButton;
 const TwitterShareButton = ReactShare.TwitterShareButton;
 const WhatsappShareButton = ReactShare.WhatsappShareButton;
-
+const FacebookMessengerShareButton = ReactShare.FacebookMessengerShareButton;
 interface SocialShareProps {
   shareUrl: string;
   title: string;
@@ -51,11 +53,17 @@ const SocialShare: React.FC<SocialShareProps> = ({ shareUrl, title }) => {
             </button>
           </FacebookShareButton>
 
-          <TwitterShareButton url={shareUrl} title={title}>
+          {/* <TwitterShareButton url={shareUrl} title={title}>
             <button className="px-2 py-1 text-blue-500 rounded">
               <IoLogoTwitter className="text-2xl" />
             </button>
-          </TwitterShareButton>
+          </TwitterShareButton> */}
+
+          {/* <FacebookMessengerShareButton url={shareUrl} title={title}> */}
+          <button className="px-2 py-1 text-blue-500 rounded">
+            <MessageSquareMoreIcon className="text-2xl" />
+          </button>
+          {/* </FacebookMessengerShareButton> */}
 
           <WhatsappShareButton url={shareUrl} title={title}>
             <button className="px-2 py-1 text-green-500 rounded">

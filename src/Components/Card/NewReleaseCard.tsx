@@ -31,7 +31,7 @@ const NewReleaseCard: React.FC<News> = ({
   link,
   btn,
   id,
-  data = { songs: [] }
+  data = { songs: [] },
 }) => {
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
   const dispatch = useDispatch();
@@ -62,22 +62,22 @@ const NewReleaseCard: React.FC<News> = ({
   const videoId = extractYouTubeId(data?.songs?.[0]?.youTube || "");
 
   const videoThumbnail = videoId
-  ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
-  : novideo;
+    ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+    : novideo;
 
   return (
     <div
-    onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
         backgroundColor: themeMode ? "#FFFFFF" : "#242526",
         color: themeMode ? "#FFFFFF" : "#000000",
         transition: "transform 0.3s ease-in-out",
         transform: isHovered ? "scale(1.05)" : "scale(1)",
-        boxShadow: isHovered && themeMode
-          ? "0px 0px 11.415px 0px rgba(138, 138, 138, 0.24)"
-          : "",
-
+        boxShadow:
+          isHovered && themeMode
+            ? "0px 0px 11.415px 0px rgba(138, 138, 138, 0.24)"
+            : "",
       }}
       className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md flex-shrink-0 overflow-hidden
         ${themeMode ? "" : "border border-[#242526] bg-[#242526]"}
@@ -103,26 +103,43 @@ const NewReleaseCard: React.FC<News> = ({
       )}
 
       <div>
-      {title && <h3 className="mt-2 text-md font-semibold line-clamp-1" style={{ color: themeMode ? "#000000" : "#FFFFFF", }}>{title}</h3>}
-      {nickname && <h3 className="mt-2  " style={{ color: themeMode ? "#BBBCC0" : "#9B9CA1", }}>{nickname}</h3>}
-      {description && (
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 "
-          style={{
-            color: themeMode ? "#BBBCC0" : "#9B9CA1",
-          }}>
-          {description}
-        </p>
-      )}
-      {date && (
-        <p className="mt-2  text-gray-600 dark:text-gray-300 "
-          style={{
-            color: themeMode ? "#BBBCC0" : "#9B9CA1",
-          }}>
-          {dateFormated}
-        </p>
-      )}
+        {title && (
+          <h3
+            className="mt-2 text-md font-semibold line-clamp-1"
+            style={{ color: themeMode ? "#000000" : "#FFFFFF" }}
+          >
+            {title}
+          </h3>
+        )}
+        {nickname && (
+          <h3
+            className="mt-2  "
+            style={{ color: themeMode ? "#BBBCC0" : "#9B9CA1" }}
+          >
+            {nickname}
+          </h3>
+        )}
+        {description && (
+          <p
+            className="mt-2 text-sm text-gray-600 dark:text-gray-300 "
+            style={{
+              color: themeMode ? "#BBBCC0" : "#9B9CA1",
+            }}
+          >
+            {description}
+          </p>
+        )}
+        {date && (
+          <p
+            className="mt-2  text-gray-600 dark:text-gray-300 "
+            style={{
+              color: themeMode ? "#BBBCC0" : "#9B9CA1",
+            }}
+          >
+            {dateFormated}
+          </p>
+        )}
       </div>
-
     </div>
   );
 };

@@ -16,6 +16,8 @@ import SocialShare from "../../Components/SocialShare/SocialShare";
 import { BiCommentDetail } from "react-icons/bi";
 import BreadCrumb from "../../Components/BreadCrumb";
 import { apiBaseUrl } from "../../Constant/config";
+import moment from "moment";
+import getVideoThumbnail from "../../lib/services";
 
 interface Artist {
   _id: string;
@@ -53,6 +55,15 @@ interface Radio {
   updatedAt: string;
   __v: number;
   songs: string[];
+}
+
+interface ISong {
+  _id: string;
+  title: string;
+  thumbnail: string;
+  artists: Artist[];
+  description: string;
+  date: string;
 }
 
 interface ArtistDetailPageProps {
@@ -94,14 +105,25 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
   const totalPages = Math.ceil(totalSongs / entriesPerPage);
   const indexOfLastSong = currentPage * entriesPerPage;
   const indexOfFirstSong = indexOfLastSong - entriesPerPage;
-  const currentSongs =
-    radio?.songs?.slice(indexOfFirstSong, indexOfLastSong) || [];
+  const currentSongs: ISong[] =
+    (radio?.songs as unknown as ISong[])
+      ?.slice(indexOfFirstSong, indexOfLastSong)
+      .map((song) => ({
+        _id: song._id,
+        title: song.title,
+        thumbnail: song.thumbnail,
+        artists: song.artists,
+        description: song.description,
+        date: song.date,
+      })) || [];
 
   const handleNext = () => {
     if (swiperRef.current) {
       swiperRef.current.slideNext();
     }
   };
+
+  console.log(currentSongs);
 
   const handlePrev = () => {
     if (swiperRef.current) {
@@ -231,35 +253,6 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
               <BreadCrumb />
             </div>
           )}
-          {/* {!type && (
-            <div className="flex items-center space-x-2 text-sm md:mt-12 mt-8">
-              <a
-                href="/"
-                className={`${themeMode ? "text-gray-500" : "text-gray-400"}`}
-              >
-                Home
-              </a>
-              <span
-                className={`${themeMode ? "text-gray-500" : "text-gray-400"}`}
-              >
-                &gt;
-              </span>
-              <a
-                href="/news"
-                className={`${themeMode ? "text-gray-500" : "text-gray-400"}`}
-              >
-                News
-              </a>
-              <span
-                className={`${themeMode ? "text-gray-500" : "text-gray-400"}`}
-              >
-                &gt;
-              </span>
-              <span className={`${themeMode ? "text-gray-900" : "text-white"}`}>
-                Submit News
-              </span>
-            </div>
-          )} */}
 
           {/* Artist Header */}
           <h2
@@ -290,7 +283,7 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
             </div>
           </div>
 
-          <div className="flex gap-4 justify-between items-start">
+          <div className="flex gap-4 justify-between items-start flex-wrap lg:flex-nowrap">
             <div className="flex-grow">
               {/* Description Card */}
               <div
@@ -330,102 +323,109 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
                   </h2>
 
                   {/* Songs Table */}
-                  <div className="space-y-2">
-                    {Array.from({ length: 10 }, (_, i) => i + 1).map(
-                      (songIndex) => (
+                  {currentSongs.length > 0 ? (
+                    <div className="space-y-2">
+                      {currentSongs.map((item, i) => (
                         <div
-                          key={songIndex}
-                          className={`w-full flex items-center justify-between p-4 rounded-lg ${
+                          key={i}
+                          className={`w-full flex items-center gap-4 p-4 rounded-lg ${
                             themeMode
                               ? "bg-white border border-gray-100"
                               : "bg-[#242526] border border-gray-800"
                           }`}
                         >
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 w-full md:max-w-[40%]">
                             <span
                               className={`w-6 text-center ${themeMode ? "text-gray-500" : "text-gray-400"}`}
                             >
-                              {songIndex}
+                              {i + 1}
                             </span>
-                            <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+                            <div className="min-w-[50px] min-h-[50px] max-w-[50px] max-h-[50px]  rounded-full overflow-hidden bg-gray-200">
                               <img
-                                src="/placeholder.svg?height=40&width=40"
+                                src={item?.thumbnail}
                                 alt="Song"
                                 className="w-full h-full object-cover"
                               />
                             </div>
-                            <div>
+                            <div className="min-w-[100px]">
                               <p
-                                className={`font-medium ${themeMode ? "text-gray-900" : "text-white"}`}
+                                className={`oneLine font-medium ${themeMode ? "text-gray-900" : "text-white"}`}
                               >
-                                Song Name
+                                {item?.title?.slice(0, 20)}
                               </p>
                               <span
-                                className={`text-xs px-2 py-0.5 rounded-full md:hidden ${
+                                className={`text-start text-xs px-2 py-0.5 rounded-full lg:hidden ${
                                   themeMode
                                     ? "bg-[#F0E6FF] text-[#5A1073]"
                                     : "bg-[#2FC4B2] text-white"
                                 }`}
                               >
-                                Wildlife
+                                {item?.artists[0]?.name}
                               </span>
                             </div>
                           </div>
-                          <div>
+                          <div className="w-full max-w-[100px] hidden lg:inline-block">
                             <span
-                              className={`text-xs px-2 py-0.5 rounded-full hidden md:inline-block ${
+                              className={`text-start text-xs px-2 py-0.5 rounded-full ${
                                 themeMode
                                   ? "bg-[#F0E6FF] text-[#5A1073]"
                                   : "bg-[#2FC4B2] text-white"
                               }`}
                             >
-                              Wildlife
+                              {item?.artists[0]?.name}
                             </span>
                           </div>
-                          <div>
-                            <span
-                              className={`hidden md:block ${themeMode ? "text-gray-700" : "text-gray-300"}`}
-                            >
-                              Brown Higgins, Alex Wood
-                            </span>
-                          </div>
-                          <div>
-                            <span
-                              className={`${themeMode ? "text-gray-700" : "text-gray-300"}`}
-                            >
-                              1:45m
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-4">
-                            <button
-                              className={`rounded-full p-2 ${
-                                themeMode
-                                  ? "text-[#5A1073] hover:bg-[#F0E6FF]"
-                                  : "text-[#2FC4B2] hover:bg-gray-800"
-                              }`}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
+                          <div className="flex justify-end items-center flex-grow gap-4">
+                            <div className="w-full hidden lg:block">
+                              <span
+                                className={`oneLine text-start ${themeMode ? "text-gray-700" : "text-gray-300"}`}
                               >
-                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                              </svg>
-                            </button>
+                                {item?.description?.slice(0, 50)}
+                              </span>
+                            </div>
+                            <div>
+                              <span
+                                className={`${themeMode ? "text-gray-700" : "text-gray-300"}`}
+                              >
+                                {item?.date &&
+                                  moment(item?.date).format("DD/MM/YYYY")}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <button
+                                className={`rounded-full p-2 ${
+                                  themeMode
+                                    ? "text-[#5A1073] hover:bg-[#F0E6FF]"
+                                    : "text-[#2FC4B2] hover:bg-gray-800"
+                                }`}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      )
-                    )}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex justify-center items-center h-full">
+                      <p className="text-gray-500">No songs found</p>
+                    </div>
+                  )}
 
                   {/* Pagination */}
-                  <div className="flex items-center justify-between mt-6">
+                  {/* <div className="flex items-center justify-between mt-6">
                     <div className="flex items-center gap-2">
                       <span
                         className={`text-sm ${themeMode ? "text-gray-600" : "text-gray-400"}`}
@@ -565,7 +565,7 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
                         </svg>
                       </button>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               {/* Comments Section */}
@@ -626,20 +626,22 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
                     {displayedRelatedAlbums.map((item) => (
                       <div key={item} className="flex gap-3">
                         <img
-                          src="/placeholder.svg?height=60&width=60"
+                          src={getVideoThumbnail(item?.songs?.[0]?.youTube)}
                           alt="Related content"
                           className="w-[60px] h-[60px] rounded-md object-cover"
                         />
                         <div>
                           <p
-                            className={`text-sm ${themeMode ? "text-gray-900" : "text-white"}`}
+                            className={`twoLine text-sm ${themeMode ? "text-gray-900" : "text-white"}`}
                           >
-                            {item?.title?.slice(0, 20)}
+                            {item?.title}
                           </p>
                           <p
-                            className={`text-xs ${themeMode ? "text-gray-500" : "text-gray-400"}`}
+                            className={`oneLine text-xs ${themeMode ? "text-gray-500" : "text-gray-400"}`}
                           >
-                            Subhead
+                            {item?.userId?.length > 0
+                              ? item.userId[0].nickname
+                              : "Unknown"}
                           </p>
                         </div>
                       </div>
