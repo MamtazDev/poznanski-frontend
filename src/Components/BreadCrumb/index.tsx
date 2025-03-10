@@ -1,62 +1,157 @@
-import React, { useMemo } from 'react';
-import { AiOutlineRight } from 'react-icons/ai';
-import { useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
-import * as common from '../../Constant/constants';
-import { RootState } from '../../reducers';
-import './style.css';
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { AiOutlineRight } from "react-icons/ai";
+import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import type { RootState } from "../../reducers";
+import "./style.css";
+
+// Define constants directly in the file
+const HOME_PATH = "/";
+const ARTISTS_PATH = "/artist";
+const TV_RADIO_PATH = "/radio";
+const CONCERT_PATH = "/concert";
+const NEWS_PATH = "/news";
+const SEARCH_PATH = "/search";
+const MATERIAL_PATH = "/playlist";
+const NEWRELEASE_PATH = "/newrelease";
+const CREATE_NEWS = "/create-news";
 
 const BreadCrumb = () => {
   const currentRoute = useLocation().pathname;
-  const defaultRoute: Array<{ [key: string]: string }> = [{ Home: common.HOME_PATH }];
-  const [selectedMenu, setSelectedMenu] = React.useState<{ [key: string]: string }[]>(defaultRoute);
+  const defaultRoute: Array<{ [key: string]: string }> = [{ Home: HOME_PATH }];
+  const [selectedMenu, setSelectedMenu] =
+    useState<{ [key: string]: string }[]>(defaultRoute);
   const themeMode = useSelector((state: RootState) => state.themeMode.mode);
+  const [isLoading, setIsLoading] = useState(false);
 
-  React.useEffect(() => {
-    const newMenu = [...defaultRoute]; // Start with the default route
+  const truncateTitle = (title: string, maxLength = 30) => {
+    if (!title) return "";
+    if (title.length <= maxLength) return title;
+    return title.substring(0, maxLength) + "...";
+  };
 
-    // Add breadcrumbs based on the route
-    if (currentRoute.includes(common.ARTISTS_PATH)) {
-      newMenu.push({ Artyści: common.ARTISTS_PATH });
+  useEffect(() => {
+    const fetchTitleAndUpdateMenu = async (
+      apiUrl: string,
+      newMenu: Array<{ [key: string]: string }>
+    ) => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`API request failed with status ${response.status}`);
+        }
 
-      // Add "Details" if on a specific artist's details page
-      if (currentRoute.match(new RegExp(`^${common.ARTISTS_PATH}/.+$`))) {
-        newMenu.push({ Szczegóły: currentRoute }); // "Details" in Polish
+        const data = await response.json();
+
+        // Detailed logging for API response
+        console.log("API Response Data:", data); // Log the complete response data
+
+        let title = "Szczegóły"; // Default title
+
+        // Check the response structure and extract the title
+        if (apiUrl.includes("/api/news/")) {
+          title = data?.news?.title || "Szczegóły";
+        } else if (apiUrl.includes("/api/radio/")) {
+          title = data?.records?.title || "tv";
+        } else if (apiUrl.includes("/api/artist/")) {
+          title = data?.artist?.name || "Szczegóły";
+          
+        } else if (apiUrl.includes("/api/album/")) {
+          title = data?.albums.title || "Szczegóły";
+        }
+        else if (apiUrl.includes("/api/playlist/")) {
+          title = data?.data.title || "Szczegóły";
+        }
+        // Logging extracted title for debugging
+        console.log("Extracted Title:", title);
+
+        const updatedMenu = [...newMenu];
+        updatedMenu.push({ [truncateTitle(title)]: currentRoute });
+        setSelectedMenu(updatedMenu);
+      } catch (error) {
+        console.error("Error fetching title:", error);
+
+        const updatedMenu = [...newMenu];
+        updatedMenu.push({ Szczegóły: currentRoute });
+        setSelectedMenu(updatedMenu);
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
 
-    if (currentRoute.includes(common.TV_RADIO_PATH)) {
-      newMenu.push({ 'TV/Radio': common.TV_RADIO_PATH });
-    }
+    const newMenu = [...defaultRoute];
 
-    if (currentRoute.includes(common.CONCERT_PATH)) {
-      newMenu.push({ Koncerty: common.CONCERT_PATH });
-    }
+    if (currentRoute.includes(ARTISTS_PATH)) {
+      newMenu.push({ Artyści: ARTISTS_PATH });
 
-    if (currentRoute.includes(common.NEWS_PATH)) {
-      newMenu.push({ Newsy: common.NEWS_PATH });
-    }
+      if (currentRoute.match(new RegExp(`^${ARTISTS_PATH}/.+$`))) {
+        const artistId = currentRoute.split("/").pop();
+        fetchTitleAndUpdateMenu(
+          `http://localhost:8000/api/artist/${artistId}`,
+          newMenu
+        );
+        return;
+      }
+    } else if (currentRoute.includes(TV_RADIO_PATH)) {
+      newMenu.push({ "TV/Radio": TV_RADIO_PATH });
+      console.log("Current Route:", currentRoute); // Log current route
 
-    if (currentRoute.includes(common.SEARCH_PATH)) {
-      newMenu.push({ Wyszukaj: common.SEARCH_PATH }); // "Search" in Polish
-    }
+      if (currentRoute.match(new RegExp(`^${TV_RADIO_PATH}/.+$`))) {
+        const radioId = currentRoute.split("/").pop();
+        console.log("Extracted Radio ID:", radioId); // Log extracted radio ID
+        fetchTitleAndUpdateMenu(
+          `http://localhost:8000/api/radio/${radioId}`,
+          newMenu
+        );
+        return;
+      }
+    } else if (currentRoute.includes(MATERIAL_PATH)) {
+      newMenu.push({ Koncerty: MATERIAL_PATH });
 
-    if (currentRoute.includes(common.MATERIAL_PATH)) {
-      newMenu.push({ 'Nasze materiały': common.MATERIAL_PATH });
-    }
+      if (currentRoute.match(new RegExp(`^${MATERIAL_PATH}/.+$`))) {
+        const playlistId = currentRoute.split("/").pop();
+        fetchTitleAndUpdateMenu(
+          `http://localhost:8000/api/playlist/${playlistId}`,
+          newMenu
+        );
+        return;
+      }
+    } else if (currentRoute.includes(NEWS_PATH)) {
+      newMenu.push({ Newsy: NEWS_PATH });
 
-    if (currentRoute.includes(common.NEWRELEASE_PATH)) {
-      newMenu.push({ Albumy: common.NEWRELEASE_PATH });
-    }
-
-    if (currentRoute.includes(common.CREATE_NEWS)) {
-      newMenu.push({ 'Dodaj newsa': common.CREATE_NEWS });
+      if (currentRoute.match(new RegExp(`^${NEWS_PATH}/.+$`))) {
+        const newsId = currentRoute.split("/").pop();
+        fetchTitleAndUpdateMenu(
+          `http://localhost:8000/api/news/${newsId}`,
+          newMenu
+        );
+        return;
+      }
+    } else if (currentRoute.includes(SEARCH_PATH)) {
+      newMenu.push({ Wyszukaj: SEARCH_PATH }); // "Search" in Polish
+    } else if (currentRoute.includes(MATERIAL_PATH)) {
+      newMenu.push({ "Nasze materiały": MATERIAL_PATH });
+    } else if (currentRoute.includes(NEWRELEASE_PATH)) {
+      newMenu.push({ Albumy: NEWRELEASE_PATH });
+      if (currentRoute.match(new RegExp(`^${NEWRELEASE_PATH}/.+$`))) {
+        const albumId = currentRoute.split("/").pop();
+        fetchTitleAndUpdateMenu(
+          `http://localhost:8000/api/album/${albumId}`,
+          newMenu
+        );
+        return;
+      }
+    } else if (currentRoute.includes(CREATE_NEWS)) {
+      newMenu.push({ "Dodaj newsa": CREATE_NEWS });
     }
 
     setSelectedMenu(newMenu);
   }, [currentRoute]);
 
-  const handleBreadcrumb = useMemo(() => {
+  const handleBreadcrumb = React.useMemo(() => {
     return selectedMenu.map((item, idx) => {
       const key = Object.keys(item)[0];
       const value = Object.values(item)[0];
@@ -69,15 +164,15 @@ const BreadCrumb = () => {
           )}
           <div
             className={`mx-3 route-text ${
-              !themeMode && 'textWhite'
-            } ${idx === selectedMenu.length - 1 && (themeMode ? 'selected-text-color' : 'text-dark-color')}`}
+              !themeMode && "textWhite"
+            } ${idx === selectedMenu.length - 1 && (themeMode ? "selected-text-color" : "text-dark-color")}`}
           >
-            {key}
+            {isLoading && idx === selectedMenu.length - 1 ? "Loading..." : key}
           </div>
         </Link>
       );
     });
-  }, [selectedMenu, themeMode]);
+  }, [selectedMenu, themeMode, isLoading]);
 
   return (
     <div className="flex">
