@@ -272,7 +272,7 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
 
           {/* Artist Header */}
           <h2
-            className={`md:text-5xl text-3xl font-bold mt-5 ${themeMode ? "text-[#252733]" : "text-white"}`}
+            className={`md:text-5xl text-2xl font-bold mt-5 ${themeMode ? "text-[#252733]" : "text-white"}`}
           >
             {radio.title}
           </h2>

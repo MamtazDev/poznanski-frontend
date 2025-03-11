@@ -149,7 +149,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
 
   return cardData && cardData.news.length > 0 ? (
     <div className="flex justify-center">
-      <div className="container md:mt-36 mt-20 md:pt-1.5">
+      <div className="container md:mt-36 mt-10 md:pt-1.5">
         <div className="flex justify-between mb-10">
           <ContentTitle titleType="NEWS" title="Top News Of The Day" />
           <div className="flex items-end">

@@ -152,19 +152,19 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="container md:mt-36 md:pt-1.5 mt-20">
+      <div className="container md:mt-36 md:pt-1.5 mt-10">
         <div className="flex justify-between">
           <ContentTitle titleType="VIDEOS" title="Materials" />
           <div className="md:block hidden">
             <DetailButton
               text="See All Videos"
               btnType="web"
-              onClick={() => navigate("/materials")}
+              onClick={() => navigate("/playlist")}
             />
           </div>
         </div>
 
-        <div className="w-full relative mt-10">
+        <div className="w-full relative md:mt-10 mt-5">
           <div className="relative group">
             <Swiper
               onSwiper={(swiper: any) => (swiperRef.current = swiper)}

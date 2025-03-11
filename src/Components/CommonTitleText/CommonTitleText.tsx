@@ -87,14 +87,14 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
     return <p>No data available</p>;
   }
   return (
-    <div className="mt-12 relative">
+    <div className="md:mt-12 relative px-5 md:px-0 mt-6">
       <h2
         className="text-xl font-semibold"
         style={{ color: themeMode ? "#252733" : "#FFF" }}
       >
         {headTitle}
       </h2>
-      <div className="w-full mt-10 relative">
+      <div className="w-full md:mt-10 mt-5 relative">
         {/* Swiper Component */}
         <Swiper
           onSwiper={(swiper: any) => (swiperRef.current = swiper)}
@@ -123,18 +123,23 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
           ))}
         </Swiper>
 
-        {/* Custom Navigation Buttons */}
-        <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10">
-          <button onClick={handlePrev} className="swiper-button-prev">
-            <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
-          </button>
-        </div>
+        {data.length > 4 ? (
+          <>
+            <div className="absolute top-1/2 left-[-40px] transform -translate-y-1/2 z-10">
+              <button onClick={handlePrev} className="swiper-button-prev">
+                <IoIosArrowBack className="text-3xl text-gray-600 hover:text-black" />
+              </button>
+            </div>
 
-        <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10">
-          <button onClick={handleNext} className="swiper-button-next">
-            <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
-          </button>
-        </div>
+            <div className="absolute top-1/2 right-[-40px] transform -translate-y-1/2 z-10">
+              <button onClick={handleNext} className="swiper-button-next">
+                <IoIosArrowForward className="text-3xl text-gray-600 hover:text-black" />
+              </button>
+            </div>
+          </>
+        ) : null}
+
+
       </div>
     </div>
   );
@@ -157,7 +162,7 @@ const AlbumeItem = ({
   const displayedTags = item.tags.slice(0, 5);
   return (
     <div
-      className="p-5 rounded-3xl mt-6"
+      className="p-5 rounded-3xl md:mt-6"
       onClick={() => handleClick(item.id)}
       style={{
         backgroundColor: themeMode ? "#FFF" : "#242526",
@@ -177,13 +182,13 @@ const AlbumeItem = ({
         {item.songs?.[0]?.youTube ? (
           <img
             src={`https://img.youtube.com/vi/${getYouTubeID(item.songs[0]?.youTube)}/hqdefault.jpg`}
-            className="w-full h-full object-cover"
+            className="w-full h-[230px] object-cover"
             alt="YouTube Thumbnail"
           />
         ) : (
           <img
             src={novideo}
-            className="md:w-full w-[119px] h-[88px] md:h-[230px] object-cover rounded-lg"
+            className="w-full h-[230px] object-cover rounded-lg"
             alt="No Video Available"
           />
         )}
@@ -223,22 +228,25 @@ const AlbumeItem = ({
           </div>
         )}
       </div>
-      {item.tags && <></>}
-      {displayedTags?.map((tag: any, index: any) => (
-        <button
-          key={index}
-          className="py-1 mt-1 ml-1 px-3 text-center rounded-full font-semibold"
-          style={{
-            backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
-            color: "#5A1073",
-          }}
-        >
-          {tag}
-        </button>
-      ))}
+      <div className="flex justify-start mt-3">
+        <div className="flex md:flex-wrap gap-2 line-clamp-1">
+          {displayedTags?.slice(0, 3).map((tag: any, index: any) => (
+            <span
+              key={index}
+              className={`px-2 py-1 rounded-full md:text-sm text-[10px] font-semibold ${!themeMode && "btn-dark-bg-color"
+                }`}
+              style={{
+                backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
+                color: themeMode ? "#5A1073" : "#5A1073",
+              }}>
+              {tag.length > 10 ? `${tag.substring(0, 7)}...` : tag}
+            </span>
+          ))}
+        </div>
+      </div>
       {item.title && (
         <>
-          <p className="mt-2 text-lg font-semibold">{item.title}</p>
+          <p className="mt-2 text-lg font-semibold line-clamp-2">{item.title}</p>
         </>
       )}
 

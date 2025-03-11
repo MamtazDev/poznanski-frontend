@@ -145,7 +145,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="container md:mt-28 mt-10">
+      <div className="container md:mt-28 mt-6">
         <div className="flex justify-between">
           <ContentTitle titleType="ARTISTS" title="Our Artists" />
           <div className="flex items-end">
@@ -194,7 +194,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
               </div>
               {artist.products.length > 0 && (
                 <div
-                  className={`transition-all ease-in-out ${hoveredCard === _idx_.toString() ? " h-full" : "h-0 overflow-hidden"}`}>
+                  className={`transition-all md:px-5 ease-in-out ${hoveredCard === _idx_.toString() ? " h-full" : "h-0 overflow-hidden"}`}>
                   {
                     <ArtistsCarousel
                       cardNum={cardNum}

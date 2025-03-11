@@ -236,7 +236,7 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="container md:mt-36 md:pt-1.5 mt-20">
+      <div className="container md:mt-36 md:pt-1.5 mt-10">
         <div className="flex justify-between">
           <ContentTitle titleType="TOP HITS" title="TV/Radio" />
           <div className="flex items-end">

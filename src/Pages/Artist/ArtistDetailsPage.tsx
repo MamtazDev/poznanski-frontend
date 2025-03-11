@@ -18,6 +18,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
+import { Avatar } from "@chakra-ui/react";
 interface Product {
   _id: string;
   songs: any;
@@ -140,10 +141,10 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           <div className="container">
             {!type && <BreadCrumb />}
             <div className="flex gap-4 items-center md:mt-5 mt-3">
-              <img
+              <Avatar
                 src={artist?.profileImg || avatar}
-                className="w-[100px] h-[100px] rounded-full"
-                alt="img"
+                className="rounded-full object-cover w-28 md:w-[118px]"
+                size={{ base: "lg", md: "2xl" }}
               />
               <div>
                 <h2
@@ -189,6 +190,8 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 )}
               </div>
             </div>
+
+            {/* Albums */}
             {albums?.length > 0 && (
               <CommonTitleText
                 data={albums.map((album) => ({
@@ -214,7 +217,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 </h2>
 
                 {/* Swiper Carousel */}
-                <div className="w-full lg:mt-10 mt-5 relative">
+                <div className="w-full h-full lg:mt-10 mt-5 relative">
                   <Swiper
                     onSwiper={(swiper: any) => (swiperRef.current = swiper)}
                     slidesPerView={4}
@@ -463,19 +466,39 @@ const RadioItem = ({
           )}
         </div>
       </div>
-      {radio.tags && <></>}
-      {displayedTags.map((tag: any, index: any) => (
-        <button
+
+      {displayedTags?.length > 0 ? (
+  <div className="flex justify-start mt-3">
+    <div className="flex md:flex-wrap gap-2 line-clamp-1">
+      {displayedTags.slice(0, 3).map((tag: any, index: any) => (
+        <span
           key={index}
-          className="py-1 mt-1 ml-1 px-3 text-center rounded-full font-semibold"
+          className={`px-2 py-1 rounded-full md:text-sm text-[10px] font-semibold ${
+            !themeMode && "btn-dark-bg-color"
+          }`}
           style={{
-            backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
+            backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
             color: "#5A1073",
           }}
         >
-          {tag}
-        </button>
+          {tag.length > 10 ? `${tag.substring(0, 7)}...` : tag}
+        </span>
       ))}
+    </div>
+  </div>
+) : (
+  <p
+    className="px-2 py-1 mt-3 rounded-full text-center md:text-sm text-[10px] font-semibold"
+    style={{
+      backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
+      color: "#5A1073",
+    }}
+  >
+    No tags added
+  </p>
+)}
+
+
       {radio.title && (
         <>
           <p className="mt-2 text-lg font-semibold line-clamp-1">

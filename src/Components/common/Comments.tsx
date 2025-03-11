@@ -285,7 +285,7 @@ export default function Comments({ postId, type }: IProps) {
     <div
       className={`py-8 px-4 sm:px-6 ${themeMode ? "bg-gray-50" : "bg-gray-950"} md:!mt-[100px] mt-10 rounded-lg overflow-hidden`}
     >
-      <h1 className={`text-3xl font-bold mb-8 ${textClass}`}>Comments</h1>
+      <h1 className={`md:text-3xl text-xl font-bold mb-8 ${textClass}`}>Comments</h1>
 
       {/* Breadcrumb Navigation */}
       {breadcrumb.length > 0 && (
