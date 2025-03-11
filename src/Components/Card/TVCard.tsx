@@ -23,7 +23,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log("data", data)
+  // console.log("data", data)
 
   const handlePlay = () => {
     if (youTube) {

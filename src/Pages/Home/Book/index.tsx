@@ -192,7 +192,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
         setShowPagination(true);
       }
 
-      console.log("Width:", width, "ShowPagination:", showPagination);
+      // console.log("Width:", width, "ShowPagination:", showPagination);
     };
 
     updateUI();

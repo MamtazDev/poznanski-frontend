@@ -234,7 +234,7 @@ const VideoMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       ref={
                         index === displayedItems.length - 1 ? lastItemRef : null
                       }
-                      key={item.id}
+                      key={index}
                       className="w-full"
                     >
                       <TVCard

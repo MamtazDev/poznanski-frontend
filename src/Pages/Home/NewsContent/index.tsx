@@ -110,7 +110,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
         setShowPagination(true);
       }
 
-      console.log("Width:", width, "ShowPagination:", showPagination);
+      // console.log("Width:", width, "ShowPagination:", showPagination);
     };
 
     updateUI();

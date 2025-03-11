@@ -47,7 +47,7 @@ const BreadCrumb = () => {
         const data = await response.json();
 
         // Detailed logging for API response
-        console.log("API Response Data:", data); // Log the complete response data
+        // console.log("API Response Data:", data); // Log the complete response data
 
         let title = "Szczegóły"; // Default title
 
@@ -60,7 +60,7 @@ const BreadCrumb = () => {
           title = data?.artist?.name || "Szczegóły";
 
         } else if (apiUrl.includes("/api/album/")) {
-          console.log("data?.data.title", data?.title)
+          // console.log("data?.data.title", data?.title)
           title = data?.title || "Szczegóły";
         }
         else if (apiUrl.includes("/api/playlist/")) {
@@ -68,7 +68,7 @@ const BreadCrumb = () => {
           title = data?.data.title || "Szczegóły";
         }
         // Logging extracted title for debugging
-        console.log("Extracted Title:", title);
+        // console.log("Extracted Title:", title);
 
         const updatedMenu = [...newMenu];
         updatedMenu.push({ [truncateTitle(title)]: currentRoute });
@@ -99,11 +99,11 @@ const BreadCrumb = () => {
       }
     } else if (currentRoute.includes(TV_RADIO_PATH)) {
       newMenu.push({ "TV/Radio": TV_RADIO_PATH });
-      console.log("Current Route:", currentRoute); // Log current route
+      // console.log("Current Route:", currentRoute); // Log current route
 
       if (currentRoute.match(new RegExp(`^${TV_RADIO_PATH}/.+$`))) {
         const radioId = currentRoute.split("/").pop();
-        console.log("Extracted Radio ID:", radioId); // Log extracted radio ID
+        // console.log("Extracted Radio ID:", radioId); // Log extracted radio ID
         fetchTitleAndUpdateMenu(
           `http://localhost:8000/api/radio/${radioId}`,
           newMenu

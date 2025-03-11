@@ -65,7 +65,7 @@ export const profileUpdateRequest = async (
     profilePicture,
   };
   const path = `/auth/users/${rafa}`;
-  console.log("request Data", reqData, path);
+  // console.log("request Data", reqData, path);
 
   await apiPutReq(path, reqData);
 };

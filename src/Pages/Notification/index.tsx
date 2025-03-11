@@ -33,7 +33,7 @@ import { INotification } from "../../reducers/NotificationReducer";
       __v: 0,
       post: {
         _id: '67c04a045c709c9661b13006',
-        title: 
+        title:
           'Kahani suno 2.0❤️ (Slowed+Reverb)_Top Bollywood" Lofi Hindi song"Love lofi Mashup #love #lofi#mashup'
       }
 
@@ -168,7 +168,7 @@ const Notification: React.FC<PageBasicProps> = ({ themeMode }) => {
     }
   };
 
-  console.log(notifications);
+  // console.log(notifications);
 
   return (
     <Layout themeMode={themeMode}>
