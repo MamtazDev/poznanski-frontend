@@ -130,7 +130,7 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     if (data) {
       setRadio(data.record);
       setRelatedNews(Array.isArray(data.relatedNews) ? data.relatedNews : []);
-      console.log("Related News:", data.relatedNews);
+      // console.log("Related News:", data.relatedNews);
     }
   }, [data]);
 

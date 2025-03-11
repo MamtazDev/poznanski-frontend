@@ -83,7 +83,7 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
   const dispatch = useDispatch();
 
   const handlePlay = (item: any) => {
-    console.log(item, "item")
+    // console.log(item, "item")
     const youTubeLink = item?.youTube;
     if (youTubeLink) {
       const videoId = youTubeLink.split("v=")[1]?.split("&")[0];
@@ -140,7 +140,7 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
     }
   };
 
-  console.log(currentSongs);
+  // console.log(currentSongs);
 
   const handlePrev = () => {
     if (swiperRef.current) {
