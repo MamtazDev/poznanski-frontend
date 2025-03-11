@@ -184,7 +184,7 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             </div>
           )}
           <h2
-            className="md:text-5xl text-3xl font-bold mt-5"
+            className="md:text-5xl text-2xl font-bold mt-5"
             style={{
               color: themeMode ? "#252733" : "#FFF",
             }}
@@ -221,7 +221,7 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </p>
             </div>
           </div>
-          <div className="p-6 rounded-2xl shadow-lg mt-6" style={{ backgroundColor: themeMode ? "#FFF" : "#242526" }}>
+          <div className="p-6 rounded-2xl shadow-lg md:mt-6 mt-3" style={{ backgroundColor: themeMode ? "#FFF" : "#242526" }}>
             <p style={{ color: themeMode ? "#6D6E76" : "#BBBCC0" }}>
               {showFullDescription ? radio.description : radio.description?.slice(0, 200) + (radio.description.length > 100 ? "..." : "")}
             </p>
@@ -272,6 +272,8 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                     1024: { slidesPerView: 2 },
                     768: { slidesPerView: 2 },
                     425: { slidesPerView: 1 },
+                    375: { slidesPerView: 1 },
+                    320: { slidesPerView: 1 },
                   }}
                 >
                   {relatedNews?.map((item: Radio, index: number) => (
@@ -287,18 +289,22 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                         }}
                       >
                         <img src={singer} alt="img" className="w-full" />
-                        {displayedTags.map((tag: any, index: any) => (
-                          <button
-                            key={index}
-                            className="py-1 mt-1 ml-1 px-3 text-center rounded-full font-semibold"
-                            style={{
-                              backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
-                              color: "#5A1073",
-                            }}
-                          >
-                            {tag}
-                          </button>
-                        ))}
+                        <div className="flex justify-start mt-3">
+                          <div className="flex md:flex-wrap gap-2 line-clamp-1">
+                            {displayedTags?.slice(0, 3).map((tag: any, index: any) => (
+                              <span
+                                key={index}
+                                className={`px-2 py-1 rounded-full text-sm  font-semibold ${!themeMode && "btn-dark-bg-color"
+                                  }`}
+                                style={{
+                                  backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
+                                  color: themeMode ? "#5A1073" : "#5A1073",
+                                }}>
+                                {tag.length > 10 ? `${tag.substring(0, 7)}...` : tag}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
                         <p className="mt-2 text-lg font-semibold">{item.title}</p>
                         <div className="flex gap-2 items-center">
                           <GoDotFill

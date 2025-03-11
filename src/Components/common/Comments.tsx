@@ -283,7 +283,7 @@ export default function Comments({ postId, type }: IProps) {
 
   return (
     <div
-      className={`py-8 px-4 sm:px-6 ${themeMode ? "bg-gray-50" : "bg-gray-950"} md:!mt-[100px] mt-10 rounded-lg overflow-hidden`}
+      className={`py-8 px-4 sm:px-6 ${themeMode ? "bg-gray-50" : "bg-gray-950"} md:!mt-[100px] mt-5 rounded-lg overflow-hidden`}
     >
       <h1 className={`md:text-3xl text-xl font-bold mb-8 ${textClass}`}>Comments</h1>
 
@@ -292,11 +292,10 @@ export default function Comments({ postId, type }: IProps) {
         <div className="flex items-center gap-2 mb-6 overflow-x-auto ease-in duration-300">
           <button
             onClick={() => navigateToBreadcrumb(-1)}
-            className={`inline-flex items-center px-3 py-1.5 text-sm font-medium ${
-              breadcrumb.length === 0
+            className={`inline-flex items-center px-3 py-1.5 text-sm font-medium ${breadcrumb.length === 0
                 ? `bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300`
                 : textClass
-            } rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all`}
+              } rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all`}
           >
             <ArrowLeft className="h-4 w-4 mr-1" />
             All Comments
@@ -311,11 +310,10 @@ export default function Comments({ postId, type }: IProps) {
                     ? navigateToBreadcrumb(index)
                     : null
                 }
-                className={`px-3 py-1.5 text-sm font-medium ${textClass} rounded-full ${
-                  index < breadcrumb.length - 1
+                className={`px-3 py-1.5 text-sm font-medium ${textClass} rounded-full ${index < breadcrumb.length - 1
                     ? "hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
                     : "cursor-default"
-                } transition-all`}
+                  } transition-all`}
               >
                 {item.name}'s replies
               </button>
@@ -325,27 +323,32 @@ export default function Comments({ postId, type }: IProps) {
       )}
 
       {/* Comments List with Animation */}
-      <div className="space-y-8">
-        <div className="comments-container grid grid-cols-1 gap-3">
-          {currentView.map((comment, i) => (
-            <CommentItem
-              key={i}
-              comment={comment}
-              handleLikeUnlike={handleLikeUnlike}
-              replyingTo={replyingTo}
-              setReplyingTo={setReplyingTo}
-              showReplies={showReplies}
-              handleDelete={handleDelete}
-              handleSubmitReply={handleSubmitReply}
-              formData={formData}
-              handleInputChange={handleInputChange}
-              isSubmitting={isSubmitting}
-              isDeleteLoading={isDeleteLoading}
-              currentDeleteId={currentDeleteId}
-            />
-          ))}
+      {currentView.length > 0 ? (
+        <div className="space-y-8">
+          <div className="comments-container grid grid-cols-1 gap-3">
+            {currentView.map((comment, i) => (
+              <CommentItem
+                key={i}
+                comment={comment}
+                handleLikeUnlike={handleLikeUnlike}
+                replyingTo={replyingTo}
+                setReplyingTo={setReplyingTo}
+                showReplies={showReplies}
+                handleDelete={handleDelete}
+                handleSubmitReply={handleSubmitReply}
+                formData={formData}
+                handleInputChange={handleInputChange}
+                isSubmitting={isSubmitting}
+                isDeleteLoading={isDeleteLoading}
+                currentDeleteId={currentDeleteId}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        null
+      )}
+
 
       {pagination.totalPages > 1 && (
         <PaginationNP
@@ -359,7 +362,7 @@ export default function Comments({ postId, type }: IProps) {
 
       {/* Add new comment form */}
       <div
-        className={`mt-12 ${bgClass} rounded-lg shadow-sm p-6 border ${borderClass}`}
+        className={`md:mt-12 mt-6 ${bgClass} rounded-lg shadow-sm p-6 border ${borderClass}`}
       >
         <h2 className={`text-xl font-semibold mb-4 ${textClass}`}>
           Leave a comment
