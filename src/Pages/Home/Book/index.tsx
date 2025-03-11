@@ -192,7 +192,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
         setShowPagination(true);
       }
 
-      console.log("Width:", width, "ShowPagination:", showPagination);
+      // console.log("Width:", width, "ShowPagination:", showPagination);
     };
 
     updateUI();
@@ -263,7 +263,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
 
           <div className="w-full relative md:mt-8 mt-4">
             <Swiper
-            onSwiper={(swiper:any) => (swiperRef.current = swiper)}
+              onSwiper={(swiper: any) => (swiperRef.current = swiper)}
               onSlideChange={handleSlideChange}
               pagination={{
                 dynamicBullets: true,
@@ -277,13 +277,24 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                     <div
                       className={`grid md:grid-cols-2 grid-cols-1  md:gap-20 gap-6`}>
                       <div className={`relative`} onClick={() => handlePlay(item.link)}>
-                        <Image
-                          src={item.img}
+                        {item.img ? (
+                          <Image
+                          src={item.img ? item.img : novideo}
                           className="md:rounded-3xl rounded-2xl object-cover h-full w-full"
-                          alt={item.img}
+                          alt={item.name || "No Video Available"}
                         />
-                        <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer">
+                        ) : (
+                          <img
+                            src={novideo}
+                            className="md:w-full w-[69px] h-[88px] md:h-[230px] object-cover rounded-lg"
+                            alt="No Video Available"
+                          />
+                        )}
+                        <div className="md:block hidden absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer">
                           <img src={playIcon} alt="icon" />
+                        </div>
+                        <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 cursor-pointer">
+                          <img src={playIcon} alt="icon" style={{ height: "50px" }} />
                         </div>
                       </div>
                       <div className={`flex flex-col`}>
@@ -322,35 +333,6 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
                             {item.location}
                           </div>
                         </div>
-                        {/* <div className={`flex mt-4`}>
-                          <div>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none">
-                              <path
-                                d="M22 12C22 17.52 17.52 22 12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12Z"
-                                stroke={themeMode ? "#6D6E76" : "#BBBCC0"}
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                              <path
-                                d="M15.7099 15.1798L12.6099 13.3298C12.0699 13.0098 11.6299 12.2398 11.6299 11.6098V7.50977"
-                                stroke={themeMode ? "#6D6E76" : "#BBBCC0"}
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </div>
-                          <div
-                            className={`flex ml-2 items-center ${themeMode ? "ticket-detail" : "ticket-detail-dark"}`}>
-                            {item.date}
-                          </div>
-                        </div> */}
                         <div className="md:mt-10 mt-8">
                           <Link to={item.ticket} target="_blank">
                             <DetailButton

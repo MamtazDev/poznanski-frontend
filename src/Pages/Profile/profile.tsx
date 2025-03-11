@@ -74,7 +74,7 @@ const ProfilePage: React.FC<{ themeMode?: boolean }> = ({ themeMode }) => {
       }
       // Call the profileUpdateRequest with user ID, nickname, and profile image
       await profileUpdateRequest(userInfo._id, nickname, profileImage);
-      console.log("Profile updated successfully");
+      // console.log("Profile updated successfully");
 
       // Update localStorage with new nickname and image
       updateLocalStorage(nickname, profileImage);

@@ -49,7 +49,7 @@ const MaterialCard: React.FC<News> = ({
 
   const handleClick = (id: any) => {
     navigate(`/playlist/${id}`);
-    console.log(id, "materials");
+    // console.log(id, "materials");
   };
   return (
     <div className="product-card1 flex w-full">
@@ -64,24 +64,23 @@ const MaterialCard: React.FC<News> = ({
           borderRadius: "2xl",
         }}
         onClick={() => handleClick(id)}>
-        <div className="flex md:flex-col  gap-5  related md:justify-between w-full h-full">
+        <div className="flex md:flex-col gap-5 related md:justify-between md:w-full md:h-full">
           <div
             className={`hover:opacity-75 object-cover cursor-pointer relative ${!themeMode && "dark-bg-color"}`}>
             {/* YouTube Thumbnail */}
             <div
-              className={`relative lg:bg-gray-100 cursor-pointer md:h-48 h-[80px] rounded-md overflow-hidden ${!themeMode && "dark-bg-color"}`}
+              className={`relative lg:bg-gray-100 cursor-pointer w-[100px] md:w-full md:h-48 h-full rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
               onClick={(e) => {
                 e.stopPropagation();
                 handlePlay();
               }}>
               <img
                 src={thumbnail}
-                className="md:w-full w-[90px] h-full  object-cover"
+                className="w-full h-full object-cover"
                 alt="YouTube Thumbnail"
               />
-
               {/* Play Button */}
-              <div className="absolute inset-0 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center ">
                 {themeMode ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +134,7 @@ const MaterialCard: React.FC<News> = ({
             </div>
 
             <div
-              className={`mt-2 text-lg font-semibold line-clamp-1 ${!themeMode && "title-dark-color"}`}>
+              className={`mt-2 md:text-lg text-sm font-semibold line-clamp-2 ${!themeMode && "title-dark-color"}`}>
               {title}
             </div>
 

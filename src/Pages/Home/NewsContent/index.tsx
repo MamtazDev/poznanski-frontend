@@ -110,7 +110,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
         setShowPagination(true);
       }
 
-      console.log("Width:", width, "ShowPagination:", showPagination);
+      // console.log("Width:", width, "ShowPagination:", showPagination);
     };
 
     updateUI();
@@ -149,7 +149,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
 
   return cardData && cardData.news.length > 0 ? (
     <div className="flex justify-center">
-      <div className="container md:mt-36 mt-20 md:pt-1.5">
+      <div className="container md:mt-36 mt-10 md:pt-1.5">
         <div className="flex justify-between mb-10">
           <ContentTitle titleType="NEWS" title="Top News Of The Day" />
           <div className="flex items-end">
@@ -178,6 +178,8 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
               1024: { slidesPerView: 3, slidesPerGroup: 3 },
               768: { slidesPerView: 2, slidesPerGroup: 2 },
               425: { slidesPerView: 1, slidesPerGroup: 1 },
+              375: { slidesPerView: 1, slidesPerGroup: 1 },
+              320: { slidesPerView: 1, slidesPerGroup: 1 },
             }}
             className="news-carousel"
           >

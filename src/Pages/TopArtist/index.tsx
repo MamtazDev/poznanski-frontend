@@ -82,8 +82,8 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
   const swiperRef = useRef<any>(null);
   const dispatch = useDispatch();
 
-  const handlePlay = (item:any) => {
-    console.log(item,"item")
+  const handlePlay = (item: any) => {
+    // console.log(item, "item")
     const youTubeLink = item?.youTube;
     if (youTubeLink) {
       const videoId = youTubeLink.split("v=")[1]?.split("&")[0];
@@ -119,6 +119,8 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
   const totalPages = Math.ceil(totalSongs / entriesPerPage);
   const indexOfLastSong = currentPage * entriesPerPage;
   const indexOfFirstSong = indexOfLastSong - entriesPerPage;
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const toggleDescription = () => setShowFullDescription(!showFullDescription);
   const currentSongs: ISong[] =
     (radio?.songs as unknown as ISong[])
       ?.slice(indexOfFirstSong, indexOfLastSong)
@@ -138,7 +140,7 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
     }
   };
 
-  console.log(currentSongs);
+  // console.log(currentSongs);
 
   const handlePrev = () => {
     if (swiperRef.current) {
@@ -225,9 +227,6 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
     }
   };
 
-
-
-
   if (error)
     return (
       <div
@@ -253,8 +252,8 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
         </p>
         <div
           className={`w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin ${themeMode
-              ? "border-r-[#5A1073] border-b-[#5A1073] border-l-[#5A1073]"
-              : "border-r-[#2FC4B2] border-b-[#2FC4B2] border-l-[#2FC4B2]"
+            ? "border-r-[#5A1073] border-b-[#5A1073] border-l-[#5A1073]"
+            : "border-r-[#2FC4B2] border-b-[#2FC4B2] border-l-[#2FC4B2]"
             }`}
         ></div>
       </div>
@@ -273,7 +272,7 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
 
           {/* Artist Header */}
           <h2
-            className={`text-5xl font-bold mt-5 ${themeMode ? "text-[#252733]" : "text-white"}`}
+            className={`md:text-5xl text-2xl font-bold mt-5 ${themeMode ? "text-[#252733]" : "text-white"}`}
           >
             {radio.title}
           </h2>
@@ -306,39 +305,30 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
               <div
                 className={`p-6 rounded-2xl shadow-lg mt-6 ${themeMode ? "bg-white" : "bg-[#242526]"}`}
               >
-                <p
-                  className={`flex gap-1 items-center font-medium ${themeMode ? "text-[#252733]" : "text-[#BBBCC0]"}`}
-                >
-                  4.9k Views
-                  <span className="flex gap-2 items-center">
-                    <GoDotFill
-                      className={`${themeMode ? "text-[#D9D9D9]" : "text-[#D9D9D9]"}`}
-                    />{" "}
-                    4 Hours Ago
-                  </span>
-                </p>
-                <p
-                  className={`${themeMode ? "text-[#6D6E76]" : "text-[#BBBCC0]"}`}
-                >
-                  {radio.description}
-                </p>
-                <button
-                  className={`mt-4 font-bold ${themeMode ? "text-[#5A1073]" : "text-[#3BD6C6]"}`}
-                >
-                  View More
-                </button>
+                <div style={{ backgroundColor: themeMode ? "#FFF" : "#242526" }}>
+                  <p style={{ color: themeMode ? "#6D6E76" : "#BBBCC0" }}>
+                    {showFullDescription ? radio.description : radio.description?.slice(0, 200) + (radio.description.length > 100 ? "..." : "")}
+                  </p>
+                  {radio.description.length > 100 && (
+                    <button
+                      className="mt-4 font-bold"
+                      style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
+                      onClick={toggleDescription}
+                    >
+                      {showFullDescription ? "View Less" : "View More"}
+                    </button>
+                  )}
+                </div>
               </div>
 
               {/* Main Content Grid */}
               <div className="w-full mt-8">
-                {/* Songs List - Takes 2/3 of the grid */}
                 <div className="w-full">
                   <h2
                     className={`text-xl font-semibold mb-4 ${themeMode ? "text-black" : "text-white"}`}
                   >
                     Songs
                   </h2>
-
                   {/* Songs Table */}
                   {currentSongs.length > 0 ? (
                     <div className="space-y-2">
@@ -346,8 +336,8 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
                         <div
                           key={i}
                           className={`w-full flex items-center gap-4 p-4 rounded-lg ${themeMode
-                              ? "bg-white border border-gray-100"
-                              : "bg-[#242526] border border-gray-800"
+                            ? "bg-white border border-gray-100"
+                            : "bg-[#242526] border border-gray-800"
                             }`}
                         >
                           <div className="flex items-center gap-3 w-full md:max-w-[40%]">
@@ -369,42 +359,13 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
                               >
                                 {item?.title?.slice(0, 20)}
                               </p>
-                              <span
-                                className={`text-start text-xs px-2 py-0.5 rounded-full lg:hidden ${themeMode
-                                    ? "bg-[#F0E6FF] text-[#5A1073]"
-                                    : "bg-[#2FC4B2] text-white"
-                                  }`}
-                              >
-                                {item?.artists[0]?.name}
-                              </span>
                             </div>
                           </div>
-                          {item?.artists[0]?.name  ?(
-                            <div className="w-full max-w-[100px] hidden lg:inline-block">
-                            <span
-                              className={`text-start text-xs px-2 py-0.5 rounded-full ${themeMode
-                                  ? "bg-[#F0E6FF] text-[#5A1073]"
-                                  : "bg-[#2FC4B2] text-white"
-                                }`}
-                            >
-                              {item?.artists[0]?.name && (
-                                 <>item?.artists[0]?.name</>
-                              )}
-                            </span>
-                          </div>
-                          ):(
-                            <p className={`text-start text-xs px-2 py-0.5 rounded-full ${themeMode
-                              ? "bg-[#F0E6FF] text-[#5A1073]"
-                              : "bg-[#2FC4B2] text-white"
-                            }`}> no name </p>
-                          )
-
-                          }
 
                           <div className="flex justify-end items-center flex-grow gap-4">
                             <div className="w-full hidden lg:block">
                               <span
-                                className={`oneLine text-start ${themeMode ? "text-gray-700" : "text-gray-300"}`}
+                                className={`text-start ${themeMode ? "text-gray-700" : "text-gray-300"}`}
                               >
                                 {item?.description?.slice(0, 50)}
                               </span>
@@ -419,10 +380,10 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
                             </div>
                             <div className="flex items-center gap-4">
                               <button
-                               onClick={() => handlePlay(item)}
+                                onClick={() => handlePlay(item)}
                                 className={`rounded-full p-2 ${themeMode
-                                    ? "text-[#5A1073] hover:bg-[#F0E6FF]"
-                                    : "text-[#2FC4B2] hover:bg-gray-800"
+                                  ? "text-[#5A1073] hover:bg-[#F0E6FF]"
+                                  : "text-[#2FC4B2] hover:bg-gray-800"
                                   }`}
                               >
                                 <svg
@@ -476,16 +437,16 @@ const TopArtist: React.FC<ArtistDetailPageProps> = ({ themeMode, type }) => {
                   <div className="flex flex-wrap gap-2">
                     <span
                       className={`px-4 py-1 rounded-full text-sm ${themeMode
-                          ? "bg-[#F0E6FF] text-[#5A1073]"
-                          : "bg-[#2FC4B2] text-white"
+                        ? "bg-[#F0E6FF] text-[#5A1073]"
+                        : "bg-[#2FC4B2] text-white"
                         }`}
                     >
                       Wildlife
                     </span>
                     <span
                       className={`px-4 py-1 rounded-full text-sm ${themeMode
-                          ? "bg-[#F0E6FF] text-[#5A1073]"
-                          : "bg-[#2FC4B2] text-white"
+                        ? "bg-[#F0E6FF] text-[#5A1073]"
+                        : "bg-[#2FC4B2] text-white"
                         }`}
                     >
                       Wildlife

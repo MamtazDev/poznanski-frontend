@@ -85,22 +85,24 @@ const NewReleaseCard: React.FC<News> = ({
         `}
       onClick={() => handleClick(id)}
     >
-      {data?.songs[0]?.youTube ? (
-        <div onClick={(e) => e.stopPropagation()}>
-          <img
-            src={videoThumbnail}
-            className="md:w-full w-[69px] h-[88px] md:h-[230px] object-cover rounded-lg cursor-pointer"
-            onClick={handlePlay}
-            alt="YouTube Thumbnail"
-          />
-        </div>
-      ) : (
+
+      <div
+        className={`lg:bg-gray-100 cursor-pointer w-[100px] md:w-full md:h-48 h-[80px] rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
+        onClick={(e) => {
+          e.stopPropagation();
+          handlePlay();
+        }}>
         <img
-          src={novideo}
-          className="md:w-full w-[69px] h-[88px] md:h-[230px] object-cover rounded-lg"
-          alt="No Video Available"
+          src={videoThumbnail}
+          style={{
+            border: !videoId ? "1px solid black" : "none",
+            borderRadius: "12px",
+          }}
+          className="object-cover h-full w-full"
+          alt="Video Thumbnail"
         />
-      )}
+
+      </div>
 
       <div>
         {title && (

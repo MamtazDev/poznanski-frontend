@@ -74,13 +74,11 @@ interface Radio {
 }
 
 const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
-  // Type the swiperRef to be of Swiper instance type
   const swiperRef = useRef<SwiperInstance | null>(null);
   const { id } = useParams<{ id: string }>();
   const targetNewsSelected = useSelector((state: RootState) =>
     getTargetNews(state, id)
   );
-  // const url = useLocation().pathname;
   const lastVisitedId = useSelector((state: RootState) =>
     getLastVisitedId(state)
   );
@@ -89,15 +87,14 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
   const [, ...tagsToRemap] = targetNewsSelected?.tags?.split("#") || [];
   const tags = tagsToRemap;
   const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
-  const [showShareOptions, setShowShareOptions] = useState(false);
+  // const [showShareOptions, setShowShareOptions] = useState(false);
 
   const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
     get5RandomNewsByTags(state, pageDataTags || [])
   );
-  const filteredRelatedData = useMemo(() => {
-    return relatedData.filter((news) => data.news._id !== id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [relatedData, id]);
+  // const filteredRelatedData = useMemo(() => {
+  //   return relatedData.filter((news) => data.news._id !== id);
+  // }, [relatedData, id]);
 
   useEffect(() => {
     setPageData(targetNewsSelected);
@@ -133,7 +130,7 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     if (data) {
       setRadio(data.record);
       setRelatedNews(Array.isArray(data.relatedNews) ? data.relatedNews : []);
-      console.log("Related News:", data.relatedNews);
+      // console.log("Related News:", data.relatedNews);
     }
   }, [data]);
 
@@ -169,11 +166,14 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     radio?.tags && typeof radio.tags === "string"
       ? radio.tags.split(",").map((tag) => tag.trim())
       : [];
-  {
-    /* Show up to 5 tags */
-  }
+
   const displayedMainTags = formattedMainTags.slice(0, 5);
 
+  const formattedTags =
+    radio?.tags && typeof radio.tags === "string"
+      ? radio.tags.split(",").map((tag) => tag.trim())
+      : [];
+  const displayedTags = formattedTags.slice(0, 5);
   return (
     <Layout themeMode={themeMode} type={type}>
       <div className="flex justify-center">
@@ -184,7 +184,7 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
             </div>
           )}
           <h2
-            className="text-5xl font-bold mt-5"
+            className="md:text-5xl text-3xl font-bold mt-5"
             style={{
               color: themeMode ? "#252733" : "#FFF",
             }}
@@ -194,19 +194,18 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           {radio.thumbnail && (
             <img
               src={radio.thumbnail}
-              className="w-full h-[596px] mt-12 rounded-xl"
+              className="w-full md:h-[596px] mt-12 rounded-xl"
               alt="Thumbnail"
             />
           )}
-
-          <div className="mt-7 flex gap-3 items-center">
+          <div className="md:mt-7 mt-3 flex gap-3 items-center">
             <Avatar
-              src={radio.artists[0]?.profileImg}
+              src={radio?.artists[0]?.profileImg}
               className="cursor-pointer"
             />
             <div>
               <h2
-                className="text-2xl font-semibold"
+                className="md:text-2xl text-lg font-semibold"
                 style={{
                   color: themeMode ? "#252733" : "#FFF",
                 }}
@@ -222,32 +221,11 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </p>
             </div>
           </div>
-          <div
-            className="p-6 rounded-2xl shadow-lg mt-6"
-            style={{ backgroundColor: themeMode ? "#FFF" : "#242526" }}
-          >
-            {/* <p
-              className="flex gap-1 items-center font-medium"
-              style={{
-                color: themeMode ? "#252733" : "#BBBCC0",
-              }}
-            >
-              4.9k Views
-              <span className="flex gap-2 items-center">
-                <GoDotFill
-                  style={{
-                    color: themeMode ? "#D9D9D9" : "D9D9D9",
-                  }}
-                />{" "}
-                4 Hours Ago
-              </span>
-            </p> */}
+          <div className="p-6 rounded-2xl shadow-lg mt-6" style={{ backgroundColor: themeMode ? "#FFF" : "#242526" }}>
             <p style={{ color: themeMode ? "#6D6E76" : "#BBBCC0" }}>
-              {showFullDescription
-                ? radio.description
-                : radio.description?.split(" ").slice(0, 50).join(" ") + "..."}
+              {showFullDescription ? radio.description : radio.description?.slice(0, 200) + (radio.description.length > 100 ? "..." : "")}
             </p>
-            {radio.description?.split(" ").length > 50 && (
+            {radio.description.length > 100 && (
               <button
                 className="mt-4 font-bold"
                 style={{ color: themeMode ? "#5A1073" : "#3BD6C6" }}
@@ -257,22 +235,23 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </button>
             )}
           </div>
+
           <div className="mt-3">
-            {displayedMainTags?.map((tag, index) => (
+            {displayedMainTags?.slice(0, 6).map((tag, index) => (
               <button
                 key={index}
                 className="py-1 mt-1 ml-1 px-3 text-center rounded-full font-semibold"
                 style={{
-                  backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
-                  color: "#5A1073",
+                  backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
+                  color: themeMode ? "#5A1073" : "#5A1073",
                 }}
               >
-                {tag}
+                {tag.length > 15 ? `${tag.substring(0, 10)}...` : tag}
               </button>
             ))}
           </div>
           {relatedNews.length > 0 && (
-            <div className="mt-12">
+            <div className="md:mt-12 mt-6 px-5 md:px-0">
               <h1
                 className="text-xl font-semibold"
                 style={{
@@ -282,7 +261,7 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 Related Videos
               </h1>
               {/* Swiper for related videos */}
-              <div className="w-full mt-10 relative">
+              <div className="w-full md:mt-10 mt-5 relative">
                 <Swiper
                   onSwiper={(swiper: any) => (swiperRef.current = swiper)}
                   slidesPerView={4}
@@ -297,7 +276,47 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 >
                   {relatedNews?.map((item: Radio, index: number) => (
                     <SwiperSlide key={index}>
-                      <RelatedDetails themeMode={themeMode} item={item} />
+                      {/* <RelatedDetails themeMode={themeMode} item={item} /> */}
+                      <div
+                        className="p-5 rounded-3xl"
+                        style={{
+                          backgroundColor: themeMode ? "#FFF" : "#242526",
+                          color: themeMode ? "black" : "#fff",
+                          borderRadius: "25px",
+                          border: `2px solid ${themeMode ? "#f8f8ff" : "#242526"}`,
+                        }}
+                      >
+                        <img src={singer} alt="img" className="w-full" />
+                        {displayedTags.map((tag: any, index: any) => (
+                          <button
+                            key={index}
+                            className="py-1 mt-1 ml-1 px-3 text-center rounded-full font-semibold"
+                            style={{
+                              backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
+                              color: "#5A1073",
+                            }}
+                          >
+                            {tag}
+                          </button>
+                        ))}
+                        <p className="mt-2 text-lg font-semibold">{item.title}</p>
+                        <div className="flex gap-2 items-center">
+                          <GoDotFill
+                            style={{
+                              color: themeMode ? "#D9D9D9" : "D9D9D9",
+                            }}
+                          />
+                          <p
+                            className="flex gap-1 items-center"
+                            style={{
+                              color: themeMode ? "#9B9CA1" : "#9B9CA1",
+                            }}
+                          >
+                            <BsCalendar2Date />
+                            {item.date}
+                          </p>
+                        </div>
+                      </div>
                     </SwiperSlide>
                   ))}
                 </Swiper>
@@ -317,12 +336,6 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
               </div>
             </div>
           )}
-
-          {/* <CommentForm
-            postModel={PostModels.news}
-            commentData={pageData?.commentsSection ?? null}
-          /> */}
-
           {radio._id && <Comments postId={radio._id} type={PostModels.news} />}
         </div>
       </div>
@@ -331,55 +344,3 @@ const TvRadioDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 };
 
 export default TvRadioDetails;
-
-const RelatedDetails = ({ themeMode, item }: any) => {
-  const formattedTags =
-    item?.tags && typeof item.tags === "string"
-      ? item.tags.split(",").map((tag: any) => tag.trim())
-      : [];
-  const displayedTags = formattedTags.slice(0, 5);
-
-  console.log("item", item);
-  return (
-    <div
-      className="p-5 rounded-3xl mt-6"
-      style={{
-        backgroundColor: themeMode ? "#FFF" : "#242526",
-        color: themeMode ? "black" : "#fff",
-        borderRadius: "25px",
-        border: `2px solid ${themeMode ? "#f8f8ff" : "#242526"}`,
-      }}
-    >
-      <img src={singer} alt="img" className="w-full" />
-      {displayedTags.map((tag: any, index: any) => (
-        <button
-          key={index}
-          className="py-1 mt-1 ml-1 px-3 text-center rounded-full font-semibold"
-          style={{
-            backgroundColor: themeMode ? "#E8ECFE" : "#3BD6C6",
-            color: "#5A1073",
-          }}
-        >
-          {tag}
-        </button>
-      ))}
-      <p className="mt-2 text-lg font-semibold">{item.title}</p>
-      <div className="flex gap-2 items-center">
-        <GoDotFill
-          style={{
-            color: themeMode ? "#D9D9D9" : "D9D9D9",
-          }}
-        />
-        <p
-          className="flex gap-1 items-center"
-          style={{
-            color: themeMode ? "#9B9CA1" : "#9B9CA1",
-          }}
-        >
-          <BsCalendar2Date />
-          {item.date}
-        </p>
-      </div>
-    </div>
-  );
-};

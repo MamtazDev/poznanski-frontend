@@ -200,7 +200,7 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
         setShowPagination(true);
       }
 
-      console.log("Width:", width, "ShowPagination:", showPagination);
+      // console.log("Width:", width, "ShowPagination:", showPagination);
     };
 
     updateUI();
@@ -236,7 +236,7 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="container md:mt-36 md:pt-1.5 mt-20">
+      <div className="container md:mt-36 md:pt-1.5 mt-10">
         <div className="flex justify-between">
           <ContentTitle titleType="TOP HITS" title="TV/Radio" />
           <div className="flex items-end">
@@ -266,6 +266,8 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
               1024: { slidesPerView: 3, slidesPerGroup: 3 },
               768: { slidesPerView: 2, slidesPerGroup: 2 },
               425: { slidesPerView: 1, slidesPerGroup: 1 },
+              375: { slidesPerView: 1, slidesPerGroup: 1 },
+              320: { slidesPerView: 1, slidesPerGroup: 1 },
             }}
             className="news-carousel"
           >

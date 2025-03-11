@@ -60,7 +60,7 @@ const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
         setShowPagination(true);
       }
 
-      console.log("Width:", width, "ShowPagination:", showPagination);
+      // console.log("Width:", width, "ShowPagination:", showPagination);
     };
 
     updateUI();

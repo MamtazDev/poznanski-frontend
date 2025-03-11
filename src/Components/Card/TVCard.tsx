@@ -23,7 +23,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log("data", data)
+  // console.log("data", data)
 
   const handlePlay = () => {
     if (youTube) {
@@ -80,7 +80,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
         >
           {/* YouTube Thumbnail */}
           <div
-            className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
+            className={`relative lg:bg-gray-100 cursor-pointer lg:h-48 w-[100px] md:w-full rounded-md flex-shrink-0 overflow-hidden ${!themeMode && "dark-bg-color"}`}
             onClick={(e) => {
               e.stopPropagation();
               handlePlay();
@@ -88,7 +88,7 @@ const TVCard: React.FC<News> = ({ type, video, title, feature, link, youTube, da
           >
             <img
               src={youTube ? `https://img.youtube.com/vi/${getYouTubeID(youTube)}/hqdefault.jpg` : "default-thumbnail.jpg"}
-              className="md:w-full w-[69px] h-full  object-cover"
+              className="w-full h-full  object-cover"
               alt="YouTube Thumbnail"
             />
 

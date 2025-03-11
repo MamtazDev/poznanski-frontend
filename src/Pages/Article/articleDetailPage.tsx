@@ -19,7 +19,7 @@ import useSWR from "swr";
 import TipTap from "../../Components/TipTap/TipTap";
 import DelayedComponent from "../../Components/_utility/DelayedComponent";
 import { PostModels } from "../../Constant/api-requests";
-import defaultimg from "../../assets/svg/userIcon.svg";
+import defaultimg from "../../assets/png/novideo.png";
 import singer from "../../assets/png/ticketBanner.png";
 import BreadCrumb from "./../../Components/BreadCrumb/index";
 import SocialShare from "../../Components/SocialShare/SocialShare";
@@ -232,11 +232,11 @@ const ArticleDetailPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 <b>{data?.news?.intro}</b>
               </p>
               <div className="flex lg:flex-row flex-col justify-between mx-auto gap-5">
-                <div className="md:w-[900px]">
+                <div className="lg:w-[900px]">
                   <Image
                     src={data?.news?.files?.[0] || defaultimg}
                     alt="Uploaded file"
-                    className="rounded-2xl w-full  md:h-[494px] object-cover flex justify-center"
+                    className="rounded-2xl w-full md:h-[494px] object-cover flex justify-center"
                   />
                   <DelayedComponent delay={200}>
                     <TipTap

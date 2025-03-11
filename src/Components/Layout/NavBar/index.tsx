@@ -254,10 +254,10 @@ const NavBar: React.FC<NavBarProps> = (props) => {
                 />
               </div>
             </div>
-            <div className="flex justify-center mb-10">
+            <div className="flex justify-center mb-5">
               <BreadCrumb />
             </div>
-            <div className="flex flex-col justify-between h-3/5 pb-10">
+            <div className="flex flex-col justify-between space-y-5 mb-5">
               {menu.map((item, idx) => (
                 <div
                   key={`nav-vertical-btn-${idx}`}
