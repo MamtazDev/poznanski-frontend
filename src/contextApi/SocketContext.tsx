@@ -58,7 +58,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }
   };
 
-  console.log(notifications);
+  // console.log(notifications);
 
   useEffect(() => {
     // Initialize socket
@@ -68,7 +68,7 @@ const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     const intervalId = setInterval(() => {
       if (user && user._id) {
-        console.log("call", user._id);
+        // console.log("call", user._id);
         socket.current?.emit("addUser", { id: user._id });
       }
     }, 10000);
