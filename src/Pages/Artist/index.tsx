@@ -228,14 +228,14 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
 
   return (
     <Layout themeMode={themeMode} type={type}>
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-10">
         <div className="container">
           {!type && (
-            <div className="md:mt-12 mt-8">
+            <div className="md:mt-12 mt-10">
               <BreadCrumb />
             </div>
           )}
-          <div className="md:mt-7 mt-10">
+          <div className="md:mt-7 mt-3">
             <ContentTitle titleType="TOP HITS" title="Our Top Artists" />
           </div>
           <div className="md:mt-6 mt-4">
@@ -299,7 +299,7 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       </div>
                       {artist?.products?.length > 0 && (
                         <div
-                          className={`mx-auto px-5 transition-all ease-in-out ${hoveredCard === idx.toString() ? "md:h-[350px] h-full" : "h-0 overflow-hidden"}`}
+                          className={` transition-all ease-in-out ${hoveredCard === idx.toString() ? "h-full" : "h-0 overflow-hidden"}`}
                         >
                           <ArtistsCarousel
                             cardNum={cardNum}

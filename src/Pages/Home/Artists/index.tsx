@@ -145,7 +145,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="container md:mt-28 mt-12">
+      <div className="container md:mt-28 mt-10">
         <div className="flex justify-between">
           <ContentTitle titleType="ARTISTS" title="Our Artists" />
           <div className="flex items-end">
@@ -163,7 +163,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
           <div
             key={_idx_}
             id={artist._id}
-            className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3 md:mt-8 mt-6 shadow-md rounded-2xl"
+            className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3 md:mt-8 mt-4 shadow-md rounded-2xl"
             style={{
               backgroundColor: themeMode ? "" : "#242526",
             }}>
@@ -178,10 +178,8 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
                 <div className="" onClick={() => handleClick(artist.id)}>
                   <Avatar
                     src={artist?.profileImg || avatar}
-                    className="md:w-[118px] w-[80px]  md:h-[80px]  h-[50px] rounded-full"
-                    size={{ base: "xl", md: "2xl", lg: "3xl" }}
-                    width={118}
-                    height={118}
+                    className="rounded-full object-cover w-28 md:w-[118px]"
+                    size={{ base: "lg", md: "2xl" }}
                   />
                 </div>
                 <div className="flex flex-col md:ml-4 ml-2 gap-1 md:gap-3">
@@ -196,7 +194,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
               </div>
               {artist.products.length > 0 && (
                 <div
-                  className={`mx-auto px-5 transition-all ease-in-out ${hoveredCard === _idx_.toString() ? "md:h-[350px] h-full" : "h-0 overflow-hidden"}`}>
+                  className={`transition-all ease-in-out ${hoveredCard === _idx_.toString() ? " h-full" : "h-0 overflow-hidden"}`}>
                   {
                     <ArtistsCarousel
                       cardNum={cardNum}

@@ -173,7 +173,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
               slidesPerView={cardNum / 2}
               slidesPerGroup={1}
               grid={{ rows: cardNum / 3, fill: "row" }}
-              spaceBetween={20}
+              spaceBetween={10}
               loop={false}
               modules={[Navigation, Pagination, Grid]}
               breakpoints={{
@@ -181,11 +181,11 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
                 768: { slidesPerView: 2, grid: { rows: 2, fill: "row" } },
                 320: { slidesPerView: 1, grid: { rows: 5, fill: "row" } },
               }}
-              className="news-carousel"
+              className="material-news-carousel"
             >
               {cardData.map((item, index) => (
-                <SwiperSlide key={index} className="h-auto">
-                  <div className="h-full p-2">
+                <SwiperSlide key={index} >
+                  <div className="p-2">
                     <MaterialCard
                       video={item.videoId}
                       data={item}
@@ -201,7 +201,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
               ))}
 
               {loading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div className="absolute  inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                   <Spinner size="xl" color="purple.500" />
                 </div>
               )}

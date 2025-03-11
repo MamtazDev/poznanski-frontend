@@ -266,6 +266,8 @@ const TV: React.FC<{ filter: string }> = ({ filter }) => {
               1024: { slidesPerView: 3, slidesPerGroup: 3 },
               768: { slidesPerView: 2, slidesPerGroup: 2 },
               425: { slidesPerView: 1, slidesPerGroup: 1 },
+              375: { slidesPerView: 1, slidesPerGroup: 1 },
+              320: { slidesPerView: 1, slidesPerGroup: 1 },
             }}
             className="news-carousel"
           >

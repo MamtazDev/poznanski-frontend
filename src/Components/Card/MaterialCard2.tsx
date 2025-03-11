@@ -28,16 +28,6 @@ const MaterialCard: React.FC<News> = ({
   const dispatch = useDispatch();
   const dateFormated = moment(date).format("DD/ MM / YYYY");
 
-  // const getYouTubeID = (url: string) => {
-  //   let videoId = "";
-  //   if (url.includes("youtube.com/watch")) {
-  //     videoId = url.split("v=")[1]?.split("&")[0];
-  //   } else if (url.includes("youtu.be/")) {
-  //     videoId = url.split("youtu.be/")[1]?.split("?")[0];
-  //   }
-  //   return videoId;
-  // };
-
   const handlePlay = () => {
     if (youTube) {
       const videoId = youTube.split("v=")[1]?.split("&")[0];
@@ -52,7 +42,7 @@ const MaterialCard: React.FC<News> = ({
   return (
     <>
       <div
-        className={`flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md
+        className={`md:flex md:flex-col gap-5 md:justify-between w-full h-full p-5 rounded-2xl shadow-md
       ${themeMode ? " " : "border border-[#242526] bg-[#242526]"}
       ${!themeMode ? "hover:shadow-[0px_0px_11.4px_4px_rgba(59,214,198,0.10)]" : "hover:shadow-[0px_0px_11.457px_0px_rgba(138,138,138,0.24)]"}
       `}
@@ -61,7 +51,7 @@ const MaterialCard: React.FC<News> = ({
           borderRadius: "2xl",
         }}
       >
-        <div className="flex md:flex-col  gap-5  related md:justify-between w-full h-full">
+        <div className="flex md:flex-col gap-5  related md:justify-between w-full h-full">
 
           <div
             className={`hover:opacity-75 object-cover cursor-pointer relative ${!themeMode && "dark-bg-color"}`}
@@ -69,7 +59,7 @@ const MaterialCard: React.FC<News> = ({
 
             {/* YouTube Thumbnail */}
             <div
-              className={`relative lg:bg-gray-100 cursor-pointer md:h-48 h-[80px] rounded-md overflow-hidden ${!themeMode && "dark-bg-color"}`}
+              className={`relative lg:bg-gray-100 cursor-pointer md:h-48 md:w-full w-[100px] h-[100px] rounded-md overflow-hidden ${!themeMode && "dark-bg-color"}`}
               onClick={(e) => {
                 e.stopPropagation();
                 handlePlay();
@@ -81,7 +71,7 @@ const MaterialCard: React.FC<News> = ({
                     ? `https://img.youtube.com/vi/${youTube.split("v=")[1]}/hqdefault.jpg`
                     : "default-thumbnail.jpg"
                 }
-                className="md:w-full w-[90px] h-full  object-cover"
+                className="w-full h-full object-cover"
                 alt="YouTube Thumbnail"
               />
 
@@ -119,9 +109,9 @@ const MaterialCard: React.FC<News> = ({
             </div>}
 
             <div
-              className={`mt-2 line-clamp-1 ${!themeMode && "title-dark-color"}`}
+              className={`mt-2 line-clamp-3 text-xs md:text-base ${!themeMode && "title-dark-color"}`}
             >
-              {title.slice(0, 10)}
+              {title}
             </div>
 
             {/* Feature Text */}
@@ -140,18 +130,18 @@ const MaterialCard: React.FC<News> = ({
             <div className='flex gap-2 items-center'>
               {location &&
                 <>
-                  <p className='flex gap-1 items-center' style={{
+                  <p className='flex gap-1 items-center text-[5px] md:text-base' style={{
                     color: themeMode ? "#9B9CA1" : "#9B9CA1"
                   }}><IoLocationOutline /> New York</p>
                   <GoDotFill style={{ color: themeMode ? "#D9D9D9" : "D9D9D9", }} />
                 </>
               }
 
-              {date && <p className='flex gap-1 items-center' style={{
+              {date && <p className='flex gap-1 items-center text-[10px] md:text-base' style={{
                 color: themeMode ? "#9B9CA1" : "#9B9CA1"
               }}>
                 <>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className="w-[12px] h-[12px] md:w-[24px] md:h-[24px]">
                     <path d="M8 2V5" stroke="#9B9CA1" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M16 2V5" stroke="#9B9CA1" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M3.5 9.08984H20.5" stroke="#9B9CA1" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />

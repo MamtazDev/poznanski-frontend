@@ -33,6 +33,18 @@ const ProductCard1: React.FC<News> = ({
 
   const imageSrc = img ? `${process.env.REACT_APP_FILES_URL}${img}` : novideo;
 
+  const extractYouTubeId = (url: string) => {
+    const match = url.match(
+      /(?:youtube\.com\/(?:.*v=|embed\/|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+    );
+    return match ? match[1] : null;
+  };
+  const videoId = extractYouTubeId(img || "");
+
+  const videoThumbnail = videoId
+    ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+    : novideo;
+
   const wordArray = tags ? tags.split(",").map((word) => word.trim()) : [];
   const dateFormatted = moment(date).format("MMMM DD, YYYY");
 
@@ -67,19 +79,6 @@ const ProductCard1: React.FC<News> = ({
               }}>
               {dateFormatted}
             </div>
-            {/* {img ? (
-              <img
-                alt="img nai"
-                src={img || novideo}  // Ensures fallback if img is empty or null
-                className="object-cover rounded-lg size-full"
-              />
-            ) : (
-              <img
-                alt="no img"
-                src={novideo}
-                className="md:w-[342px] w-[230px] h-[88px] md:h-[235px] object-cover rounded-lg"
-              />
-            )} */}
             <img
               src={img ?? novideo}
               className="object-cover rounded-lg size-full"
@@ -90,8 +89,35 @@ const ProductCard1: React.FC<News> = ({
 
           <div className="flex flex-col md:w-full space-y-2">
             {tags ? (
-              <div className="flex  gap-2 mt-2 md:mt-0">
+              <div className="md:flex gap-2 hidden mt-2 md:mt-0">
                 {wordArray.slice(0, 3).map(
+                  (tag, index) =>
+                    tag && (
+                      <span
+                        key={index}
+                        className={`px-2 py-1 rounded-full md:text-sm text-[10px] font-semibold ${!themeMode && "btn-dark-bg-color"
+                          }`}
+                        style={{
+                          backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
+                          color: themeMode ? "#5A1073" : "#5A1073",
+                        }}>
+                        {tag.length > 10 ? `${tag.substring(0, 7)}...` : tag}
+                      </span>
+                    )
+                )}
+              </div>
+            ) :
+              <p className={`px-2 py-1 rounded-full text-center md:text-sm text-[10px] font-semibold`}
+                style={{
+                  backgroundColor: themeMode ? "#E8ECFE" : "#2FC4B2",
+                  color: themeMode ? "#5A1073" : "#5A1073",
+                }}>
+                no tags added
+              </p>
+            }
+            {tags ? (
+              <div className="flex md:hidden gap-2 mt-2 md:mt-0">
+                {wordArray.slice(0, 2).map(
                   (tag, index) =>
                     tag && (
                       <span

@@ -60,6 +60,11 @@ export interface ArticleToDisplay {
   commentsSection?: CommentsSection;
 	tags?: string;
 	date?: Date;
+  description?: string;
+  thumbnail?: string;
+  videoId?: string;
+  channelTitle?: string;
+  publishedAt?: string;
 }
 
 export interface FileToDisplay {

@@ -248,6 +248,25 @@ code {
   background: #E8ECFE !important;
   transform: none !important;}
 
+.material-news-carousel .swiper-pagination-bullet-active {
+  width: 18px !important;
+  height: 7px !important;
+  border-radius: 50px;
+  background: var(--primary-color) !important;
+  margin-top: 50px !important;
+}
+
+.material-news-carousel .swiper-pagination-bullet {
+  transform: initial !important;
+}
+
+.material-news-carousel .swiper-pagination-bullet-active-prev-prev, .event-carousel .swiper-pagination-bullet-active-prev {
+  width: 18px !important;
+  height: 7px !important;
+  border-radius: 50px;
+  background: #E8ECFE !important;
+  transform: none !important;}
+
   .swiper{
     margin-left: 14px;
     margin-right: auto;

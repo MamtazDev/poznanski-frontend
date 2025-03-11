@@ -97,21 +97,6 @@ const MaterialsDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
     getLastVisitedId(state)
   );
   const dispatch = useDispatch();
-  //  const [pageData, setPageData] = useState<ArticleToDisplay>();
-  //  const [, ...tagsToRemap] = targetNewsSelected?.tags?.split("#") || [];
-  //  const tags = tagsToRemap;
-  //  const pageDataTags = useMemo(() => pageData?.tags || [], [pageData?.tags]);
-  //  const relatedData: ArticleToDisplay[] = useSelector((state: RootState) =>
-  //    get5RandomNewsByTags(state, pageDataTags || [])
-  //  );
-  //  const filteredRelatedData = useMemo(() => {
-  //    return relatedData.filter((news) => data.news._id !== id);
-  //    // eslint-disable-next-line react-hooks/exhaustive-deps
-  //  }, [relatedData, id]);
-
-  //  useEffect(() => {
-  //    setPageData(targetNewsSelected);
-  //  }, [targetNewsSelected]);
 
   useEffect(() => {
     if (!lastVisitedId || lastVisitedId !== id) {
@@ -172,46 +157,6 @@ const MaterialsDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       </div>
     );
 
-  //   const fetcher = () =>
-  //    fetch(`http://localhost:8000/api/playlist/${id}`).then((res) => res.json());
-  //  const { data, error } = useSWR(`/api/playlist/${id}`, fetcher);
-  //  const [playlist, setMaterials] = useState<Radio | null>(null);
-
-  //  console.log(playlist,"playlist")
-
-  //  useEffect(() => {
-  //    if (data) {
-  //       setMaterials(data);
-  //    }
-  //  }, [data]);
-
-  //  if (error) return <div>Error loading data.</div>;
-  //  if (!playlist)
-  //    return (
-  //      <div
-  //        className="flex justify-center items-center h-screen w-full"
-  //        style={{
-  //          backgroundColor: themeMode ? 'white' : 'black',
-  //        }}
-  //      >
-  //        <p
-  //          className="text-xl font-semibold"
-  //          style={{
-  //            color: themeMode ? 'black' : 'white',
-  //          }}
-  //        >
-  //          Loading...
-  //        </p>
-  //        <div
-  //          className="w-6 h-6 ml-2 border-4 border-t-transparent rounded-full animate-spin"
-  //          style={{
-  //            borderRightColor: themeMode ? '#5A1073' : '#2FC4B2',
-  //            borderBottomColor: themeMode ? '#5A1073' : '#2FC4B2',
-  //            borderLeftColor: themeMode ? '#5A1073' : '#2FC4B2',
-  //          }}
-  //        ></div>
-  //      </div>
-  //    );
 
   return (
     <Layout themeMode={themeMode} type={type}>
@@ -230,13 +175,12 @@ const MaterialsDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
           >
             {pageData.title}
           </h2>
-
           <img
             src={pageData.thumbnail}
             className="w-full md:mt-12 mt-6 rounded-xl object-cover"
             alt="Thumbnail"
           />
-          <div className="mt-7 flex gap-3 items-center">
+          <div className="md:mt-7 mt-3 flex gap-3 items-center">
             {/* <Avatar
               src={radio.artists[0]?.profileImg}
 
@@ -269,7 +213,7 @@ const MaterialsDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 color: themeMode ? "#252733" : "#BBBCC0",
               }}
             >
-              4.9k Views
+              {/* 4.9k Views */}
               <span className="flex gap-2 items-center">
                 <GoDotFill
                   style={{
@@ -399,15 +343,13 @@ const MaterialsDetails: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                 </div>
               </div>
             ) : (
-              <p className="text-xl mt-2 font-medium">
+              <p className="text-xl mt-2 font-medium" style={{
+                color: themeMode ? "black" : "#fff",
+              }}>
                 there is no related data added ...
               </p>
             )}
           </div>
-          {/* <CommentForm
-            postModel={PostModels.news}
-            commentData={pageData.commentsSection ?? null}
-          /> */}
           {pageData._id && (
             <Comments postId={pageData._id} type={PostModels.material} />
           )}

@@ -187,7 +187,7 @@ const AlbumsMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
       <div className="flex justify-center">
         <div className="container">
           {!type && (
-            <div className="md:mt-12 mt-8">
+            <div className="md:mt-12 mt-10">
               <BreadCrumb />
             </div>
           )}
