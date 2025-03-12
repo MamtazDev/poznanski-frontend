@@ -155,10 +155,11 @@ const AlbumeItem = ({
   getYouTubeID,
   item,
 }: any) => {
-  const formattedTags =
-    item?.tags && typeof item.tags === "string"
-      ? item.tags.split(",").map((tag: any) => tag.trim())
-      : [];
+
+  // const formattedTags =
+  //   item?.tags && typeof item.tags === "string"
+  //     ? item.tags.split(",").map((tag: any) => tag.trim())
+  //     : [];
   // console.log("item", formattedTags);
   const displayedTags = item.tags.slice(0, 5);
   return (
