@@ -299,7 +299,8 @@ const ArtistMainPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       </div>
                       {artist?.products?.length > 0 && (
                         <div
-                          className={`md:px-5 transition-all ease-in-out ${hoveredCard === idx.toString() ? "h-full" : "h-0 overflow-hidden"}`}
+                          className={`md:px-5 transition-all ease-in-out
+                            ${hoveredCard === idx.toString() ? "h-full" : "h-0 overflow-hidden"}`}
                         >
                           <ArtistsCarousel
                             cardNum={cardNum}
