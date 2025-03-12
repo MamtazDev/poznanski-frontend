@@ -131,7 +131,7 @@ const NewReleases: React.FC<{ filter: string }> = ({ filter }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="container md:mt-36 md:pt-1.5 mt-10">
+      <div className="container md:mt-20 mt-10">
         <div className="flex justify-between">
           <ContentTitle titleType="NEW RELEASE" title="New Releases For You" />
           <div className="flex items-end">

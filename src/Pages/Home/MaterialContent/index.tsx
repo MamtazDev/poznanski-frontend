@@ -152,7 +152,7 @@ const MaterialContent: React.FC<{ filter: string }> = ({ filter }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="container md:mt-36 md:pt-1.5 mt-10">
+      <div className="container md:mt-20 mt-10">
         <div className="flex justify-between">
           <ContentTitle titleType="VIDEOS" title="Materials" />
           <div className="md:block hidden">

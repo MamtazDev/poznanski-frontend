@@ -254,7 +254,7 @@ const Book: React.FC<{ filter: string }> = ({ filter }) => {
     <>
       <div className="flex justify-center">
         <div className="container">
-          <div className="md:mt-7 mt-10">
+          <div className="md:mt-20 mt-10">
             <ContentTitle
               titleType="Concerts"
               title="Concerts Around You"

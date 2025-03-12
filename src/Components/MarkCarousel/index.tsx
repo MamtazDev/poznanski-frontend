@@ -89,7 +89,7 @@ const MarkCarousel = () => {
   }, []);
 
   return (
-    <div className="md:mt-36 mt-20 md:pt-1.5">
+    <div className="md:mt-20 mt-10">
       {themeMode ? (
         <Slider {...settings}>
           {logos?.length &&

@@ -44,7 +44,7 @@ const Subscription = () => {
   };
 
   return (
-    <div className="md:mt-28 mt-20 flex justify-center">
+    <div className="md:mt-20 mt-10 flex justify-center">
       <div className="container">
         <div
           className={`flex flex-col md:flex-row  justify-between w-full md:px-5 px-4 md:py-16 py-8 ${!themeMode ? "subscription-body-dark" : "subscription-body"}`}

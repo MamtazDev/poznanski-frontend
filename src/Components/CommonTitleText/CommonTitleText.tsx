@@ -108,6 +108,7 @@ const CommonTitleText: React.FC<IProps> = ({ data = [], headTitle }) => {
             768: { slidesPerView: 2 },
             425: { slidesPerView: 1 },
             375: { slidesPerView: 1 },
+            320: { slidesPerView: 1 },
           }}
         >
           {data.map((item: any) => (

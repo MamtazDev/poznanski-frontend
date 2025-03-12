@@ -229,6 +229,7 @@ const ArtistDetailsPage: React.FC<PageBasicProps> = ({ themeMode, type }) => {
                       768: { slidesPerView: 2 },
                       425: { slidesPerView: 1 },
                       375: { slidesPerView: 1 },
+                      320: { slidesPerView: 1 },
                     }}
                   >
                     {radios?.map((radio) => (

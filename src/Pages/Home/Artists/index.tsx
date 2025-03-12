@@ -145,7 +145,7 @@ const Artists: React.FC<{ filter: string }> = ({ filter }) => {
 
   return (
     <div className="flex justify-center">
-      <div className="container md:mt-28 mt-6">
+      <div className="container md:mt-20 mt-10">
         <div className="flex justify-between">
           <ContentTitle titleType="ARTISTS" title="Our Artists" />
           <div className="flex items-end">
