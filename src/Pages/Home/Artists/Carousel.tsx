@@ -9,10 +9,11 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperInstance } from "swiper";
-import { Navigation } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../reducers";
+import SmallDeviceArtist from "./SmallDeviceArtist";
 interface CarouselProps {
   cardNum: number;
   cardData: {
@@ -29,18 +30,31 @@ const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
   const [showPagination, setShowPagination] = useState(window.innerWidth < 768);
   const [showNavigation, setShowNavigation] = useState(window.innerWidth >= 768);
   const [itemsPerRow, setItemsPerRow] = useState(3);
-  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
-  const [newLoaded, setNewLoaded] = useState(false);
-  const [newSliderRef, newInstanceRef] = useKeenSlider<HTMLDivElement>({
-    initial: 0,
-    loop: true,
-    created() {
-      setNewLoaded(true);
-    },
-  });
+  const swiperRef = useRef<SwiperClass | null>(null);
+  const [showPrevButton, setShowPrevButton] = useState<boolean>(false);
+  const [showNextButton, setShowNextButton] = useState<boolean>(true);
 
-  useEffect(() => { }, [newInstanceRef, newLoaded]);
+  const handleSlideChange = () => {
+    if (swiperRef.current) {
+      const swiper = swiperRef.current;
+
+      const slidesPerView = Array.isArray(swiper.params.slidesPerView)
+        ? swiper.params.slidesPerView[0] || 1
+        : swiper.params.slidesPerView || 1;
+
+      const isFirstSlide = swiper.activeIndex === 0;
+      const isLastSlide = swiper.activeIndex >= swiper.slides.length - slidesPerView;
+
+      setShowPrevButton(!isFirstSlide);
+      setShowNextButton(!isLastSlide);
+    }
+  };
+
+  const handleNext = () => swiperRef.current?.slideNext();
+  const handlePrev = () => swiperRef.current?.slidePrev();
+
+
 
   useEffect(() => {
     const updateUI = () => {
@@ -68,32 +82,19 @@ const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
     return () => window.removeEventListener("resize", updateUI);
   }, [showPagination]);
 
-  const swiperRef = useRef<SwiperClass | null>(null);
-  const [showPrevButton, setShowPrevButton] = useState<boolean>(false);
-  const [showNextButton, setShowNextButton] = useState<boolean>(true);
 
-  const handleSlideChange = () => {
-    if (swiperRef.current) {
-      const swiper = swiperRef.current;
+  const themeMode = useSelector((state: RootState) => state.themeMode.mode);
 
-      const slidesPerView = Array.isArray(swiper.params.slidesPerView)
-        ? swiper.params.slidesPerView[0] || 1
-        : swiper.params.slidesPerView || 1;
+  const [newLoaded, setNewLoaded] = useState(false);
+  const [newSliderRef, newInstanceRef] = useKeenSlider<HTMLDivElement>({
+    initial: 0,
+    loop: true,
+    created() {
+      setNewLoaded(true);
+    },
+  });
 
-      const isFirstSlide = swiper.activeIndex === 0;
-      const isLastSlide = swiper.activeIndex >= swiper.slides.length - slidesPerView;
-
-      setShowPrevButton(!isFirstSlide);
-      setShowNextButton(!isLastSlide);
-    }
-  };
-
-  const handleNext = () => swiperRef.current?.slideNext();
-  const handlePrev = () => swiperRef.current?.slidePrev();
-
-
-
-
+  useEffect(() => { }, [newInstanceRef, newLoaded]);
   return (
     <div className="w-full">
       <div className="w-full relative mt-10">
@@ -108,7 +109,7 @@ const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
               loop={true}>
               {[...Array(Math.ceil(cardData.length / cardNum))].map((_, idx) => (
                 <SwiperSlide key={`carousel-grid-${idx}`}>
-                  <div className={`grid grid-cols-${cardNum} gap-4 py-5`}>
+                  <div className={`grid grid-cols-${cardNum} gap-4 py-5 mb-5`}>
                     {[...Array(cardNum)].map((_, index) => {
                       const item = cardData[idx * cardNum + index];
                       return (
@@ -150,51 +151,20 @@ const ArtistsCarousel: React.FC<CarouselProps> = ({ cardNum, cardData }) => {
                 )}
               </>
             )}
-
-
-
           </div>
         )}
       </div>
       {/* Single Card Display */}
+
       {cardNum === 1 && (
-        <div className="mt-4 w-full gap-3 flex-col flex">
-          {cardData[0] && (
-            <MaterialCard
-              youTube={cardData[0].youTube ?? ""}
-              type="vertical"
-              feature={cardData[0].category}
-              title={cardData[0].title}
-              date={cardData[0].date}
-              location={cardData[0].location}
-            />
-          )}
-          {cardData[1] && (
-            <MaterialCard
-              youTube={cardData[0].youTube ?? ""}
-              type="vertical"
-              // img={cardData[1]?.img}
-              feature={cardData[1].category}
-              title={cardData[1].title}
-              date={cardData[1].date}
-              location={cardData[1].location}
-            />
-          )}
-          {cardData[2] && (
-            <MaterialCard
-              youTube={cardData[0].youTube ?? ""}
-              type="vertical"
-              // img={cardData[1]?.img}
-              feature={cardData[1].category}
-              title={cardData[1].title}
-              date={cardData[1].date}
-              location={cardData[1].location}
-            />
-          )}
+        <div className="md:hidden">
+          <SmallDeviceArtist
+            cardNum={cardNum}
+            cardData={cardData} />
         </div>
       )}
+
     </div>
   );
 };
-
 export default ArtistsCarousel;
