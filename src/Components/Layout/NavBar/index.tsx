@@ -220,10 +220,9 @@ const NavBar: React.FC<NavBarProps> = (props) => {
               {menu.map((item, idx) => (
                 <div
                   key={`nav-btn-${idx}`}
-                  className={`Nav-btn ${!props.themeMode && "Nav-btn-dark"} ${
-                    item === selectedMenu &&
+                  className={`Nav-btn ${!props.themeMode && "Nav-btn-dark"} ${item === selectedMenu &&
                     (props.themeMode ? "selected-menu" : "selected-menu-dark")
-                  }`}
+                    }`}
                   onClick={() => onClick(item)}
                 >
                   {item}
@@ -233,12 +232,14 @@ const NavBar: React.FC<NavBarProps> = (props) => {
           </div>
         )}
       </div>
+
+
       <Modal onClose={onClose} size="full" isOpen={openModal}>
         <ModalOverlay />
         <ModalContent
           className={`container ${!props.themeMode && "back-dark"} justify-between h-screen p-4 md:p-6`}
         >
-          <div className="flex-col h-full">
+          <div className="flex flex-col h-full">
             <div className="flex justify-between my-4">
               <div className="cursor-pointer">
                 <PoznanskiLogoIcon
@@ -248,10 +249,7 @@ const NavBar: React.FC<NavBarProps> = (props) => {
               </div>
 
               <div className="flex items-center" onClick={onClose}>
-                <AiOutlineClose
-                  size={24}
-                  color={props.themeMode ? "" : "#FFF"}
-                />
+                <AiOutlineClose size={24} color={props.themeMode ? "" : "#FFF"} />
               </div>
             </div>
             <div className="flex justify-center mb-5">
@@ -261,39 +259,57 @@ const NavBar: React.FC<NavBarProps> = (props) => {
               {menu.map((item, idx) => (
                 <div
                   key={`nav-vertical-btn-${idx}`}
-                  className={`Nav-vertical-btn text-center ${
-                    item === selectedMenu &&
+                  className={`Nav-vertical-btn text-center ${item === selectedMenu &&
                     (props.themeMode ? "selected-menu" : "text-dark-color")
-                  } h-[15%] content-center`}
+                    } h-[15%] content-center`}
                   onClick={() => onClick(item)}
                 >
                   {item}
                 </div>
               ))}
             </div>
-            <div className="flex justify-center">
-              <div className="grid grid-cols-4 gap-x-8 -mb-20">
-                <YoutubeIcon
-                  className="cursor-pointer"
-                  stroke={getIconsColor(props.themeMode)}
-                />
-                <FacebookIcon
-                  className="cursor-pointer"
-                  stroke={getIconsColor(props.themeMode)}
-                />
-                <InstagramIcon
-                  className="cursor-pointer"
-                  stroke={getIconsColor(props.themeMode)}
-                />
-                <SummaryIcon
-                  className="cursor-pointer"
-                  stroke={getIconsColor(props.themeMode)}
-                />
+
+            {/* Aligning the footer section (icons + button) */}
+            <div className="flex flex-col items-center justify-between mt-5 flex-grow">
+              {/* Icons Grid Section */}
+              <div className="flex justify-center w-full mb-6">
+                <div className="grid grid-cols-4 gap-x-8">
+                  <YoutubeIcon
+                    className="cursor-pointer"
+                    stroke={getIconsColor(props.themeMode)}
+                  />
+                  <FacebookIcon
+                    className="cursor-pointer"
+                    stroke={getIconsColor(props.themeMode)}
+                  />
+                  <InstagramIcon
+                    className="cursor-pointer"
+                    stroke={getIconsColor(props.themeMode)}
+                  />
+                  <SummaryIcon
+                    className="cursor-pointer"
+                    stroke={getIconsColor(props.themeMode)}
+                  />
+                </div>
               </div>
+
+              {/* Action Button Section (Full width) */}
+              <div className="flex justify-center w-full mt-auto">
+                <Link to={common.CREATE_NEWS} state={""}>
+                  <button
+                    className={`text-lg w-full p-3 font-semibold rounded-md ${!themeMode ? "bg-[#2FC4B2] text-[#5A1073]" : "bg-[#5A1073] text-[#2FC4B2]"}`}
+                  >
+                    Dodaj newsa
+                  </button>
+                </Link>
+              </div>
+
             </div>
           </div>
         </ModalContent>
       </Modal>
+
+
     </Fragment>
   );
 };

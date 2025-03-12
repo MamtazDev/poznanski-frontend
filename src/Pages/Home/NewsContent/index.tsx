@@ -92,6 +92,7 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
     };
   }, []);
 
+
   useEffect(() => {
     const updateUI = () => {
       const width = window.innerWidth;
@@ -117,7 +118,6 @@ const NewsContent: React.FC<{ filterText: string }> = ({ filterText }) => {
     window.addEventListener("resize", updateUI);
     return () => window.removeEventListener("resize", updateUI);
   }, [showPagination]);
-
 
   const swiperRef = useRef<SwiperClass | null>(null);
   const [showPrevButton, setShowPrevButton] = useState<boolean>(false);
