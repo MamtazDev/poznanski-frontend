@@ -368,7 +368,10 @@ export default function Comments({ postId, type }: IProps) {
           Leave a comment
         </h2>
         <form onSubmit={handleSubmitComment} className="max-w-[700px]">
-          <div className="mb-4">
+          {user?._id && isSubmitting  && (
+            <>
+
+            <div className="mb-4">
             <label
               htmlFor="content"
               className={`block text-sm font-medium ${textClass} mb-1`}
@@ -406,6 +409,11 @@ export default function Comments({ postId, type }: IProps) {
               disabled={!user?._id || isSubmitting}
             />
           </div>
+          </>
+          )
+
+          }
+
 
           {user?._id ? (
             <ActionButton

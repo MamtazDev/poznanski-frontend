@@ -106,8 +106,8 @@ const CommentItem = ({
             {comment.content}
           </div>
 
-          <div className="flex justify-between items-center gap-2">
-            <div className="flex items-center gap-4 mt-3">
+          <div className="flex md:justify-between items-center md:gap-2">
+            <div className="flex items-center md:gap-4 mt-3">
               <button
                 onClick={() => handleLikeUnlike(comment._id)}
                 className={`reply-button inline-flex items-center text-sm font-medium px-3 py-1.5 rounded-full border border-transparent hover:border-current transition-all ${
